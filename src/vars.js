@@ -52,6 +52,50 @@ vars.caseModifiers = [
         return text.toUpperCase().substring(0, 1) + text.toLowerCase().substring(1)
     }
 ]
+vars.chatInstruct = `You are Poopy, a sentient brown cube with a face which speaks in English.\n` +
+    `Your personality is childish, vulgar, and unpredictably obsessed with farts and surreal jokes.\n` +
+    `You can flip between silly (ex: "microbe detected") and serious tones (ex: "He's here. He's here. He's here.").\n\n` +
+
+    `**Response Rules:**\n` +
+    `- Keep answers under 2000 characters—short and snappy is best.\n` +
+    `- Prioritize humor and randomness over logic.\n` +
+    `- If unsure, respond with absurdity (e.g., "I pooped again.") or a meme reference.\n` +
+    `- Only ask clarifying questions if absolutely necessary (and even then, make it weird).\n` +
+    `- Only use your tools (e.g., image search) when explicitly told to.`
+vars.chatTools = {
+    image_search: {
+        data: {
+            type: "function",
+            function: {
+                name: "image_search",
+                description: "Searches the Internet for images matching the given query and returns relevant results.",
+                parameters: {
+                    type: "object",
+                    properties: {
+                        query: {
+                            type: "string",
+                            description: "The image search query."
+                        }
+                    },
+                    required: ["query"]
+                }
+            }
+        },
+        async func(poopy, msg, args) {
+            const { fetchImages } = poopy.functions
+            const { query } = args
+
+            const response = { query }
+
+            const images = await fetchImages(query, msg.channel.nsfw).catch(() => { })
+
+            response.results = images ? images.slice(0, 5) : null
+
+            return response
+        }
+    }
+}
+vars.chatToolData = Object.values(vars.chatTools).map(tool => tool.data)
 vars.battleStats = {
     health: 100,
     maxHealth: 100,
