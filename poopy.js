@@ -24,7 +24,6 @@ class Poopy {
             allowbotusage: false,
             allowbottriggers: false,
             allowpresence: true,
-            allowcleverbot: false,
             database: 'poopydata',
             globalPrefix: 'p:',
             stfu: false,
@@ -189,7 +188,7 @@ class Poopy {
         let { envsExist, configFlagsEnabled,
             chunkArray, chunkObject, requireJSON, findCommand, fetchPingPerms,
             dmSupport, sleep, gatherData, deleteMsgData, infoPost, sendWebhook,
-            getKeywordsFor, getUrls, randomChoice, similarity, yesno,
+            getKeywordsFor, getUrls, randomChoice, similarity, yesno, chat,
             cleverbot, regexClean, decrypt, getOption, getTotalHivemindStatus } = functions
 
         let botConfig = {
@@ -1290,10 +1289,13 @@ class Poopy {
                             }).catch(() => { })
                         }
                     } else {
-                        var resp = !config.allowcleverbot || data.guildData[msg.guild.id]?.disabled
-                            .find(cmd => cmd.find(n => n === "cleverbot")) ?
-                            randomChoice(arrays.eightball) :
-                            await cleverbot(origcontent, msg).catch(() => { })
+                        var eightballMsg = randomChoice(arrays.eightball)
+                        var resp = !process.env.AI21_KEY || data.guildData[msg.guild.id]?.disabled
+                            .find(cmd => cmd.find(n => n === "chat")) ?
+                            eightballMsg :
+                            await chat(origcontent, msg, {
+                                errorMsg: eightballMsg
+                            }).catch(() => { }) ?? "what"
 
                         if (resp) {
                             await msg.reply({
