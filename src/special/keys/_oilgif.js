@@ -1,5 +1,5 @@
 module.exports = {
-  desc: 'shit gif',
+  desc: 'oil gif',
   func: function () {
     let poopy = this
     let arrays = poopy.arrays
