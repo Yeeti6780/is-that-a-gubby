@@ -6,7 +6,7 @@ module.exports = {
     let { fetchPingPerms } = poopy.functions
 
     var garbage = ''
-    for (var i = 0; i < 600; i++) {
+    for (var i = 0; i < 200; i++) {
       garbage = garbage + String.fromCharCode(Math.floor(Math.random() * 15000))
     }
     if (!msg.nosend) await msg.reply({
