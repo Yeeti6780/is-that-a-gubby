@@ -30,10 +30,6 @@ module.exports = {
             "orig": "<token>",
             "autocomplete": [
                 'AI21_KEY',
-                'DALLE2_SESSION',
-                //'DEEPAI_KEY',
-                //'GOOGLE_KEY',
-                'RAPIDAPI_KEY',
                 'REMOVEBG_KEY'
             ]
         },
@@ -54,10 +50,6 @@ module.exports = {
             "orig": "<token>",
             "autocomplete": [
                 'AI21_KEY',
-                'DALLE2_SESSION',
-                //'DEEPAI_KEY',
-                //'GOOGLE_KEY',
-                'RAPIDAPI_KEY',
                 'REMOVEBG_KEY'
             ]
         }],
@@ -73,29 +65,9 @@ module.exports = {
 
         let tokenList = {
             AI21_KEY: {
-                uses: "`generatetext`",
+                uses: "`chat`",
                 method: 'Create an AI21 Studio account (https://studio.ai21.com/sign-up), then go to your account (https://studio.ai21.com/account/account) and copy the API key',
                 example: '4QRVuB48Djt1ckJa8TQcAMRPEY8hL7V3'
-            },
-            DALLE2_SESSION: {
-                uses: "`dalle2text`, `dalle2variations`",
-                method: "If you have access, go to the website (https://labs.openai.com/) and inspect element (F12). Click the Network tab, do a random generation, click the list item with the name \"tasks\", then click the Headers tab at the right menu and scroll down, you'll find the Bearer authorization and copy it (don't include \"Bearer\"). This session token is temporary so it",
-                example: 'sess-770lhwAbGJP0VQcmbJ3f7p8XlVII6zXkeciNrwfK'
-            },
-            /*DEEPAI_KEY: {
-                uses: "`waifu2x`, `superresolution`, `weirdcore`, `generatetext`?",
-                method: 'Create a DeepAI account (https://deepai.org), then go to your profile (https://deepai.org/dashboard/profile) and copy the api-key',
-                example: '758271bd-f608-4c9e-9e39-8b69852ae78c'
-            },
-            GOOGLE_KEY: {
-                uses: "`youtube`",
-                method: "Go to Google Cloud console (https://console.cloud.google.com/welcome), then click the top left button and click \"NEW PROJECT\" (if you haven't created one yet). Activate the YouTube Data API (https://console.cloud.google.com/apis/library/youtube.googleapis.com) and create an API key for it (https://console.cloud.google.com/apis/credentials)",
-                example: 'AIzaSyKxWTcB1l0rAHL62eP96pfnQJ5bBCtkW_r'
-            },*/
-            RAPIDAPI_KEY: {
-                uses: '`ocr`, `translate`, `badtranslate`, `bing`, `speechtotext`, `cleverbot`?',
-                method: "Create a RapidAPI account (https://rapidapi.com/auth/register) and go to your apps (https://rapidapi.com/developer/dashboard). Click the default-application then click Settings, show the Application Key and copy it. For this to fully work, you'll also need to subscribe to the APIs: `Microsoft Computer Vision`, `Microsoft Translator Text`, `Bing Web Search`, `Speech Recognition English`, `Shazam - song recognizer` and `random-stuff-api`",
-                example: '1b4rhcq2gblihxyjxdskzpnvh0ttgv1uyli3lihvxjslts2jta'
             },
             REMOVEBG_KEY: {
                 uses: '`removebg`',
