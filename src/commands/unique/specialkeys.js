@@ -3,7 +3,7 @@ module.exports = {
     args: [{
         "name": "page", "required": false, "specifarg": false, "orig": "[-page]"
     }],
-    execute: async function (msg) {
+    execute: async function (msg, args) {
         let poopy = this
         let config = poopy.config
         let bot = poopy.bot
