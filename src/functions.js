@@ -3628,8 +3628,9 @@ functions.lastUrls = function (msg, tempdir, global) {
     let tempfiles = poopy.tempfiles
 
     var urlsGlobal = !global &&
-        tempdata[msg.author.id][msg.id]?.lastUrls ||
-        data.guildData[msg.guild.id].channels[msg.channel.id].lastUrls
+        tempdata[msg.author.id]?.[msg.id]?.lastUrls ||
+        data.guildData?.[msg.guild.id]?.channels?.[msg.channel.id]?.lastUrls ||
+        []
     var urls = urlsGlobal.slice()
 
     for (var i = 0; i < urls.length; i++) {
