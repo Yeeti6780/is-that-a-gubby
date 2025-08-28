@@ -1586,7 +1586,7 @@ class Poopy {
                                     })
                                     value = `"${value.replace(/"/g, "''")}"`
                                 }
-                                argContent[i] = (`${cmdArg.specifarg ? `-${cmdArg.name}` : ''} ${!(cmdarg.specifarg && cmdarg.orig == `[-${cmdarg.name}]`) ? value : ''}`).trim()
+                                argContent[i] = (`${cmdArg.specifarg ? `-${cmdArg.name}` : ''} ${!(cmdArg.specifarg && cmdArg.orig == `[-${cmdArg.name}]`) ? value : ''}`).trim()
                             }
                         }
 
