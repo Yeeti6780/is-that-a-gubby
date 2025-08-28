@@ -1123,8 +1123,6 @@ class Poopy {
                         content: CryptoJS.AES.encrypt(cleanMessage, process.env.AUTH_TOKEN).toString(),
                         timestamp: Date.now()
                     })
-
-                    data.guildData[msg.guild.id].messages.splice(10000)
                 }
             }
 
