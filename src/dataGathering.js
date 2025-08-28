@@ -3,189 +3,249 @@ const schemas = require('./schemas')
 
 let connected = false
 
+// Object to store promises for currently fetching data
+const pendingFetches = {
+    botData: new Map(),
+    userData: new Map(),
+    guildData: new Map(),
+    channelData: new Map(),
+    allChannelData: new Map(),
+    memberData: new Map(),
+    allMemberData: new Map(),
+    globalData: new Map()
+}
+
+async function withRaceConditionProtection(type, key, fetchFunction) {
+    if (pendingFetches[type].has(key)) {
+        return pendingFetches[type].get(key)
+    }
+
+    const promise = fetchFunction()
+    pendingFetches[type].set(key, promise)
+
+    try {
+        const result = await promise
+        return result
+    } finally {
+        pendingFetches[type].delete(key)
+    }
+}
+
 module.exports = {
     botData: async (dataid) => {
-        var botData = {}
+        const key = dataid
+        
+        return withRaceConditionProtection('botData', key, async () => {
+            var botData = {}
 
-        var url = process.env.MONGODB_URL
-        if (!connected) {
-            connected = true
-            await mongoose.connect(url)
-        }
-
-        var dataobject = await schemas.botData.findOne({ dataid }).then(d => d.toJSON()).catch(() => { })
-
-        if (dataobject) {
-            for (var k in dataobject) {
-                var value = dataobject[k]
-                if ((schemas.botData.schema.obj[k] ?? { required: true }).required) continue
-                botData[k] = value
+            var url = process.env.MONGODB_URL
+            if (!connected) {
+                connected = true
+                await mongoose.connect(url)
             }
-        }
 
-        return botData
+            var dataobject = await schemas.botData.findOne({ dataid }).then(d => d?.toJSON()).catch(() => { })
+
+            if (dataobject) {
+                for (var k in dataobject) {
+                    var value = dataobject[k]
+                    if ((schemas.botData.schema.obj[k] ?? { required: true }).required) continue
+                    botData[k] = value
+                }
+            }
+
+            return botData
+        })
     },
 
     userData: async (dataid, uid) => {
-        var userData = {}
+        const key = getCacheKey(dataid, uid)
+        
+        return withRaceConditionProtection('userData', key, async () => {
+            var userData = {}
 
-        var url = process.env.MONGODB_URL
-        if (!connected) {
-            connected = true
-            await mongoose.connect(url)
-        }
-
-        var dataobject = await schemas.userData.findOne({ dataid, uid }).then(d => d.toJSON()).catch(() => { })
-
-        if (dataobject) {
-            for (var k in dataobject) {
-                var value = dataobject[k]
-                if ((schemas.userData.schema.obj[k] ?? { required: true }).required) continue
-                userData[k] = value
+            var url = process.env.MONGODB_URL
+            if (!connected) {
+                connected = true
+                await mongoose.connect(url)
             }
-        }
 
-        return userData
+            var dataobject = await schemas.userData.findOne({ dataid, uid }).then(d => d?.toJSON()).catch(() => { })
+
+            if (dataobject) {
+                for (var k in dataobject) {
+                    var value = dataobject[k]
+                    if ((schemas.userData.schema.obj[k] ?? { required: true }).required) continue
+                    userData[k] = value
+                }
+            }
+
+            return userData
+        })
     },
 
     guildData: async (dataid, gid) => {
-        var guildData = {}
+        const key = getCacheKey(dataid, gid)
+        
+        return withRaceConditionProtection('guildData', key, async () => {
+            var guildData = {}
 
-        var url = process.env.MONGODB_URL
-        if (!connected) {
-            connected = true
-            await mongoose.connect(url)
-        }
-
-        var dataobject = await schemas.guildData.findOne({ dataid, gid }).then(d => d.toJSON()).catch(() => { })
-
-        if (dataobject) {
-            for (var k in dataobject) {
-                var value = dataobject[k]
-                if ((schemas.guildData.schema.obj[k] ?? { required: true }).required) continue
-                guildData[k] = value
+            var url = process.env.MONGODB_URL
+            if (!connected) {
+                connected = true
+                await mongoose.connect(url)
             }
-        }
 
-        return guildData
+            var dataobject = await schemas.guildData.findOne({ dataid, gid }).then(d => d?.toJSON()).catch(() => { })
+
+            if (dataobject) {
+                for (var k in dataobject) {
+                    var value = dataobject[k]
+                    if ((schemas.guildData.schema.obj[k] ?? { required: true }).required) continue
+                    guildData[k] = value
+                }
+            }
+
+            return guildData
+        })
     },
 
     channelData: async (dataid, gid, cid) => {
-        var channelData = {}
+        const key = getCacheKey(dataid, gid, cid)
+        
+        return withRaceConditionProtection('channelData', key, async () => {
+            var channelData = {}
 
-        var url = process.env.MONGODB_URL
-        if (!connected) {
-            connected = true
-            await mongoose.connect(url)
-        }
-
-        var dataobject = await schemas.channelData.findOne({ dataid, gid, cid }).then(d => d.toJSON()).catch(() => { })
-
-        if (dataobject) {
-            for (var k in dataobject) {
-                var value = dataobject[k]
-                if ((schemas.channelData.schema.obj[k] ?? { required: true }).required) continue
-                channelData[k] = value
+            var url = process.env.MONGODB_URL
+            if (!connected) {
+                connected = true
+                await mongoose.connect(url)
             }
-        }
 
-        return channelData
-    },
+            var dataobject = await schemas.channelData.findOne({ dataid, gid, cid }).then(d => d?.toJSON()).catch(() => { })
 
-    allChannelData: async (dataid, gid) => {
-        var channelData = {}
-
-        var url = process.env.MONGODB_URL
-        if (!connected) {
-            connected = true
-            await mongoose.connect(url)
-        }
-
-        var dataobjects = await schemas.channelData.find({ dataid, gid }).then(arr => arr.map(d => d.toJSON())).catch(() => { })
-
-        if (dataobjects) {
-            for (var dataobject of dataobjects) {
-                var cid = dataobject.cid
-                channelData[cid] = {}
+            if (dataobject) {
                 for (var k in dataobject) {
                     var value = dataobject[k]
                     if ((schemas.channelData.schema.obj[k] ?? { required: true }).required) continue
-                    channelData[cid][k] = value
+                    channelData[k] = value
                 }
             }
-        }
 
-        return channelData
+            return channelData
+        })
+    },
+
+    allChannelData: async (dataid, gid) => {
+        const key = getCacheKey(dataid, gid)
+        
+        return withRaceConditionProtection('allChannelData', key, async () => {
+            var channelData = {}
+
+            var url = process.env.MONGODB_URL
+            if (!connected) {
+                connected = true
+                await mongoose.connect(url)
+            }
+
+            var dataobjects = await schemas.channelData.find({ dataid, gid }).then(arr => arr.map(d => d.toJSON())).catch(() => { })
+
+            if (dataobjects) {
+                for (var dataobject of dataobjects) {
+                    var cid = dataobject.cid
+                    channelData[cid] = {}
+                    for (var k in dataobject) {
+                        var value = dataobject[k]
+                        if ((schemas.channelData.schema.obj[k] ?? { required: true }).required) continue
+                        channelData[cid][k] = value
+                    }
+                }
+            }
+
+            return channelData
+        })
     },
 
     memberData: async (dataid, gid, uid) => {
-        var memberData = {}
+        const key = getCacheKey(dataid, gid, uid)
+        
+        return withRaceConditionProtection('memberData', key, async () => {
+            var memberData = {}
 
-        var url = process.env.MONGODB_URL
-        if (!connected) {
-            connected = true
-            await mongoose.connect(url)
-        }
-
-        var dataobject = await schemas.memberData.findOne({ dataid, gid, uid }).then(d => d.toJSON()).catch(() => { })
-
-        if (dataobject) {
-            for (var k in dataobject) {
-                var value = dataobject[k]
-                if ((schemas.memberData.schema.obj[k] ?? { required: true }).required) continue
-                memberData[k] = value
+            var url = process.env.MONGODB_URL
+            if (!connected) {
+                connected = true
+                await mongoose.connect(url)
             }
-        }
 
-        return memberData
-    },
+            var dataobject = await schemas.memberData.findOne({ dataid, gid, uid }).then(d => d?.toJSON()).catch(() => { })
 
-    allMemberData: async (dataid, gid) => {
-        var memberData = {}
-
-        var url = process.env.MONGODB_URL
-        if (!connected) {
-            connected = true
-            await mongoose.connect(url)
-        }
-
-        var dataobjects = await schemas.memberData.find({ dataid, gid }).then(arr => arr.map(d => d.toJSON())).catch(() => { })
-
-        if (dataobjects) {
-            for (var dataobject of dataobjects) {
-                var uid = dataobject.uid
-                memberData[uid] = {}
+            if (dataobject) {
                 for (var k in dataobject) {
                     var value = dataobject[k]
                     if ((schemas.memberData.schema.obj[k] ?? { required: true }).required) continue
-                    memberData[uid][k] = value
+                    memberData[k] = value
                 }
             }
-        }
 
-        return memberData
+            return memberData
+        })
+    },
+
+    allMemberData: async (dataid, gid) => {
+        const key = getCacheKey(dataid, gid)
+        
+        return withRaceConditionProtection('allMemberData', key, async () => {
+            var memberData = {}
+
+            var url = process.env.MONGODB_URL
+            if (!connected) {
+                connected = true
+                await mongoose.connect(url)
+            }
+
+            var dataobjects = await schemas.memberData.find({ dataid, gid }).then(arr => arr.map(d => d.toJSON())).catch(() => { })
+
+            if (dataobjects) {
+                for (var dataobject of dataobjects) {
+                    var uid = dataobject.uid
+                    memberData[uid] = {}
+                    for (var k in dataobject) {
+                        var value = dataobject[k]
+                        if ((schemas.memberData.schema.obj[k] ?? { required: true }).required) continue
+                        memberData[uid][k] = value
+                    }
+                }
+            }
+
+            return memberData
+        })
     },
 
     globalData: async () => {
-        var globalData = {}
+        const key = 'global'
+        
+        return withRaceConditionProtection('globalData', key, async () => {
+            var globalData = {}
 
-        var url = process.env.MONGODB_URL
-        if (!connected) {
-            connected = true
-            await mongoose.connect(url)
-        }
-
-        var dataobject = await schemas.globalData.findOne({}).then(d => d.toJSON()).catch(() => { })
-
-        if (dataobject) {
-            for (var k in dataobject) {
-                var value = dataobject[k]
-                if ((schemas.globalData.schema.obj[k] ?? { required: true }).required) continue
-                globalData[k] = value
+            var url = process.env.MONGODB_URL
+            if (!connected) {
+                connected = true
+                await mongoose.connect(url)
             }
-        }
 
-        return globalData
+            var dataobject = await schemas.globalData.findOne({}).then(d => d?.toJSON()).catch(() => { })
+
+            if (dataobject) {
+                for (var k in dataobject) {
+                    var value = dataobject[k]
+                    if ((schemas.globalData.schema.obj[k] ?? { required: true }).required) continue
+                    globalData[k] = value
+                }
+            }
+
+            return globalData
+        })
     },
 
     update: async (dataid, d) => {
