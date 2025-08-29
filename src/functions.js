@@ -3671,12 +3671,12 @@ functions.addLastUrl = function (msg, url) {
     
     if (tempdata[msg.author.id][msg.id]) {
         var lasturls = [url].concat(lastUrls(msg))
-        lasturls.splice(100)
+        lasturls.splice(1000)
         tempdata[msg.author.id][msg.id].lastUrls = lasturls
     }
 
     var lasturls = [url].concat(lastUrls(msg, false, true))
-    lasturls.splice(100)
+    lasturls.splice(1000)
     data.guildData[msg.guild.id].channels[msg.channel.id].lastUrls = lasturls
 }
 
