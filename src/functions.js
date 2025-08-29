@@ -3591,8 +3591,7 @@ functions.lastUrl = function (msg, i, tempdir, global) {
 
     var urlsGlobal = !global &&
         tempdata[msg.author.id]?.[msg.id]?.lastUrls ||
-        data.guildData?.[msg.guild.id]?.channels?.[msg.channel.id]?.lastUrls ||
-        []
+        data.guildData?.[msg.guild.id]?.channels?.[msg.channel.id]?.lastUrls
     var urls = urlsGlobal.slice()
     var url = urls[i]
 
@@ -3628,8 +3627,7 @@ functions.lastUrls = function (msg, tempdir, global) {
 
     var urlsGlobal = !global &&
         tempdata[msg.author.id]?.[msg.id]?.lastUrls ||
-        data.guildData?.[msg.guild.id]?.channels?.[msg.channel.id]?.lastUrls ||
-        []
+        data.guildData?.[msg.guild.id]?.channels?.[msg.channel.id]?.lastUrls
     var urls = urlsGlobal.slice()
 
     for (var i = 0; i < urls.length; i++) {
