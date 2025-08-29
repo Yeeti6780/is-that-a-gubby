@@ -21,7 +21,7 @@ module.exports = {
         var randomsentences = getOption(args, 'randomsentences', { dft: false, splice: true, n: 0, join: true })
 
         var saidMessage = args.join(' ').substring((args[0] || '').length + 1)
-        var messages = tempdata[msg.guild.id].messages
+        var messages = tempdata[msg.guild.id].messages.map(m => m.content)
         if (messages.length <= 0 || randomsentences) {
             messages = json.sentenceJSON.data.map(s => s.sentence).concat(arrays.psPasta)
         }
@@ -30,12 +30,7 @@ module.exports = {
         }
         await msg.channel.sendTyping().catch(() => { })
         var markovChain = markovChainGenerator(messages.join('  '))
-        var markov = markovMe(markovChain, saidMessage, {
-            wordNumber: wordNumber,
-            nopunctuation: nopunctuation,
-            keepcase: keepcase,
-            randlerp: randlerp
-        })
+        var markov = markovMe(markovChain, saidMessage, { wordNumber, nopunctuation, keepcase, randlerp })
         if (!msg.nosend) await msg.reply({
             content: markov,
             allowedMentions: {
