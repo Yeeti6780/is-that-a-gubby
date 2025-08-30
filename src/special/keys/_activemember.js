@@ -1,55 +1,67 @@
 module.exports = {
-  desc: 'Returns a random active member from the server, this is calculated by the number of messages each one has sent and role order.',
+  desc: "Returns a random active member from the server, this is calculated by the number of messages each one has sent and role order.",
   func: function (msg) {
     let poopy = this
     let data = poopy.data
+    let { roundTo } = poopy.functions
 
     var datamembers = data.guildData[msg.guild.id].allMembers
-    var usermembers = {}
-    for (var id in datamembers) {
-      var datamember = datamembers[id]
-      if (datamember.username) usermembers[id] = datamember
-    }
-    var keys = Object.keys(usermembers)
-
     var roles = msg.guild.roles?.cache?.size || 1
 
-    var determineActiveValue = (id) => Math.max(
-      Math.min(
-        ((datamembers[id].messages || 0) + (25 * (datamembers[id].highestroleorder || 0))) * (datamembers[id].bot ? 0.1 : 1) || 0,
-        100 * roles
-      ) - Math.floor((Date.now() - datamembers[id].lastmessage || 0) / 604800000) * 10 * roles,
-      0
-    ) || 0
+    var activeMembers = Object.entries(datamembers).filter(([_, member]) => {
+      if (!member.username) return false
 
-    var sum = 0
-    for (var id in usermembers) {
-      sum += determineActiveValue(id)
+      var hasRecentActivity = (Date.now() - (member.lastmessage || 0)) < 30 * 24 * 60 * 60 * 1000
+      var hasMessages = (member.messages || 0) > 0
+      return hasRecentActivity && hasMessages
+    })
+
+    if (activeMembers.length === 0) return ""
+
+    var weightedMembers = activeMembers.map(([id, member]) => {
+      var {
+        messages = 0,
+        highestroleorder = 0,
+        lastmessage = 0,
+        bot = false
+      } = member
+
+      var daysSinceLastActivity = (Date.now() - lastmessage) / (24 * 60 * 60 * 1000)
+      var recencyPenalty = Math.pow(0.5, daysSinceLastActivity / 7)
+
+      var messageWeight = Math.pow(roundTo(messages, 50) * highestroleorder / roles * 4, 1.5)
+
+      var botMultiplier = bot ? 0.5 : 1
+
+      var score = messageWeight * recencyPenalty * botMultiplier
+
+      var weight = Math.max(score, 0.1)
+
+      return { id, member, weight }
+    }).sort((a, b) => b.weight - a.weight)
+
+    var totalWeight = weightedMembers.reduce((sum, wm) => sum + wm.weight, 0)
+
+    if (totalWeight === 0) {
+      var randomIndex = Math.floor(Math.random() * weightedMembers.length)
+      return weightedMembers[randomIndex].member.username
     }
 
-    var rnd = Math.random() * sum
-    var counter = 0
-
-    for (var id in usermembers) {
-      counter += determineActiveValue(id)
-      
-      if (counter > rnd) {
-        return usermembers[id].username.replace(/\@/g, '@‌')
+    var random = Math.random() * totalWeight
+    for (var wm of weightedMembers) {
+      random -= wm.weight
+      if (random <= 0) {
+        return wm.member.username
       }
     }
 
-    return usermembers[keys[0]].username.replace(/\@/g, '@‌')
+    return weightedMembers[0].member.username
   },
   array: function (msg) {
     let poopy = this
     let data = poopy.data
 
-    var datamembers = data.guildData[msg.guild.id].allMembers;
-    var members = []
-    for (var id in datamembers) {
-      var datamember = datamembers[id]
-      if (datamember.username) members.push(datamember.username)
-    }
-    return members.map(member => member.replace(/\@/g, '@‌'))
+    var datamembers = data.guildData[msg.guild.id].allMembers
+    return Object.values(datamembers).filter(m => m.username).map(m => m.username)
   }
 }
