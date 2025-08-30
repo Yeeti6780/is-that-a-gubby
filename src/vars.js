@@ -255,6 +255,8 @@ vars.dataTemplate = {
             read: [],
             restricted: [],
             disabled: [],
+            keyDisabled: [],
+            funcDisabled: [],
             localcmds: [],
             messages: [],
 
@@ -265,6 +267,7 @@ vars.dataTemplate = {
                     battling: false
                 }
             },
+
             members: {
                 userId: {
                     username: "",

@@ -191,6 +191,16 @@ module.exports = {
             required: false
         },
 
+        keyDisabled: {
+            type: Array,
+            required: false
+        },
+
+        funcDisabled: {
+            type: Array,
+            required: false
+        },
+
         restricted: {
             type: Array,
             required: false
