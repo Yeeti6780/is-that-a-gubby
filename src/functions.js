@@ -3514,7 +3514,7 @@ functions.getUrls = async function (msg, options = {}) {
     if (msg.embeds.length) {
         var embedsR = []
         msg.embeds.forEach(embed => {
-            if ((options.update && embed.fetched) || embed.data.type != 'rich' || !embed.data.image || !embed.data.image.url) return
+            if ((options.update && embed.fetched) || embed.data?.type != 'rich' || !embed.data?.image || !embed.data?.image?.url) return
             embedsR.push(embed.data.image.url)
             if (options.update && !embed.fetched) embed.fetched = true
         })
