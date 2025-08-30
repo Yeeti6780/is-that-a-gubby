@@ -38,23 +38,22 @@ module.exports = {
         var type = fileinfo.type
 
         if (type.mime.startsWith('video')) {
+            var frames = fileinfo.info.frames
+            if (frames > 150) {
+                await msg.reply(`That video has more than 150 frames, time to blow.`).catch(() => { })
+                fs.rmSync(filepath, { force: true, recursive: true })
+                return
+            }
+            
             if (fileinfo.info.width > 1000 || fileinfo.info.height > 1000) {
                 await msg.reply(`That file has width or height higher than 1000 pixels, time to blow.`).catch(() => { })
-                fs.rmSync(filepath, { force: true, recursive: true })
                 return
             }
 
             var filepath = await downloadFile(currenturl, `input.mp4`, {
                 fileinfo            })
             var filename = `input.mp4`
-            var frames = fileinfo.info.frames
             var fps = fileinfo.info.fps.includes('0/0') ? '50' : fileinfo.info.fps
-
-            if (frames > 150) {
-                await msg.reply(`That video has more than 150 frames, time to blow.`).catch(() => { })
-                fs.rmSync(filepath, { force: true, recursive: true })
-                return
-            }
 
             fs.mkdirSync(`${filepath}/frames`)
 
@@ -68,17 +67,17 @@ module.exports = {
             await execPromise(`magick ${filepath}/${filename} -liquid-rescale ${scale}% ${filepath}/output.png`)
             return await sendFile(msg, filepath, `output.png`)
         } else if (type.mime.startsWith('image') && vars.gifFormats.find(f => f === type.ext)) {
-            var filepath = await downloadFile(currenturl, `input.gif`, {
-                fileinfo            })
-            var filename = `input.gif`
             var frames = fileinfo.info.frames
-            var fps = fileinfo.info.fps.includes('0/0') ? '50' : fileinfo.info.fps
-
             if (frames > 150) {
                 await msg.reply(`That GIF has more than 150 frames, time to blow.`).catch(() => { })
                 fs.rmSync(filepath, { force: true, recursive: true })
                 return
             }
+            
+            var filepath = await downloadFile(currenturl, `input.gif`, {
+                fileinfo            })
+            var filename = `input.gif`
+            var fps = fileinfo.info.fps.includes('0/0') ? '50' : fileinfo.info.fps
 
             fs.mkdirSync(`${filepath}/frames`)
 

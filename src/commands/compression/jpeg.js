@@ -40,7 +40,6 @@ module.exports = {
         if (type.mime.startsWith('video')) {
             if (fileinfo.info.width > 1000 || fileinfo.info.height > 1000) {
                 await msg.reply(`That file has width or height higher than 1000 pixels, time to blow.`).catch(() => { })
-                fs.rmSync(filepath, { force: true, recursive: true })
                 return
             }
 
