@@ -84,17 +84,13 @@ module.exports = {
                     var resp = await cleverbot(content, m).catch(err => {
                         channel.send({
                             content: err.stack,
-                            allowedMentions: {
-                                parse: fetchPingPerms(m)
-                            }
+                            allowedMentions: fetchPingPerms(m)
                         }).catch(() => { })
                     })
                     if (resp) {
                         channel.send({
                             content: resp,
-                            allowedMentions: {
-                                parse: fetchPingPerms(m)
-                            }
+                            allowedMentions: fetchPingPerms(m)
                         }).catch(() => { })
                     }
                 } catch (_) { }
@@ -109,9 +105,7 @@ module.exports = {
                     if (reason === 'time') {
                         channel.send({
                             content: 'I\'m running out of time...',
-                            allowedMentions: {
-                                parse: fetchPingPerms(m)
-                            }
+                            allowedMentions: fetchPingPerms(m)
                         }).catch(() => { })
                     }
                 } catch (_) { }

@@ -311,12 +311,7 @@ module.exports = {
         if (!msg.nosend) {
             if (config.textEmbeds) msg.reply({
                 content: `\`${fileinfo.name}\`\n\n${params.join('\n')}`,
-                allowedMentions: {
-                    parse: (!msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) &&
-                        !msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.MentionEveryone) &&
-                        msg.author.id !== msg.guild.ownerID) ?
-                        ['users'] : ['users', 'everyone', 'roles']
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
             else msg.reply({
                 embeds: [embed]

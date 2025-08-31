@@ -1138,7 +1138,7 @@ functions.infoPost = async function (message) {
     if (config.textEmbeds) await infoChannel.send({
         content: message,
         allowedMentions: {
-            parse: ['users']
+            parse: []
         }
     }).catch(() => { })
     else await infoChannel.send({
@@ -1415,7 +1415,7 @@ functions.yesno = async function (channel, content, who, btdata, reply) {
                 parse: (!who.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) &&
                     !who.permissions.has(DiscordTypes.PermissionFlagsBits.MentionEveryone) &&
                     who.id !== channel.guild.ownerID) ?
-                    ['users'] : ['users', 'everyone', 'roles']
+                    [] : ['users', 'everyone', 'roles']
             }
             who = who.id
         }
@@ -1563,7 +1563,7 @@ functions.selectMenu = async function (channel, content, placeholder, options, e
                 parse: (!who.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) &&
                     !who.permissions.has(DiscordTypes.PermissionFlagsBits.MentionEveryone) &&
                     who.id !== channel.guild.ownerID) ?
-                    ['users'] : ['users', 'everyone', 'roles']
+                    [] : ['users', 'everyone', 'roles']
             }
             who = who.id
         }
@@ -1709,7 +1709,7 @@ functions.navigateEmbed = async function (channel, pageFunc, results, who, extra
             parse: (!who.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) &&
                 !who.permissions.has(DiscordTypes.PermissionFlagsBits.MentionEveryone) &&
                 who.id !== channel.guild.ownerID) ?
-                ['users'] : ['users', 'everyone', 'roles']
+                [] : ['users', 'everyone', 'roles']
         }
         sendObject.allowedMentions = allowedMentions
         who = who.id
@@ -2011,7 +2011,7 @@ functions.rainmaze = async function (channel, who, reply, w = 8, h = 6) {
             parse: (!who.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) &&
                 !who.permissions.has(DiscordTypes.PermissionFlagsBits.MentionEveryone) &&
                 who.id !== channel.guild.ownerID) ?
-                ['users'] : ['users', 'everyone', 'roles']
+                [] : ['users', 'everyone', 'roles']
         }
         rainObject.allowedMentions = allowedMentions
         tag = who.tag ?? who.user.tag
@@ -2304,7 +2304,7 @@ functions.displayShop = async function (channel, who, reply, shopType, shopMsg) 
             parse: (!who.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) &&
                 !who.permissions.has(DiscordTypes.PermissionFlagsBits.MentionEveryone) &&
                 who.id !== channel.guild.ownerID) ?
-                ['users'] : ['users', 'everyone', 'roles']
+                [] : ['users', 'everyone', 'roles']
         }
         shopObject.allowedMentions = allowedMentions
         who = who.id

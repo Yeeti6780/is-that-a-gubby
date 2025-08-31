@@ -183,7 +183,7 @@ module.exports = {
             if (config.textEmbeds) msg.reply({
                 content: `${infoEmbed.author.name}\n\n${infoEmbed.description}\n${infoEmbed.fields.map(p => `**${p.name}**: ${p.value}`).join('\n')}`,
                 allowedMentions: {
-                    parse: ['users']
+                    parse: []
                 }
             }).catch(() => { })
             else msg.reply({

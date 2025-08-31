@@ -117,7 +117,7 @@ for (var Discord of modules.Discord) {
                     payload = {
                         content: res,
                         allowedMentions: {
-                            parse: ['users']
+                            parse: []
                         }
                     }
                     break;
@@ -178,7 +178,7 @@ for (var Discord of modules.Discord) {
                     payload = {
                         content: res,
                         allowedMentions: {
-                            parse: ['users']
+                            parse: []
                         }
                     }
                     break;
@@ -248,7 +248,7 @@ for (var Discord of modules.Discord) {
                         payload = {
                             content: res,
                             allowedMentions: {
-                                parse: ['users']
+                                parse: []
                             }
                         }
                         break;

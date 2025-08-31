@@ -1364,7 +1364,7 @@ class Poopy {
                 channel.send({
                     content: joinPhrases[data.guildData[guild.id].joins % joinPhrases.length],
                     allowedMentions: {
-                        parse: ['users']
+                        parse: []
                     }
                 }).catch(() => { })
 

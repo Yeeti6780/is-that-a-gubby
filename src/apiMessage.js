@@ -90,7 +90,7 @@ async function send(payload) {
                     payload = {
                         content: r,
                         allowedMentions: {
-                            parse: ['users']
+                            parse: []
                         }
                     }
                     break;

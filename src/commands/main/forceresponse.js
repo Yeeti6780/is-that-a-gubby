@@ -30,7 +30,7 @@ module.exports = {
             if (!msg.nosend) await msg.reply({
                 content: `OK, the bot's next ${repliesOnly ? `response${persist ? 's' : ''} to ${persist ? 'replies' : 'a reply'}` : `message${persist ? 's' : ''}`} here will be "${saidMessage}"`,
                 allowedMentions: {
-                    parse: ['users']
+                    parse: []
                 }
             }).catch(() => { })
             tempdata[msg.guild.id][msg.channel.id].forceResponse = {
