@@ -823,7 +823,7 @@ functions.chat = async function (stim, msg, {
     if (!contexts) contexts = tempdata[msg.guild.id][msg.channel.id][msg.author.id].chatContexts = {}
 
     var instructMsg = Array.isArray(instruct) ? instruct[0].content : instruct
-    var startHistory = Array.isArray(instruct) ? instruct : [
+    var startHistory = Array.isArray(instruct) ? [ ...instruct ] : [
         {
             role: "system",
             content: instructMsg
