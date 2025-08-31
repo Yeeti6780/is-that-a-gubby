@@ -26,7 +26,7 @@ module.exports = {
         "name": "text",
         "required": true,
         "specifarg": false,
-        "orig": "\"<name>\""
+        "orig": "<name>"
     }],
     execute: async function (msg, args) {
         let poopy = this
@@ -89,7 +89,7 @@ module.exports = {
         return `${oldName.replace(/\@/g, '@‌')}'s nickname was set to **${name}**.`
     },
     help: {
-        name: 'rename/nickname [user (manage nicknames permission only)] "<text>" (change nickname permission only)',
+        name: 'rename/nickname [user (manage nicknames permission only)] <text> (change nickname permission only)',
         value: 'Allows you to set a nickname on yourself or other users.'
     },
     cooldown: 2500,
