@@ -18,9 +18,7 @@ module.exports = {
         var tobf = tobrainfuck(saidMessage)
         if (!msg.nosend) await msg.reply({
             content: tobf,
-            allowedMentions: {
-                parse: fetchPingPerms(msg)
-            }
+            allowedMentions: fetchPingPerms(msg)
         }).catch(async () => {
             var currentcount = vars.filecount
             vars.filecount++

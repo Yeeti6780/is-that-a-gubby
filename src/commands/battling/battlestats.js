@@ -37,9 +37,7 @@ module.exports = {
         if (!member) {
             await msg.reply({
                 content: `Invalid user: **${userQuery}**`,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
             return
         }
@@ -173,9 +171,7 @@ module.exports = {
                 fields: battleStats
             }],
             content: `**${member.displayName}'s Stats**\n\n${battleStats.map(s => `**${s.name}**: ${s.value}`).join('\n')}`,
-            allowedMentions: {
-                parse: fetchPingPerms(msg)
-            }
+            allowedMentions: fetchPingPerms(msg)
         }
         if (config.textEmbeds) delete sendObject.embeds
         else delete sendObject.content

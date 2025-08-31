@@ -222,9 +222,7 @@ module.exports = {
                 if (findCommand > -1) {
                     if (!msg.nosend) await msg.reply({
                         content: `\`${data.guildData[msg.guild.id].localcmds[findCommand].phrase}\``,
-                        allowedMentions: {
-                            parse: fetchPingPerms(msg)
-                        }
+                        allowedMentions: fetchPingPerms(msg)
                     }).catch(() => { })
                     return data.guildData[msg.guild.id].localcmds[findCommand].phrase
                 } else {
@@ -254,9 +252,7 @@ module.exports = {
                     var phrase = await getKeywordsFor(localCommand.phrase, msg, true, opts).catch(() => { }) ?? 'error'
                     if (!msg.nosend) await msg.reply({
                         content: phrase,
-                        allowedMentions: {
-                            parse: fetchPingPerms(msg)
-                        }
+                        allowedMentions: fetchPingPerms(msg)
                     }).catch(() => { })
 
                     msg.content = content
@@ -316,9 +312,7 @@ module.exports = {
 
                         if (!msg.nosend) await msg.reply({
                             content: `✅ Added \`${name.toLowerCase()}\` command with phrase \`${saidMessage}\``,
-                            allowedMentions: {
-                                parse: fetchPingPerms(msg)
-                            }
+                            allowedMentions: fetchPingPerms(msg)
                         }).catch(() => { })
                         return `✅ Added \`${name.toLowerCase()}\` command with phrase \`${saidMessage}\``
                     }
@@ -358,9 +352,7 @@ module.exports = {
 
                         if (!msg.nosend) await msg.reply({
                             content: `✅ Imported \`${name}\` command from the database.`,
-                            allowedMentions: {
-                                parse: fetchPingPerms(msg)
-                            }
+                            allowedMentions: fetchPingPerms(msg)
                         }).catch(() => { })
                         return `✅ Imported \`${name}\` command from the database.`
                     } else {
@@ -419,9 +411,7 @@ module.exports = {
 
                         if (!msg.nosend) await msg.reply({
                             content: `✅ Edited \`${name.toLowerCase()}\` command with phrase \`${saidMessage}\``,
-                            allowedMentions: {
-                                parse: fetchPingPerms(msg)
-                            }
+                            allowedMentions: fetchPingPerms(msg)
                         }).catch(() => { })
                         return `✅ Edited \`${name.toLowerCase()}\` command with phrase \`${saidMessage}\``
                     } else {
@@ -448,9 +438,7 @@ module.exports = {
 
                         if (!msg.nosend) await msg.reply({
                             content: `✅ Removed \`${removed[0].name}\` command with phrase \`${removed[0].phrase}\``,
-                            allowedMentions: {
-                                parse: fetchPingPerms(msg)
-                            }
+                            allowedMentions: fetchPingPerms(msg)
                         }).catch(() => { })
                         return `✅ Removed \`${removed[0].name}\` command with phrase \`${removed[0].phrase}\``
                     } else {

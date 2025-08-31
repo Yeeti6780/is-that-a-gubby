@@ -64,9 +64,7 @@ module.exports = {
         }).catch(async err => {
             await msg.reply({
                 content: err.stack,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
         })
 
@@ -83,9 +81,7 @@ module.exports = {
 
         if (!msg.nosend) await msg.reply({
             content: output,
-            allowedMentions: {
-                parse: fetchPingPerms(msg)
-            }
+            allowedMentions: fetchPingPerms(msg)
         }).catch(() => { })
         return output
     },

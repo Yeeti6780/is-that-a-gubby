@@ -24,9 +24,7 @@ module.exports = {
 
         if (!msg.nosend) await msg.reply({
             content: markovString,
-            allowedMentions: {
-                parse: fetchPingPerms(msg)
-            }
+            allowedMentions: fetchPingPerms(msg)
         }).catch(async () => {
             var currentcount = vars.filecount
             vars.filecount++

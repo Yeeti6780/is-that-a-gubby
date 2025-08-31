@@ -66,9 +66,7 @@ module.exports = {
 
         var cmdmessage = !msg.nosend && await msg.reply({
             content: `Executing \`${cmd.name[0]}\`.`,
-            allowedMentions: {
-                parse: fetchPingPerms(msg)
-            }
+            allowedMentions: fetchPingPerms(msg)
         }).catch(() => { })
         if (cmd.cooldown) {
             data.guildData[msg.guild.id].members[msg.author.id].coolDown = (data.guildData[msg.guild.id].members[msg.author.id].coolDown || Date.now()) + cmd.cooldown / ((msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerID) && (cmd.type === 'Text' || cmd.type === 'Main') ? 5 : 1)
@@ -85,9 +83,7 @@ module.exports = {
         if (cmd.type == 'Local' && !msg.nosend) {
             await msg.reply({
                 content: phrase,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
         }
         return phrase

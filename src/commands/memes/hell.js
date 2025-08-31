@@ -20,9 +20,7 @@ module.exports = {
         var fileinfo = await validateFile(currenturl).catch(error => {
             msg.reply({
                 content: error,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             })
             msg.channel.sendTyping().catch(() => { })
             return;
@@ -73,9 +71,7 @@ module.exports = {
         } else {
             msg.reply({
                 content: `Unsupported file: \`${currenturl}\``,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
             msg.channel.sendTyping().catch(() => { })
             return

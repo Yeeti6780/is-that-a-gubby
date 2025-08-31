@@ -43,9 +43,7 @@ module.exports = {
                 var ev = evalMessage[i]
                 await msg.reply({
                     content: ev,
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }).catch(async () => {
                     await msg.reply('​').catch(() => { })
                     return
@@ -56,9 +54,7 @@ module.exports = {
         } catch (error) {
             await msg.reply({
                 content: error.message,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
             return
         }

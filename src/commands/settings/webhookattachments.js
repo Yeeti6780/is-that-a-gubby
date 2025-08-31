@@ -9,9 +9,7 @@ module.exports = {
         data.guildData[msg.guild.id].webhookAttachments = !data.guildData[msg.guild.id].webhookAttachments
         if (!msg.nosend) await msg.reply({
             content: `Attachments from webhooks have been **${data.guildData[msg.guild.id].webhookAttachments ? 'enabled' : 'disabled'}**.`,
-            allowedMentions: {
-                parse: fetchPingPerms(msg)
-            }
+            allowedMentions: fetchPingPerms(msg)
         }).catch(() => { })
         return `Attachments from webhooks have been **${data.guildData[msg.guild.id].webhookAttachments ? 'enabled' : 'disabled'}**.`
     },

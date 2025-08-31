@@ -13,9 +13,7 @@ module.exports = {
             .replace(/{mention}/, `<@${msg.author.id}>`)
         if (!msg.nosend) await msg.reply({
             content: poop,
-            allowedMentions: {
-                parse: fetchPingPerms(msg)
-            }
+            allowedMentions: fetchPingPerms(msg)
         }).catch(() => { })
         return poop
     },

@@ -136,9 +136,7 @@ module.exports = {
         if (!msg.nosend) {
             if (config.textEmbeds) msg.reply({
                 content: `${statsEmbed.fields.map(p => `**${p.name}**: ${p.value}`).join('\n')}\n\nv${pkg.version}`,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
             else msg.reply({
                 embeds: [statsEmbed]

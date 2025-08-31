@@ -23,9 +23,7 @@ module.exports = {
         var fileinfo = await validateFile(currenturl, true).catch(async error => {
             await msg.reply({
                 content: error,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
             await msg.channel.sendTyping().catch(() => { })
             return;
@@ -83,9 +81,7 @@ module.exports = {
             } else {
                 await msg.reply({
                     content: `File has no audio stream, maybe you should just use \`gradualspeedup\` for that.`,
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
                 await msg.channel.sendTyping().catch(() => { })
             }
@@ -113,18 +109,14 @@ module.exports = {
         } else if (type.mime.startsWith('image') && vars.gifFormats.find(f => f === type.ext)) {
             await msg.reply({
                 content: `Maybe you should just use \`gradualspeedup\` for that.`,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
             await msg.channel.sendTyping().catch(() => { })
             return
         } else {
             await msg.reply({
                 content: `Unsupported file: \`${currenturl}\``,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
             await msg.channel.sendTyping().catch(() => { })
             return

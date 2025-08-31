@@ -9,9 +9,7 @@ module.exports = {
         data.userData[msg.author.id].dms = !data.userData[msg.author.id].dms
         if (!msg.nosend) await msg.reply({
             content: `Unrelated DMs from \`dm\` will **${!data.userData[msg.author.id].dms ? 'not ' : ''}be sent** to you now.`,
-            allowedMentions: {
-                parse: fetchPingPerms(msg)
-            }
+            allowedMentions: fetchPingPerms(msg)
         }).catch(() => { })
         return `Unrelated DMs from \`dm\` will **${!data.userData[msg.author.id].dms ? 'not ' : ''}be sent** to you now.`
     },

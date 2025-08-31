@@ -35,9 +35,7 @@ module.exports = {
 
             var message = await msg.reply({
                 content: word,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
 
             if (message) {

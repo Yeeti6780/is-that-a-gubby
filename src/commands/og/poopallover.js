@@ -19,9 +19,7 @@ module.exports = {
         };
         if (!msg.nosend) await msg.reply({
             content: '**' + (saidMessage || 'this') + '** has been successfully pooped on.',
-            allowedMentions: {
-                parse: fetchPingPerms(msg)
-            },
+            allowedMentions: fetchPingPerms(msg),
             files: attachments
         }).catch(() => { })
         return '**' + (saidMessage || 'this') + '** has been successfully pooped on.'

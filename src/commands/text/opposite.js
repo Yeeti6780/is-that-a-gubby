@@ -25,9 +25,7 @@ module.exports = {
     var opposite = lingo(saidMessage, translateSettings)
     if (!msg.nosend) await msg.reply({
       content: opposite,
-      allowedMentions: {
-        parse: fetchPingPerms(msg)
-      }
+      allowedMentions: fetchPingPerms(msg)
     }).catch(() => { })
     return opposite
   },

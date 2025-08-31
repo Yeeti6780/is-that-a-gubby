@@ -23,9 +23,7 @@ module.exports = {
             if (messageToReact.catch) messageToReact = await messageToReact.catch(async () => {
                     await msg.reply({
                         content: 'Invalid message ID: **' + saidMessage + '**',
-                        allowedMentions: {
-                            parse: fetchPingPerms(msg)
-                        }
+                        allowedMentions: fetchPingPerms(msg)
                     }).catch(() => { })
                     return
                 })
@@ -38,9 +36,7 @@ module.exports = {
                 if (err) {
                     await msg.reply({
                         content: 'Invalid emoji: **' + emoji + '**',
-                        allowedMentions: {
-                            parse: fetchPingPerms(msg)
-                        }
+                        allowedMentions: fetchPingPerms(msg)
                     }).catch(() => { })
                     return
                 }

@@ -175,9 +175,7 @@ module.exports = {
                         if (config.textEmbeds) {
                             await msg.reply({
                                 content: `**Channel:** <#${timer.channelId}>\n**Schedule:** \`${timer.cron}\` (Next: <t:${timestamp}:F>)\n**Message:**\n${timer.phrase}`,
-                                allowedMentions: {
-                                    parse: fetchPingPerms(msg)
-                                }
+                                allowedMentions: fetchPingPerms(msg)
                             }).catch(() => { })
                         } else {
                             await msg.reply({
@@ -192,9 +190,7 @@ module.exports = {
                                         "text": bot.user.displayName
                                     },
                                 }],
-                                allowedMentions: {
-                                    parse: fetchPingPerms(msg)
-                                }
+                                allowedMentions: fetchPingPerms(msg)
                             }).catch(() => { })
                         }
                     }
@@ -271,9 +267,7 @@ module.exports = {
 
                     if (!msg.nosend) await msg.reply({
                         content: `✅ Added new timer with ID \`${timerId}\` that will run \`${cronTime}\` with message \`${phrase.replace(/`/g, "")}\` in <#${channel.id}>.\n-# Next execution: <t:${timestamp}:F>`,
-                        allowedMentions: {
-                            parse: fetchPingPerms(msg)
-                        }
+                        allowedMentions: fetchPingPerms(msg)
                     }).catch(() => { })
                     return `✅ Added new timer with ID \`${timerId}\` that will run \`${cronTime}\` with message \`${phrase.replace(/`/g, "")}\` in <#${channel.id}>.\n-# Next execution: <t:${timestamp}:F>`
                 } else {
@@ -346,9 +340,7 @@ module.exports = {
 
                     if (!msg.nosend) await msg.reply({
                         content: `✅ Updated timer \`${timerId}\` (${updates.join(' and ')}).\n-# Next execution: <t:${timestamp}:F>`,
-                        allowedMentions: {
-                            parse: fetchPingPerms(msg)
-                        }
+                        allowedMentions: fetchPingPerms(msg)
                     }).catch(() => { })
                     return `✅ Updated timer \`${timerId}\` (${updates.join(' and ')}).\n -# Next execution: <t:${timestamp}:F>`
                 } else {
@@ -376,9 +368,7 @@ module.exports = {
 
                         if (!msg.nosend) await msg.reply({
                             content: `✅ Removed timer \`${removed.id}\` that was scheduled for \`${removed.cron}\` in <#${removed.channelId}>`,
-                            allowedMentions: {
-                                parse: fetchPingPerms(msg)
-                            }
+                            allowedMentions: fetchPingPerms(msg)
                         }).catch(() => { })
                         return `✅ Removed timer \`${removed.id}\` that was scheduled for \`${removed.cron}\` in <#${removed.channelId}>`
                     } else {

@@ -38,9 +38,7 @@ module.exports = {
             if (isNaN(numToRepeat)) {
                 await msg.reply({
                     content: 'Invalid number: **' + args[1] + '**',
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
                 return;
             }
@@ -53,9 +51,7 @@ module.exports = {
                 return;
             };
             var sendObject = {
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                },
+                allowedMentions: fetchPingPerms(msg),
                 files: attachments,
                 stickers: msg.stickers,
                 tts: (msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.SendTTSMessages) || msg.author.id === msg.guild.ownerID) && tts

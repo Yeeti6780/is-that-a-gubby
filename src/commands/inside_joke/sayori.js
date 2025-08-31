@@ -30,9 +30,7 @@ module.exports = {
             content: optiontext,
             username: sayori.displayName,
             avatarURL: sayori.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' }),
-            allowedMentions: {
-                parse: fetchPingPerms(msg)
-            }
+            allowedMentions: fetchPingPerms(msg)
         }).catch(() => { })
 
         if (botmsg) {
@@ -44,9 +42,7 @@ module.exports = {
                             content: '<@' + msg.author.id + '> ' + option.edit + ' ⁽ᵉᵈᶦᵗᵉᵈ⁾',
                             username: sayori.displayName,
                             avatarURL: sayori.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' }),
-                            allowedMentions: {
-                                parse: fetchPingPerms(msg)
-                            }
+                            allowedMentions: fetchPingPerms(msg)
                         }).catch(() => { })
                     } else {
                         botmsg.delete().catch(() => { })
@@ -54,9 +50,7 @@ module.exports = {
                             content: option.edit + ' ⁽ᵉᵈᶦᵗᵉᵈ⁾',
                             username: sayori.displayName,
                             avatarURL: sayori.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' }),
-                            allowedMentions: {
-                                parse: fetchPingPerms(msg)
-                            }
+                            allowedMentions: fetchPingPerms(msg)
                         }).catch(() => { })
                     }
                     clearTimeout(editTimeout)
@@ -65,9 +59,7 @@ module.exports = {
         } else {
             botmsg = await msg.reply({
                 content: optiontext,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
 
             if (botmsg) {
@@ -76,16 +68,12 @@ module.exports = {
                         if (option.pings === true) {
                             botmsg.edit({
                                 content: '<@' + msg.author.id + '> ' + option.edit,
-                                allowedMentions: {
-                                    parse: fetchPingPerms(msg)
-                                }
+                                allowedMentions: fetchPingPerms(msg)
                             }).catch(() => { })
                         } else {
                             botmsg.edit({
                                 content: option.edit,
-                                allowedMentions: {
-                                    parse: fetchPingPerms(msg)
-                                }
+                                allowedMentions: fetchPingPerms(msg)
                             }).catch(() => { })
                         }
                         clearTimeout(editTimeout)

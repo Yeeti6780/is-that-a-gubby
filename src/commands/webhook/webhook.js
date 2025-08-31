@@ -51,9 +51,7 @@ module.exports = {
         if (!member) {
             await msg.reply({
                 content: `Invalid user ID: **${args[1]}**`,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
             return
         }
@@ -106,9 +104,7 @@ module.exports = {
                 }
                 if (!msg.nosend) await msg.reply({
                     content: member.displayName.replace(/\@/g, '@‌') + ` is now ${name}.`,
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
                 return member.displayName.replace(/\@/g, '@‌') + ` is now ${name}.`
             } else {
@@ -118,9 +114,7 @@ module.exports = {
         } else {
             if (!msg.nosend) await msg.reply({
                 content: member.displayName.replace(/\@/g, '@‌') + ` is not ${data.guildData[msg.guild.id].members[member.id].custom.name}.`,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
             data.guildData[msg.guild.id].members[member.id].custom = false
             return member.displayName.replace(/\@/g, '@‌') + ` is not ${data.guildData[msg.guild.id].members[member.id].custom.name}.`

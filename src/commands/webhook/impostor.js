@@ -38,9 +38,7 @@ module.exports = {
         if (!member) {
             await msg.reply({
                 content: `Invalid user ID: **${args[1]}**`,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => {})
             return
         }
@@ -58,9 +56,7 @@ module.exports = {
                 data.guildData[msg.guild.id].members[member.id].impostor = true
                 if (!msg.nosend) await msg.reply({
                     content: member.displayName.replace(/\@/g, '@‌') + ' is now the Impostor.',
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }).catch(() => {})
                 return member.displayName.replace(/\@/g, '@‌') + ' is now the Impostor.'
             } else {
@@ -71,9 +67,7 @@ module.exports = {
             data.guildData[msg.guild.id].members[member.id].impostor = false
             if (!msg.nosend) await msg.reply({
                 content: member.displayName.replace(/\@/g, '@‌') + ' is not the Impostor.',
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => {})
             return member.displayName.replace(/\@/g, '@‌') + ' is not the Impostor.'
         }

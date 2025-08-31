@@ -561,9 +561,7 @@ class Poopy {
                     content: origcontent || "",
                     files: data.guildData[msg.guild.id].webhookAttachments ? attachmentsAndStickers : [],
                     embeds: embeds,
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }
 
                 if (msg.reference) {
@@ -628,9 +626,7 @@ class Poopy {
                         var change = await getKeywordsFor(cmd, msg, false, { resetattempts: true }).catch(async err => {
                             await msg.reply({
                                 content: err.stack,
-                                allowedMentions: {
-                                    parse: fetchPingPerms(msg)
-                                }
+                                allowedMentions: fetchPingPerms(msg)
                             }).catch(() => { })
                         }) ?? 'error'
 
@@ -659,9 +655,7 @@ class Poopy {
                         try {
                             await msg.reply({
                                 content: err.stack,
-                                allowedMentions: {
-                                    parse: fetchPingPerms(msg)
-                                }
+                                allowedMentions: fetchPingPerms(msg)
                             }).catch(() => { })
                         } catch (_) { }
                     })
@@ -819,9 +813,7 @@ class Poopy {
                                     try {
                                         await msg.reply({
                                             content: err.stack,
-                                            allowedMentions: {
-                                                parse: fetchPingPerms(msg)
-                                            }
+                                            allowedMentions: fetchPingPerms(msg)
                                         }).catch(() => { })
                                     } catch (_) { }
                                 })
@@ -863,9 +855,7 @@ class Poopy {
                             if (tempdata[msg.guild.id][msg.channel.id].shutUp) break
                             await msg.reply({
                                 content: phrase,
-                                allowedMentions: {
-                                    parse: fetchPingPerms(msg)
-                                }
+                                allowedMentions: fetchPingPerms(msg)
                             }).catch(() => { })
 
                             data.botData.filecount = vars.filecount
@@ -924,9 +914,7 @@ class Poopy {
                                             try {
                                                 await msg.reply({
                                                     content: err.stack,
-                                                    allowedMentions: {
-                                                        parse: fetchPingPerms(msg)
-                                                    }
+                                                    allowedMentions: fetchPingPerms(msg)
                                                 }).catch(() => { })
                                                 await msg.channel.sendTyping().catch(() => { })
                                             } catch (_) { }
@@ -970,9 +958,7 @@ class Poopy {
 
                                     await msg.reply({
                                         content: phrase,
-                                        allowedMentions: {
-                                            parse: fetchPingPerms(msg)
-                                        }
+                                        allowedMentions: fetchPingPerms(msg)
                                     }).catch(() => { })
 
                                     data.botData.filecount = vars.filecount
@@ -993,9 +979,7 @@ class Poopy {
                     try {
                         await msg.reply({
                             content: err.stack,
-                            allowedMentions: {
-                                parse: fetchPingPerms(msg)
-                            }
+                            allowedMentions: fetchPingPerms(msg)
                         }).catch(() => { })
                     } catch (_) { }
                 })
@@ -1003,9 +987,7 @@ class Poopy {
 
             var executed = !isRestricted ? await executeCommand().catch(async (e) => await msg.reply({
                 content: e.stack,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })) : false
 
             msg.content = origcontent = allcontents.length > 0 ? allcontents.join(' -|- ') : origcontent
@@ -1202,9 +1184,7 @@ class Poopy {
                         if (res) {
                             await msg.reply({
                                 content: res,
-                                allowedMentions: {
-                                    parse: fetchPingPerms(msg)
-                                }
+                                allowedMentions: fetchPingPerms(msg)
                             }).catch(() => { })
                         }
                     } else {
@@ -1219,9 +1199,7 @@ class Poopy {
                         if (resp) {
                             await msg.reply({
                                 content: resp,
-                                allowedMentions: {
-                                    parse: fetchPingPerms(msg)
-                                }
+                                allowedMentions: fetchPingPerms(msg)
                             }).catch(() => { })
                         }
                     }
@@ -1235,27 +1213,21 @@ class Poopy {
                     await findCmd.execute.call(poopy, msg, ['setprefix', config.globalPrefix]).catch(async err => {
                         await msg.reply({
                             content: err.stack,
-                            allowedMentions: {
-                                parse: fetchPingPerms(msg)
-                            }
+                            allowedMentions: fetchPingPerms(msg)
                         }).catch(() => { })
                         await msg.channel.sendTyping().catch(() => { })
                     })
                 } else if (words.includes('lore')) {
                     await msg.reply({
                         content: `Well... If you played a little bit with \`${config.globalPrefix}poop\`, I could give you some...`,
-                        allowedMentions: {
-                            parse: fetchPingPerms(msg)
-                        }
+                        allowedMentions: fetchPingPerms(msg)
                     }).catch(() => { })
                 } else if ((words.includes('how') && words.includes('are') && words.includes('you')) || (words.includes('what') && words.includes('up')) || (words.includes('what') && words.includes('doing')) || words.includes('wassup') || (words.includes('how') && words.includes('it') && words.includes('going'))) {
                     var activity = bot.user.presence.activities[0]
                     if (activity) {
                         await msg.reply({
                             content: `Ya know, just ${DiscordTypes.ActivityType[activity.type].toLowerCase()} ${((activity.type === DiscordTypes.ActivityType.Competing && 'in ') || (activity.type === DiscordTypes.ActivityType.Listening && 'to ') || '')}${activity.name.replace(new RegExp(`${regexClean(` | ${config.globalPrefix}help`)}$`), '')}.`,
-                            allowedMentions: {
-                                parse: fetchPingPerms(msg)
-                            }
+                            allowedMentions: fetchPingPerms(msg)
                         }).catch(() => { })
                     }
                 } else if (
@@ -1290,9 +1262,7 @@ class Poopy {
                     var eggPhrase = ourEggPhrases[tempdata[msg.author.id].mentions]
                     if (eggPhrase) await msg.reply({
                         content: eggPhrase,
-                        allowedMentions: {
-                            parse: fetchPingPerms(msg)
-                        }
+                        allowedMentions: fetchPingPerms(msg)
                     }).catch(() => { })
                 }
             }

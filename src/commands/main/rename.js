@@ -91,9 +91,7 @@ module.exports = {
 
         if (!msg.nosend) await msg.reply({
             content: `${oldName.replace(/\@/g, '@‌')}'s nickname was set to **${name}**.`,
-            allowedMentions: {
-                parse: fetchPingPerms(msg)
-            }
+            allowedMentions: fetchPingPerms(msg)
         }).catch(() => { })
         return `${oldName.replace(/\@/g, '@‌')}'s nickname was set to **${name}**.`
     },

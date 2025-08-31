@@ -39,18 +39,14 @@ module.exports = {
             var resp = await cleverbot(saidMessage, msg, clear).catch(err => {
                 channel.send({
                     content: err.stack,
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
             })
 
             if (resp) {
                 if (!msg.nosend) channel.send({
                     content: resp,
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
                 return resp
             }

@@ -42,9 +42,7 @@ module.exports = {
             var payload = tryJSONparse(word)
             if (!payload) return 'Malformatted payload JSON.'
 
-            payload.allowedMentions = {
-                parse: fetchPingPerms(msg)
-            }
+            payload.allowedMentions = fetchPingPerms(msg)
 
             if (payload.files) payload.files.filter(file => {
                 return file.attachment.match(vars.validUrl) || file.attachment.match(/temp:[a-zA-Z0-9_-]{10}/g)

@@ -53,9 +53,7 @@ module.exports = {
                 if (!msg.nosend) {
                     if (config.textEmbeds) msg.reply({
                         content: list.join('\n'),
-                        allowedMentions: {
-                            parse: fetchPingPerms(msg)
-                        }
+                        allowedMentions: fetchPingPerms(msg)
                     }).catch(() => { })
                     else msg.reply({
                         embeds: [listEmbed]
@@ -104,9 +102,7 @@ module.exports = {
             if (!msg.nosend) {
                 if (config.textEmbeds) msg.reply({
                     content: instruction,
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
                 else msg.reply({
                     embeds: [{

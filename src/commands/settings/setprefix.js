@@ -27,9 +27,7 @@ module.exports = {
             data.guildData[msg.guild.id].prefix = saidMessage
             if (!msg.nosend) await msg.reply({
                 content: `The prefix was set to \`${saidMessage}\` (if this is wrong, mention me with "reset prefix")`,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
             return `The prefix was set to \`${saidMessage}\` (if this is wrong, mention me with "reset prefix")`
         } else {

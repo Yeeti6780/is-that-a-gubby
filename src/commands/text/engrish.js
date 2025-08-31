@@ -25,9 +25,7 @@ module.exports = {
     var engrish = lingo(saidMessage, translateSettings)
     if (!msg.nosend) await msg.reply({
       content: engrish,
-      allowedMentions: {
-        parse: fetchPingPerms(msg)
-      }
+      allowedMentions: fetchPingPerms(msg)
     }).catch(() => { })
     return engrish
   },

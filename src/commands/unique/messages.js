@@ -176,9 +176,7 @@ module.exports = {
                 var rand = messages[Math.floor(Math.random() * messages.length)].content
                 if (!msg.nosend) await msg.reply({
                     content: rand,
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
                 return rand
             },
@@ -208,9 +206,7 @@ module.exports = {
                 var rand = messages[Math.floor(Math.random() * messages.length)].content
                 if (!msg.nosend) await msg.reply({
                     content: rand,
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
                 return rand
             },
@@ -253,9 +249,7 @@ module.exports = {
 
                     if (!msg.nosend) await msg.reply({
                         content: `✅ Added ${cleanMessage}`,
-                        allowedMentions: {
-                            parse: fetchPingPerms(msg)
-                        }
+                        allowedMentions: fetchPingPerms(msg)
                     }).catch(() => { })
                     return `✅ Added ${cleanMessage}`
                 }

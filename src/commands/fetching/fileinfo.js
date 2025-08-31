@@ -19,9 +19,7 @@ module.exports = {
         var fileinfo = await validateFile(currenturl, 'very true').catch(async error => {
             await msg.reply({
                 content: error,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
             await msg.channel.sendTyping().catch(() => { })
             return;

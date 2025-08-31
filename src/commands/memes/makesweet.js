@@ -67,9 +67,7 @@ module.exports = {
             var fileinfo = await validateFile(url).catch(async error => {
                 await msg.reply({
                 content: error,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
                 await msg.channel.sendTyping().catch(() => { })
                 return
@@ -81,9 +79,7 @@ module.exports = {
             if (!filetype || !(filetype.mime.startsWith('image') && !(vars.gifFormats.find(f => f === filetype.ext)))) {
                 await msg.reply({
                     content: `Unsupported file: \`${url}\``,
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
                 return
             }
@@ -122,9 +118,7 @@ module.exports = {
         }).catch(async (e) => {
             await msg.reply({
                 content: e.response.statusText,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
             fs.rmSync(`${filepath}`, { force: true, recursive: true })
         })

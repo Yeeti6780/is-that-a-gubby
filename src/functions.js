@@ -503,11 +503,20 @@ functions.configFlagsEnabled = function (reqConfigs = []) {
 }
 
 functions.fetchPingPerms = function (msg) {
-    return (
+    let poopy = this
+    let { DiscordTypes } = poopy.modules
+
+    const hasPingPerms = (
         msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
         msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.MentionEveryone) ||
         msg.author.id == msg.guild.ownerID
-    ) ? ['users', 'everyone', 'roles'] : []
+    )
+
+    return hasPingPerms ? {
+        parse: ['users', 'everyone', 'roles']
+    } : {
+        users: [msg.author.id]
+    }
 }
 
 functions.execPromise = function (code) {
@@ -2187,9 +2196,7 @@ functions.displayShops = async function (msg, shopType, shopMsg) {
 
         if (config.textEmbeds) {
             shopObject.content = instruction
-            shopObject.allowedMentions = {
-                parse: fetchPingPerms(msg)
-            }
+            shopObject.allowedMentions = fetchPingPerms(msg)
         }
         else {
             shopObject.embeds = [{
@@ -4552,9 +4559,7 @@ functions.battle = async function (msg, subject, action, damage, chance) {
             },
         }],
         content: `${attacked ? actions.join(' ') : 'You missed!'}${stats.length ? `\n\n${stats.map(s => `**${s.name}**: ${s.value}`).join('\n')}` : ''}`,
-        allowedMentions: {
-            parse: fetchPingPerms(msg)
-        }
+        allowedMentions: fetchPingPerms(msg)
     }
 
     payload.files = []
@@ -4939,18 +4944,14 @@ functions.sendFile = async function (msg, filepath, filename, extraOptions) {
                 } else {
                     await msg.reply({
                         content: fileLink.includes('retard') ? 'ok so what happened right here is i tried to upload a gif with a size bigger than 20 mb to catbox.moe but apparently you cant do it so uhhhhhh haha no link for you' : fileLink,
-                        allowedMentions: {
-                            parse: fetchPingPerms(msg)
-                        }
+                        allowedMentions: fetchPingPerms(msg)
                     }).catch(() => { })
                     infoPost(`Couldn\'t upload catbox.moe file, reason:\n\`${fileLink.includes('retard') ? 'ok so what happened right here is i tried to upload a gif with a size bigger than 20 mb to catbox.moe but apparently you cant do it so uhhhhhh haha no link for you' : fileLink}\``)
                 }
             } else {
                 await msg.reply({
                     content: fileLink.includes('retard') ? 'ok so what happened right here is i tried to upload a gif with a size bigger than 20 mb to catbox.moe but apparently you cant do it so uhhhhhh haha no link for you' : fileLink,
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
                 if (!isUrl) {
                     infoPost(`Couldn\'t upload catbox.moe file, reason:\n\`${fileLink.includes('retard') ? 'ok so what happened right here is i tried to upload a gif with a size bigger than 20 mb to catbox.moe but apparently you cant do it so uhhhhhh haha no link for you' : fileLink}\``)
@@ -4997,9 +4998,7 @@ functions.sendFile = async function (msg, filepath, filename, extraOptions) {
         infoPost(`Sending file to channel`)
         var sendObject = {
             files: [new Discord.AttachmentBuilder(`${filepath}/${filename}`)],
-            allowedMentions: {
-                parse: fetchPingPerms(msg)
-            }
+            allowedMentions: fetchPingPerms(msg)
         }
 
         if (extraOptions.content) sendObject.content = extraOptions.content
@@ -5014,9 +5013,7 @@ functions.sendFile = async function (msg, filepath, filename, extraOptions) {
                 var isUrl = vars.validUrl.test(fileLink)
                 await msg.reply({
                     content: fileLink.includes('retard') ? 'ok so what happened right here is i tried to upload a gif with a size bigger than 20 mb to catbox.moe but apparently you cant do it so uhhhhhh haha no link for you' : fileLink,
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
 
                 if (!isUrl) {

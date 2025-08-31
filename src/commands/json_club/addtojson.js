@@ -51,9 +51,7 @@ module.exports = {
 
             if (!msg.nosend) await msg.reply({
                 content: '✅ Added ' + saidMessage,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
 
             arrays.psFiles = globaldata.psfiles

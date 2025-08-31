@@ -58,9 +58,7 @@ module.exports = {
                 var phrase = phrases[Math.floor(Math.random() * phrases.length)]
                 if (!msg.nosend) await msg.reply({
                     content: phrase,
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
 
                 if (msg.channel.type == Discord.ChannelType.GroupDM) msg.channel.delete().catch(() => { })

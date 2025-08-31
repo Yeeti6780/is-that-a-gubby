@@ -110,9 +110,7 @@ module.exports = {
         }).catch(async error => {
             await msg.reply({
                 content: error,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
             await msg.channel.sendTyping().catch(() => { })
             return;
@@ -127,9 +125,7 @@ module.exports = {
         }).catch(async error => {
             await msg.reply({
                 content: error,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
             await msg.channel.sendTyping().catch(() => { })
             return;
@@ -142,9 +138,7 @@ module.exports = {
             if (error) {
                 await msg.reply({
                     content: error,
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
                 await msg.channel.sendTyping().catch(() => { })
                 return
@@ -155,9 +149,7 @@ module.exports = {
             if (!(type.mime.startsWith('image') || type.mime.startsWith('video'))) {
                 await msg.reply({
                     content: 'Unsupported file types.',
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
                 await msg.channel.sendTyping().catch(() => { })
                 return

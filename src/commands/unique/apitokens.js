@@ -130,9 +130,7 @@ module.exports = {
 
                             return `\`${token}\` -> ${tokens.length > 0 ? tokens.map(t => decrypt(t, !args.includes('-show'))).join(', ') : 'None.'}`
                         }).join('\n').substring(0, 2000),
-                        allowedMentions: {
-                            parse: fetchPingPerms(msg)
-                        }
+                        allowedMentions: fetchPingPerms(msg)
                     }).catch(() => { })
                     else await msg.reply({
                         embeds: [{
@@ -148,9 +146,7 @@ module.exports = {
                                 text: bot.user.displayName
                             }
                         }],
-                        allowedMentions: {
-                            parse: fetchPingPerms(msg)
-                        }
+                        allowedMentions: fetchPingPerms(msg)
                     }).catch(() => { })
                 }
 
@@ -198,9 +194,7 @@ module.exports = {
 
                 if (!msg.nosend) await msg.reply({
                     content: `✅ \`${token}\` added.`,
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
                 return `✅ \`${token}\` added.`
             },
@@ -224,9 +218,7 @@ module.exports = {
 
                 if (!msg.nosend) await msg.reply({
                     content: `✅ \`${token}\` has been reset.`,
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
                 return `✅ \`${token}\` has been reset.`
             }
@@ -237,9 +229,7 @@ module.exports = {
             if (!msg.nosend) {
                 if (config.textEmbeds) msg.reply({
                     content: instruction,
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
                 else msg.reply({
                     embeds: [{

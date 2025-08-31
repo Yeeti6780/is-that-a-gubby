@@ -63,9 +63,7 @@ module.exports = {
             content: message,
             username: name,
             avatarURL: avatar,
-            allowedMentions: {
-                parse: fetchPingPerms(msg)
-            }
+            allowedMentions: fetchPingPerms(msg)
         }
 
         if (keepAttachments) {

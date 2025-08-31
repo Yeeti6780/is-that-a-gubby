@@ -33,9 +33,7 @@ objShell.Run "%windir%\\System32\\RUNDLL32.EXE user32.dll,UpdatePerUserSystemPar
             var fileinfo = await validateFile(currenturl, true).catch(async error => {
                 await msg.reply({
                 content: error,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
                 await msg.channel.sendTyping().catch(() => { })
                 return;

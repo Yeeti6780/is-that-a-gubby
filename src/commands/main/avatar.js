@@ -48,9 +48,7 @@ module.exports = {
         if (!member) {
             await msg.reply({
                 content: `Invalid user ID: **${args[1]}**`,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => {})
             return
         }
@@ -63,9 +61,7 @@ module.exports = {
         var parsedAvatar = whatwg.parseURL(avatar.attachment)
 
         var avObject = {
-            allowedMentions: {
-                parse: fetchPingPerms(msg)
-            },
+            allowedMentions: fetchPingPerms(msg),
             files: [avatar]
         }
 

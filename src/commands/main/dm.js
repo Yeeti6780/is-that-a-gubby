@@ -109,9 +109,7 @@ module.exports = {
         if (!member) {
             await msg.reply({
                 content: `Invalid user ID: **${args[1]}**`,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
             return
         }
@@ -133,9 +131,7 @@ module.exports = {
                 data.userData[member.id].dms = send
                 member.send({
                     content: `Unrelated DMs from \`dm\` will **${!send ? 'not ' : ''}be sent** to you now. To change this setting, use the \`toggledms\` command.`,
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
                 if (pending) {
                     pending.edit(send ? 'You can send DMs to the user now.' : 'blocked on twitter').catch(() => { })

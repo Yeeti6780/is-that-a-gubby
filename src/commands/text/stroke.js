@@ -15,9 +15,7 @@ module.exports = {
     var gibber = gibberish(saidMessage)
     if (!msg.nosend) await msg.reply({
       content: gibber,
-      allowedMentions: {
-        parse: fetchPingPerms(msg)
-      }
+      allowedMentions: fetchPingPerms(msg)
     }).catch(() => { })
     return gibber
   },

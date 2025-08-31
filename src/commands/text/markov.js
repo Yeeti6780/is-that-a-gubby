@@ -33,9 +33,7 @@ module.exports = {
         var markov = markovMe(markovChain, saidMessage, { wordNumber, nopunctuation, keepcase, randlerp })
         if (!msg.nosend) await msg.reply({
             content: markov,
-            allowedMentions: {
-                parse: fetchPingPerms(msg)
-            }
+            allowedMentions: fetchPingPerms(msg)
         }).catch(async () => {
             var currentcount = vars.filecount
             vars.filecount++

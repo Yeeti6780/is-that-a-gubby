@@ -23,9 +23,7 @@ module.exports = {
                 }
 
                 await messageToEdit.edit({
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    },
+                    allowedMentions: fetchPingPerms(msg),
                     content: phrase
                 }).catch(() => { })
             }

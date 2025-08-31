@@ -190,9 +190,7 @@ module.exports = {
 
                 if (!msg.nosend) await msg.reply({
                     content: `✅ \`${name}\` was successfully registered to the command template database! (ID: \`${id}\`)`,
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
                 return `✅ \`${name}\` was successfully registered to the command template database! (ID: \`${id}\`)`
             }
@@ -319,9 +317,7 @@ module.exports = {
 
                                     await msg.reply({
                                         content: `✅ Imported \`${name}\` command from the database.`,
-                                        allowedMentions: {
-                                            parse: fetchPingPerms(msg)
-                                        }
+                                        allowedMentions: fetchPingPerms(msg)
                                     }).catch(() => { })
                                 } else {
                                     if (config.useReactions) msg.reply('Error fetching command.').catch(() => { })
@@ -481,9 +477,7 @@ module.exports = {
 
                                     await msg.reply({
                                         content: `✅ Imported \`${name}\` command from the database.`,
-                                        allowedMentions: {
-                                            parse: fetchPingPerms(msg)
-                                        }
+                                        allowedMentions: fetchPingPerms(msg)
                                     }).catch(() => { })
                                 } else {
                                     if (config.useReactions) msg.reply('Error fetching command.').catch(() => { })

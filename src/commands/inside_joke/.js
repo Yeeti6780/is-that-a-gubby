@@ -15,9 +15,7 @@ module.exports = {
             
             if (!msg.nosend) await msg.reply({
                 content: chatResponse,
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
             
             return chatResponse

@@ -32,9 +32,7 @@ module.exports = {
             return
         };
         var sendObject = {
-            allowedMentions: {
-                parse: fetchPingPerms(msg)
-            },
+            allowedMentions: fetchPingPerms(msg),
             files: attachments,
             stickers: msg.stickers,
             tts: (

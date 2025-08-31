@@ -23,9 +23,7 @@ module.exports = {
 
         if (!msg.nosend) await msg.reply({
             content: finalMessage,
-            allowedMentions: {
-                parse: fetchPingPerms(msg)
-            }
+            allowedMentions: fetchPingPerms(msg)
         }).catch(() => { })
         return finalMessage
     },

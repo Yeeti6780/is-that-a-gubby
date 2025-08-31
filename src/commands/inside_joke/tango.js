@@ -26,9 +26,7 @@ module.exports = {
             },
         };
         if (!msg.nosend) await msg.reply({
-            allowedMentions: {
-                parse: fetchPingPerms(msg)
-            },
+            allowedMentions: fetchPingPerms(msg),
             embeds: [tangoEmbed]
         }).catch((e) => console.log(e))
         return 'but how'

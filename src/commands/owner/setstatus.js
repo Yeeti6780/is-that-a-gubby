@@ -49,18 +49,14 @@ module.exports = {
                 vars.statusChanges = permanent;
                 if (!msg.nosend) await msg.reply({
                     content: `Poopy\'s status set to: **${saidMessage} (${args[1]})**`,
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
                 return `Poopy\'s status set to: **${saidMessage} (${args[1]})**`
             }
             else {
                 await msg.reply({
                     content: `Invalid status type: **${args[2]}** (Available: **Playing**, **Listening**, **Watching**, **Streaming**, **Competing**)`,
-                    allowedMentions: {
-                        parse: fetchPingPerms(msg)
-                    }
+                    allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
             }
         };

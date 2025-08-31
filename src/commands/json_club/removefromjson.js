@@ -51,9 +51,7 @@ module.exports = {
 
             if (!msg.nosend) await msg.reply({
                 content: '✅ Removed ' + removed[0],
-                allowedMentions: {
-                    parse: fetchPingPerms(msg)
-                }
+                allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
 
             arrays.psFiles = globaldata.psfiles

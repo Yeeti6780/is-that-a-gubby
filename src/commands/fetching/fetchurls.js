@@ -17,9 +17,7 @@ module.exports = {
     };
     var urls = await getUrls(msg).catch(() => { }) ?? []
     if (!msg.nosend) await msg.reply({
-      allowedMentions: {
-        parse: fetchPingPerms(msg)
-      },
+      allowedMentions: fetchPingPerms(msg),
       content: urls.join('\n') || 'No URLs fetched.'
     }).catch(() => { })
     return urls.join('\n') || 'No URLs fetched.'

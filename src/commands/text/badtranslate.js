@@ -71,9 +71,7 @@ module.exports = {
 
         var lmessage = !msg.nosend && details && await msg.reply({
             content: `Translating from ${vars.languages[lastlanguage]} to ${vars.languages[currentlanguage]}. (${output})`,
-            allowedMentions: {
-                parse: fetchPingPerms(msg)
-            }
+            allowedMentions: fetchPingPerms(msg)
         }).catch(() => { })
 
         for (var i = 0; i < repeat; i++) {
@@ -116,9 +114,7 @@ module.exports = {
 
         if (!msg.nosend) await msg.reply({
             content: output,
-            allowedMentions: {
-                parse: fetchPingPerms(msg)
-            }
+            allowedMentions: fetchPingPerms(msg)
         }).catch(() => { })
         return output
     },

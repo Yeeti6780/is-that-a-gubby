@@ -80,9 +80,7 @@ module.exports = {
                 map(s => s?.trans).
                 filter(Boolean).
                 join(""),
-            allowedMentions: {
-                parse: fetchPingPerms(msg)
-            }
+            allowedMentions: fetchPingPerms(msg)
         }).catch(() => { })
         return response.data.sentences.
             map(s => s?.trans).

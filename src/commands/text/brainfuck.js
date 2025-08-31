@@ -15,9 +15,7 @@ module.exports = {
     var compiled = await brainfuck(saidMessage)
     if (!msg.nosend) await msg.reply({
       content: compiled || '​',
-      allowedMentions: {
-        parse: fetchPingPerms(msg)
-      }
+      allowedMentions: fetchPingPerms(msg)
     }).catch(() => { })
     return compiled || '​'
   },

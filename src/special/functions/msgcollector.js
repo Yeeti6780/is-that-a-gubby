@@ -79,9 +79,7 @@ module.exports = {
 
                     await channel.send({
                         content: collect,
-                        allowedMentions: {
-                            parse: fetchPingPerms(msg)
-                        }
+                        allowedMentions: fetchPingPerms(msg)
                     }).catch(() => { })
                 } catch (_) { }
 
@@ -104,9 +102,7 @@ module.exports = {
 
                         await channel.send({
                             content: finishphrasek,
-                            allowedMentions: {
-                                parse: fetchPingPerms(msg)
-                            }
+                            allowedMentions: fetchPingPerms(msg)
                         }).catch(() => { })
                     }
                 } catch (_) { }
