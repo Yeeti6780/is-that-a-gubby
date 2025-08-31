@@ -1458,8 +1458,7 @@ class Poopy {
 
                         var extraContent = interaction.options.getString('extrapayload') ?? ''
 
-                        for (var i in cmdArgs) {
-                            var cmdArg = cmdArgs[i]
+                        for (var cmdArg of cmdArgs) {
                             var value = interaction.options.getString(cmdArg.name.toLowerCase())
                             if (value != null) {
                                 if (cmdArg.orig.match(/^"([\s\S]*?)"$/)) {
@@ -1470,11 +1469,12 @@ class Poopy {
                                     })
                                     value = `"${value.replace(/"/g, "''")}"`
                                 }
-                                argContent[i] = (`${cmdArg.specifarg ? `-${cmdArg.name}` : ''} ${!(cmdArg.specifarg && cmdArg.orig == `[-${cmdArg.name}]`) ? value : ''}`).trim()
+
+                                argContent.push((`${cmdArg.specifarg ? `-${cmdArg.name}` : ''} ${!(cmdArg.specifarg && cmdArg.orig == `[-${cmdArg.name}]`) ? value : ''}`).trim())
                             }
                         }
 
-                        argContent = argContent.flat().join(' ')
+                        argContent = argContent.join(' ')
 
                         var content = [cmd]
 
