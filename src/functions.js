@@ -507,7 +507,7 @@ functions.fetchPingPerms = function (msg) {
         msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
         msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.MentionEveryone) ||
         msg.author.id == msg.guild.ownerID
-    ) ? ['users', 'everyone', 'roles'] : ['users']
+    ) ? ['users', 'everyone', 'roles'] : []
 }
 
 functions.execPromise = function (code) {
@@ -3511,7 +3511,7 @@ functions.getUrls = async function (msg, options = {}) {
     if (msg.embeds.length) {
         var embedsR = []
         msg.embeds.forEach(embed => {
-            if ((options.update && embed.fetched) || embed.data.type != 'rich' || !embed.data.image || !embed.data.image.url) return
+            if ((options.update && embed.fetched) || embed.data?.type != 'rich' || !embed.data?.image || !embed.data?.image?.url) return
             embedsR.push(embed.data.image.url)
             if (options.update && !embed.fetched) embed.fetched = true
         })
@@ -5445,10 +5445,13 @@ functions.saveData = async function () {
 
 functions.updateSlashCommands = async function () {
     let poopy = this
+    let config = poopy.config
     let bot = poopy.bot
     let rest = poopy.rest
     let arrays = poopy.arrays
     let { Discord } = poopy.modules
+
+    if (config.self) return
 
     var slashBuilders = Object.values(arrays.slashBuilders)
     await rest.put(Discord.Routes.applicationCommands(bot.user.id), { body: slashBuilders }).catch((e) => console.log(e))
