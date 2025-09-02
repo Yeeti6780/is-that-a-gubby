@@ -23,7 +23,7 @@ module.exports = {
         let poopy = this
         let bot = poopy.bot
         let { DiscordTypes } = poopy.modules
-        let { resolveUser } = poopy.functions
+        let { fetchPingPerms, resolveUser } = poopy.functions
         let config = poopy.config
 
         var userQuery = args.slice(1).join(' ')
