@@ -32,7 +32,8 @@ module.exports = {
 
                 return await getKeywordsFor(value.replace(new RegExp(`\\[${name}\\]\\(([\\s\\S]*?)\\)`, 'ig'), tempdata[msg.author.id][msg.id].declared[`[${name}]`] || ''), msg, isBot, valOpts).catch(() => { }) ?? ''
             },
-            raw: true
+            raw: true,
+            declared: true
         }
         return [phrase, true]
     },

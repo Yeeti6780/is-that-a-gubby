@@ -17,7 +17,8 @@ module.exports = {
         tempdata[msg.author.id][msg.id].keyDeclared[`{${name}}`] = {
             func: async function (msg)  {
                 return value.replace(new RegExp(`\\{${name}\\}`, 'ig'), tempdata[msg.author.id][msg.id].declared[`{${name}}`] || '')
-            }
+            },
+            declared: true
         }
         return [phrase, true]
     },

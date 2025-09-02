@@ -48,7 +48,8 @@ module.exports = {
         var min = Math.round(Number(split[0])) || 0
         var max = Math.round(Number(split[1])) || 0
         return Math.floor(rand() * (max + 1 - min)) + min
-      }
+      },
+      declared: true
     }
 
     return [phrase, true]

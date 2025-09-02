@@ -823,7 +823,7 @@ functions.chat = async function (stim, msg, {
     if (!contexts) contexts = tempdata[msg.guild.id][msg.channel.id][msg.author.id].chatContexts = {}
 
     var instructMsg = Array.isArray(instruct) ? instruct[0].content : instruct
-    var startHistory = Array.isArray(instruct) ? [ ...instruct ] : [
+    var startHistory = Array.isArray(instruct) ? [...instruct] : [
         {
             role: "system",
             content: instructMsg
@@ -1181,7 +1181,9 @@ functions.getKeyFunc = function (string, { extrakeys = {}, extrafuncs = {}, decl
             }
         }
     }
-    for (var k in extrakeys) keylist[k] = extrakeys[k]
+    for (var k in extrakeys)
+        if (!declaredonly || (declaredonly && k.declared))
+            keylist[k] = extrakeys[k]
 
     for (var f in funclist) {
         if (funclist[f].potential) {
@@ -1192,7 +1194,10 @@ functions.getKeyFunc = function (string, { extrakeys = {}, extrafuncs = {}, decl
             }
         }
     }
-    for (var f in extrafuncs) funclist[f] = extrafuncs[f]
+
+    for (var f in extrafuncs)
+        if (!declaredonly || (declaredonly && f.declared))
+            funclist[f] = extrafuncs[f]
 
     var keys = Object.keys(keylist).sort((a, b) => b.length - a.length)
     var funcs = Object.keys(funclist).sort((a, b) => b.length - a.length)
@@ -1206,6 +1211,17 @@ functions.getKeyFunc = function (string, { extrakeys = {}, extrafuncs = {}, decl
     })
 
     if ((keyfiltered.length <= 0 && funcfiltered.length <= 0) || string.length > 1024 * 1024) return false
+
+    let urlSpans = []
+    let urlRegex = new RegExp(vars.validUrl, 'gi')
+    let urlMatch
+    while ((urlMatch = urlRegex.exec(string)) !== null) {
+        urlSpans.push([urlMatch.index, urlMatch.index + urlMatch[0].length])
+    }
+
+    function isNotInUrlOrIsDeclared(index, name, list, extra) {
+        return !(urlSpans.some(([start, end]) => index >= start && index < end)) || ((name in extra) || (declaredonly && (name in list)))
+    }
 
     for (var i in string) {
         var char = string[i]
@@ -1252,19 +1268,23 @@ functions.getKeyFunc = function (string, { extrakeys = {}, extrafuncs = {}, decl
                             potentialindexes.splice(potentialindexes.findIndex(ind => ind === parindex), 1)
                         } else {
                             if (!rawMatch) {
-                                lastParenthesesIndex++
-                                return {
-                                    match: [funcmatch[0], string.substring(lastParenthesesIndex, i)],
-                                    type: 'func'
+                                if (isNotInUrlOrIsDeclared(lastParenthesesIndex, funcmatch[0], funclist, extrafuncs)) {
+                                    lastParenthesesIndex++
+                                    return {
+                                        match: [funcmatch[0], string.substring(lastParenthesesIndex, i)],
+                                        type: 'func'
+                                    }
                                 }
                             } else {
                                 rawrequired--
                                 llastParenthesesIndex = i
                                 if (rawrequired <= 0) {
-                                    rawParenthesesIndex++
-                                    return {
-                                        match: [rawMatch, string.substring(rawParenthesesIndex, i)],
-                                        type: 'func'
+                                    if (isNotInUrlOrIsDeclared(rawParenthesesIndex, rawMatch, funclist, extrafuncs)) {
+                                        rawParenthesesIndex++
+                                        return {
+                                            match: [rawMatch, string.substring(rawParenthesesIndex, i)],
+                                            type: 'func'
+                                        }
                                     }
                                 }
                             }
@@ -1278,9 +1298,11 @@ functions.getKeyFunc = function (string, { extrakeys = {}, extrafuncs = {}, decl
             var keymatch = matchLongestKey(string.substring(i), keys)
             if (keymatch) {
                 keyindex = i
-                if (rawrequired <= 0) return {
-                    match: keymatch[0],
-                    type: 'key'
+                if (rawrequired <= 0 && isNotInUrlOrIsDeclared(i, keymatch[0], keylist, extrakeys)) {
+                    return {
+                        match: keymatch[0],
+                        type: 'key'
+                    }
                 }
             }
         }
@@ -1288,20 +1310,22 @@ functions.getKeyFunc = function (string, { extrakeys = {}, extrafuncs = {}, decl
 
     if (llastParenthesesIndex > -1) {
         var funcmatch = matchLongestFunc(string.substring(0, lastParenthesesIndex), funcfiltered)
-
-        lastParenthesesIndex++
-        return {
-            match: [funcmatch[0], string.substring(lastParenthesesIndex, llastParenthesesIndex)],
-            type: 'func'
+        if (isNotInUrlOrIsDeclared(lastParenthesesIndex, funcmatch[0], funclist, extrafuncs)) {
+            lastParenthesesIndex++
+            return {
+                match: [funcmatch[0], string.substring(lastParenthesesIndex, llastParenthesesIndex)],
+                type: 'func'
+            }
         }
     }
 
     if (keyindex > -1) {
         var keymatch = matchLongestKey(string.substring(keyindex), keys)
-
-        return {
-            match: keymatch[0],
-            type: 'key'
+        if (isNotInUrlOrIsDeclared(keyindex, keymatch[0], keylist, extrakeys)) {
+            return {
+                match: keymatch[0],
+                type: 'key'
+            }
         }
     }
 
@@ -1333,7 +1357,9 @@ functions.splitKeyFunc = function (string, { extrafuncs = {}, args = Infinity, s
             }
         }
     }
-    for (var f in extrafuncs) funclist[f] = extrafuncs[f]
+    for (var f in extrafuncs)
+        if (!declaredonly || (declaredonly && f.declared))
+            funclist[f] = extrafuncs[f]
 
     var funcs = Object.keys(funclist).sort((a, b) => b.length - a.length)
     var pfuncs = Object.keys(pfunclist).sort((a, b) => b.length - a.length)

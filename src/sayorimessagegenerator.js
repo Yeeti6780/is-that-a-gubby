@@ -3,7 +3,7 @@ module.exports = function (msg, fixedchoice) {
     let { _location, _arab, _funnygif, _ps, _shit, _activemember, _persontype,
         _insult, _compliment, _restaurant, _message, _restaurantfood,
         _platform, _noun, _animal, _segsy, _food, _country, _pspasta,
-        _city, _sentence, _verb, _adj } = poopy.special.keys
+        _city, _sentence, _verb, _adjective } = poopy.special.keys
 
     function phraseword(phrase) {
         const words = phrase.split(' ')
@@ -116,7 +116,7 @@ module.exports = function (msg, fixedchoice) {
         { text: 'i like porn 🥲 🥲 🥲 🥲 🥲 🥲' },
         { text: _verb() },
         { text: _noun() },
-        { text: _adj() },
+        { text: _adjective() },
         { pings: true, text: `stupid ${msg.author.displayName.toLowerCase()}` },
         { text: `not ${msg.author.displayName.toLowerCase()}` },
         { text: `wth ${msg.author.displayName.toLowerCase()}` },
@@ -134,7 +134,7 @@ module.exports = function (msg, fixedchoice) {
         { text: `${_activemember(msg).toLowerCase()} with the ${_noun()}` },
         { text: `${_activemember(msg).toLowerCase()} living in ${_country().toLowerCase()}` },
         { text: `${_activemember(msg).toLowerCase()}e` },
-        { text: `${_adj()}e ${_activemember(msg).toLowerCase()}e` },
+        { text: `${_adjective()}e ${_activemember(msg).toLowerCase()}e` },
         { text: `${_activemember(msg).toUpperCase()} IS THE ${sayoriAdjectives[Math.floor(Math.random() * sayoriAdjectives.length)]} ${sayoriAdjectives[Math.floor(Math.random() * sayoriAdjectives.length)]} ${sayoriAdjectives[Math.floor(Math.random() * sayoriAdjectives.length)]} ${sayoriAdjectives[Math.floor(Math.random() * sayoriAdjectives.length)]}` },
         { text: msg.author.displayName.toLowerCase() }
     ]

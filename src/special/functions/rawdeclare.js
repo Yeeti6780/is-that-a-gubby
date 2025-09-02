@@ -17,7 +17,8 @@ module.exports = {
         tempdata[msg.author.id][msg.id].keyDeclared[`{${name}}`] = {
             func: async function (msg, isBot, _, opts) {
                 return await getKeywordsFor(value.replace(new RegExp(`\\{${name}\\}`, 'ig'), tempdata[msg.author.id][msg.id].declared[`{${name}}`] || ''), msg, isBot, opts).catch(() => { }) ?? ''
-            }
+            },
+            declared: true
         }
         return [phrase, true]
     },
