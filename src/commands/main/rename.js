@@ -69,11 +69,10 @@ module.exports = {
 
         var member = userQuery ? await resolveUser(userQuery, msg.guild, "member").catch(() => { }) : msg.member
 
-        console.log(userQuery, member)
-
-        if (!member || (
-            !msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageNicknames) &&
-            !msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator)
+        if (!member || !(
+            msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageNicknames) ||
+            msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
+            (config.ownerids.find(id => id == msg.author.id))
         )) {
             await msg.reply({
                 content: !member ? `Invalid member: **${userQuery}**` : `You don't have the permission to change the nicknames of other users.`,
@@ -87,7 +86,7 @@ module.exports = {
             return
         }
 
-        var oldName = member.displayName
+        var oldName = member.displayName.replace(/\@/g, '@‌')
 
         var failed = false
         await member.setNickname(name).catch(() => failed = true)
@@ -101,10 +100,10 @@ module.exports = {
         }
 
         if (!msg.nosend) await msg.reply({
-            content: `${oldName.replace(/\@/g, '@‌')}'s nickname was set to **${name}**.`,
+            content: `${oldName}'s nickname was set to **${name}**.`,
             allowedMentions: fetchPingPerms(msg)
         }).catch(() => { })
-        return `${oldName.replace(/\@/g, '@‌')}'s nickname was set to **${name}**.`
+        return `${oldName}'s nickname was set to **${name}**.`
     },
     help: {
         name: 'rename/nickname [user (manage nicknames permission only)] "<name>"',
