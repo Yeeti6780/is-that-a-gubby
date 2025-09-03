@@ -69,11 +69,11 @@ module.exports = {
 
         var member = userQuery ? await resolveUser(userQuery, msg.guild, "member").catch(() => { }) : msg.member
 
-        if (!member || !(
+        if (!member || (member != msg.member && !(
             msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageNicknames) ||
             msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
             (config.ownerids.find(id => id == msg.author.id))
-        )) {
+        ))) {
             await msg.reply({
                 content: !member ? `Invalid member: **${userQuery}**` : `You don't have the permission to change the nicknames of other users.`,
                 allowedMentions: fetchPingPerms(msg)
