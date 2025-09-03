@@ -86,6 +86,11 @@ module.exports = {
             return
         }
 
+        if (name.length > 32) {
+            await msg.reply('That name is TOO LONG!').catch(() => { })
+            return
+        }
+
         var oldName = member.displayName.replace(/\@/g, '@‌')
 
         var failed = false
