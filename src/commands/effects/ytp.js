@@ -1,5 +1,5 @@
 module.exports = {
-    name: ['ytp'],
+    name: ['ytp', 'lobotomy'],
     args: [{ "name": "file", "required": false, "specifarg": false, "orig": "{file}" }, { "name": "clips", "required": false, "specifarg": true, "orig": "[-clips <number (max 200)>]" }, { "name": "repetitions", "required": false, "specifarg": true, "orig": "[-repetitions <number (max 10)>]" }, { "name": "norandomize", "required": false, "specifarg": true, "orig": "[-norandomize]" }, { "name": "nodistort", "required": false, "specifarg": true, "orig": "[-nodistort]" }],
     execute: async function (msg, args) {
         let poopy = this
@@ -71,7 +71,7 @@ module.exports = {
         }
 
         if (clips * repetitions > 250) {
-            await msg.reply('The number of clips must be smaller or equal to 250.')
+            await msg.reply(`The total number of clips (${clips * repetitions} in this case) must be smaller or equal to 250.`)
             await msg.channel.sendTyping().catch(() => { })
             return;
         }
@@ -386,7 +386,7 @@ module.exports = {
         }
     },
     help: {
-        name: 'ytp {file} [-clips <number (max 200)>] [-repetitions <number (max 10)>] [-norandomize] [-nodistort]',
+        name: 'ytp/lobotomy {file} [-clips <number (max 200)>] [-repetitions <number (max 10)>] [-norandomize] [-nodistort]',
         value: 'Turns the file into a YTP. Default clips is 10 and repetitions is 1.'
     },
     cooldown: 2500,
