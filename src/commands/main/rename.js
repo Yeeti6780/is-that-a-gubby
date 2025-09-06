@@ -36,6 +36,16 @@ module.exports = {
         let { DiscordTypes } = poopy.modules
         let { fetchPingPerms, resolveUser } = poopy.functions
 
+        if (!(
+            msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ChangeNickname) ||
+            msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageNicknames) ||
+            msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
+            (config.ownerids.find(id => id == msg.author.id))
+        )) {
+            await msg.reply(`You don't have the permission to change your own nickname... that's just hunky-doody y'know!`).catch(() => { })
+            return
+        }
+
         var saidMessage = args.slice(1).join(' ')
         var symbolReplacedMessage
         vars.symbolreplacements.forEach(symbolReplacement => {
@@ -98,10 +108,10 @@ module.exports = {
 
         if (failed) {
             if (!msg.nosend) await msg.reply({
-                content: `I don’t have permission to change ${oldName}'s nickname. Make sure my highest role is above theirs!`,
+                content: `I couldn't change ${oldName}'s nickname. Make sure my highest role is above theirs!`,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            return `I don’t have permission to change ${oldName}'s nickname. Make sure my highest role is above theirs!`
+            return `I couldn't change ${oldName}'s nickname. Make sure my highest role is above theirs!`
         }
 
         if (!msg.nosend) await msg.reply({
