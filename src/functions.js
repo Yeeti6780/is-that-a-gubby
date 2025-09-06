@@ -4771,6 +4771,8 @@ functions.fetchImages = async function (query, unsafe) {
     const urlBlacklist = [
         "https://www.tiktok.com/api",
         "https://lookaside.instagram.com/seo",
+        "https://lookaside.fbsbx.com/lookaside/crawler/instagram",
+        "https://lookaside.fbsbx.com/lookaside/crawler/threads",
         ".svg"
     ]
 
