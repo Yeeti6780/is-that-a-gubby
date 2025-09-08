@@ -14,6 +14,7 @@ async function start() {
     if (process.env.BOT_WEBSITE) {
         const express = require('express')
         const cors = require('cors')
+        const axios = require('axios')
         const bp = require('body-parser')
         const fs = require('fs-extra')
 
@@ -120,33 +121,24 @@ async function start() {
             res.end()
         })
 
-        app.get('/discordActivity', async function (_, res) {
-            while (!poopyStarted) await sleep(1000)
+        app.get("/api/media", async (req, res) => {
+            try {
+                const url = req.query.url
+                if (!url) return res.status(400).send("Missing url query parameter")
 
-            const doc = `<!DOCTYPE html>
-            <html>
+                const response = await axios.get(url, {
+                    responseType: "stream"
+                })
 
-            <head>
-                <title>poopy activity</title>
-                <link rel="icon" href="/assets/poopy.png">
-                <style>
-                    body, iframe {
-                        margin: 0;
-                        border: 0;
-                        width: 100vw;
-                        height: 100vh;
-                        overflow: hidden;
-                    }
-                </style>
-            </head>
-            
-            <body>
-                <iframe src="${process.env.BOT_WEBSITE}/oil" title="poopy activity"></iframe>
-            </body>
-            
-            </html>`
-            res.type('html').send(doc)
-        })
+                res.setHeader("Access-Control-Allow-Origin", "*")
+                res.setHeader("Content-Type", response.headers["content-type"])
+
+                response.data.pipe(res)
+            } catch (err) {
+                console.error(err)
+                res.status(500).send("Error fetching media")
+            }
+        });
 
         redirects.forEach(({ source, destination, permanent }) => {
             app.get(source, (_, res) => {
