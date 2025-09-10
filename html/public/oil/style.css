@@ -1,121 +1,211 @@
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('/fonts/Ubuntu-Bold.woff2') format('woff2'),
+        url('/fonts/Ubuntu-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('/fonts/Ubuntu-BoldItalic.woff2') format('woff2'),
+        url('/fonts/Ubuntu-BoldItalic.woff') format('woff');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('/fonts/Ubuntu-LightItalic.woff2') format('woff2'),
+        url('/fonts/Ubuntu-LightItalic.woff') format('woff');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('/fonts/Ubuntu-Medium.woff2') format('woff2'),
+        url('/fonts/Ubuntu-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('/fonts/Ubuntu-Italic.woff2') format('woff2'),
+        url('/fonts/Ubuntu-Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('/fonts/Ubuntu-MediumItalic.woff2') format('woff2'),
+        url('/fonts/Ubuntu-MediumItalic.woff') format('woff');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('/fonts/Ubuntu-Light.woff2') format('woff2'),
+        url('/fonts/Ubuntu-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('/fonts/Ubuntu-Regular.woff2') format('woff2'),
+        url('/fonts/Ubuntu-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
 
 body {
     background: radial-gradient(#795148, #30201d);
     margin: 25px;
-    height: calc(100vh - 50px);
+    min-height: calc(100vh - 50px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-div#options {
+#options {
     transform: translate(-50%, -110%);
     left: 50%;
     top: 100%;
     position: fixed;
     width: fit-content;
     height: fit-content;
-    display: table;
+    display: flex;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+    background: #795148;
+    border-radius: 10px;
     z-index: 1;
+}
+
+#fileButton {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
 }
 
 button {
-    font-size: x-large;
+    font-size: large;
     padding: 1rem;
-    border-color: #795148;
-    background: #795148;
     color: white;
     font-family: 'Ubuntu';
-    box-shadow: 3px 3px 3px black;
-    text-shadow: 3px 3px 3px black;
+    transition: 0.3s;
+    cursor: pointer;
+    background: #795148;
+    border: none;
     border-radius: 10px;
-    border-style: solid;
-    width: fit-content;
-    transition: 0.5s;
-    display: table-cell;
 }
 
 button:hover {
-    font-size: x-large;
-    padding: 1rem;
-    border-color: #ffdfca;
-    background: #ffdfca;
-    color: white;
-    box-shadow: 3px 3px 3px black;
-    text-shadow: 3px 3px 3px black;
-    border-radius: 10px;
-    width: fit-content;
-    transition: 0.5s;
-    cursor: pointer;
-    display: table-cell;
+    background: #976a60;
+    border-color: #976a60;
 }
 
 button:active {
-    font-size: x-large;
-    padding: 1rem;
-    border-color: #492100;
-    background: #492100;
+    background: #472f2a;
+    border-color: #472f2a;
+}
+
+#options button {
+    width: 40px;
+    height: 40px;
+    margin: 0.5rem;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#options button img {
+    height: 70%;
+    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
+}
+
+#file {
+    display: block;
+    margin: 10px;
+    width: 300px;
+    height: 300px;
+    object-fit: contain;
+    object-position: center;
+    position: relative;
+}
+
+#files {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 50px auto;
+    width: 100%;
+}
+
+.file-container {
+    position: relative;
+    display: inline-block;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+    border: none;
     color: white;
-    box-shadow: 3px 3px 3px black;
-    text-shadow: 3px 3px 3px black;
-    border-radius: 10px;
-    width: fit-content;
-    transition: 0.5s;
+    font-size: 14px;
+    padding: 5px 8px;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.2s;
     cursor: pointer;
-    display: table-cell;
 }
 
-div#options button {
-    padding: 0.5rem;
-    width: 70px;
-    height: 70px;
-    border-color: #795148;
-    background: #795148;
-    color: white;
-    box-shadow: 3px 3px 3px black;
-    text-shadow: 3px 3px 3px black;
-    border-radius: 10px;
-    transition: 0.5s;
-    display: table-cell;
+.file-container:hover .copy-btn,
+.file-container:focus-within .copy-btn {
+    opacity: 1;
 }
 
-div#options button:hover {
-    padding: 0.5rem;
-    width: 70px;
-    height: 70px;
-    border-color: #ffdfca;
-    background: #ffdfca;
-    color: white;
-    box-shadow: 3px 3px 3px black;
-    text-shadow: 3px 3px 3px black;
-    border-radius: 10px;
-    transition: 0.5s;
-    cursor: pointer;
-    display: table-cell;
+@media (max-width: 600px), (max-height: 300px) {
+    body {
+        margin: 0;
+        min-height: 100vh;
+    }
+
+    #file {
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+    }
+
+    #files {
+        margin: 0;
+    }
 }
 
-
-div#options button:active {
-    padding: 0.5rem;
-    width: 70px;
-    height: 70px;
-    border-color: #492100;
-    background: #492100;
-    color: white;
-    box-shadow: 3px 3px 3px black;
-    text-shadow: 3px 3px 3px black;
-    border-radius: 10px;
-    transition: 0.5s;
-    cursor: pointer;
-    display: table-cell;
-}
-
-div#options button img {
-    height: 100%;
-    filter: drop-shadow(3px 3px 3px black);
-}
-
-.top {
-    left: 50%;
-    transform: translate(-50%, 10%);
-    position: fixed;
-    z-index: 1;
+@media (max-width: 350px), (max-height: 200px) {
+    #options,
+    #fileButton {
+        display: none;
+    }
 }

@@ -121,14 +121,18 @@ async function start() {
             res.end()
         })
 
+        const cachedMediaResponses = {}
+
         app.get("/api/media", async (req, res) => {
             try {
                 const url = req.query.url
                 if (!url) return res.status(400).send("Missing url query parameter")
 
-                const response = await axios.get(url, {
+                const response = cachedMediaResponses[url] ?? await axios.get(url, {
                     responseType: "stream"
                 })
+
+                if (response) cachedMediaResponses[url] = response
 
                 res.setHeader("Access-Control-Allow-Origin", "*")
                 res.setHeader("Content-Type", response.headers["content-type"])

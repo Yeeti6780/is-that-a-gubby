@@ -15,7 +15,7 @@ async function main() {
 
     var fileButton = document.createElement('button')
     fileButton.innerHTML = `the oil is loading, please wait`
-    fileButton.className = 'top'
+    fileButton.id = 'fileButton'
     document.body.appendChild(fileButton)
 
     var oil = await fetch('/api/oil').then(res => res.json()).catch(() => { })
@@ -28,34 +28,41 @@ async function main() {
 
     var count = 0
     var repeat = false
+    var mute = true
     var mobile = mobileCheck()
     var lastvideo
+
     var options = document.getElementById('options')
     fileButton.innerHTML = `click <b>here</b> for a file!!!!${mobile ? '' : ' (or press f)'}`
+
     var unmuteButton = document.createElement('button')
     unmuteButton.title = 'Unmutes all videos'
     var unmuteImage = document.createElement('img')
     unmuteImage.src = '/assets/unmute.png'
     unmuteButton.appendChild(unmuteImage)
     options.appendChild(unmuteButton)
+
     var muteButton = document.createElement('button')
     muteButton.title = 'Mutes all videos'
     var muteImage = document.createElement('img')
     muteImage.src = '/assets/mute.png'
     muteButton.appendChild(muteImage)
     options.appendChild(muteButton)
+
     var playButton = document.createElement('button')
     playButton.title = 'Replays all videos'
     var playImage = document.createElement('img')
     playImage.src = '/assets/play.png'
     playButton.appendChild(playImage)
     options.appendChild(playButton)
+
     var stopButton = document.createElement('button')
     stopButton.title = 'Stops all videos'
     var stopImage = document.createElement('img')
     stopImage.src = '/assets/stop.png'
     stopButton.appendChild(stopImage)
     options.appendChild(stopButton)
+
     var repeatButton = document.createElement('button')
     repeatButton.title = 'Stays at the last file'
     var repeatImage = document.createElement('img')
@@ -63,60 +70,63 @@ async function main() {
     repeatButton.appendChild(repeatImage)
     options.appendChild(repeatButton)
 
+    var clearButton = document.createElement('button')
+    clearButton.title = 'Clear all files'
+    var clearImage = document.createElement('img')
+    clearImage.src = '/assets/clear.png'
+    clearButton.appendChild(clearImage)
+    options.appendChild(clearButton)
+
     async function clicked() {
         if (!randomOil) return
-        window.scrollTo(0, document.body.scrollHeight)
         if (count < randomOil.length) {
             var url = randomOil[count]
-            if (lastvideo) {
+
+            if (lastvideo && mute) {
                 lastvideo.muted = true
                 lastvideo = undefined
             }
+
             var parsedUrl = new URL(url)
+
+            var container = document.createElement('div')
+            container.className = 'file-container'
+
+            var copyBtn = document.createElement('button')
+            copyBtn.className = 'copy-btn'
+            copyBtn.innerText = 'Copy'
+            copyBtn.addEventListener('click', () => {
+                copyBtn.innerText = 'Copied!'
+                navigator.clipboard.writeText(`${parsedUrl.protocol}//${parsedUrl.host}${parsedUrl.pathname}`)
+                setTimeout(() => copyBtn.innerText = 'Copy', 1000)
+            })
+
             if (/\.(mov|mp4|wmv|avi|webm)$/.test(parsedUrl.pathname)) {
-                url = `/api/media?url=${encodeURIComponent(url)}`
-                
                 var video = document.createElement('video')
                 video.id = 'file'
-                video.style.transition = '0.1s'
-                video.style.width = '0px'
                 video.controls = true
                 video.autoplay = true
                 video.loop = true
-                video.src = url
-                document.body.appendChild(video)
+                video.src = `/api/media?url=${encodeURIComponent(url)}`
+                container.appendChild(video)
                 lastvideo = video
-                video.play()
-                setTimeout(() => {
-                    video.style.width = '300px'
-                    setTimeout(() => {
-                        window.scrollTo(0, document.body.scrollHeight)
-                    }, 100)
-                }, 0)
             } else {
                 var img = document.createElement('img')
                 img.id = 'file'
-                img.style.transition = '0.1s'
-                img.style.width = '0px'
                 img.src = url
-                document.body.appendChild(img)
-                setTimeout(() => {
-                    img.style.width = '300px'
-                    setTimeout(() => {
-                        window.scrollTo(0, document.body.scrollHeight)
-                    }, 100)
-                }, 0)
+                container.appendChild(img)
             }
-            if (!repeat) {
-                count++
-            }
+
+            container.appendChild(copyBtn)
+            document.getElementById('files').appendChild(container)
+
+            container.scrollIntoView({ behavior: "smooth", block: "end" })
+
+            if (!repeat) count++
             fileButton.innerHTML = 'keep clicking for more!!!!'
-            window.scrollTo(0, document.body.scrollHeight)
             if (count >= randomOil.length) {
                 fileButton.innerHTML = 'oops, seems like you\'ve reached the end of it'
             }
-        } else {
-            fileButton.innerHTML = 'oops, seems like you\'ve reached the end of it'
         }
     }
 
@@ -125,11 +135,15 @@ async function main() {
     if (!mobile) {
         document.addEventListener('keypress', (event) => {
             if (event.key === 'f') clicked()
+            else
+                console.log("pork")
         })
     }
 
     muteButton.addEventListener('click', () => {
         var videos = document.getElementsByTagName('video')
+
+        mute = true
 
         for (var i in videos) {
             var video = videos[i]
@@ -140,6 +154,8 @@ async function main() {
 
     unmuteButton.addEventListener('click', () => {
         var videos = document.getElementsByTagName('video')
+
+        mute = false
 
         for (var i in videos) {
             var video = videos[i]
@@ -174,6 +190,13 @@ async function main() {
     repeatButton.addEventListener('click', () => {
         repeat = !repeat
         count = repeat ? (((count - 1) < 0) ? 0 : count - 1) : (((count + 1) >= randomOil.length) ? randomOil.length : count + 1)
+    })
+
+    clearButton.addEventListener('click', () => {
+        document.querySelectorAll('.file-container').forEach(el => el.remove())
+        count = 0
+        randomOil = sortArrayRandomly(oil)
+        fileButton.innerHTML = `click <b>here</b> for a file!!!!`
     })
 }
 
