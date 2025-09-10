@@ -201,3 +201,24 @@ async function main() {
 }
 
 main()
+
+let isSmall = false
+
+function scrollToBottomIfSmall() {
+    const smallWidth = 600
+    const smallHeight = 300
+
+    let wasSmall = isSmall
+    isSmall = window.innerWidth <= smallWidth || window.innerHeight <= smallHeight
+
+    if ((isSmall && !wasSmall) || (!isSmall && wasSmall)) {
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: 'instant'
+        })
+    }
+}
+
+window.addEventListener('load', scrollToBottomIfSmall)
+
+window.addEventListener('resize', scrollToBottomIfSmall)
