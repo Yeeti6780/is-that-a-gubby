@@ -29,7 +29,7 @@ module.exports = {
             messages.push(saidMessage)
         }
         await msg.channel.sendTyping().catch(() => { })
-        var markovChain = markovChainGenerator(messages.join('  '))
+        var markovChain = markovChainGenerator(messages)
         var markov = markovMe(markovChain, saidMessage, { wordNumber, nopunctuation, keepcase, randlerp })
         if (!msg.nosend) await msg.reply({
             content: markov,
