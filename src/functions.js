@@ -711,10 +711,10 @@ functions.gatherData = async function (msg) {
         data.userData[msg.author.id].username = msg.author.displayName
         reconcileDataWithTemplate(data.userData, vars.dataTemplate.userData, msg)
 
-        data.botData.leaderboard[msg.author.id] = {
-            tag: msg.author.tag,
-            bucks: data.userData[msg.author.id].bucks
-        }
+        if (!data.botData.leaderboard[msg.author.id]) data.botData.leaderboard[msg.author.id] = {}
+
+        data.botData.leaderboard[msg.author.id].tag ??= msg.author.tag ?? msg.author.id
+        data.botData.leaderboard[msg.author.id].bucks = data.userData[msg.author.id].bucks
     }
 
     if (!data.guildData[msg.guild.id]) {
@@ -2084,10 +2084,10 @@ functions.rainmaze = async function (channel, who, reply, w = 8, h = 6) {
                 })
                 data.userData[who].bucks += reward
 
-                data.botData.leaderboard[who] = {
-                    tag: tag ?? (await bot.users.fetch(who).catch(() => { }))?.tag,
-                    bucks: data.userData[who].bucks
-                }
+                if (!data.botData.leaderboard[who]) data.botData.leaderboard[who] = {}
+
+                data.botData.leaderboard[who].tag ??= tag ?? who
+                data.botData.leaderboard[who].bucks = data.userData[who].bucks
             }
         }
 
@@ -3006,7 +3006,7 @@ functions.refreshDiscordURLs = async function (urls) {
                 while (!success) {
                     if (attempts >= 10) return null
                     attempts++
-                    
+
                     const response = await axios({
                         method: 'POST',
                         url: `https://discord.com/api/v9/attachments/refresh-urls`,
@@ -4370,17 +4370,19 @@ functions.dealDamage = function (damage, subjUser, subjData, subjShield, subjShi
         )
     }
 
-    if (otherSubjId)
-        data.botData.leaderboard[otherSubjId] = {
-            tag: otherSubjUser.tag,
-            bucks: otherSubjData.bucks
-        }
+    if (otherSubjId) {
+        if (!data.botData.leaderboard[otherSubjId]) data.botData.leaderboard[otherSubjId] = {}
 
-    if (subjId)
-        data.botData.leaderboard[subjId] = {
-            tag: subjUser.tag,
-            bucks: subjData.bucks
-        }
+        data.botData.leaderboard[otherSubjId].tag ??= otherSubjUser.tag ?? otherSubjUser.user?.tag ?? otherSubjUser.id
+        data.botData.leaderboard[otherSubjId].bucks = otherSubjData.bucks
+    }
+
+    if (subjId) {
+        if (!data.botData.leaderboard[subjId]) data.botData.leaderboard[subjId] = {}
+
+        data.botData.leaderboard[subjId].tag ??= subjUser.tag ?? subjUser.user?.tag ?? subjUser.id
+        data.botData.leaderboard[subjId].bucks = subjUser.bucks
+    }
 
     return [subjDamageDealt, otherSubjDamageDealt, subjDeathArray, otherSubjDeathArray]
 }
@@ -4393,8 +4395,7 @@ functions.battle = async function (msg, subject, action, damage, chance) {
     let tempdata = poopy.tempdata
     let vars = poopy.vars
     let {
-        getLevel, execPromise, randomNumber, fetchPingPerms,
-        randomChoice, validateFile, downloadFile, dataGather,
+        getLevel, fetchPingPerms, validateFile, dataGather,
         getShieldById, battleGif, dealDamage, resolveUser,
         pronouns
     } = poopy.functions
@@ -4412,8 +4413,7 @@ functions.battle = async function (msg, subject, action, damage, chance) {
     subject = subject ?? attachment ?? sticker
 
     var yourUser = msg.author
-    var subjUser = resolveUser(subject, msg.guild)
-    if (subjUser?.catch) subjUser = await subjUser.catch(() => { })
+    var subjUser = await resolveUser(subject, msg.guild, "user").catch(() => { })
 
     var yourId = yourUser.id
     var subjId = subjUser && subjUser.id
