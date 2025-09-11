@@ -3545,7 +3545,9 @@ functions.getUrls = async function (msg, options = {}) {
             func: async function (emoji) {
                 var codepoints = []
                 for (var j = 0; j < [...emoji].length; j++) {
-                    codepoints.push([...emoji][j].codePointAt().toString(16).padStart(4, '0'))
+                    var unicode = [...emoji][j].codePointAt().toString(16).padStart(4, '0')
+                    if (unicode == "fe0f") continue
+                    codepoints.push(unicode)
                 }
                 var emojiimage = json.emojiJSON.find(image => image.unicode === codepoints.join('-'))
                 if (emojiimage) {
@@ -4474,7 +4476,9 @@ functions.battle = async function (msg, subject, action, damage, chance) {
 
         if (battleData && battleData.death) {
             if (battleData.death - Date.now() > 0) {
-                var pronoun = battleUser ? (await pronouns(battleUser, msg.guild))[0] : 'it'
+                var pronoun = battleUser == yourUser ? 'you' :
+                    battleUser ? (await pronouns(battleUser, msg.guild))[0] : 'it'
+
                 switch (pronoun) {
                     case 'they':
                         pronoun = "they're"
@@ -4490,6 +4494,10 @@ functions.battle = async function (msg, subject, action, damage, chance) {
 
                     case 'it':
                         pronoun = "it's"
+                        break
+                    
+                    case 'you':
+                        pronoun = "you're"
                         break
                 }
 
@@ -4579,8 +4587,8 @@ functions.battle = async function (msg, subject, action, damage, chance) {
 
     if (youGotHit) actions.push(`**${subjName}** hit you back for **${gotDamaged}** damage!`)
 
-    if (youDied) actions.push('You have died.')
-    if (subjDied) actions.push(subjIsYou ? 'Congratulations.' : `${subjPronounCapperCase} ${subjHave} died.`)
+    if (youDied || (youDied && isPoopy)) actions.push('You have died.')
+    if (subjDied && !isPoopy) actions.push(subjIsYou ? 'Congratulations.' : `${subjPronounCapperCase} ${subjHave} died.`)
     if (yourLevel > yourLastLevel) actions.push(`You leveled UP!`)
     if (subjLevel > subjLastLevel) actions.push(`${subjPronounCapperCase} leveled UP!`)
 
