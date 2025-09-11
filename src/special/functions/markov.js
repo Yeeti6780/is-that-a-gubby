@@ -17,7 +17,7 @@ module.exports = {
         if (word) {
             messages.push(word)
         }
-        var markovChain = markovChainGenerator(messages.join('  '))
+        var markovChain = markovChainGenerator(messages)
         var markov = markovMe(markovChain, word)
 
         return markov
