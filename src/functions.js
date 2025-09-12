@@ -508,7 +508,7 @@ functions.fetchPingPerms = function (msg) {
     }
 }
 
-functions.execPromise = function (code) {
+functions.execPromise = function (code, opts = {}) {
     let poopy = this
     let config = poopy.config
     let vars = poopy.vars
@@ -569,7 +569,7 @@ functions.execPromise = function (code) {
         var stderrclosed = false
         var procExited = false
 
-        var proc = spawn(command, args)
+        var proc = spawn(command, args, opts)
 
         var procTimeout = setTimeout(() => {
             process.kill(proc.pid, "SIGINT")

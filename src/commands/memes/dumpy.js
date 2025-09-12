@@ -40,7 +40,9 @@ module.exports = {
             var filename = 'input.png'
             fs.copyFileSync(`lib/dumpy.jar`, `${filepath}/dumpy.jar`)
 
-            await execPromise(`cd ${filepath} && java -jar dumpy.jar --file ${filename} --lines ${resolution}`)
+            await execPromise(`java -jar dumpy.jar --file ${filename} --lines ${resolution}`, {
+                cwd: filepath
+            })
 
             try {
                 fs.renameSync(`${filepath}/dumpy.gif`, `${filepath}/output.gif`)
