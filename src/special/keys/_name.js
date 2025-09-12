@@ -17,4 +17,5 @@ module.exports = {
         var names = nameJSON.male.concat(nameJSON.female).concat(nameJSON.surname)
         return names.map(n => n.name.value)
     },
+    cmdconnected: 'randomname'
 }

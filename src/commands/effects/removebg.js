@@ -47,7 +47,6 @@ module.exports = {
                     ...form.getHeaders(),
                     'X-Api-Key': userToken(msg.author.id, 'REMOVEBG_KEY')
                 },
-                encoding: null,
                 responseType: 'arraybuffer'
             }).catch((err) => {
                 rejected = true

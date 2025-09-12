@@ -66,7 +66,7 @@ module.exports = {
     },
     help: {
         name: 'removefromjson <json (psfiles, pspasta, funnygif, poop, dmphrases, shitting)> <value>',
-        value: "Removes a value from JSONs like Phexonia Studio's files."
+        value: "Removes a value from JSONs like oil or DM phrases."
     },
     cooldown: 2500,
     type: 'JSON Club'

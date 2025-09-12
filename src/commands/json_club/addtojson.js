@@ -66,7 +66,7 @@ module.exports = {
     },
     help: {
         name: 'addtojson <json (psfiles, pspasta, funnygif, poop, dmphrases, shitting)> <value>',
-        value: "Adds a new value to JSONs like Phexonia Studio's files."
+        value: "Adds a new value to JSONs like oil or DM phrases."
     },
     cooldown: 2500,
     type: 'JSON Club'

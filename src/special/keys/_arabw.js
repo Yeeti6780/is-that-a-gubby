@@ -16,5 +16,6 @@ module.exports = {
             word += consonants[Math.floor(Math.random() * consonants.length)] + vowels[Math.floor(Math.random() * vowels.length)]
         }
         return word
-    }
+    },
+    cmdconnected: 'araboword'
 }

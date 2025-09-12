@@ -100,5 +100,6 @@ module.exports = {
         'twit',
         'weirdo',
         'gay'
-    ]
+    ],
+    cmdconnected: 'cah'
 }

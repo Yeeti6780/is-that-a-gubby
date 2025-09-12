@@ -13,5 +13,6 @@ module.exports = {
 
         var wordJSON = json.wordJSON
         return wordJSON.data.map(w => w.word.value)
-    }
+    },
+    cmdconnected: 'randomword'
 }

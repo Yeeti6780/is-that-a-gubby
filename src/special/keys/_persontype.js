@@ -115,5 +115,6 @@ module.exports = {
     'prime minister',
     'youtuber',
     'nerd'
-  ]
+  ],
+  cmdconnected: 'cah'
 }

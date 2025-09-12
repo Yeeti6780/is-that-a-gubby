@@ -13,5 +13,6 @@ module.exports = {
     let arrays = poopy.arrays
 
     return arrays.psFiles.filter(file => file.match(/\.(png|jpe?g|bmp|tiff|webp)/))
-  }
+  },
+  cmdconnected: 'ps'
 }

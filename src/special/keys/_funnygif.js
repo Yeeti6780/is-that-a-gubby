@@ -11,5 +11,6 @@ module.exports = {
     let arrays = poopy.arrays
 
     return arrays.funnygifs
-  }
+  },
+  cmdconnected: 'funnygif'
 }

@@ -66,5 +66,6 @@ module.exports = {
         })
 
         return arabArray.join(' ').replace(/\@/g, '@‌')
-    }
+    },
+    cmdconnected: 'arabottify'
 }

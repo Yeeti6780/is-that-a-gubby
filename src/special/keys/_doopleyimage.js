@@ -12,5 +12,6 @@ module.exports = {
     let json = poopy.json
 
     return json.doopleyJSON.images
-  }
+  },
+  cmdconnected: 'doopley'
 }

@@ -53,7 +53,7 @@ module.exports = {
     },
     help: {
         name: 'displayjson <json (psfiles, pspasta, funnygif, poop, dmphrases, shitting)>',
-        value: "Displays the values of a JSON like Phexonia Studio's files."
+        value: "Displays the values of a JSON like oil or DM phrases."
     },
     cooldown: 2500,
     type: 'JSON Club'

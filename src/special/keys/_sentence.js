@@ -13,5 +13,6 @@ module.exports = {
 
         var sentenceJSON = json.sentenceJSON
         return sentenceJSON.data.map(s => s.sentence)
-    }
+    },
+    cmdconnected: 'randomsentence'
 }

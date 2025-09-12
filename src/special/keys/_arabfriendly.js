@@ -12,5 +12,6 @@ module.exports = {
     let json = poopy.json
 
     return json.arabJSON.words.filter(arab => !json.arabJSON.danger.includes(arab))
-  }
+  },
+  cmdconnected: 'arabottify'
 }

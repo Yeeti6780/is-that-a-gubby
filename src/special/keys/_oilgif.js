@@ -13,5 +13,6 @@ module.exports = {
     let arrays = poopy.arrays
 
     return arrays.shitting.filter(file => file.match(/\.(gif|apng)/))
-  }
+  },
+  cmdconnected: 'oil'
 }

@@ -1,4 +1,4 @@
-const { os, fs, request, CryptoJS, DiscordTypes } = require('./modules')
+const { os, fs, CryptoJS, DiscordTypes } = require('./modules')
 let vars = require('./vars')
 let functions = {}
 
@@ -27,30 +27,6 @@ String.prototype.toCapperCase = function toCapperCase() {
 
 functions.sleep = function (ms) {
     return new Promise(resolve => setTimeout(resolve, ms ?? 0))
-}
-
-functions.request = async function (options) {
-    return new Promise((resolve, reject) => {
-        request(options, function (error, response, body) {
-            if (error) {
-                reject(error)
-                return
-            }
-
-            try {
-                body = JSON.parse(body)
-            } catch (_) { }
-
-            resolve({
-                request: options,
-                status: response.statusCode,
-                statusText: response.statusMessage,
-                headers: response.headers,
-                url: response.request.href,
-                data: body
-            })
-        })
-    })
 }
 
 functions.requireJSON = function (path) {
@@ -1022,7 +998,7 @@ functions.cleverbot = async function (stim, msg, clear) {
         })
             .then(a => ({
                 xai: a.headers['set-cookie'][0].split(";")[0].split("=")[1],
-                data: a.data.split("\r")
+                data: (typeof a.data == 'string' ? a.data : a.data.toString()).split("\r")
             }))
             .catch((e) => console.log(e))
 
@@ -4891,8 +4867,8 @@ functions.fetchImages = async function (query, unsafe) {
         gis({
             searchTerm: query,
             queryStringAddition: `&safe=${unsafe ? 'images' : 'active'}`
-        }, async function (_, results) {
-            if (!results) {
+        }, async function (error, results) {
+            if (error || !results) {
                 resolve(["https://i.imgur.com/K5kyI8P.png"])
                 return
             }
@@ -5058,8 +5034,10 @@ functions.sendFile = async function (msg, filepath, filename, extraOptions) {
         extraOptions.name = args[nameindex + 1].replace(/[/\\?%*:|"<>]/g, '-').substring(0, 128)
     }
 
+    var fileBuffer
+
     try {
-        fs.readFileSync(`${filepath}/${filename}`)
+        fileBuffer = fs.readFileSync(`${filepath}/${filename}`)
     } catch (_) {
         await msg.reply('Couldn\'t send file.').catch(() => { })
         infoPost(`Couldn\'t send file`)
@@ -5078,7 +5056,10 @@ functions.sendFile = async function (msg, filepath, filename, extraOptions) {
         filename = extraOptions.name
     }
 
-    if (extraOptions.catbox) {
+    var tooLarge = fileBuffer.length > 1024 * 1024 * 10
+
+    if (extraOptions.catbox || tooLarge) {
+        if (tooLarge) await msg.reply('The output file is too large, so I\'m uploading it to catbox.moe.').catch(() => { })
         infoPost(`Uploading file to catbox.moe`)
         var fileLink = await vars.Catbox.upload(`${filepath}/${filename}`).catch(() => { })
         if (fileLink) {
@@ -5089,18 +5070,18 @@ functions.sendFile = async function (msg, filepath, filename, extraOptions) {
                     addLastUrl(msg, fileLink)
                 } else {
                     await msg.reply({
-                        content: fileLink.includes('retard') ? 'ok so what happened right here is i tried to upload a gif with a size bigger than 20 mb to catbox.moe but apparently you cant do it so uhhhhhh haha no link for you' : fileLink,
+                        content: fileLink.includes('gif larger than 20 MB') ? 'ok so what happened right here is i tried to upload a gif with a size bigger than 20 mb to catbox.moe but apparently you cant do it so uhhhhhh haha no link for you' : fileLink,
                         allowedMentions: fetchPingPerms(msg)
                     }).catch(() => { })
-                    infoPost(`Couldn\'t upload catbox.moe file, reason:\n\`${fileLink.includes('retard') ? 'ok so what happened right here is i tried to upload a gif with a size bigger than 20 mb to catbox.moe but apparently you cant do it so uhhhhhh haha no link for you' : fileLink}\``)
+                    infoPost(`Couldn\'t upload catbox.moe file, reason:\n\`${fileLink.includes('gif larger than 20 MB') ? 'ok so what happened right here is i tried to upload a gif with a size bigger than 20 mb to catbox.moe but apparently you cant do it so uhhhhhh haha no link for you' : fileLink}\``)
                 }
             } else {
                 await msg.reply({
-                    content: fileLink.includes('retard') ? 'ok so what happened right here is i tried to upload a gif with a size bigger than 20 mb to catbox.moe but apparently you cant do it so uhhhhhh haha no link for you' : fileLink,
+                    content: fileLink.includes('gif larger than 20 MB') ? 'ok so what happened right here is i tried to upload a gif with a size bigger than 20 mb to catbox.moe but apparently you cant do it so uhhhhhh haha no link for you' : fileLink,
                     allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
                 if (!isUrl) {
-                    infoPost(`Couldn\'t upload catbox.moe file, reason:\n\`${fileLink.includes('retard') ? 'ok so what happened right here is i tried to upload a gif with a size bigger than 20 mb to catbox.moe but apparently you cant do it so uhhhhhh haha no link for you' : fileLink}\``)
+                    infoPost(`Couldn\'t upload catbox.moe file, reason:\n\`${fileLink.includes('gif larger than 20 MB') ? 'ok so what happened right here is i tried to upload a gif with a size bigger than 20 mb to catbox.moe but apparently you cant do it so uhhhhhh haha no link for you' : fileLink}\``)
                 }
             }
 
@@ -5158,12 +5139,12 @@ functions.sendFile = async function (msg, filepath, filename, extraOptions) {
             if (fileLink) {
                 var isUrl = vars.validUrl.test(fileLink)
                 await msg.reply({
-                    content: fileLink.includes('retard') ? 'ok so what happened right here is i tried to upload a gif with a size bigger than 20 mb to catbox.moe but apparently you cant do it so uhhhhhh haha no link for you' : fileLink,
+                    content: fileLink.includes('gif larger than 20 MB') ? 'ok so what happened right here is i tried to upload a gif with a size bigger than 20 mb to catbox.moe but apparently you cant do it so uhhhhhh haha no link for you' : fileLink,
                     allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
 
                 if (!isUrl) {
-                    infoPost(`Couldn\'t upload catbox.moe file, reason:\n\`${fileLink.includes('retard') ? 'ok so what happened right here is i tried to upload a gif with a size bigger than 20 mb to catbox.moe but apparently you cant do it so uhhhhhh haha no link for you' : fileLink}\``)
+                    infoPost(`Couldn\'t upload catbox.moe file, reason:\n\`${fileLink.includes('gif larger than 20 MB') ? 'ok so what happened right here is i tried to upload a gif with a size bigger than 20 mb to catbox.moe but apparently you cant do it so uhhhhhh haha no link for you' : fileLink}\``)
                 } else returnUrl = fileLink
             } else {
                 await msg.reply('Couldn\'t send file.').catch(() => { })

@@ -13,5 +13,6 @@ module.exports = {
     return arrays.psPasta
   },
   attemptvalue: 5,
-  limit: 5
+  limit: 5,
+  cmdconnected: 'pspasta'
 }

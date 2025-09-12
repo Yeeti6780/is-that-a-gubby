@@ -67,7 +67,9 @@ module.exports = {
         }
 
         if (keepAttachments) {
-            var attachments = msg.attachments.map(attachment => new Discord.AttachmentBuilder(attachment.url, attachment.name))
+            var attachments = msg.attachments
+                .filter(attachment => attachment.size <= 1024 * 1024 * 10)
+                .map(attachment => new Discord.AttachmentBuilder(attachment.url, attachment.name))
             var embeds = msg.embeds.filter(embed => embed.data.type === 'rich')
             var stickers = msg.stickers
                 .filter(sticker => sticker.format != 3)

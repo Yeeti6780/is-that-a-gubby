@@ -21,5 +21,6 @@ module.exports = {
         var markov = markovMe(markovChain, word)
 
         return markov
-    }
+    },
+    cmdconnected: 'markov'
 }

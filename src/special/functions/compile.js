@@ -77,5 +77,6 @@ module.exports = {
   attemptvalue: 30,
   limit: 5,
   raw: true,
-  parentheses: true
+  parentheses: true,
+  cmdconnected: 'compile'
 }

@@ -16,9 +16,10 @@ module.exports = {
     execute: async function (msg, args) {
         let poopy = this
         let {
-            parseNumber, request, validateFile,
+            parseNumber, validateFile,
             fetchPingPerms, downloadFile, sendFile
         } = poopy.functions
+        let { axios } = poopy.modules
 
         await msg.channel.sendTyping().catch(() => { })
 
@@ -79,10 +80,13 @@ module.exports = {
 
         if (fontsize != undefined) form.FontSize = fontsize
 
-        var response = await request({
-            url: 'https://cooltext.com/PostChange',
+        var response = await axios({
             method: 'POST',
-            formData: form
+            url: 'https://cooltext.com/PostChange',
+            data: new URLSearchParams(form),
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
         }).catch(() => { })
 
         if (!response || !response.data) {
@@ -91,6 +95,8 @@ module.exports = {
             }).catch(() => { })
             return
         }
+
+        console.log(response)
 
         var fileinfo = await validateFile(response.data.renderLocation.replace('https', 'http'), 'very true').catch(async error => {
             await msg.reply({

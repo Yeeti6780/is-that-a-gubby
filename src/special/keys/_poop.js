@@ -18,5 +18,6 @@ module.exports = {
             .replace(/{seconds}/, Math.floor((Math.random() * 59) + 2))
             .replace(/{mention}/, `<@${msg.author.id}>`)
         )
-    }
+    },
+    cmdconnected: 'poop'
 }

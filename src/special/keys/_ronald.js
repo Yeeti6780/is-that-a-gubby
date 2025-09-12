@@ -45,5 +45,6 @@ module.exports = {
     'https://tenor.com/view/clown-mcdonalds-oh-wow-surprised-gif-16021560',
     'https://tenor.com/view/ronald-gif-21619925',
     'https://tenor.com/view/ronald-gif-21619963'
-  ]
+  ],
+  cmdconnected: 'ronald'
 }

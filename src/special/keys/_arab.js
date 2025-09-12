@@ -11,5 +11,6 @@ module.exports = {
     let json = poopy.json
 
     return json.arabJSON.words
-  }
+  },
+  cmdconnected: 'arabottify'
 }

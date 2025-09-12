@@ -434,7 +434,7 @@ class Poopy {
             Fetching: 'Image, GIF, and video fetching commands.',
             Generation: 'Generate things from an AI or not.',
             'Hex Manipulation': 'Manipulate the file\'s Hex Code to make it shorter, longer, etc.',
-            'Inside Joke': 'phexonia studios',
+            'Inside Joke': 'if you know you know',
             'JSON Club': 'Exclusive to some people for editing the JSONs used by Poopy.',
             Main: 'Poopy\'s main commands.',
             Memes: 'Integrate an input in many different meme formats.',
@@ -547,7 +547,9 @@ class Poopy {
                     return
                 }
 
-                var attachments = msg.attachments.map(attachment => new Discord.AttachmentBuilder(attachment.url, attachment.name))
+                var attachments = msg.attachments
+                    .filter(attachment => attachment.size <= 1024 * 1024 * 10)
+                    .map(attachment => new Discord.AttachmentBuilder(attachment.url, attachment.name))
                 var embeds = msg.embeds.filter(embed => embed.data.type === 'rich')
                 var stickers = msg.stickers
                     .filter(sticker => sticker.format != 3)

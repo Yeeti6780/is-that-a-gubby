@@ -51,5 +51,5 @@ module.exports = {
   },
   attemptvalue: 10,
   limit: 5,
-  cmdconnected: ['translate']
+  cmdconnected: 'translate'
 }
