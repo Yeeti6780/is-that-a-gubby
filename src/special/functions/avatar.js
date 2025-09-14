@@ -4,6 +4,7 @@ module.exports = {
   func: async function (matches, msg) {
     let poopy = this
     let bot = poopy.bot
+    let { splitKeyFunc } = poopy.functions
 
     var word = matches[1]
     var [id, global] = splitKeyFunc(word, { args: 2 })
