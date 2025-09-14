@@ -78,7 +78,7 @@ function decompose(str) {
 
     // var rawCode = fullRawCode.substring(rawStartIndex, rawEndIndex)
 
-    return str.replace(
+    var newStr = str.replace(
         /(?:<@&?\d+>|<a?:\w+:\d+>|https?:\/\/[^\s<>]+)|./g,
         (m) => {
             if (/^<@&?\d+>$/.test(m) || /^<a?:\w+:\d+>$/.test(m) || /^https?:\/\/[^\s<>]+$/.test(m)) {
@@ -89,7 +89,15 @@ function decompose(str) {
                 ? String.fromCharCode(Math.floor(Math.random() * 15000))
                 : "")
         }
-    ).substring(0, 2000)
+    ).trim().substring(0, 2000)
+
+    if (str == newStr) newStr = (
+        str + " " + Array.from({ length: 50 })
+            .map(() => String.fromCharCode(Math.floor(Math.random() * 15000)))
+            .join("")
+    ).trim().substring(0, 2000)
+
+    return newStr
 }
 
 for (var Discord of modules.Discord) {
