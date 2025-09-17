@@ -362,7 +362,7 @@ module.exports = {
                     guildUpdate,
                     channelOps.length > 0 ? schemas.channelData.bulkWrite(channelOps) : null,
                     memberOps.length > 0 ? schemas.memberData.bulkWrite(memberOps) : null,
-                    messageOps.length > 0 ? schemas.messageData.bulkWrite(messageOps) : null
+                    //messageOps.length > 0 ? schemas.messageData.bulkWrite(messageOps) : null
                 ])
             } catch (err) {
                 console.error(`Failed to update guild ${gid}:`, err)
