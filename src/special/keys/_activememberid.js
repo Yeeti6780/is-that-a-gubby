@@ -1,10 +1,8 @@
-module.exports = {
-  desc: "Returns a random active member's ID from the server, this is calculated by the number of messages each one has sent and role order.",
-  func: function (msg) {
+function getWeightedMembers(msg) {
     let poopy = this
     let data = poopy.data
     let { roundTo } = poopy.functions
-
+  
     var datamembers = data.guildData[msg.guild.id].allMembers
     var roles = msg.guild.roles?.cache?.size || 1
 
@@ -40,28 +38,40 @@ module.exports = {
       return { id, member, weight }
     }).sort((a, b) => b.weight - a.weight)
 
+    return weightedMembers
+}
+
+module.exports = {
+  desc: "Returns a random active member's ID from the server, this is calculated by the number of messages each one has sent and role order.",
+  func: function (msg) {
+    let poopy = this
+
+    var weightedMembers = getWeightedMembers.call(poopy, msg)
+    
     var totalWeight = weightedMembers.reduce((sum, wm) => sum + wm.weight, 0)
 
     if (totalWeight === 0) {
       var randomIndex = Math.floor(Math.random() * weightedMembers.length)
-      return weightedMembers[randomIndex].id
+      return weightedMembers[randomIndex].id ?? ""
     }
 
     var random = Math.random() * totalWeight
     for (var wm of weightedMembers) {
       random -= wm.weight
       if (random <= 0) {
-        return wm.id
+        return wm.id ?? ""
       }
     }
 
-    return weightedMembers[0].id
+    return weightedMembers[0].id ?? ""
   },
   array: function (msg) {
     let poopy = this
-    let data = poopy.data
+    
+    let weightedMembers = getWeightedMembers.call(poopy, msg)
 
-    var datamembers = data.guildData[msg.guild.id].allMembers
-    return Object.keys(datamembers)
+    return weightedMembers
+      .filter(m => m.id)
+      .map(m => m.id)
   }
 }
