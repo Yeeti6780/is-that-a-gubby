@@ -144,7 +144,7 @@ vars.defaultConfig = {
     },
     commandLimit: 5,
     defaultDisabled: [],
-    keyLimit: 500,
+    keyLimit: 2500,
     rateLimit: 3,
     rateLimitTime: 60000 * 2,
     processTimeout: 60000 * 2,
