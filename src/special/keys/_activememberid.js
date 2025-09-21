@@ -29,7 +29,7 @@ function getWeightedMembers(msg) {
 
       var messageWeight = Math.pow(roundTo(messages, 50) * highestroleorder / roles * 4, 1.5)
 
-      var botMultiplier = bot ? 0.5 : 1
+      var botMultiplier = bot ? 0.2 : 1
 
       var score = messageWeight * recencyPenalty * botMultiplier
 
