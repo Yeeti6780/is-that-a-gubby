@@ -66,6 +66,6 @@ module.exports = {
         value: 'Poopy says the message after the command.'
     },
     cooldown: 2500,
-    nodefer: true,
+    ephemeral: true,
     type: 'Main'
 }
