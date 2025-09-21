@@ -63,10 +63,6 @@ module.exports = {
 
             if (msg.nosend) return new Array(numToRepeat).map(() => saidMessage).join('\n')
 
-            if (msg.type === DiscordTypes.InteractionType.ApplicationCommand && del) await msg.deferReply({
-                flags: DiscordTypes.MessageFlags.Ephemeral
-            }).catch(() => { })
-
             for (var i = 0; i < numToRepeat; i++) {
                 if (tempdata[msg.guild.id][msg.channel.id].shutUp) break
 
@@ -82,7 +78,9 @@ module.exports = {
                 }
             }
 
-            if (msg.type === DiscordTypes.InteractionType.ApplicationCommand && del) await msg.editReply({ content: 'Successfully sent.' }).catch(() => { });
+            if (msg.type === DiscordTypes.InteractionType.ApplicationCommand && del) await msg.editReply({
+                content: 'Successfully sent.'
+            }).catch(() => { });
 
             return new Array(numToRepeat).map(() => saidMessage).join('\n')
         } else {
@@ -95,7 +93,7 @@ module.exports = {
         value: 'Spam a message! Limit is 25.\nExample usage: p:spam 5 stupid'
     },
     cooldown: 10000,
-    nodefer: true,
+    ephemeral: true,
     perms: ['ManageMessages', 'Administrator'],
     type: 'Main'
 }
