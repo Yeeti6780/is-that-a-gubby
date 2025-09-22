@@ -86,7 +86,7 @@ class Poopy {
         }
 
         // we can create thge bot now
-        let { Discord, DiscordTypes, Collection, fs, CryptoJS } = modules
+        let { Discord, DiscordTypes, Collection, fs, CryptoJS, DMGuild } = modules
         let { envsExist, configFlagsEnabled,
             chunkArray, chunkObject, requireJSON, findCommand, fetchPingPerms,
             dmSupport, sleep, gatherData, deleteMsgData, infoPost, sendWebhook,
@@ -470,7 +470,7 @@ class Poopy {
                 await msg.channel.sendTyping().catch(() => { })
                 await sleep(Math.floor(Math.random() * 500) + 500)
                 await msg.channel.send(arrays.dmPhrases[Math.floor(Math.random() * arrays.dmPhrases.length)]
-                    .replace(/{mention}/, msg.author.toString())).catch(() => { })
+                    .replace(/{mention}/g, msg.author.toString())).catch(() => { })
                 return
             }
 
@@ -1590,7 +1590,7 @@ class Poopy {
 
                             const blockReason = `AutoMod Rule${brokenRules.length > 1 ? "s" : ""}: ${brokenRules.join(", ") || "what"}`
 
-                            //if (timeoutDuration > 0) interaction.member.timeout(timeoutDuration, blockReason).catch(() => { })
+                            if (timeoutDuration > 0) interaction.member.timeout(timeoutDuration, blockReason).catch(() => { })
 
                             if (blockMessage != undefined) {
                                 await interaction.reply({
@@ -1602,7 +1602,7 @@ class Poopy {
                             }
                         }
 
-                        var hasEphemeralSayPerm = interaction.member?.permissions && (
+                        var hasEphemeralSayPerm = !(interaction.guild instanceof DMGuild) && (
                             interaction.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) ||
                             interaction.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) ||
                             interaction.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||

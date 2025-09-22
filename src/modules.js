@@ -1,7 +1,7 @@
 let modules = {}
 let activeBots = require('./dataValues').activeBots
 
-modules.Discord = [require('discord.js'), require('discord.js-selfbot-v13')]
+modules.Discord = [require('discord.js')]
 modules.DiscordTypes = require('discord-api-types/v10')
 
 modules.fs = require('fs-extra')

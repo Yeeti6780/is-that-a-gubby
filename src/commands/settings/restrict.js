@@ -23,10 +23,10 @@ module.exports = {
             "orig": "[channel]",
             "autocomplete": function (interaction) {
                 let poopy = this
-                let { DiscordTypes } = poopy.modules
+                let { Discord } = poopy.modules
                 
                 return interaction.guild.channels.cache
-                    .filter(c => c.type != DiscordTypes.ChannelType.GuildCategory)
+                    .filter(c => c.type != Discord.ChannelType.GuildCategory)
                     .sort((a, b) => a.name.localeCompare(b.name))
                     .map(c => ({ name: c.name, value: c.id }))
             }
@@ -83,7 +83,7 @@ module.exports = {
 
                     var findChannel = msg.guild.channels.cache.find(c => c.id === channelId)
 
-                    if (findChannel && findChannel.type != DiscordTypes.ChannelType.GuildCategory) {
+                    if (findChannel && findChannel.type != Discord.ChannelType.GuildCategory) {
                         var findChannelIndex = data.guildData[msg.guild.id].restricted.indexOf(channelId)
 
                         if (findChannelIndex > -1) {

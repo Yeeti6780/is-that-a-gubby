@@ -8,9 +8,9 @@ module.exports = {
 
         await msg.channel.sendTyping().catch(() => { })
         var poop = arrays.poopPhrases[Math.floor(Math.random() * arrays.poopPhrases.length)]
-            .replace(/{fart}/, Math.floor(Math.random() * 291) + 10)
-            .replace(/{seconds}/, Math.floor((Math.random() * 59) + 2))
-            .replace(/{mention}/, `<@${msg.author.id}>`)
+            .replace(/{fart}/g, Math.floor(Math.random() * 291) + 10)
+            .replace(/{seconds}/g, Math.floor((Math.random() * 59) + 2))
+            .replace(/{mention}/g, `<@${msg.author.id}>`)
         if (!msg.nosend) await msg.reply({
             content: poop,
             allowedMentions: fetchPingPerms(msg)

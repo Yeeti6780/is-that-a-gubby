@@ -96,8 +96,8 @@ module.exports = {
             var hu = await yesno(msg.channel, `It's time to choose the wise one`, msg.member, hi, msg).catch((e) => console.log(e))
 
             if (hu) {
-                data.userData[msg.author.id].bucks += 5000
-                await msg.reply(`***YES!!🥳🥳🥳🥳🎉🎉*** *YES !!!!!* **THAT'S THE** __*Only Thing You Need From The Doctor*__, the ${ho.emoji}.🎉🎉🎉🎉🎉🎉 ***AND*** *NOW* YOUHAVE, __*100% Fresh Juiced from Florida*__, __***\`+5000 POBUCKS\`***__ *FOREVER*👍`).catch(() => { })
+                data.userData[msg.author.id].bucks += 10000
+                await msg.reply(`***YES!!🥳🥳🥳🥳🎉🎉*** *YES !!!!!* **THAT'S THE** __*Only Thing You Need From The Doctor*__, the ${ho.emoji}.🎉🎉🎉🎉🎉🎉 ***AND*** *NOW* YOUHAVE, __*100% Fresh Juiced from Florida*__, __***\`+10000 POBUCKS\`***__ *FOREVER*👍`).catch(() => { })
             } else {
                 await msg.reply('invalid').catch(() => { })
             }
@@ -154,7 +154,7 @@ module.exports = {
 
             dmChannel.nsfw = !!data.guildData[dmChannel.id]?.channels?.[dmChannel.id]?.nsfw
 
-            if (!dmChannel.nsfw) saidMessage = saidMessage.replace(/https?:\/\/(rule34|e621)([!#$&-;=?-[\]_a-z~]|%[0-9a-fA-F])*/g, 'no')
+            if (!dmChannel.nsfw) saidMessage = saidMessage.replace(/https?:\/\/.*(rule34|e621|xxx|porn|iplogger)([!#$&-;=?-[\]_a-z~]|%[0-9a-fA-F])*/g, 'no')
 
             var dmMessage = await dmChannel.send({
                 content: `${infoMessage}${saidMessage}`,
@@ -163,9 +163,8 @@ module.exports = {
 
             if (dmMessage) {
                 if (!msg.nosend) {
-                    if (msg.type === DiscordTypes.InteractionType.ApplicationCommand && !msg.replied) await msg.editReply({
-                        content: 'Successfully sent.',
-                        flags: DiscordTypes.MessageFlags.Ephemeral
+                    if (msg.type === DiscordTypes.InteractionType.ApplicationCommand && !msg.replied) await msg.reply({
+                        content: 'Successfully sent.'
                     }).catch(() => { })
                     else msg.react('✅').catch(() => { })
                 }
@@ -179,6 +178,5 @@ module.exports = {
         name: 'dm <user> <message>',
         value: 'Allows Poopy to DM an user the message inside the command.'
     },
-    ephemeral: true,
     type: 'Main'
 }

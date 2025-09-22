@@ -95,7 +95,7 @@ module.exports = {
         var vars = poopy.vars
         var bot = poopy.bot
         var { chunkArray, navigateEmbed, generateId, fetchPingPerms, createCronJob } = poopy.functions
-        var { DiscordTypes, cron } = poopy.modules
+        var { Discord, DiscordTypes, cron } = poopy.modules
 
         var options = {
             list: async (msg) => {
@@ -213,7 +213,7 @@ module.exports = {
                     var channelMatch = args[1].match(/^<#(\d+)>$|^(\d+)$/)
                     if (channelMatch) {
                         channel = msg.guild.channels.cache.get(channelMatch[1])
-                        if (!channel || channel.type == DiscordTypes.ChannelType.GuildCategory) {
+                        if (!channel || channel.type == Discord.ChannelType.GuildCategory) {
                             await msg.reply('Invalid channel.').catch(() => { })
                             return
                         }

@@ -5,7 +5,7 @@ module.exports = {
         let arrays = poopy.arrays
 
         return arrays.dmPhrases[Math.floor(Math.random() * arrays.dmPhrases.length)]
-            .replace(/{mention}/, `<@${msg.author.id}>`)
+            .replace(/{mention}/g, `<@${msg.author.id}>`)
     },
     array: function (msg) {
         let poopy = this

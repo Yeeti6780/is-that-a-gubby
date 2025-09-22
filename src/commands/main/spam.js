@@ -5,7 +5,7 @@ module.exports = {
         let poopy = this
         let config = poopy.config
         let data = poopy.data
-        let { Discord, DiscordTypes } = poopy.modules
+        let { Discord, DiscordTypes, DMGuild } = poopy.modules
         let { fetchPingPerms } = poopy.functions
         let tempdata = poopy.tempdata
 
@@ -16,7 +16,7 @@ module.exports = {
                 return;
             }
 
-            var del = true
+            var del = !(msg.guild instanceof DMGuild)
             var deleteIndex = args.indexOf('-nodelete')
             if (deleteIndex > -1) {
                 args.splice(deleteIndex, 1)

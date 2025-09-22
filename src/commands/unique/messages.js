@@ -90,10 +90,10 @@ module.exports = {
             "orig": "[channel]",
             "autocomplete": function (interaction) {
                 let poopy = this
-                let { DiscordTypes } = poopy.modules
+                let { Discord } = poopy.modules
 
                 return interaction.guild.channels.cache
-                    .filter(c => c.type != DiscordTypes.ChannelType.GuildCategory)
+                    .filter(c => c.type != Discord.ChannelType.GuildCategory)
                     .sort((a, b) => a.name.localeCompare(b.name))
                     .map(c => ({ name: c.name, value: c.id }))
             }
@@ -301,7 +301,7 @@ module.exports = {
 
                     var findChannel = msg.guild.channels.cache.find(c => c.id === channelId)
 
-                    if (findChannel && findChannel.type != DiscordTypes.ChannelType.GuildCategory) {
+                    if (findChannel && findChannel.type != Discord.ChannelType.GuildCategory) {
                         var findChannelIndex = data.guildData[msg.guild.id].read.indexOf(channelId)
 
                         if (findChannelIndex > -1) {
@@ -333,7 +333,7 @@ module.exports = {
                         if (!msg.nosend) await msg.reply(`I **can't read** messages from all channels now.`).catch(() => { })
                         return `I **can't read** messages from all channels now.`
                     } else {
-                        data.guildData[msg.guild.id].read = msg.guild.channels.cache.filter(c => c.type != DiscordTypes.ChannelType.GuildCategory).map(c => c.id)
+                        data.guildData[msg.guild.id].read = msg.guild.channels.cache.filter(c => c.type != Discord.ChannelType.GuildCategory).map(c => c.id)
 
                         if (!msg.nosend) await msg.reply(`I **can read** messages from all channels now.`).catch(() => { })
                         return `I **can read** messages from all channels now.`
