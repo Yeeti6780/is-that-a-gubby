@@ -4010,6 +4010,13 @@ functions.dmSupport = function (msg) {
         msg.attachments = snapshot.attachments
         msg.embeds = snapshot.embeds
     }
+
+    msg.isUserApp = !!(
+        msg.authorizingIntegrationOwners ?
+            (!msg.authorizingIntegrationOwners["0"] &&
+            msg.authorizingIntegrationOwners["1"]) :
+            false
+    )
 }
 
 functions.escapeKeywordResult = async function (string) {
