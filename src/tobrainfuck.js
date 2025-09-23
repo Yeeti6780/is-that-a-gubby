@@ -49,7 +49,6 @@ next()
 
 module.exports = function (inp) {
     function shortest_str(c) {
-        console.log(c.length)
         for (var a = 0, f = 1; f < c.length; f++) c[f].length < c[a].length && (a = f);
         return a
     }

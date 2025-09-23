@@ -135,8 +135,6 @@ async function main() {
     if (!mobile) {
         document.addEventListener('keypress', (event) => {
             if (event.key === 'f') clicked()
-            else
-                console.log("pork")
         })
     }
 

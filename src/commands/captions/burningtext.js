@@ -96,8 +96,6 @@ module.exports = {
             return
         }
 
-        console.log(response)
-
         var fileinfo = await validateFile(response.data.renderLocation.replace('https', 'http'), 'very true').catch(async error => {
             await msg.reply({
                 content: error,
