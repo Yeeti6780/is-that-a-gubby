@@ -256,8 +256,10 @@ for (var Discord of modules.Discord) {
                 }
             }
 
-            if (config.allowbotusage || interaction.replied) return interaction.channel.send(payload).then(setMessageCooldown)
-            else {
+            if (config.allowbotusage || interaction.replied) {
+                if (interaction.isUserApp) return interaction.followUp(payload).then(setMessageCooldown)
+                else return interaction.channel.send(payload).then(setMessageCooldown)
+            } else {
                 var reply = await (!interaction.replied && interaction.deferred ?
                     interaction.editReply(payload) :
                     interactionReply.call(interaction, payload)).then(setMessageCooldown)

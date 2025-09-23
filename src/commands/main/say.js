@@ -4,7 +4,7 @@ module.exports = {
     execute: async function (msg, args) {
         let poopy = this
         let config = poopy.config
-        let { Discord, DiscordTypes, DMGuild } = poopy.modules
+        let { Discord, DiscordTypes } = poopy.modules
         let { fetchPingPerms } = poopy.functions
 
         await msg.channel.sendTyping().catch(() => { })
@@ -13,7 +13,7 @@ module.exports = {
             msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
             msg.author.id === msg.guild.ownerID ||
             (config.ownerids.find(id => id == msg.author.id))
-        ) && !(msg.guild instanceof DMGuild)
+        ) && !msg.isUserApp
         var deleteIndex = args.indexOf('-nodelete')
         if (deleteIndex > -1) {
             args.splice(deleteIndex, 1)
@@ -48,7 +48,7 @@ module.exports = {
         if (reply) {
             if (!msg.nosend) await reply.reply(sendObject).catch(() => { })
         } else {
-            if (del || (msg.replied && msg.deferred)) {
+            if (del || (msg.replied && msg.deferred && !msg.isUserApp)) {
                 if (!msg.nosend) await msg.channel.send(sendObject).catch(() => { })
 
                 if (msg.type === DiscordTypes.InteractionType.ApplicationCommand && !msg.replied) await msg.editReply({

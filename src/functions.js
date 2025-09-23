@@ -2567,7 +2567,7 @@ functions.displayUpgradesShop = async function (channel, who, reply, shopObject,
                     flags: DiscordTypes.MessageFlags.Ephemeral
                 }).catch(() => { })
             else
-                await channel.send(reachedMaxText).catch(() => { })
+                await channel.reply(reachedMaxText).catch(() => { })
 
             await updateShop().catch(() => { })
             return

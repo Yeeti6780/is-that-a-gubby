@@ -208,10 +208,10 @@ module.exports = {
                 }
 
                 clearInterval(clipeditinterval)
-                clipsmessage.edit(`Concatenating clips.`).catch(() => { })
+                if (clipsmessage) clipsmessage.edit(`Concatenating clips.`).catch(() => { })
 
                 await execPromise(`ffmpeg -f concat -i ${filepath}/clips/list.txt -preset ${findpreset(args)} -c:v libx264 -pix_fmt yuv420p ${filepath}/output.mp4`)
-                if (clipsmessage) clipsmessage.delete().catch(() => { })
+                if (clipsmessage && !msg.isUserApp) clipsmessage.delete().catch(() => { })
                 return await sendFile(msg, filepath, `output.mp4`)
             } else {
                 var fps = fileinfo.info.fps
@@ -260,10 +260,10 @@ module.exports = {
                 }
 
                 clearInterval(clipeditinterval)
-                clipsmessage.edit(`Concatenating clips.`).catch(() => { })
+                if (clipsmessage) clipsmessage.edit(`Concatenating clips.`).catch(() => { })
 
                 await execPromise(`ffmpeg -f concat -i ${filepath}/clips/list.txt -preset ${findpreset(args)} -c:v libx264 -pix_fmt yuv420p ${filepath}/output.mp4`)
-                clipsmessage.delete().catch(() => { })
+                if (clipsmessage && !msg.isUserApp) clipsmessage.delete().catch(() => { })
                 return await sendFile(msg, filepath, `output.mp4`)
             }
         } else if (type.mime.startsWith('image') && vars.gifFormats.find(f => f === type.ext)) {
@@ -317,10 +317,10 @@ module.exports = {
             }
 
             clearInterval(clipeditinterval)
-            clipsmessage.edit(`Concatenating clips.`).catch(() => { })
+            if (clipsmessage) clipsmessage.edit(`Concatenating clips.`).catch(() => { })
 
             await execPromise(`ffmpeg -f concat -i ${filepath}/clips/list.txt -filter_complex "[0:v]split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} -gifflags -offsetting ${filepath}/output.gif`)
-            clipsmessage.delete().catch(() => { })
+            if (clipsmessage && !msg.isUserApp) clipsmessage.delete().catch(() => { })
             return await sendFile(msg, filepath, `output.gif`)
         } else if (type.mime.startsWith('audio')) {
             var filepath = await downloadFile(currenturl, `input.mp3`, {
@@ -371,10 +371,10 @@ module.exports = {
             }
 
             clearInterval(clipeditinterval)
-            clipsmessage.edit(`Concatenating clips.`).catch(() => { })
+            if (clipsmessage) clipsmessage.edit(`Concatenating clips.`).catch(() => { })
 
             await execPromise(`ffmpeg -f concat -i ${filepath}/clips/list.txt -preset ${findpreset(args)} ${filepath}/output.mp3`)
-            clipsmessage.delete().catch(() => { })
+            if (clipsmessage && !msg.isUserApp) clipsmessage.delete().catch(() => { })
             return await sendFile(msg, filepath, `output.mp3`)
         } else {
             await msg.reply({

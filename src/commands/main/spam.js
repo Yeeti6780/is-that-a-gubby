@@ -5,7 +5,7 @@ module.exports = {
         let poopy = this
         let config = poopy.config
         let data = poopy.data
-        let { Discord, DiscordTypes, DMGuild } = poopy.modules
+        let { Discord, DiscordTypes } = poopy.modules
         let { fetchPingPerms } = poopy.functions
         let tempdata = poopy.tempdata
 
@@ -16,7 +16,7 @@ module.exports = {
                 return;
             }
 
-            var del = !(msg.guild instanceof DMGuild)
+            var del = !msg.isUserApp
             var deleteIndex = args.indexOf('-nodelete')
             if (deleteIndex > -1) {
                 args.splice(deleteIndex, 1)
@@ -69,7 +69,7 @@ module.exports = {
                 if (reply) {
                     await reply.reply(sendObject).catch(() => { })
                 } else {
-                    if (del || (msg.replied && msg.deferred)) {
+                    if (del || (msg.replied && msg.deferred && !msg.isUserApp)) {
                         await msg.channel.send(sendObject).catch(() => { })
                         if (msg.type !== DiscordTypes.InteractionType.ApplicationCommand && del) msg.delete().catch(() => { })
                     } else {

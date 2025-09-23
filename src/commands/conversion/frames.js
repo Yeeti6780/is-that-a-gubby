@@ -80,7 +80,7 @@ module.exports = {
                             style: DiscordTypes.ButtonStyle.Primary,
                             function: async (_, __, resultsMsg, collector) => {
                                 collector.stop()
-                                resultsMsg.delete().catch(() => { })
+                                if (!msg.isUserApp) resultsMsg.delete().catch(() => { })
                                 sendFile(msg, filepath, `output.zip`)
                             },
                             page: false

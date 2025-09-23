@@ -108,7 +108,7 @@ module.exports = {
             }
         }
 
-        if (lmessage) {
+        if (lmessage && !msg.isUserApp) {
             await lmessage.delete().catch(() => { })
         }
 

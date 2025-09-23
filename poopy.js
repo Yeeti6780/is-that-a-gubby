@@ -86,7 +86,7 @@ class Poopy {
         }
 
         // we can create thge bot now
-        let { Discord, DiscordTypes, Collection, fs, CryptoJS, DMGuild } = modules
+        let { Discord, DiscordTypes, Collection, fs, CryptoJS } = modules
         let { envsExist, configFlagsEnabled,
             chunkArray, chunkObject, requireJSON, findCommand, fetchPingPerms,
             dmSupport, sleep, gatherData, deleteMsgData, infoPost, sendWebhook,
@@ -1616,7 +1616,7 @@ class Poopy {
                             }
                         }
 
-                        var hasEphemeralSayPerm = !(interaction.guild instanceof DMGuild) && hasMessagePerms
+                        var hasEphemeralSayPerm = !interaction.isUserApp && hasMessagePerms
 
                         var hasNoDeleteArg = findCmd.args.some(a => a.name == "nodelete")
                         
@@ -1626,9 +1626,9 @@ class Poopy {
                                 findCmd.ephemeral
                         ) : false
 
-                        await interaction.deferReply({
-                            flags: isEphemeral ? DiscordTypes.MessageFlags.Ephemeral : null
-                        }).catch(() => { })
+                        await interaction.deferReply(isEphemeral ? {
+                            flags: DiscordTypes.MessageFlags.Ephemeral
+                        } : undefined).catch(() => { })
 
                         interaction.content = content
                         interaction.author = interaction.user
@@ -1738,8 +1738,6 @@ class Poopy {
 
         console.log(`${bot.user.displayName} is online, RUN`)
         infoPost(`${bot.user.displayName} woke up to ash and dust`)
-
-        bot.guilds.cache.get('834431435704107018')?.channels.cache.get('947167169718923341')?.send(!config.stfu ? 'i wake up to ash and dust' : '').catch(() => { })
         config.ownerids.push(bot.user.id)
 
         var poopyDirectories = ['temp', 'tempfiles']
@@ -1909,6 +1907,8 @@ class Poopy {
         }, 300000)
 
         var wakecount = data.botData.reboots + 1
+
+        bot.guilds.cache.get('834431435704107018')?.channels.cache.get('947167169718923341')?.send(!config.stfu ? 'i wake up to ash and dust' : '').catch(() => { })
         bot.guilds.cache.get('834431435704107018')?.channels.cache.get('947167169718923341')?.send(!config.stfu ? (config.testing ? 'raleigh is testing' : `this is the ${toOrdinal(wakecount)} time this happens`) : '').catch(() => { })
 
         updateHivemindStatus()

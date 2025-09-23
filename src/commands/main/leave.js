@@ -64,7 +64,7 @@ module.exports = {
                 if (msg.channel.type == Discord.ChannelType.GroupDM) msg.channel.delete().catch(() => { })
                 else {
                     var left = await msg.guild.leave().catch(() => { })
-                    if (!msg.nosend) await msg.channel?.send(left).catch(() => { })
+                    if (!msg.nosend) await msg.reply(left).catch(() => { })
                 }
                 return phrase
             }

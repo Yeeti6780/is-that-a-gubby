@@ -84,7 +84,7 @@ module.exports = {
             }
             
             clearInterval(frameeditinterval)
-            if (framemessage) framemessage.delete().catch(() => { })
+            if (framemessage && !msg.isUserApp) framemessage.delete().catch(() => { })
         } else {
             for (var i in fetched) frameurls[Number(i) + 1] = fetched[i]
         }

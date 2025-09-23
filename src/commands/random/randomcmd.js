@@ -73,7 +73,7 @@ module.exports = {
         }
 
         var deletetimeout = setTimeout(() => {
-            if (!cmdmessage) return
+            if (!cmdmessage || msg.isUserApp) return
             cmdmessage.delete().catch(() => { })
             clearTimeout(deletetimeout)
         }, 3000)
