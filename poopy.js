@@ -1504,7 +1504,7 @@ class Poopy {
 
                         var hasMessagePerms = hasPerms || interaction.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages)
 
-                        var isRestricted = data.guildData[interaction.guild.id]?.restricted?.includes(interaction.channel.id) && !hasPerms
+                        var isRestricted = data.guildData[interaction.guild.id]?.restricted?.includes(interaction.channel.id) && !hasMessagePerms
 
                         if (isRestricted) {
                             await interaction.reply({
