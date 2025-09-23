@@ -587,7 +587,7 @@ class Poopy {
                         "enemies" : "battlers"
 
                     var battler = poopy.json.battlerJSON[type].reduce((closestBattler, currentBattler) =>
-                        similarity(currentBattler.name, msg.member.displayName) > similarity(closestBattler.name, msg.member.displayName)
+                        similarity(currentBattler.name ?? "", msg.member.displayName) > similarity(closestBattler.name ?? "", msg.member.displayName)
                             ? currentBattler : closestBattler
                     )
 
@@ -601,6 +601,7 @@ class Poopy {
                     sendObject.username = data.guildData[msg.guild.id].members[msg.author.id].custom.name.substring(0, 32)
                     sendObject.avatarURL = data.guildData[msg.guild.id].members[msg.author.id].custom.avatar
                 }
+                
                 await sendWebhook(msg, sendObject).catch((e) => console.log(e))
                 msg.delete().catch(() => { })
             }
