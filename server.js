@@ -283,7 +283,10 @@ async function start() {
     }
 
     for (var tokendata of tokens) {
-        if (!tokendata?.TOKEN) continue
+        if (!tokendata?.TOKEN) {
+            console.error("Discord bot token NOT FOUND in process.env!")
+            continue
+        }
 
         if (!poopy) tokendata.config.quitOnDestroy = true
 
