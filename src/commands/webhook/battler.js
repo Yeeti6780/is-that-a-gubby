@@ -25,7 +25,7 @@ module.exports = {
             msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageWebhooks) ||
             msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) ||
             msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
-            msg.author.id === msg.guild.ownerID || config.ownerids.find(id => id == msg.author.id)
+            msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id)
         )) {
             await msg.reply('You need to have the manage webhooks/messages permission to execute that!').catch(() => { })
             return

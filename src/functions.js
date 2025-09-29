@@ -498,7 +498,7 @@ functions.fetchPingPerms = function (msg) {
     const hasPingPerms = (
         msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
         msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.MentionEveryone) ||
-        msg.author.id == msg.guild.ownerID
+        msg.author.id == msg.guild.ownerId
     )
 
     return hasPingPerms ? {
@@ -1432,7 +1432,7 @@ functions.yesno = async function (channel, content, who, btdata, reply, keepCont
             sendObject.allowedMentions = {
                 parse: (!who.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) &&
                     !who.permissions.has(DiscordTypes.PermissionFlagsBits.MentionEveryone) &&
-                    who.id !== channel.guild.ownerID) ?
+                    who.id !== channel.guild.ownerId) ?
                     [] : ['users', 'everyone', 'roles']
             }
             who = who.id
@@ -1580,7 +1580,7 @@ functions.selectMenu = async function (channel, content, placeholder, options, e
             sendObject.allowedMentions = {
                 parse: (!who.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) &&
                     !who.permissions.has(DiscordTypes.PermissionFlagsBits.MentionEveryone) &&
-                    who.id !== channel.guild.ownerID) ?
+                    who.id !== channel.guild.ownerId) ?
                     [] : ['users', 'everyone', 'roles']
             }
             who = who.id
@@ -1726,7 +1726,7 @@ functions.navigateEmbed = async function (channel, pageFunc, results, who, extra
         allowedMentions = {
             parse: (!who.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) &&
                 !who.permissions.has(DiscordTypes.PermissionFlagsBits.MentionEveryone) &&
-                who.id !== channel.guild.ownerID) ?
+                who.id !== channel.guild.ownerId) ?
                 [] : ['users', 'everyone', 'roles']
         }
         sendObject.allowedMentions = allowedMentions
@@ -2028,7 +2028,7 @@ functions.rainmaze = async function (channel, who, reply, w = 8, h = 6) {
         allowedMentions = {
             parse: (!who.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) &&
                 !who.permissions.has(DiscordTypes.PermissionFlagsBits.MentionEveryone) &&
-                who.id !== channel.guild.ownerID) ?
+                who.id !== channel.guild.ownerId) ?
                 [] : ['users', 'everyone', 'roles']
         }
         rainObject.allowedMentions = allowedMentions
@@ -2321,7 +2321,7 @@ functions.displayShop = async function (channel, who, reply, shopType, shopMsg) 
         allowedMentions = {
             parse: (!who.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) &&
                 !who.permissions.has(DiscordTypes.PermissionFlagsBits.MentionEveryone) &&
-                who.id !== channel.guild.ownerID) ?
+                who.id !== channel.guild.ownerId) ?
                 [] : ['users', 'everyone', 'roles']
         }
         shopObject.allowedMentions = allowedMentions
@@ -3841,36 +3841,52 @@ functions.createCronJob = async function (cronData) {
     let poopy = this
     let bot = poopy.bot
     let tempdata = poopy.tempdata
-    let { cron } = poopy.modules
-    let { sleep } = poopy.functions
+    let { cron, DummyMessage } = poopy.modules
+    let { sleep, getKeywordsFor } = poopy.functions
 
-    var timerId = cronData.id
+    const timerId = cronData.id
 
-    var guildId = cronData.guildId
-    var channelId = cronData.channelId
+    const guildId = cronData.guildId
+    const guild = bot.guilds.cache.get(guildId)
+        ?? await bot.guilds.fetch(guildId).catch(() => { })
 
-    var cronTime = cronData.cron
-    var phrase = cronData.phrase
+    const channelId = cronData.channelId
+    const channel = guild?.channels ? (
+        guild.channels.cache.get(channelId)
+        ?? await guild.channels.fetch(channelId).catch(() => { })
+    ) : (
+        bot.channels.cache.get(channelId)
+        ?? await bot.channels.fetch(channelId).catch(() => { })
+        ?? bot.users.cache.get(channelId)
+        ?? await bot.users.fetch(channelId).catch(() => { })
+    )
 
-    var execute = async () => {
-        var cronMessage
-        var abort = false
+    const userId = cronData.userId ?? guild?.ownerId ?? bot.user.id
+    const member = guild?.members ? (
+        guild.members.cache.get(userId)
+        ?? await guild.members.fetch(userId).catch(() => { })
+        ?? guild.members.me
+    ) : (
+        bot.users.cache.get(userId)
+        ?? await bot.users.fetch(userId).catch(() => { })
+        ?? bot.user
+    )
+
+    const cronTime = cronData.cron
+    const phrase = cronData.phrase
+
+    const execute = async () => {
+        let cronMessage
+        let abort = false
 
         while (true) {
-            var guild = bot.guilds.cache.get(guildId)
-                ?? await bot.guilds.fetch(guildId).catch(() => { })
+            const dummyMessage = new DummyMessage.Fake({
+                poopy, guild, channel, member
+            }, phrase)
 
-            var channel = guild && guild.channels ? (
-                guild.channels.cache.get(channelId)
-                ?? await guild.channels.fetch(channelId).catch(() => { })
-            ) : (
-                bot.channels.cache.get(channelId)
-                ?? await bot.channels.fetch(channelId).catch(() => { })
-            )
+            const evaluatedPhrase = await getKeywordsFor(phrase, dummyMessage, true, { resetattempts: true }).catch(() => { }) ?? phrase
 
-            if (!channel) break
-
-            cronMessage = await channel.send(phrase).catch((err) => {
+            cronMessage = await channel.send(evaluatedPhrase).catch((err) => {
                 if (!err.message.includes("discord.com")) abort = true
             })
 
@@ -3880,15 +3896,21 @@ functions.createCronJob = async function (cronData) {
         }
     }
 
-    var job = cron.CronJob.from({
-        cronTime,
-        onTick: execute,
-        start: true,
-        timeZone: "Etc/UTC"
-    })
+    let job
 
-    if (tempdata.crons[timerId]) tempdata.crons[timerId].stop()
-    tempdata.crons[timerId] = job
+    try {
+        job = cron.CronJob.from({
+            cronTime,
+            onTick: execute,
+            start: true,
+            timeZone: "Etc/UTC"
+        })
+    } catch { }
+
+    if (job) {
+        if (tempdata.crons[timerId]) tempdata.crons[timerId].stop()
+        tempdata.crons[timerId] = job
+    }
 
     return job
 }
@@ -4014,7 +4036,7 @@ functions.dmSupport = function (msg) {
     msg.isUserApp = !!(
         msg.authorizingIntegrationOwners ?
             (!msg.authorizingIntegrationOwners["0"] &&
-            msg.authorizingIntegrationOwners["1"]) :
+                msg.authorizingIntegrationOwners["1"]) :
             false
     )
 }
@@ -4476,7 +4498,7 @@ functions.battle = async function (msg, subject, action, damage, chance) {
                     case 'it':
                         pronoun = "it's"
                         break
-                    
+
                     case 'you':
                         pronoun = "you're"
                         break

@@ -445,7 +445,7 @@ class User {
     }
 }
 
-class Message {
+class APIMessage {
     constructor(data, payload) {
         let { req, poopy } = data
         this._data = data
@@ -455,7 +455,7 @@ class Message {
         if (payload && typeof payload == 'string') payload = { content: payload }
 
         this.content = payload ? payload.content : req.body.args
-        this.attachments = payload ? new Collection((payload.files ?? []).map(a => [`Attachment${i++}`, {
+        this.attachments = payload ? new Collection((payload.files ?? []).map(a => [`Attachment${i}`, {
             id: `Attachment${i++}`,
             name: a.name,
             url: a.url
@@ -524,4 +524,70 @@ class Message {
     }
 }
 
-module.exports = Message
+class FakeMessage {
+    constructor(data, payload) {
+        let { guild, channel, user, member, poopy } = data
+
+        let { generateId } = poopy.functions
+
+        if (payload && typeof payload == 'string') payload = { content: payload }
+
+        this.content = payload ? payload.content : ""
+        this.attachments = payload ? payload.files : new Collection()
+        this.embeds = payload ? payload.embeds : []
+        this.stickers = payload ? payload.stickers : new Collection()
+
+        this.guild = guild
+        this.channel = channel
+        this.member = member
+        this.user = this.author = member.user ?? member
+
+        this.id = generateId()
+        this.type = 0
+        this.bot = this.user.bot
+        this.mentions = {
+            users: new Collection(),
+            members: new Collection(),
+            roles: new Collection()
+        }
+    }
+
+    async reply(payload) {
+        return this.channel.send(payload)
+    }
+
+    async edit(payload) {
+        return this.channel.send(payload)
+    }
+
+    async delete() { }
+
+    async react() { }
+
+    async fetchReference() { }
+
+    async fetchWebhook() { }
+
+    createReactionCollector() {
+        return {
+            on: () => { },
+            once: () => { },
+            resetTimer: () => { },
+            stop: () => { }
+        }
+    }
+
+    createMessageComponentCollector() {
+        return {
+            on: () => { },
+            once: () => { },
+            resetTimer: () => { },
+            stop: () => { }
+        }
+    }
+}
+
+module.exports = {
+    API: APIMessage,
+    Fake: FakeMessage
+}

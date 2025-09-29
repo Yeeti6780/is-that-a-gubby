@@ -8,7 +8,7 @@ module.exports = {
     let { sleep } = poopy.functions
     let { DiscordTypes } = poopy.modules
 
-    if (msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerID || config.ownerids.find(id => id == msg.author.id)) {
+    if (msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id)) {
       if (tempdata[msg.guild.id][msg.channel.id].shutUp) return
 
       var duration = isNaN(Number(args[1])) ? 10 : Number(args[1]) >= 600 ? 600 : Number(args[1]) ?? 10

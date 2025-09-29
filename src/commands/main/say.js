@@ -11,7 +11,7 @@ module.exports = {
         var del = (
             msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) ||
             msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
-            msg.author.id === msg.guild.ownerID ||
+            msg.author.id === msg.guild.ownerId ||
             (config.ownerids.find(id => id == msg.author.id))
         ) && !msg.isUserApp
         var deleteIndex = args.indexOf('-nodelete')
@@ -38,7 +38,7 @@ module.exports = {
             tts: (
                 msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
                 msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.SendTTSMessages) ||
-                msg.author.id === msg.guild.ownerID
+                msg.author.id === msg.guild.ownerId
             ) && tts
         }
         if (saidMessage) {

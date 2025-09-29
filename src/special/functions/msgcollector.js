@@ -26,7 +26,7 @@ module.exports = {
         var channelid = channel.id
         var authorid = msg.author.id
 
-        if (msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.roles.cache.find(role => role.name.match(/mod|dev|admin|owner|creator|founder|staff/ig)) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || authorid === msg.guild.ownerID || config.ownerids.find(id => id == msg.author.id) || isBot || authorid == bot.user.id) {
+        if (msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.roles.cache.find(role => role.name.match(/mod|dev|admin|owner|creator|founder|staff/ig)) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || authorid === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id) || isBot || authorid == bot.user.id) {
             if (tempdata[guildid][channelid][authorid].messageCollector) {
                 tempdata[guildid][channelid][authorid].messageCollector.stop()
                 delete tempdata[guildid][channelid][authorid].messageCollector

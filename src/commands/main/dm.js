@@ -68,7 +68,7 @@ module.exports = {
         };
 
         var ownerid = (config.ownerids.find(id => id == msg.author.id));
-        if (args[1].match(/^@(here|everyone)$/) && (Math.random() < 0.2 || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.MentionEveryone) || msg.author.id == msg.guild.ownerID || ownerid || opts.ownermode)) {
+        if (args[1].match(/^@(here|everyone)$/) && (Math.random() < 0.2 || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.MentionEveryone) || msg.author.id == msg.guild.ownerId || ownerid || opts.ownermode)) {
             var len = config.useReactions ? 20 : 25
             var ha = shuffle(
                 msg.guild.emojis.cache.filter(emoji =>

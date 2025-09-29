@@ -6,7 +6,7 @@ const dotenv = require('dotenv')
 async function start() {
     let poopyStarted = false
     let poopy
-    let { APIMessage } = require('./src/modules')
+    let { DummyMessage } = require('./src/modules')
     let { sleep } = require('./src/functions')
 
     if (process.env.RAILWAY_STATIC_URL && !process.env.BOT_WEBSITE) process.env.BOT_WEBSITE = `https://${process.env.RAILWAY_STATIC_URL}`
@@ -81,7 +81,7 @@ async function start() {
 
             let messages = []
 
-            var msg = new APIMessage({ req, res, poopy, messages })
+            var msg = new DummyMessage.API({ req, res, poopy, messages })
 
             if (!data.guildData[msg.guild.id]) data.guildData[msg.guild.id] = {}
             if (data.guildData[msg.guild.id].prefix == undefined) data.guildData[msg.guild.id].prefix = ''
@@ -89,7 +89,7 @@ async function start() {
 
             var err
             await callbacks.messageCallback(msg).catch((e) => err = e.message)
-            if (!messages.length) messages.push(req.body.restype == 'json' ? new APIMessage({ req, res, poopy, messages }, err ?? 'No output.') : err ?? 'No output.')
+            if (!messages.length) messages.push(req.body.restype == 'json' ? new DummyMessage.API({ req, res, poopy, messages }, err ?? 'No output.') : err ?? 'No output.')
 
             switch (req.body.restype) {
                 case 'json':
@@ -118,7 +118,6 @@ async function start() {
                     res.type('html').send(doc)
                     break;
             }
-            res.end()
         })
 
         const cachedMediaResponses = {}

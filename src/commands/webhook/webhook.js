@@ -51,7 +51,7 @@ module.exports = {
                 symbolReplacedMessage = saidMessage.replace(new RegExp(target, 'ig'), symbolReplacement.replacement)
             })
         })
-        var name = (symbolReplacedMessage.match(/"([\s\S]*?)"/) ?? [])[1]
+        var name = (symbolReplacedMessage.match(/^"([\s\S]*?)"/) ?? [])[1]
         if (name) {
             if (name.length > 32) {
                 await msg.reply('That name is TOO LONG!').catch(() => { })
@@ -99,7 +99,7 @@ module.exports = {
         }
 
         if (data.guildData[msg.guild.id].members[member.id].custom === false) {
-            if (msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageWebhooks) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.author.id === msg.guild.ownerID || config.ownerids.find(id => id == msg.author.id)) {
+            if (msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageWebhooks) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id)) {
                 if (!name) {
                     await msg.reply('Where\'s the name?!').catch(() => { })
                     return

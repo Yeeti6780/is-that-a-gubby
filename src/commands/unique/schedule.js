@@ -202,7 +202,7 @@ module.exports = {
             },
 
             add: async (msg, args) => {
-                if (msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerID || config.ownerids.find(id => id == msg.author.id)) {
+                if (msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id)) {
                     if (!args[1]) {
                         await msg.reply('You gotta specify the cron schedule!').catch(() => { })
                         return
@@ -227,22 +227,19 @@ module.exports = {
                             saidMessage = saidMessage.replace(new RegExp(target, 'ig'), symbolReplacement.replacement)
                         })
                     })
-                    var matchedTextes = saidMessage.match(/(?<!\\)"([\s\S]*?)(?<!\\)"/g)
-                    if (!matchedTextes) {
+                    var matchedText = (saidMessage.match(/^"([\s\S]*?)"/) ?? [])[1]
+                    if (!matchedText) {
                         await msg.reply('You gotta specify the cron schedule!').catch(() => { })
                         return
                     }
-                    for (let i = 0; i < matchedTextes.length; i++) {
-                        matchedTextes[i] = matchedTextes[i].replace(/\\(?=")/g, "")
-                    }
 
-                    var cronTime = matchedTextes[0].substring(1, matchedTextes[0].length - 1)
+                    var cronTime = matchedText.replace(/\\(?=")/g, "")
                     if (!cron.validateCronExpression(cronTime)) {
                         await msg.reply('Invalid cron.').catch(() => { })
                         return
                     }
 
-                    var phrase = saidMessage.replace(matchedTextes[0], "").trim().replace(/`<?@[!&]?[a-z0-9]+>?`/g, (c) => c.slice(1, -1))
+                    var phrase = saidMessage.replace(`"${matchedText}"`, "").trim().replace(/`<?@[!&]?[a-z0-9]+>?`/g, (c) => c.slice(1, -1))
 
                     if (!phrase) {
                         await msg.reply('You gotta specify the message to send!').catch(() => { })
@@ -255,6 +252,7 @@ module.exports = {
                         id: timerId,
                         guildId: msg.guild.id,
                         channelId: channel.id,
+                        userId: msg.author.id,
                         cron: cronTime,
                         phrase
                     }
@@ -282,7 +280,7 @@ module.exports = {
             },
 
             edit: async (msg, args) => {
-                if (msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerID || config.ownerids.find(id => id == msg.author.id)) {
+                if (msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id)) {
                     if (args[1] == undefined) {
                         await msg.reply('You gotta specify a timer ID!').catch(() => { })
                         return
@@ -297,6 +295,9 @@ module.exports = {
                     }
 
                     var timer = data.botData.crons[timerIndex]
+
+                    var oldCron = timer.cron
+
                     var updated = false
                     var updates = []
 
@@ -306,15 +307,13 @@ module.exports = {
                             saidMessage = saidMessage.replace(new RegExp(target, 'ig'), symbolReplacement.replacement)
                         })
                     })
-                    var matchedTextes = saidMessage.match(/(?<!\\)"([\s\S]*?)(?<!\\)"/g)
-                    if (matchedTextes) {
-                        for (let i = 0; i < matchedTextes.length; i++) {
-                            matchedTextes[i] = matchedTextes[i].replace(/\\(?=")/g, "")
-                        }
+                    var matchedText = (saidMessage.match(/^"([\s\S]*?)"/) ?? [])[1]
+                    if (matchedText) {
+                        matchedText = matchedText.replace(/\\(?=")/g, "")
 
-                        saidMessage = saidMessage.replace(matchedTextes[0], "").trim()
+                        saidMessage = saidMessage.replace(`"${matchedText}"`, "").trim()
 
-                        var newCron = matchedTextes[0].substring(1, matchedTextes[0].length - 1)
+                        var newCron = matchedText
                         if (!cron.validateCronExpression(newCron)) {
                             await msg.reply('Invalid cron.').catch(() => { })
                             return
@@ -338,6 +337,7 @@ module.exports = {
 
                     var job = await createCronJob(timer).catch(() => { })
                     if (!job) {
+                        timer.cron = oldCron
                         await msg.reply('Invalid cron.').catch(() => { })
                         return
                     }
@@ -357,7 +357,7 @@ module.exports = {
             },
 
             delete: async (msg, args) => {
-                if (msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerID || config.ownerids.find(id => id == msg.author.id)) {
+                if (msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id)) {
                     if (args[1] == undefined) {
                         await msg.reply('You gotta specify a timer ID!').catch(() => { })
                         return
