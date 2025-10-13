@@ -9,6 +9,6 @@ module.exports = {
 
         var resolvedUser = await resolveUser(word, msg.guild, "user").catch(() => { })
 
-        return resolvedUser.id ?? ""
+        return resolvedUser?.id ?? ""
     }
 }
