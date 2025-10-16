@@ -532,7 +532,9 @@ class Poopy {
             async function webhookify() {
                 webhooked = true
 
-                if (!(origcontent || msg.attachments.size || msg.embeds.length || msg.stickers.size) ||
+                if (
+                    msg.type === DiscordTypes.InteractionType.ApplicationCommand ||
+                    !(origcontent || msg.attachments.size || msg.embeds.length || msg.stickers.size) ||
                     (
                         msg.channel.type === Discord.ChannelType.PublicThread ||
                         msg.channel.type === Discord.ChannelType.PrivateThread ||
