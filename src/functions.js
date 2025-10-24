@@ -789,7 +789,7 @@ functions.gatherData = async function (msg) {
 }
 
 functions.chat = async function (stim, msg, {
-    temperature = 1,
+    temperature = 0.7,
     instruct = vars.chatInstruct,
     clear = false,
     useTools = false,
