@@ -4435,7 +4435,7 @@ functions.battle = async function (msg, subject, action, damage, chance) {
 
     await msg.channel.sendTyping().catch(() => { })
     var attachment = msg.attachments.first()?.url
-    var sticker = msg.stickers[0].url
+    var sticker = msg.stickers[0]?.url
 
     if (!subject && !attachment && !sticker) {
         await msg.reply('What/who is the subject?!').catch(() => { })
