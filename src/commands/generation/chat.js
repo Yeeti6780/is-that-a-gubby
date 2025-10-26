@@ -24,7 +24,7 @@ module.exports = {
 
         await msg.channel.sendTyping().catch(() => { })
 
-        var temperature = getOption(args, 'temperature', { dft: 0.7, splice: true, n: 1, join: true, func: (opt) => parseNumber(opt, { dft: 0.7, min: 0, max: 1, round: false }) })
+        var temperature = getOption(args, 'temperature', { dft: 1, splice: true, n: 1, join: true, func: (opt) => parseNumber(opt, { dft: 1, min: 0, max: 1, round: false }) })
         var instruct = getOption(args, 'instruct', { dft: vars.chatInstruct, splice: true, n: Infinity, join: true, stopMatch: ["-clear", "-temperature"] })
         var clear = getOption(args, 'clear', { n: 0, splice: true, dft: false })
 
@@ -58,7 +58,7 @@ module.exports = {
     },
     help: {
         name: 'chat/ask <message> [-temperature <number (from 0 to 1)>] [-instruct <prompt>] [-clear]',
-        value: 'Generates an answer based on your prompt using AI21. Default temperature is 0.7.'
+        value: 'Generates an answer based on your prompt using AI21. Default temperature is 1.'
     },
     type: 'Generation',
     envRequired: ['AI21_KEY']
