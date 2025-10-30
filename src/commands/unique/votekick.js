@@ -5,7 +5,7 @@ module.exports = {
             name: "user",
             required: true,
             specifarg: false,
-            orig: "<user>",
+            orig: "{user}",
             autocomplete: async function (interaction) {
                 let poopy = this
                 let { data, config } = poopy
@@ -84,7 +84,7 @@ module.exports = {
             return
         }
 
-        var userQuery = args.slice(1).join(' ')
+        var userQuery = args.slice(1).join(' ').trim()
 
         var member = userQuery ? await resolveUser(userQuery, msg.guild, "member").catch(() => { }) : msg.author
 
@@ -99,7 +99,7 @@ module.exports = {
         return await votekick(member, msg.channel, goal, action, duration * 1000)
     },
     help: {
-        name: 'votekick <user> [-goal <votes (default: active members * (1/2))>] [-action <timeout|mute|kick|ban>] [-duration <seconds (default 45)>] (moderator only)',
+        name: 'votekick {user} [-goal <votes (default: active members * (1/2))>] [-action <timeout|mute|kick|ban>] [-duration <seconds (default 45)>] (moderator only)',
         value: 'Starts a votekick on the specified user. When the goal is reached, it executes an action on them, by default a 10 minute timeout.'
     },
     cooldown: 2500,

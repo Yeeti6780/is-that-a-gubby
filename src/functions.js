@@ -782,6 +782,7 @@ functions.gatherData = async function (msg) {
 
         reconcileDataWithTemplate(tempdata, vars.tempdataTemplate, msg)
 
+        tempdata[msg.guild.id][msg.channel.id][msg.author.id].bot = msg.author.bot
         tempdata[msg.guild.id][msg.channel.id][msg.author.id].lastMessage = Date.now()
 
         if (!tempdata[msg.author.id].coolDownMsg) {
@@ -2152,6 +2153,7 @@ functions.votekick = async function (member, channel, voteGoal, action = "timeou
     let poopy = this
     let tempdata = poopy.tempdata
     let { Discord, DiscordTypes } = poopy.modules
+    let { randomChoice } = poopy.functions
 
     const actionNames = {
         timeout: "timed out",
@@ -2160,18 +2162,16 @@ functions.votekick = async function (member, channel, voteGoal, action = "timeou
         ban: "banned"
     }
 
+    const members = Object.entries(tempdata[guild.id][channel.id])
+        .filter(([_, m]) => m?.lastMessage != undefined && !m.bot && now - m.lastMessage < 120_000)
+        .map(([id, _]) => id)
+
+    member = member ?? guild.members.cache.get(randomChoice(members))
+
     const user = member.user
     const guild = channel.guild
 
     const now = Date.now()
-
-    const voteMembers = Object.fromEntries(
-        Object.entries(tempdata[guild.id][channel.id])
-            .filter(([_, m]) => m?.lastMessage != undefined && now - m.lastMessage < 120_000)
-            .map(([id, m]) => [id, m.lastMessage])
-    )
-
-    const members = Object.keys(voteMembers)
 
     voteGoal = voteGoal ?? Math.ceil(members.length * (1 / 2))
 
