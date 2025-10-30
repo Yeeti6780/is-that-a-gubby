@@ -73,7 +73,7 @@ module.exports = {
             var embeds = msg.embeds.filter(embed => embed.data.type === 'rich')
             var stickers = msg.stickers
                 .filter(sticker => sticker.format != 3)
-                .map(sticker => new Discord.AttachmentBuilder(`https://cdn.discordapp.com/stickers/${sticker.id}.${sticker.format == 4 ? "gif" : "png"}?size=160`))
+                .map(sticker => new Discord.AttachmentBuilder(`${sticker.url.replace("cdn.discordapp.com", "media.discordapp.net")}?size=160`))
 
             var attachmentsAndStickers = attachments.concat(stickers)
 

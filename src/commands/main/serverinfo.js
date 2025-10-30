@@ -4,7 +4,7 @@ module.exports = {
     execute: async function (msg) {
         let poopy = this
         let bot = poopy.bot
-        let { DiscordTypes } = poopy.modules
+        let { DiscordTypes, Discord } = poopy.modules
         let config = poopy.config
 
         var icon = msg.guild.iconURL({ dynamic: true, size: 1024, extension: 'png' })

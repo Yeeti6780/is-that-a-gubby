@@ -872,6 +872,7 @@ functions.chat = async function (stim, msg, {
 
         if (!message) return
 
+        if (message.tool_calls == null) delete message.tool_calls
         ourHistory.push(message)
     }
 
@@ -3783,7 +3784,7 @@ functions.getUrls = async function (msg, options = {}) {
         var stickersR = []
         msg.stickers.forEach(sticker => {
             if (options.update && sticker.fetched) return
-            stickersR.push(`https://cdn.discordapp.com/stickers/${sticker.id}.${sticker.format == 4 ? "gif" : "png"}?size=160`)
+            stickersR.push(sticker.url)
             if (options.update && !sticker.fetched) sticker.fetched = true
         })
         stickersR.reverse()
@@ -4539,7 +4540,7 @@ functions.battle = async function (msg, subject, action, damage, chance) {
 
     await msg.channel.sendTyping().catch(() => { })
     var attachment = msg.attachments.first()?.url
-    var sticker = msg.stickers[0] && `https://cdn.discordapp.com/stickers/${msg.stickers[0].id}.${msg.stickers[0].format == 4 ? "gif" : "png"}`
+    var sticker = msg.stickers[0]?.url
 
     if (!subject && !attachment && !sticker) {
         await msg.reply('What/who is the subject?!').catch(() => { })
