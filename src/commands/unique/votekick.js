@@ -75,9 +75,9 @@ module.exports = {
 
         const permissions = msg.member.permissions
         const isPoopyOwner = config.ownerids.find(id => id == msg.author.id)
-        const canUseAction = (action == "ban" && !permissions.has(DiscordTypes.PermissionFlagsBits.BanMembers))
-            || (action == "kick" && !permissions.has(DiscordTypes.PermissionFlagsBits.KickMembers))
-            || ((action == "timeout" || action == "muted") && !permissions.has(DiscordTypes.PermissionFlagsBits.ModerateMembers))
+        const canUseAction = (action == "ban" && permissions.has(DiscordTypes.PermissionFlagsBits.BanMembers))
+            || (action == "kick" && permissions.has(DiscordTypes.PermissionFlagsBits.KickMembers))
+            || ((action == "timeout" || action == "muted") && permissions.has(DiscordTypes.PermissionFlagsBits.ModerateMembers))
 
         if (!isPoopyOwner && !canUseAction) {
             await msg.reply(`You don't have permissions to use the ${action} action.`).catch(() => { })
