@@ -232,6 +232,7 @@ var dataGetters = {
             verbJSON: 'verbs',
             adjJSON: 'adjectives',
             advJSON: 'adverbs',
+            colorJSON: 'colors',
             imageJSON: 'images',
             nameJSON: 'names',
             arabJSON: 'arab',

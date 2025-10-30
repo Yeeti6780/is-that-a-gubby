@@ -2241,7 +2241,7 @@ functions.votekick = async function (member, channel, voteGoal, action = "timeou
             switch (action) {
                 case "timeout": return await member.timeout(600_000).catch(() => { })
                 case "mute": {
-                    const muteRole = guild.roles.cache.find(r => r.name.split(" ").some(n => n.toLowerCase().startsWith("mute")))
+                    const muteRole = guild.roles.cache.find(r => r.name.toLowerCase().includes("muted"))
 
                     if (muteRole) return await member.roles.set([muteRole.id]).catch(() => member.roles.add(muteRole.id).catch(() => { }))
                     else return await member.timeout(600_000).catch(() => { })
