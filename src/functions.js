@@ -2161,6 +2161,8 @@ functions.votekick = async function (member, channel, voteGoal, action = "timeou
         kick: "kicked",
         ban: "banned"
     }
+    
+    const guild = channel.guild
 
     const members = Object.entries(tempdata[guild.id][channel.id])
         .filter(([_, m]) => m?.lastMessage != undefined && !m.bot && now - m.lastMessage < 120_000)
@@ -2169,7 +2171,6 @@ functions.votekick = async function (member, channel, voteGoal, action = "timeou
     member = member ?? guild.members.cache.get(randomChoice(members))
 
     const user = member.user
-    const guild = channel.guild
 
     const now = Date.now()
 
