@@ -30,7 +30,7 @@ module.exports = {
     execute: async function (msg, args) {
         let poopy = this
         let config = poopy.config
-        let { resolveUser, getOption, parseNumber, parseString, votekick } = poopy.functions
+        let { fetchPingPerms, resolveUser, getOption, parseNumber, parseString, votekick } = poopy.functions
         let { DiscordTypes } = poopy.modules
 
         const goal = getOption(
