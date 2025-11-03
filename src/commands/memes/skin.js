@@ -71,7 +71,7 @@ module.exports = {
             return
         }
     },
-    help: { name: 'skin/machine {file}', value: 'NOOOO GET OUT OF THERE' },
+    help: { name: 'skin/machine {file}', value: 'and i wonder' },
     cooldown: 2500,
     type: 'Memes'
 }
