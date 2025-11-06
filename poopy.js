@@ -1707,7 +1707,12 @@ class Poopy {
             if (script.match(vars.validUrl))
                 script = await axios.get(script).then((res) => res.data.toString()).catch(() => script)
 
-            try { eval(script) } catch { }
+            try {
+                with (poopy)
+                with (poopy.functions)
+                with (poopy.modules)
+                eval(script)
+            } catch { }
         }
 
         saveData()
