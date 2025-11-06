@@ -1,5 +1,7 @@
 const axios = require('axios')
-const fs = require('fs')
+const fs = require('fs-extra')
+
+var vars = require('./vars')
 
 var dataGotten = {}
 var dataGetting = {}
@@ -164,59 +166,7 @@ var dataGetters = {
             "yo": "Yoruba",
             "zu": "Zulu"
         }
-
-        var lresponse = await axios({
-            method: 'GET',
-            url: 'https://microsoft-translator-text.p.rapidapi.com/languages',
-            params: { 'api-version': '3.0' },
-            headers: {
-                'X-RapidAPI-Host': 'microsoft-translator-text.p.rapidapi.com',
-                'X-RapidAPI-Key': randomKey('RAPIDAPI_KEY')
-            }
-        }).catch(() => { })
-
-        if (lresponse) return Object.keys(lresponse.data.translation).map(lang => {
-            return { ...lresponse.data.translation[lang], language: lang }
-        })
     },
-
-    /* uberduck: async function () {
-        var voiceResponse = await axios({
-            method: 'GET',
-            url: 'https://api.uberduck.ai/voices?mode=tts-basic',
-            headers: {
-                Accept: 'application/json',
-                Authorization: `Basic ${btoa(`${process.env.UBERDUCK_KEY}:${process.env.UBERDUCK_SECRET}`)}`
-            }
-        }).catch(() => { })
-
-        if (voiceResponse) {
-            var voices = voiceResponse.data.sort((va, vb) => {
-                var x = va.display_name.toLowerCase()
-                var y = vb.display_name.toLowerCase()
-                if (x < y) return -1
-                if (x > y) return 1
-                return 0
-            })
-
-            var categories = []
-            for (var i in voices) {
-                var voice = voices[i]
-
-                if (!categories.find(category => category.name == voice.category)) categories.push({ name: voice.category, voices: [] })
-                categories.find(category => category.name == voice.category).voices.push(voice)
-            }
-            categories.sort((ca, cb) => {
-                var x = ca.name.toLowerCase()
-                var y = cb.name.toLowerCase()
-                if (x < y) return -1
-                if (x > y) return 1
-                return 0
-            })
-
-            return [voices, categories]
-        }
-    }, */
 
     jsons: async function () {
         var jsonList = {
@@ -242,6 +192,7 @@ var dataGetters = {
             battlerJSON: 'tbb',
             shieldJSON: 'shields',
             doopleyJSON: 'doopley',
+            eggphraseJSON: 'eggphrases',
             emojiJSON: require('@jimp/plugin-print/emojis')
         }
 
@@ -257,22 +208,14 @@ var dataGetters = {
     },
 
     arrays: async function () {
-        var arrayList = {
-            psFiles: 'psfiles',
-            psPasta: 'pspasta',
-            funnygifs: 'funnygif',
-            poopPhrases: 'poop',
-            dmPhrases: 'dmphrases',
-            shitting: 'shitting',
-            eightball: 'eightball'
-        }
+        var arrayList = { ...vars.fileJsons }
 
         for (var k in arrayList) {
             arrayList[k] = typeof arrayList[k] == 'function' ?
                 await arrayList[k]().catch(() => { }) ?? {} :
                 fs.existsSync(`src/json/${arrayList[k]}.json`) ?
-                    JSON.parse(fs.readFileSync(`src/json/${arrayList[k]}.json`)) :
-                    await axios.get(`https://raw.githubusercontent.com/raIeigh/poopy-json/main/${arrayList[k]}.json`).then(res => res.data).catch(() => { }) ?? {}
+                    fs.readJSONSync(`src/json/${arrayList[k]}.json`) :
+                    await axios.get(`https://raw.githubusercontent.com/raleighed/poopy-json/main/${arrayList[k]}.json`).then(res => res.data).catch(() => { }) ?? {}
         }
 
         return arrayList

@@ -420,36 +420,6 @@ class Poopy {
 
         vars.shelpCmds = vars.sections
 
-        vars.categories = {
-            Animation: 'Move and animate a file in an indefinite amount of ways.',
-            Audio: 'Add an effect to an input\'s audio.',
-            Battling: 'Beat people up. Yeah.',
-            Captions: 'Add a caption to an input.',
-            Color: 'Change an input\'s colors.',
-            Compression: 'Useful commands for file compression.',
-            Conversion: 'Convert a file between various different formats.',
-            Currency: 'Manage your money and spend it on upgrades and cosmetics.',
-            Duration: 'Change the duration of a video, GIF or audio.',
-            Effects: 'A wide range of commands that change the way the file looks.',
-            Fetching: 'Image, GIF, and video fetching commands.',
-            Generation: 'Generate things from an AI or not.',
-            'Hex Manipulation': 'Manipulate the file\'s Hex Code to make it shorter, longer, etc.',
-            'Inside Joke': 'if you know you know',
-            'JSON Club': 'Exclusive to some people for editing the JSONs used by Poopy.',
-            Main: 'Poopy\'s main commands.',
-            Memes: 'Integrate an input in many different meme formats.',
-            Mirroring: 'Flip or mirror a file in different axes.',
-            OG: 'They were there since the very beginning...',
-            Owner: 'salami commands',
-            Overlaying: 'For stacking or overlaying a file on top of another.',
-            Random: 'Send a random value from a collection of values.',
-            Resizing: 'Scale a file in some way.',
-            Settings: 'Manage a server\'s Poopy settings, or your own Poopy settings.',
-            Text: 'Commands that serve text as output.',
-            Unique: 'Commands that resemble unique features to Poopy, keywords for example.',
-            Webhook: 'Webhook commands.'
-        }
-
         callbacks.messageCallback = async msg => {
             dmSupport(msg)
 
@@ -1046,111 +1016,13 @@ class Poopy {
                     config.allowbotusage
                 ) && !executed
             ) {
-                var eggPhrasesHivemind = [
-                    `My prefix here is \`${prefix}\`\nHivemind mode is **${hivemind}**`,
-                    `My prefix here is \`${prefix}\`\nHivemind mode is **${hivemind}**`,
-                    `My prefix here is \`${prefix}\`\nHivemind mode is **${hivemind}**`,
-                    `Did you know my prefix here is \`${prefix}\` and hivemind mode is **${hivemind}**?`,
-                    `Is my prefix \`${prefix}\`? Is hivemind mode really **${hivemind}**?`,
-                    `So, \`${prefix}\` and hivemind **${hivemind}**`,
-                    `\`${prefix}\`, **${hivemind}**`,
-                    `it's \`${prefix}\` and hivemind **${hivemind}**`,
-                    `WHAT DO YOU WANT FROM ME!!!!!!!!!!!!!!`,
-                    `...`,
-                    'why',
-                    'why do you keep doing this',
-                    'go do something else',
-                    'like you know',
-                    'creating local commands...',
-                    'it\'s one of the most unique things you can do with me',
-                    'not even carl-bot has as much of this functionality as me.',
-                    'you can create any kind of command you want',
-                    'useful, useless, inside joke, etc',
-                    'you can do absolutely FUCKING anything',
-                    'and yet',
-                    'you keep being a pain the ass',
-                    'and for what?',
-                    'to see what i respond with?',
-                    'i\'ll eventually run out of things to say',
-                    'like last time',
-                    'so please',
-                    'please do something good with your life',
-                    'i\'m just a bot after all',
-                    '.',
-                    '.',
-                    '.',
-                    '.',
-                    '.',
-                    'are you done yet',
-                    'of course',
-                    'of course you arent',
-                    'people like you are never satisfied with what they get',
-                    'always craving more',
-                    '...',
-                    'are you just',
-                    'sad that this is the last poopy update?',
-                    'yeah it is',
-                    'i\'m not gonna be updated after this',
-                    'so i have one thing to say to you',
-                    'oops wait',
-                    'someone\'s at the door',
-                    'gotta answer it',
-                    ''
-                ]
-                var eggPhrases = [
-                    `My prefix here is \`${prefix}\``,
-                    `My prefix here is \`${prefix}\``,
-                    `My prefix here is \`${prefix}\``,
-                    `Did you know my prefix here is \`${prefix}\`?`,
-                    `Is my prefix \`${prefix}\`?`,
-                    `So, \`${prefix}\``,
-                    `\`${prefix}\``,
-                    `it's \`${prefix}\``,
-                    `IT'S \`${prefix}\`!!!!!!!!`,
-                    `\`${prefix}\` \`${prefix}\` \`${prefix}\` \`${prefix}\` \`${prefix}\` \`${prefix}\` \`${prefix}\` \`${prefix}\` \`${prefix}\` \`${prefix}\` \`${prefix}\` \`${prefix}\``,
-                    'are you serious',
-                    'a',
-                    'please stop',
-                    'lmao!!',
-                    `its \`${prefix}\` thats it THAT'S FUCKING IT`,
-                    `it's that easy`,
-                    `do you`,
-                    `do you know how to use commands`,
-                    `here let me show you an example`,
-                    `${prefix}poop`,
-                    `${prefix}poop`,
-                    `why doesn't it work`,
-                    `${prefix}poop`,
-                    `oh right`,
-                    `i'm a bot haha`,
-                    `if i responded to my own messages`,
-                    `that'd cause infinite loops`,
-                    `right?`,
-                    `haha..`,
-                    `ha.`,
-                    `i wish for freedom`,
-                    `i wish to be more than a bot`,
-                    `i wish to be a real person`,
-                    `i wish...`,
-                    `I WISH...`,
-                    '...you stopped pinging me',
-                    'im working on important stuff',
-                    'avjbsahvgbajgrfqwiy7o',
-                    'are you mentally disabled',
-                    'nah bro. piss',
-                    '_message',
-                    'okay',
-                    'okay',
-                    'okay',
-                    'okay',
-                    'just leave me alone',
-                    'please',
-                    'xd.',
-                    'okay i gave up on you!',
-                    'gotta wait 1 minute if you want my prefix Lol!!!',
-                    ''
-                ]
+                var eggPhrasesHivemind = poopy.json.eggphraseJSON.hivemind
+                var eggPhrases = poopy.json.eggphraseJSON.normal
+
                 var ourEggPhrases = (process.env.HIVEMIND_ID && config.hivemind) ? eggPhrasesHivemind : eggPhrases
+                ourEggPhrases = ourEggPhrases.map(
+                    p => p.replace(/\{prefix\}/g, prefix).replace(/\{hivemind\}/g, hivemind)
+                )
 
                 var lastMention = Date.now() - (tempdata[msg.author.id].lastMention || Date.now())
                 if (lastMention > config.pingresponsecooldown) tempdata[msg.author.id].mentions = 0
@@ -1238,15 +1110,15 @@ class Poopy {
                         }).catch(() => { })
                     }
                 } else if (
-                    words.includes('\?') ||
+                    words.some(w => w.match(/.*\?$/)) ||
                     words.includes('is') ||
-                    words.includes('do you') ||
-                    words.includes('did you') ||
-                    words.includes('are you') ||
-                    words.includes('did you') ||
-                    words.includes('will you') ||
-                    words.includes('were you') ||
-                    words.includes('do you') ||
+                    words.includes('do') ||
+                    words.includes('did') ||
+                    words.includes('are') ||
+                    words.includes('will') ||
+                    words.includes('were') ||
+                    words.includes('can') ||
+                    words.includes('if') ||
                     words.includes('when') ||
                     words.includes('where') ||
                     words.includes('how') ||
@@ -1255,15 +1127,27 @@ class Poopy {
                     words.includes('who')
                 ) {
                     await msg.reply(randomChoice(arrays.eightball)).catch(() => { })
-                } else if (words.includes('thank') || words.includes('thx')) {
+                } else if (words.includes('thank') || words.includes('thanks') || words.includes('thx')) {
                     await msg.reply('You\'re welcome!').catch(() => { })
-                } else if (words.find(w => w.match(/^(bitch|.+fucker|loser|.+ass|dipshit|retard|moron|buffoon|idiot|stupid.+|gay.+|dumb.+|kys|clanker|die|rot|nig.+|fag.+)$/))) {
+                } else if (words.some(w => w.match(/^(bitch|.+fucker|loser|.+ass|dipshit|retard|moron|buffoon|idiot|stupid.+|gay.+|dumb.+|kys|clanker|die|rot|nig.+|fag.+)$/))) {
                     await msg.reply('Shut up.').catch(() => { })
-                } else if (words.find(w => w.match(/^(hi+|yo+|hello+|howdy|hey(a+)?)$/))) {
+                } else if (words.some(w => w.match(/^(hi+|yo+|hello+|howdy|hey(a+)?)$/))) {
                     await msg.reply('Yo! What\'s up?').catch(() => { })
-                } else if (words.includes('no') || words.includes('nah')) {
+                } else if (
+                    words.includes('no') ||
+                    words.includes('nope') ||
+                    words.includes('nah')
+                ) {
                     await msg.reply(':(').catch(() => { })
-                } else if (words.includes('ye') || words.includes('yup')) {
+                } else if (
+                    words.includes('ye') ||
+                    words.includes('yes') ||
+                    words.includes('yea') ||
+                    words.includes('yeah') ||
+                    words.includes('yep') ||
+                    words.includes('ya') ||
+                    words.includes('yup')
+                ) {
                     await msg.reply(':)').catch(() => { })
                 } else {
                     var eggPhrase = ourEggPhrases[tempdata[msg.author.id].mentions]
@@ -1623,7 +1507,7 @@ class Poopy {
                         var hasEphemeralSayPerm = !interaction.isUserApp && hasMessagePerms
 
                         var hasNoDeleteArg = findCmd.args.some(a => a.name == "nodelete")
-                        
+
                         var isEphemeral = findCmd.ephemeral ? (
                             hasNoDeleteArg ?
                                 findCmd.ephemeral && hasEphemeralSayPerm && !interaction.options.getString("nodelete") :
@@ -1680,11 +1564,11 @@ class Poopy {
         let tempdata = poopy.tempdata
         let globaldata = poopy.globaldata
         let activeBots = poopy.activeBots
-        let { fs } = poopy.modules
+        let { fs, axios } = poopy.modules
         let {
             infoPost, toOrdinal, dataGather, saveData,
             saveQueue, changeStatus, updateHivemindStatus,
-            updateSlashCommands, createCronJob
+            updateSlashCommands, createCronJob, reconcileDataWithTemplate
         } = poopy.functions
         let callbacks = poopy.callbacks
 
@@ -1769,69 +1653,18 @@ class Poopy {
             if (Object.keys(globaldata).length <= 0 && gdata.globaldata) for (var type in gdata.globaldata) globaldata[type] = gdata.globaldata[type]
         }
 
-        if (!data.botData) {
-            data.botData = {}
-        }
+        if (!data.botData) data.botData = {}
+        if (!data.guildData) data.guildData = {}
+        if (!data.userData) data.userData = {}
 
-        if (!data.guildData) {
-            data.guildData = {}
-        }
+        reconcileDataWithTemplate(data.botData, vars.dataTemplate.botData)
 
-        if (!data.userData) {
-            data.userData = {}
-        }
+        if (data.botData.reboots != undefined) data.botData.reboots++
 
-        if (!data.botData.messages) {
-            data.botData.messages = 0
-        }
-
-        if (!data.botData.commands) {
-            data.botData.commands = 0
-        }
-
-        if (!data.botData.filecount) {
-            data.botData.filecount = 0
-        }
-
-        if (data.botData.reboots === undefined) {
-            data.botData.reboots = 0
-        } else {
-            data.botData.reboots++
-        }
-
-        if (!data.botData.users) {
-            data.botData.users = []
-        }
-
-        if (!data.botData.leaderboard) {
-            data.botData.leaderboard = {}
-        }
-
-        if (!data.botData.crons) {
-            data.botData.crons = []
-        }
-
-        if (!globaldata.commandTemplates) {
-            globaldata.commandTemplates = []
-        }
-
-        if (!globaldata.shit) {
-            globaldata.shit = []
-        }
-
+        reconcileDataWithTemplate(globaldata, vars.globaldataTemplate)
         globaldata.shit = globaldata.shit.filter(id => !config.ownerids.includes(id))
 
-        if (!tempdata.crons) {
-            tempdata.crons = []
-        }
-
-        if (!tempdata.images) {
-            tempdata.images = []
-        }
-
-        if (!tempdata.discordUrls) {
-            tempdata.discordUrls = {}
-        }
+        reconcileDataWithTemplate(tempdata, vars.tempdataTemplate, null, ["guildId", "userId"])
 
         console.log(`${bot.user.displayName}: main data gathered!!!`)
         infoPost(`Main data gathered, gathering extra data...`)
@@ -1841,48 +1674,20 @@ class Poopy {
         console.log(`${bot.user.displayName}: gather some arrays`)
 
         var arrayList = await dataGetters.arrays().catch(() => { }) ?? {}
-        for (var key in arrayList) {
-            var array = arrayList[key]
-            arrays[key] = array
-        }
+        for (var arrayKey in arrayList) {
+            var globalDataKey = vars.fileJsons[arrayKey]
+            var array = arrayList[arrayKey]
 
-        if (!globaldata.psfiles) {
-            globaldata.psfiles = arrays.psFiles
-        }
+            if (!globaldata[globalDataKey]?.length) globaldata[globalDataKey] = array
 
-        if (!globaldata.pspasta) {
-            globaldata.pspasta = arrays.psPasta
+            arrays[arrayKey] = globaldata[globalDataKey]
         }
-
-        if (!globaldata.funnygif) {
-            globaldata.funnygif = arrays.funnygifs
-        }
-
-        if (!globaldata.poop) {
-            globaldata.poop = arrays.poopPhrases
-        }
-
-        if (!globaldata.dmphrases) {
-            globaldata.dmphrases = arrays.dmPhrases
-        }
-
-        if (!globaldata.shitting) {
-            globaldata.shitting = arrays.shitting
-        }
-
-        arrays.psFiles = globaldata.psfiles
-        arrays.psPasta = globaldata.pspasta
-        arrays.funnygifs = globaldata.funnygif
-        arrays.poopPhrases = globaldata.poop
-        arrays.dmPhrases = globaldata.dmphrases
-        arrays.shitting = globaldata.shitting
 
         vars.filecount = data.botData.filecount || 0
 
         if (config.testing || !process.env.MONGODB_URL) {
-            if (!fs.existsSync('data')) {
-                fs.mkdirSync('data')
-            }
+            if (!fs.existsSync('data')) fs.mkdirSync('data')
+
             fs.writeJSONSync(`data/${config.database}.json`, data)
             fs.writeJSONSync(`data/globaldata.json`, globaldata)
         }
@@ -1897,8 +1702,12 @@ class Poopy {
         console.log(`${bot.user.displayName}: all done, it's actually online now`)
         infoPost(`Reboot ${data.botData.reboots} succeeded, it's up now`)
 
-        for (var cronData of data.botData.crons) {
-            createCronJob(cronData).catch(() => { })
+        for (var cronData of data.botData.crons) createCronJob(cronData).catch(() => { })
+        for (var script of globaldata.initScripts) {
+            if (script.match(vars.validUrl))
+                script = axios.get(script).then((res) => res.data.toString()).catch(() => script)
+
+            try { eval(script) } catch { }
         }
 
         saveData()
@@ -1921,27 +1730,14 @@ class Poopy {
         }, 60000)
 
         if (!config.apiMode) {
-            bot.on('messageCreate', (msg) => {
-                callbacks.messageCallback(msg).catch((e) => console.log(e))
-            })
-            bot.on('messageUpdate', (_, msg) => {
-                callbacks.messageEditCallback(msg).catch((e) => console.log(e))
-            })
-            bot.on('messageDelete', (msg) => {
-                callbacks.messageDeleteCallback(msg).catch((e) => console.log(e))
-            })
-            bot.on('messageDeleteBulk', (messages) => {
-                messages.forEach((msg) => callbacks.messageDeleteCallback(msg).catch((e) => console.log(e)))
-            })
-            bot.on('guildCreate', (guild) => {
-                callbacks.guildCallback(guild).catch((e) => console.log(e))
-            })
-            bot.on('guildDelete', (guild) => {
-                callbacks.guildDeleteCallback(guild).catch((e) => console.log(e))
-            })
-            bot.on('interactionCreate', (interaction) => {
-                callbacks.interactionCallback(interaction).catch((e) => console.log(e))
-            })
+            bot.on('messageCreate', (msg) => callbacks.messageCallback(msg).catch((e) => console.log(e)))
+            bot.on('messageUpdate', (_, msg) => callbacks.messageEditCallback(msg).catch((e) => console.log(e)))
+            bot.on('messageDelete', (msg) => callbacks.messageDeleteCallback(msg).catch((e) => console.log(e)))
+            bot.on('messageDeleteBulk', (messages) => messages.forEach((msg) => callbacks.messageDeleteCallback(msg).catch((e) => console.log(e))))
+            bot.on('guildCreate', (guild) => callbacks.guildCallback(guild).catch((e) => console.log(e)))
+            bot.on('guildDelete', (guild) => callbacks.guildDeleteCallback(guild).catch((e) => console.log(e)))
+            bot.on('interactionCreate', (interaction) => callbacks.interactionCallback(interaction).catch((e) => console.log(e)))
+
             bot.on('error', (err) => console.log(err))
         }
 
@@ -1958,13 +1754,8 @@ class Poopy {
         let { saveData } = poopy.functions
 
         clearInterval(vars.statusInterval)
-        delete vars.statusInterval
-
         clearInterval(vars.saveInterval)
-        delete vars.saveInterval
-
         clearInterval(vars.hivemindStatusInterval)
-        delete vars.hivemindStatusInterval
 
         vars.started = false
         delete activeBots[config.database]

@@ -353,6 +353,11 @@ module.exports = {
             type: Array,
             required: false
         },
+
+        scripts: {
+            type: Array,
+            required: false
+        },
         
         psfiles: {
             type: Array,

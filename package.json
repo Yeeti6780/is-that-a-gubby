@@ -1,6 +1,6 @@
 {
   "name": "poopy",
-  "version": "1.17.2",
+  "version": "1.17.3",
   "description": "Poopies for you.",
   "main": "server.js",
   "scripts": {

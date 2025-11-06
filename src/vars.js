@@ -7,51 +7,47 @@ vars.badFilter = /nigg|fagg|https?\:\/\/.*(rule34|e621|porn|hentai|xxx|iplogger|
 vars.scamFilter = /discord\.(gift|gg)\/[\d\w]+\/?/ig
 vars.cmdRegex = /(?:\w+:(?:"[^"\\]*(?:\\[\S\s][^"\\]*)*"|'[^'\\]*(?:\\[\S\s][^'\\]*)*'|\/[^\/\\]*(?:\\[\S\s][^\/\\]*)*\/[gimy]*))|("[^"\\]*(?:\\[\S\s][^"\\]*)*"|'[^'\\]*(?:\\[\S\s][^'\\]*)*'|\/[^\/\\]*(?:\\[\S\s][^\/\\]*)*\/[gimy]*(?=\s|$)|(?:\\\s|\S)+)/g
 vars.emojiRegex = require('emoji-regex')()
+
 vars.Catbox = new catbox.Catbox()
 vars.Litterbox = new catbox.Litterbox()
+
 if (process.env.GOOGLE_KEY) vars.youtube = google.youtube({
     version: 'v3',
     auth: process.env.GOOGLE_KEY
 })
-/*if (process.env.TWITTER_CONSUMER_KEY && process.env.TWITTER_CONSUMER_SECRET && process.env.TWITTER_ACCESSTOKEN_KEY && process.env.TWITTER_ACCESSTOKEN_SECRET) vars.twitterClient = new Twitter({
-    consumer_key: process.env.TWITTERCONSUMERKEY,
-    consumer_secret: process.env.TWITTERCONSUMERSECRET,
-    access_token_key: process.env.TWITTERACCESSTOKENKEY,
-    access_token_secret: process.env.TWITTERACCESSTOKENSECRET
-})*/
+
 vars.gifFormats = ['gif', 'apng']
 vars.jimpFormats = ['png', 'jpeg', 'jpg', 'gif', 'bmp', 'tiff']
+
 vars.processingTools = require('./processingTools')
-vars.symbolreplacements = [{
-    target: [
-        '\u2018',
-        '\u2019',
-        '\u201b',
-        '\u275b',
-        '\u275c'
-    ],
-    replacement: "'"
-},
-{
-    target: [
-        '\u201c',
-        '\u201d',
-        '\u201f'
-    ],
-    replacement: '"'
-}]
+
 vars.punctuation = ['?', '.', '!', '...']
-vars.caseModifiers = [
-    function (text) {
-        return text.toUpperCase()
+vars.symbolreplacements = [
+    {
+        target: [
+            '\u2018',
+            '\u2019',
+            '\u201b',
+            '\u275b',
+            '\u275c'
+        ],
+        replacement: "'"
     },
-    function (text) {
-        return text.toLowerCase()
-    },
-    function (text) {
-        return text.toUpperCase().substring(0, 1) + text.toLowerCase().substring(1)
+    {
+        target: [
+            '\u201c',
+            '\u201d',
+            '\u201f'
+        ],
+        replacement: '"'
     }
 ]
+vars.caseModifiers = [
+    (text) => text.toUpperCase(),
+    (text) => text.toLowerCase(),
+    (text) => text.toUpperCase().substring(0, 1) + text.toLowerCase().substring(1)
+]
+
 vars.defaultConfig = {
     testing: false,
     poosonia: false,
@@ -151,6 +147,37 @@ vars.defaultConfig = {
     memLimit: 0,
     quitOnDestroy: false
 }
+
+vars.categories = {
+    'Animation': 'Move and animate a file in an indefinite amount of ways.',
+    'Audio': 'Add an effect to an input\'s audio.',
+    'Battling': 'Beat people up. Yeah.',
+    'Captions': 'Add a caption to an input.',
+    'Color': 'Change an input\'s colors.',
+    'Compression': 'Useful commands for file compression.',
+    'Conversion': 'Convert a file between various different formats.',
+    'Currency': 'Manage your money and spend it on upgrades and cosmetics.',
+    'Duration': 'Change the duration of a video, GIF or audio.',
+    'Effects': 'A wide range of commands that change the way the file looks.',
+    'Fetching': 'Image, GIF, and video fetching commands.',
+    'Generation': 'Generate things from an AI or not.',
+    'Hex Manipulation': 'Manipulate the file\'s Hex Code to make it shorter, longer, etc.',
+    'Inside Joke': 'if you know you know',
+    'JSON Club': 'Exclusive to some people for editing the JSONs used by Poopy.',
+    'Main': 'Poopy\'s main commands.',
+    'Memes': 'Integrate an input in many different meme formats.',
+    'Mirroring': 'Flip or mirror a file in different axes.',
+    'OG': 'They were there since the very beginning...',
+    'Owner': 'salami commands',
+    'Overlaying': 'For stacking or overlaying a file on top of another.',
+    'Random': 'Send a random value from a collection of values.',
+    'Resizing': 'Scale a file in some way.',
+    'Settings': 'Manage a server\'s Poopy settings, or your own Poopy settings.',
+    'Text': 'Commands that serve text as output.',
+    'Unique': 'Commands that resemble unique features to Poopy, keywords for example.',
+    'Webhook': 'Webhook commands.'
+}
+
 vars.chatInstruct = [
     {
         role: "system",
@@ -184,6 +211,7 @@ vars.chatInstruct = [
         content: "Sup. What do you need? I might poop on you if you annoy me!"
     }
 ]
+
 vars.chatTools = {
     image_search: {
         data: {
@@ -222,7 +250,9 @@ vars.chatTools = {
         }
     }
 }
+
 vars.chatToolData = Object.values(vars.chatTools).map(tool => tool.data)
+
 vars.battleStats = {
     health: 100,
     maxHealth: 100,
@@ -239,6 +269,17 @@ vars.battleStats = {
     shieldEquipped: "base",
     shieldsOwned: ["base"]
 }
+
+vars.fileJsons = {
+    psFiles: 'psfiles',
+    psPasta: 'pspasta',
+    funnygifs: 'funnygif',
+    poopPhrases: 'poop',
+    dmPhrases: 'dmphrases',
+    shitting: 'shitting',
+    eightball: 'eightball'
+}
+
 vars.shieldStatsDisplayInfo = [
     {
         name: "damageReduction",
@@ -256,7 +297,18 @@ vars.shieldStatsDisplayInfo = [
         format: "+%"
     }
 ]
+
 vars.dataTemplate = {
+    botData: {
+        messages: 0,
+        commands: 0,
+        filecount: 0,
+        reboots: 0,
+
+        users: [],
+        leaderboard: {},
+        crons: [],
+    },
     userData: {
         userId: {
             username: "",
@@ -321,12 +373,22 @@ vars.dataTemplate = {
         }
     }
 }
+
+vars.globaldataTemplate = {
+    commandTemplates: [],
+    initScripts: [],
+    shit: [],
+
+    ...Object.keys(vars.fileJsons)
+}
+
 vars.tempdataTemplate = {
     discordUrls: {},
     images: [],
+    crons: [],
+
     channelvideos: [],
     playlistvideos: [],
-    crons: [],
 
     guildId: {
         automodRules: undefined,
@@ -350,6 +412,7 @@ vars.tempdataTemplate = {
         },
         userId: {}
     },
+
     userId: {
         mentions: 0,
         lastMention: 0,
