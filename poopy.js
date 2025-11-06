@@ -1708,11 +1708,10 @@ class Poopy {
                 script = await axios.get(script).then((res) => res.data.toString()).catch(() => script)
 
             try {
-                with (poopy)
-                with (poopy.functions)
-                with (poopy.modules)
                 eval(script)
-            } catch { }
+            } catch (e) {
+                console.log(e)
+            }
         }
 
         saveData()
