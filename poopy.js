@@ -1318,6 +1318,8 @@ class Poopy {
                     .setColor(0xF5C542)
 
                 if (!cachedStarboardMessage) {
+                    tempdata.starboards[starboard.id][msg.id] = true
+                    
                     const attachments = []
                     if (msg.attachments.size) {
                         for (const attachment of msg.attachments.values()) {
@@ -1345,7 +1347,9 @@ class Poopy {
                         components: [row],
                         files: attachments
                     }).catch(() => { })
-                } else {
+                }
+                
+                if (cachedStarboardMessage && cachedStarboardMessage !== true) {
                     await cachedStarboardMessage.edit({
                         embeds: [starboardEmbed]
                     }).catch(() => { })
