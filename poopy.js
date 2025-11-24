@@ -1309,8 +1309,9 @@ class Poopy {
 
                 if (!meetsThreshold && !cachedStarboardMessage) return
 
-                const embedContent = `## ${emoji} ${reaction.count} / ${msg.author.username}\n${msg.content}`
+                const embedContent = `## ${emoji} ${reaction.count}\n\n${msg.content}`
                 const starboardEmbed = new Discord.EmbedBuilder()
+                    .setAuthor({ name: `${msg.member.displayName} (${msg.user.username})`, iconURL: msg.member.displayAvatarURL({ dynamic: true, size: 1024, extension: "png" }) })
                     .setDescription(embedContent)
                     .setColor(0xF5C542)
 
@@ -1334,16 +1335,14 @@ class Poopy {
                         new Discord.ButtonBuilder()
                             .setStyle(Discord.ButtonStyle.Link)
                             .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
-                            .setLabel('Jump to original message')
-                            .setEmoji('🔗')
+                            .setLabel('Jump to message')
                     )
 
-                    cachedStarboardMessage = tempdata.starboards[starboard.id][msg.id] =
-                        await channel.send({
-                            embeds: [starboardEmbed],
-                            components: [row],
-                            files: attachments
-                        })
+                    tempdata.starboards[starboard.id][msg.id] = await channel.send({
+                        embeds: [starboardEmbed],
+                        components: [row],
+                        files: attachments
+                    }).catch(() => { })
                 } else {
                     await cachedStarboardMessage.edit({
                         embeds: [starboardEmbed]
@@ -1807,6 +1806,8 @@ class Poopy {
         infoPost(`Reboot ${data.botData.reboots} succeeded, it's up now`)
 
         for (var cronData of data.botData.crons) createCronJob(cronData).catch(() => { })
+        for (var starboard of data.botData.starboards) tempdata.starboards[starboard.id] = {}
+
         for (var script of globaldata.initScripts) {
             if (script.match(vars.validUrl))
                 script = await axios.get(script).then((res) => res.data.toString()).catch(() => script)
