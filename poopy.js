@@ -1289,13 +1289,14 @@ class Poopy {
             if (starboards.length <= 0) return
 
             for (const starboard of starboards) {
+                const guildId = starboard.guildId
+                const channelId = starboard.channelId
+                
                 if (channelId == msg.channel?.id) continue
 
-                const guildId = starboard.guildId
                 const guild = bot.guilds.cache.get(guildId)
                     ?? await bot.guilds.fetch(guildId).catch(() => { })
 
-                const channelId = starboard.channelId
                 const channel = guild?.channels ? (
                     guild.channels.cache.get(channelId)
                     ?? await guild.channels.fetch(channelId).catch(() => { })
