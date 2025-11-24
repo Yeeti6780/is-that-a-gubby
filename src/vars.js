@@ -335,6 +335,7 @@ vars.dataTemplate = {
         users: [],
         leaderboard: {},
         crons: [],
+        starboards: []
     },
     userData: {
         userId: {
@@ -413,6 +414,7 @@ vars.tempdataTemplate = {
     discordUrls: {},
     images: [],
     crons: [],
+    starboards: {},
 
     channelvideos: [],
     playlistvideos: [],

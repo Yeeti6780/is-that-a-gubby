@@ -31,7 +31,22 @@ module.exports = {
             "name": "channel",
             "required": false,
             "specifarg": false,
-            "orig": "[channel]"
+            "orig": "[channel]",
+            "autocomplete": function (interaction) {
+                let poopy = this
+                let { Discord } = poopy.modules
+
+                return interaction.guild.channels.cache
+                    .filter(c => c.type != Discord.ChannelType.GuildCategory &&
+                        c.type != Discord.ChannelType.PublicThread &&
+                        c.type != Discord.ChannelType.PrivateThread &&
+                        c.type != Discord.ChannelType.AnnouncementThread &&
+                        c.type != Discord.ChannelType.GuildDirectory &&
+                        c.type != Discord.ChannelType.GuildForum &&
+                        c.type != Discord.ChannelType.GuildMedia)
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map(c => ({ name: c.name, value: c.id }))
+            }
         },
         {
             "name": "cron",
@@ -87,7 +102,7 @@ module.exports = {
         }],
         "description": "Deletes the timer from the server."
     }],
-    execute: async function (msg, args, opts) {
+    execute: async function (msg, args) {
         var poopy = this
         var data = poopy.data
         var tempdata = poopy.tempdata
@@ -213,7 +228,12 @@ module.exports = {
                     var channelMatch = args[1].match(/^<#(\d+)>$|^(\d+)$/)
                     if (channelMatch) {
                         channel = msg.guild.channels.cache.get(channelMatch[1])
-                        if (!channel || channel.type == Discord.ChannelType.GuildCategory) {
+                        if (!channel || (
+                            channel.type == Discord.ChannelType.GuildCategory ||
+                            channel.type == Discord.ChannelType.GuildDirectory ||
+                            channel.type == Discord.ChannelType.GuildForum ||
+                            channel.type == Discord.ChannelType.GuildMedia
+                        )) {
                             await msg.reply('Invalid channel.').catch(() => { })
                             return
                         }
@@ -391,31 +411,31 @@ module.exports = {
 
         if (!args[1]) {
             var syntaxOverview = "```\n" +
-                                "┌────────────── second (optional)\n" +
-                                "│ ┌──────────── minute\n" +
-                                "│ │ ┌────────── hour\n" +
-                                "│ │ │ ┌──────── day of month\n" +
-                                "│ │ │ │ ┌────── month\n" +
-                                "│ │ │ │ │ ┌──── day of week\n" +
-                                "│ │ │ │ │ │\n" +
-                                "* * * * * *\n" +
-                                "```\n" +
-                                "\n" +
-                                "**Allowed values per field**\n" +
-                                "`second`: `0-59 (optional)`\n" +
-                                "`minute`: `0-59`\n" +
-                                "`hour`: `0-23`\n" +
-                                "`day of month`: `1-31`\n" +
-                                "`month`: `1-12 (or names, e.g., Jan, Sep)`\n" +
-                                "`day of week`: `0-7 (or names, 0 or 7 are Sunday)`\n" +
-                                "\n" +
-                                "Learn more at https://nodecron.com/cron-syntax.html"
+                "┌────────────── second (optional)\n" +
+                "│ ┌──────────── minute\n" +
+                "│ │ ┌────────── hour\n" +
+                "│ │ │ ┌──────── day of month\n" +
+                "│ │ │ │ ┌────── month\n" +
+                "│ │ │ │ │ ┌──── day of week\n" +
+                "│ │ │ │ │ │\n" +
+                "* * * * * *\n" +
+                "```\n" +
+                "\n" +
+                "**Allowed values per field**\n" +
+                "`second`: `0-59 (optional)`\n" +
+                "`minute`: `0-59`\n" +
+                "`hour`: `0-23`\n" +
+                "`day of month`: `1-31`\n" +
+                "`month`: `1-12 (or names, e.g., Jan, Sep)`\n" +
+                "`day of week`: `0-7 (or names, 0 or 7 are Sunday)`\n" +
+                "\n" +
+                "Learn more at https://nodecron.com/cron-syntax.html"
 
             var instruction = "**list** - Gets a list of timers set up in the server.\n" +
-                            "**info** <timerId> - Displays the info of the timer that has been set up with the respective ID.\n" +
-                            "**add** [channel] \"<cron>\" <phrase> (moderator only) - Sets up a new scheduled timer with the specified phrase and cron syntax. Cron syntax overview is listed below.\n" +
-                            "**edit** <timerId> \"[cron]\" <phrase> (moderator only) - Edits the scheduled timer with the specified ID, if it exists.\n" +
-                            "**delete** <timerId> (moderator only) - Deletes the timer from the server, if it exists."
+                "**info** <timerId> - Displays the info of the timer that has been set up with the respective ID.\n" +
+                "**add** [channel] \"<cron>\" <phrase> (moderator only) - Sets up a new scheduled timer with the specified phrase and cron syntax. Cron syntax overview is listed below.\n" +
+                "**edit** <timerId> \"[cron]\" <phrase> (moderator only) - Edits the scheduled timer with the specified ID, if it exists.\n" +
+                "**delete** <timerId> (moderator only) - Deletes the timer from the server, if it exists."
             if (!msg.nosend) {
                 if (config.textEmbeds) msg.reply(instruction + "\n\n" + "**Cron Syntax Overview**\n" + syntaxOverview).catch(() => { })
                 else msg.reply({

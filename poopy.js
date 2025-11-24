@@ -460,8 +460,12 @@ class Poopy {
                 (
                     channelfilter.gids.includes(msg.guild.id) &&
                     (
-                        (channelfilter.blacklist && channelfilter.ids.includes(msg.channel?.id)) ||
-                        (!(channelfilter.blacklist) && !(channelfilter.ids.includes(msg.channel?.id)))
+                        (channelfilter.blacklist && channelfilter.ids.some(
+                            id => id == msg.channel?.id || id == msg.channel?.parent?.id || id == msg.channel?.parent?.parent?.id
+                        )) ||
+                        (!(channelfilter.blacklist) && !(channelfilter.ids.some(
+                            id => id == msg.channel?.id || id == msg.channel?.parent?.id || id == msg.channel?.parent?.parent?.id
+                        )))
                     )
                 )
 
@@ -491,7 +495,9 @@ class Poopy {
             var allcontents = []
             var webhooked = false
 
-            var isRestricted = data.guildData[msg.guild.id].restricted.includes(msg.channel.id) && !(
+            var isRestricted = data.guildData[msg.guild.id].restricted.some(
+                id => id == msg.channel?.id || id == msg.channel?.parent?.id || id == msg.channel?.parent?.parent?.id
+            ) && !(
                 msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) ||
                 msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) ||
                 msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
@@ -969,12 +975,17 @@ class Poopy {
 
             if (!webhooked) await webhookify().catch((e) => console.log(e))
 
-            if (origcontent && ((!(msg.author.bot) && msg.author.id != bot.user.id) || config.allowbotusage) && data.guildData[msg.guild?.id].read?.includes(msg.channel?.id)) {
+            if (
+                origcontent && ((!(msg.author.bot) && msg.author.id != bot.user.id) || config.allowbotusage)
+                && data.guildData[msg.guild?.id].read?.some(
+                    id => id == msg.channel?.id || id == msg.channel?.parent?.id || id == msg.channel?.parent?.parent?.id
+                )
+            ) {
                 var cleanMessage = Discord.Util.cleanContent(origcontent, msg).replace(/\@/g, '@‌')
 
                 if (
                     !(cleanMessage.match(vars.badFilter) || cleanMessage.match(vars.scamFilter) || cleanMessage.includes(prefix.toLowerCase())) &&
-                    !(tempdata[msg.guild.id].messages.find(message => message.content.toLowerCase() === cleanMessage.toLowerCase()))
+                    !(tempdata[msg.guild.id].messages.some(message => message.content.toLowerCase() === cleanMessage.toLowerCase()))
                 ) {
                     data.guildData[msg.guild.id].messages.unshift({
                         id: msg.id,
@@ -1267,6 +1278,80 @@ class Poopy {
             infoPost(`Left a server (${bot.guilds.cache.size} in total)`)
         }
 
+        callbacks.reactionCallback = async (reaction) => {
+            const msg = reaction.message
+            const emoji = reaction.emoji.toString()
+
+            const starboards = data.botData.starboards.filter(
+                s => s.guildId == msg?.guild?.id && s.emoji == emoji
+            )
+
+            if (starboards.length < 0) return
+
+            for (const starboard of starboards) {
+                const guildId = starboard.guildId
+                const guild = bot.guilds.cache.get(guildId)
+                    ?? await bot.guilds.fetch(guildId).catch(() => { })
+
+                const channelId = starboard.channelId
+                const channel = guild?.channels ? (
+                    guild.channels.cache.get(channelId)
+                    ?? await guild.channels.fetch(channelId).catch(() => { })
+                ) : (
+                    bot.channels.cache.get(channelId)
+                    ?? await bot.channels.fetch(channelId).catch(() => { })
+                    ?? bot.users.cache.get(channelId)
+                    ?? await bot.users.fetch(channelId).catch(() => { })
+                )
+
+                const meetsThreshold = reaction.count >= starboard.threshold
+                const cachedStarboardMessage = tempdata.starboards[starboard.id][msg.id]
+
+                if (!meetsThreshold && !cachedStarboardMessage) return
+
+                const embedContent = `## ${emoji} ${reaction.count} / ${msg.author.username}\n${msg.content}`
+                const starboardEmbed = new Discord.EmbedBuilder()
+                    .setDescription(embedContent)
+                    .setColor(0xF5C542)
+
+                if (!cachedStarboardMessage) {
+                    const attachments = []
+                    if (msg.attachments.size) {
+                        for (const attachment of msg.attachments.values()) {
+                            attachments.push(attachment.url)
+                        }
+                    }
+
+                    if (msg.stickers.size) {
+                        for (const sticker of msg.stickers.values()) {
+                            attachments.push(sticker.url)
+                        }
+                    }
+
+                    attachments.splice(10)
+
+                    const row = new Discord.ActionRowBuilder().addComponents(
+                        new Discord.ButtonBuilder()
+                            .setStyle(Discord.ButtonStyle.Link)
+                            .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
+                            .setLabel('Jump to original message')
+                            .setEmoji('🔗')
+                    )
+
+                    cachedStarboardMessage = tempdata.starboards[starboard.id][msg.id] =
+                        await channel.send({
+                            embeds: [starboardEmbed],
+                            components: [row],
+                            files: attachments
+                        })
+                } else {
+                    await cachedStarboardMessage.edit({
+                        embeds: [starboardEmbed]
+                    }).catch(() => { })
+                }
+            }
+        }
+
         callbacks.interactionCallback = async (interaction) => {
             dmSupport(interaction)
 
@@ -1392,9 +1477,28 @@ class Poopy {
 
                         var hasMessagePerms = hasPerms || interaction.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages)
 
-                        var isRestricted = data.guildData[interaction.guild.id]?.restricted?.includes(interaction.channel.id) && !hasMessagePerms
+                        var isFiltered = (guildfilter.blacklist && guildfilter.ids.includes(interaction.guild?.id)) ||
+                            (
+                                !(guildfilter.blacklist) &&
+                                !(guildfilter.ids.includes(interaction.guild?.id))
+                            ) ||
+                            (
+                                channelfilter.gids.includes(interaction.guild?.id) &&
+                                (
+                                    (channelfilter.blacklist && channelfilter.ids.some(
+                                        id => id == interaction.channel?.id || id == interaction.channel?.parent?.id || id == interaction.channel?.parent?.parent?.id
+                                    )) ||
+                                    (!(channelfilter.blacklist) && !(channelfilter.ids.some(
+                                        id => id == interaction.channel?.id || id == interaction.channel?.parent?.id || id == interaction.channel?.parent?.parent?.id
+                                    )))
+                                )
+                            )
 
-                        if (isRestricted) {
+                        var isRestricted = data.guildData[interaction.guild.id]?.restricted?.some(
+                            id => id == interaction.channel?.id || id == interaction.channel?.parent?.id || id == interaction.channel?.parent?.parent?.id
+                        ) && !hasMessagePerms
+
+                        if (isRestricted || isFiltered || tempdata[interaction.guild.id]?.[interaction.channel.id]?.shutUp) {
                             await interaction.reply({
                                 content: "Nope!",
                                 flags: DiscordTypes.MessageFlags.Ephemeral
@@ -1739,6 +1843,11 @@ class Poopy {
             bot.on('messageDelete', (msg) => callbacks.messageDeleteCallback(msg).catch((e) => console.log(e)))
             bot.on('messageDeleteBulk', (messages) => messages.forEach((msg) => callbacks.messageDeleteCallback(msg).catch((e) => console.log(e))))
             bot.on('guildCreate', (guild) => callbacks.guildCallback(guild).catch((e) => console.log(e)))
+            bot.on('guildDelete', (guild) => callbacks.guildDeleteCallback(guild).catch((e) => console.log(e)))
+            bot.on('messageReactionAdd', (reaction) => callbacks.reactionCallback(reaction).catch((e) => console.log(e)))
+            bot.on('messageReactionRemove', (reaction) => callbacks.reactionCallback(reaction).catch((e) => console.log(e)))
+            bot.on('messageReactionRemoveAll', (_, reactions) => reactions.forEach((reaction) => callbacks.reactionCallback(reaction).catch((e) => console.log(e))))
+            bot.on('messageReactionRemoveEmoji', (reaction) => callbacks.reactionCallback(reaction).catch((e) => console.log(e)))
             bot.on('guildDelete', (guild) => callbacks.guildDeleteCallback(guild).catch((e) => console.log(e)))
             bot.on('interactionCreate', (interaction) => callbacks.interactionCallback(interaction).catch((e) => console.log(e)))
 

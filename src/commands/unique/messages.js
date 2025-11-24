@@ -93,7 +93,10 @@ module.exports = {
                 let { Discord } = poopy.modules
 
                 return interaction.guild.channels.cache
-                    .filter(c => c.type != Discord.ChannelType.GuildCategory)
+                    .filter(c => c.type != Discord.ChannelType.GuildCategory &&
+                        c.type != Discord.ChannelType.PublicThread &&
+                        c.type != Discord.ChannelType.PrivateThread &&
+                        c.type != Discord.ChannelType.AnnouncementThread)
                     .sort((a, b) => a.name.localeCompare(b.name))
                     .map(c => ({ name: c.name, value: c.id }))
             }

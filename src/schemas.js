@@ -40,6 +40,11 @@ module.exports = {
         crons: {
             type: Array,
             required: false
+        },
+
+        starboards: {
+            type: Array,
+            required: false
         }
     })),
 
