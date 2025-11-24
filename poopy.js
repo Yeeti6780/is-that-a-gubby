@@ -1289,10 +1289,10 @@ class Poopy {
             if (starboards.length <= 0) return
 
             for (const starboard of starboards) {
+                if (Object.values(starboard.messages).includes(msg.id)) continue
+                
                 const guildId = starboard.guildId
                 const channelId = starboard.channelId
-                
-                if (channelId == msg.channel?.id) continue
 
                 const guild = bot.guilds.cache.get(guildId)
                     ?? await bot.guilds.fetch(guildId).catch(() => { })
@@ -1343,16 +1343,19 @@ class Poopy {
                             .setLabel('Jump to message')
                     )
 
-                    tempdata.starboards[starboard.id][msg.id] = await channel.send({
-                        embeds: [starboardEmbed],
+                    const starboardMsg = tempdata.starboards[starboard.id][msg.id] = await channel.send({
+                        embeds: [...msg.embeds.filter(e => e.type == "rich"), starboardEmbed],
                         components: [row],
-                        files: attachments
+                        files: attachments,
+                        allowedMentions: { parse: [] }
                     }).catch(() => { })
+
+                    starboard.messages[msg.id] = starboardMsg.id
                 }
                 
                 if (cachedStarboardMessage && cachedStarboardMessage !== true) {
                     await cachedStarboardMessage.edit({
-                        embeds: [starboardEmbed]
+                        embeds: [...msg.embeds.filter(e => e.type == "rich"), starboardEmbed]
                     }).catch(() => { })
                 }
             }
