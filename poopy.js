@@ -1346,7 +1346,7 @@ class Poopy {
                     )
 
                     const starboardMsg = tempdata.starboards[starboard.id][msg.id] = await channel.send({
-                        embeds: [...msg.embeds.filter(e => e.type == "rich"), starboardEmbed],
+                        embeds: [...msg.embeds.filter(e => e.data.type == "rich"), starboardEmbed],
                         components: [row],
                         files: attachments,
                         allowedMentions: { parse: [] }
@@ -1357,7 +1357,7 @@ class Poopy {
                 
                 if (cachedStarboardMessage && cachedStarboardMessage !== true) {
                     await cachedStarboardMessage.edit({
-                        embeds: [...msg.embeds.filter(e => e.type == "rich"), starboardEmbed]
+                        embeds: [...msg.embeds.filter(e => e.data.type == "rich"), starboardEmbed]
                     }).catch(() => { })
                 }
             }
