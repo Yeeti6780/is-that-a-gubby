@@ -253,7 +253,9 @@ module.exports = {
                     ) {
                         emoji = inputEmoji;
 
-                        if (data.botData.starboards.find(s => s.channelId == channel.id && s.emoji == emoji)) {
+                        if (data.botData.starboards.find(
+                            s => s.channelId == channel.id && s.emoji == emoji
+                        )) {
                             await msg.reply('A starboard with that emoji already exists in the channel.').catch(() => { });
                             return;
                         }
@@ -331,7 +333,9 @@ module.exports = {
                     if (vars.emojiRegex.test(emojiInput) || discordEmojiRegex.test(emojiInput)) {
                         starboard.emoji = emojiInput;
 
-                        if (data.botData.starboards.find(s => s.channelId == starboard.channelId && s.emoji == emojiInput)) {
+                        if (data.botData.starboards.find(
+                            s => s.channelId == starboard.channelId && s.emoji == emojiInput && s.id != starboardId
+                        )) {
                             await msg.reply('A starboard with that emoji already exists in the channel.').catch(() => { });
                             return;
                         }
