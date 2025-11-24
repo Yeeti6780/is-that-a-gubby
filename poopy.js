@@ -1289,6 +1289,8 @@ class Poopy {
             if (starboards.length < 0) return
 
             for (const starboard of starboards) {
+                if (channelId == msg.channel?.id) continue
+                
                 const guildId = starboard.guildId
                 const guild = bot.guilds.cache.get(guildId)
                     ?? await bot.guilds.fetch(guildId).catch(() => { })
@@ -1307,7 +1309,7 @@ class Poopy {
                 const meetsThreshold = reaction.count >= starboard.threshold
                 const cachedStarboardMessage = tempdata.starboards[starboard.id][msg.id]
 
-                if (!meetsThreshold && !cachedStarboardMessage) return
+                if (!meetsThreshold && !cachedStarboardMessage) continue
 
                 const embedContent = `## ${emoji} ${reaction.count}\n\n${msg.content}`
                 const starboardEmbed = new Discord.EmbedBuilder()
