@@ -1291,9 +1291,13 @@ class Poopy {
             for (const starboard of starboards) {
                 const origMsg = msg.messageSnapshots?.size ? msg.messageSnapshots.first() : msg
 
+                const starboardMessageExists = (id, type) => data.botData.starboards.some(
+                    sb => sb.channelId == starboard.channelId && Object[type](sb.messages).includes(id)
+                )
+
                 if (
-                    Object.values(starboard.messages).includes(origMsg.id) ||
-                    Object.values(starboard.messages).includes(msg.id)
+                    starboardMessageExists(origMsg.id, "values") ||
+                    starboardMessageExists(msg.id, "values")
                 ) continue
 
                 const guildId = starboard.guildId
@@ -1312,9 +1316,14 @@ class Poopy {
                     ?? await bot.users.fetch(channelId).catch(() => { })
                 )
 
+                tempdata[starboard.guildId] ??= {}
+                tempdata[starboard.guildId][starboard.channelId] ??= {}
+                tempdata[starboard.guildId][starboard.channelId].starboardMessages ??= {}
+
+                const starboardCache = tempdata[starboard.guildId][starboard.channelId].starboardMessages
+
                 const meetsThreshold = reaction.count >= starboard.threshold
-                const cachedStarboardMessage = tempdata.starboards[starboard.id][origMsg.id]
-                    ?? tempdata.starboards[starboard.id][msg.id]
+                const cachedStarboardMessage = starboardCache[origMsg.id] ?? starboardCache[msg.id]
 
                 if (!meetsThreshold && !cachedStarboardMessage) continue
 
@@ -1324,25 +1333,31 @@ class Poopy {
                         `> -# Reply to: https://discord.com/channels/${msg.reference.guildId}/${msg.reference.channelId}/${msg.reference.messageId}\n\n${origMsg.content ?? ""}` :
                         origMsg.content
 
-                const embedContent = `## ${emoji} ${reaction.count}\n\n${msgContent}`
+                const emojiContent = msg.reactions.cache.filter(
+                    r => data.botData.starboards.filter(
+                        sb => sb.channelId == starboard.channelId && sb.emoji == r.emoji.toString() && r.count >= sb.threshold
+                    )
+                ).map(r => `${r.emoji.toString()} ${r.count}`).join("  ·  ")
+
+                const embedContent = `${emojiContent ? `## ${emojiContent}` : ""}\n\n${msgContent}`.trim()
 
                 const isAttachmentEmbed = (e) => !(/^(rich|link)$/.test(e.data.type)) && !e.data.title && !e.data.description
 
                 const starboardEmbed = new Discord.EmbedBuilder()
                     .setAuthor({ name: `${msg.member.displayName} (${msg.author.username})`, iconURL: msg.member.displayAvatarURL({ dynamic: true, size: 1024, extension: "png" }) })
-                    .setDescription(embedContent.trim())
+                    .setDescription(embedContent || "None.")
                     .setColor(0xF5C542)
-                
+
                 const starboardMsgEmbeds = [...origMsg.embeds.filter(e => !isAttachmentEmbed(e)), starboardEmbed]
 
                 if (!cachedStarboardMessage) {
                     if (
-                        Object.keys(starboard.messages).includes(origMsg.id) ||
-                        Object.keys(starboard.messages).includes(msg.id)
+                        starboardMessageExists(origMsg.id, "keys") ||
+                        starboardMessageExists(msg.id, "keys")
                     ) continue
 
-                    tempdata.starboards[starboard.id][origMsg.id] = true
-                    tempdata.starboards[starboard.id][msg.id] = true
+                    starboardCache[origMsg.id] = true
+                    starboardCache[msg.id] = true
 
                     const attachments = [
                         ...origMsg.attachments.map(a => new Discord.AttachmentBuilder(a.url)),
@@ -1376,8 +1391,8 @@ class Poopy {
                         allowedMentions: { parse: [] }
                     }).catch(() => { })
 
-                    tempdata.starboards[starboard.id][origMsg.id] = starboardMsg
-                    tempdata.starboards[starboard.id][msg.id] = starboardMsg
+                    starboardCache[origMsg.id] = starboardMsg
+                    starboardCache[msg.id] = starboardMsg
 
                     starboard.messages[origMsg.id] = starboardMsg.id
                     starboard.messages[msg.id] = starboardMsg.id
@@ -1848,10 +1863,15 @@ class Poopy {
         console.log(`${bot.user.displayName}: all done, it's actually online now`)
         infoPost(`Reboot ${data.botData.reboots} succeeded, it's up now`)
 
-        for (var cronData of data.botData.crons) createCronJob(cronData).catch(() => { })
-        for (var starboard of data.botData.starboards) tempdata.starboards[starboard.id] = {}
+        for (let cronData of data.botData.crons) createCronJob(cronData).catch(() => { })
 
-        for (var script of globaldata.initScripts) {
+        for (let starboard of data.botData.starboards) {
+            tempdata[starboard.guildId] ??= {}
+            tempdata[starboard.guildId][starboard.channelId] ??= {}
+            tempdata[starboard.guildId][starboard.channelId].starboardMessages ??= {}
+        }
+
+        for (let script of globaldata.initScripts) {
             if (script.match(vars.validUrl))
                 script = await axios.get(script).then((res) => res.data.toString()).catch(() => script)
 

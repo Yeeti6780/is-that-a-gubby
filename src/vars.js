@@ -414,7 +414,6 @@ vars.tempdataTemplate = {
     discordUrls: {},
     images: [],
     crons: [],
-    starboards: {},
 
     channelvideos: [],
     playlistvideos: [],
@@ -428,6 +427,7 @@ vars.tempdataTemplate = {
             forceResponse: undefined,
 
             webhooks: undefined,
+            starboardMessages: undefined,
             cleverContext: {
                 history: [],
                 processing: false

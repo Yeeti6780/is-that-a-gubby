@@ -121,7 +121,7 @@ module.exports = {
                     var timer = serverTimers[i]
                     var nextTime = tempdata.crons[timer.id].nextDate()
                     var timestamp = Math.floor(nextTime.ts / 1000)
-                    timersArray.push(`- **ID:** ${timer.id} | **Channel:** <#${timer.channelId}> | **Schedule:** \`${timer.cron}\` (Next: <t:${timestamp}:F>)`)
+                    timersArray.push(`- **ID:** \`${timer.id}\` | **Channel:** <#${timer.channelId}> | **Schedule:** \`${timer.cron}\` (Next: <t:${timestamp}:F>)`)
                 }
 
                 if (timersArray.length <= 0) {
@@ -209,7 +209,7 @@ module.exports = {
                             }).catch(() => { })
                         }
                     }
-                    return `Timer Info (ID: ${timer.id})\nChannel: <#${timer.channelId}>\nSchedule: ${timer.cron}\nMessage: ${timer.phrase}`
+                    return `Timer Info (ID: \`${timer.id}\`)\nChannel: <#${timer.channelId}>\nSchedule: ${timer.cron}\nMessage: ${timer.phrase}`
                 } else {
                     await msg.reply(`No timer found with that ID in this server.`).catch(() => { })
                     return

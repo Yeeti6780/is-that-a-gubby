@@ -1,5 +1,5 @@
 module.exports = {
-    name: ['starboard'],
+    name: ['starboards'],
     args: [{
         "name": "option",
         "required": true,
@@ -119,7 +119,7 @@ module.exports = {
 
                 for (var i in serverStarboards) {
                     var starboard = serverStarboards[i]
-                    starboardsArray.push(`- **ID:** ${starboard.id} | **Channel:** <#${starboard.channelId}> | **Threshold:** ${starboard.threshold} | **Emoji:** ${starboard.emoji}`)
+                    starboardsArray.push(`- **ID:** \`${starboard.id}\` | **Channel:** <#${starboard.channelId}> | **Threshold:** ${starboard.threshold} | **Emoji:** ${starboard.emoji}`)
                 }
 
                 if (starboardsArray.length <= 0) {
@@ -204,7 +204,7 @@ module.exports = {
                             }).catch(() => { })
                         }
                     }
-                    return `Starboard Info (ID: ${starboard.id})\nChannel: <#${starboard.channelId}>\n**Threshold:** ${starboard.threshold}\n**Emoji:** ${starboard.emoji}`
+                    return `Starboard Info (ID: \`${starboard.id}\`)\nChannel: <#${starboard.channelId}>\n**Threshold:** ${starboard.threshold}\n**Emoji:** ${starboard.emoji}`
                 } else {
                     await msg.reply(`No starboard found with that ID in this server.`).catch(() => { })
                     return
@@ -279,7 +279,9 @@ module.exports = {
                 };
 
                 data.botData.starboards.push(newStarboard)
-                tempdata.starboards[starboardId] = {}
+
+                tempdata[msg.guild.id][channel.id] ??= {}
+                tempdata[msg.guild.id][channel.id].starboardMessages ??= {}
 
                 if (!msg.nosend) {
                     await msg.reply(
@@ -388,7 +390,9 @@ module.exports = {
                 }
 
                 let removed = data.botData.starboards.splice(index, 1)[0];
-                delete tempdata.starboards[starboardId];
+
+                if (tempdata[removed.guildId]?.[removed.channelId]?.starboardMessages)
+                    delete tempdata[removed.guildId][removed.channelId].starboardMessages;
 
                 if (!msg.nosend) {
                     await msg.reply(
@@ -433,7 +437,7 @@ module.exports = {
         return await options[args[1].toLowerCase()](msg, args.slice(1))
     },
     help: {
-        name: 'starboard <option>',
+        name: 'starboards <option>',
         value: 'Allows you to set up custom starboards your server! Use the command alone for more info.'
     },
     cooldown: 2500,
