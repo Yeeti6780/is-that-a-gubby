@@ -1313,7 +1313,8 @@ class Poopy {
                 )
 
                 const meetsThreshold = reaction.count >= starboard.threshold
-                const cachedStarboardMessage = tempdata.starboards[starboard.id][msg.id]
+                const cachedStarboardMessage = tempdata.starboards[starboard.id][origMsg.id]
+                    ?? tempdata.starboards[starboard.id][msg.id]
 
                 if (!meetsThreshold && !cachedStarboardMessage) continue
 
@@ -1341,6 +1342,7 @@ class Poopy {
                     ) continue
 
                     tempdata.starboards[starboard.id][origMsg.id] = true
+                    tempdata.starboards[starboard.id][msg.id] = true
 
                     const attachments = [
                         ...origMsg.attachments.map(a => new Discord.AttachmentBuilder(a.url)),
@@ -1367,14 +1369,18 @@ class Poopy {
                             .setLabel('Jump to message')
                     )
 
-                    const starboardMsg = tempdata.starboards[starboard.id][origMsg.id] = await channel.send({
+                    const starboardMsg = await channel.send({
                         embeds: starboardMsgEmbeds,
                         components: [row],
                         files: attachments,
                         allowedMentions: { parse: [] }
                     }).catch(() => { })
 
+                    tempdata.starboards[starboard.id][origMsg.id] = starboardMsg
+                    tempdata.starboards[starboard.id][msg.id] = starboardMsg
+
                     starboard.messages[origMsg.id] = starboardMsg.id
+                    starboard.messages[msg.id] = starboardMsg.id
                 }
 
                 if (cachedStarboardMessage && cachedStarboardMessage !== true) {
