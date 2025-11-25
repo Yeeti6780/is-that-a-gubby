@@ -1347,7 +1347,7 @@ class Poopy {
                     !e.data.description
 
                 const starboardEmbed = new Discord.EmbedBuilder()
-                    .setAuthor({ name: `${msg.member.displayName} (${msg.author.username})`, iconURL: msg.member.displayAvatarURL({ dynamic: true, size: 1024, extension: "png" }) })
+                    .setAuthor({ name: `${(msg.member ?? msg.author).displayName} (${msg.author.username})`, iconURL: (msg.member ?? msg.author).displayAvatarURL({ dynamic: true, size: 1024, extension: "png" }) })
                     .setDescription(embedContent || "None.")
                     .setColor(0xF5C542)
 
