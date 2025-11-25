@@ -1292,8 +1292,8 @@ class Poopy {
                 const origMsg = msg.messageSnapshots?.size ? msg.messageSnapshots.first() : msg
 
                 if (
-                    Object.values(starboard.messages).includes(msg.id) ||
-                    Object.values(starboard.messages).includes(origMsg.id)
+                    Object.values(starboard.messages).includes(origMsg.id) ||
+                    Object.values(starboard.messages).includes(msg.id)
                 ) continue
 
                 const guildId = starboard.guildId
@@ -1335,14 +1335,17 @@ class Poopy {
                 const starboardMsgEmbeds = [...origMsg.embeds.filter(e => !isAttachmentEmbed(e)), starboardEmbed]
 
                 if (!cachedStarboardMessage) {
-                    if (Object.keys(starboard.messages).includes(msg.id)) continue
+                    if (
+                        Object.keys(starboard.messages).includes(origMsg.id) ||
+                        Object.keys(starboard.messages).includes(msg.id)
+                    ) continue
 
-                    tempdata.starboards[starboard.id][msg.id] = true
+                    tempdata.starboards[starboard.id][origMsg.id] = true
 
                     const attachments = [
                         ...origMsg.attachments.map(a => new Discord.AttachmentBuilder(a.url)),
                         ...origMsg.stickers.map(s => new Discord.AttachmentBuilder(s.url)),
-                        ...[...origMsg.embeds.values()]
+                        ...origMsg.embeds
                             .filter(e => isAttachmentEmbed(e))
                             .map(e => {
                                 const embed = e.toJSON()
@@ -1364,14 +1367,14 @@ class Poopy {
                             .setLabel('Jump to message')
                     )
 
-                    const starboardMsg = tempdata.starboards[starboard.id][msg.id] = await channel.send({
+                    const starboardMsg = tempdata.starboards[starboard.id][origMsg.id] = await channel.send({
                         embeds: starboardMsgEmbeds,
                         components: [row],
                         files: attachments,
                         allowedMentions: { parse: [] }
                     }).catch(() => { })
 
-                    starboard.messages[msg.id] = starboardMsg.id
+                    starboard.messages[origMsg.id] = starboardMsg.id
                 }
 
                 if (cachedStarboardMessage && cachedStarboardMessage !== true) {
