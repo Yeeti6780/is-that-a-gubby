@@ -2199,7 +2199,7 @@ functions.votekick = async function (member, channel, voteGoal, action = "timeou
 
         const passedGoal = !(votes.size < voteGoal)
 
-        await voteMsg.edit({ embeds: [updatedEmbed], components: passedGoal ? [] : [buttons] }).catch(() => { })
+        voteMsg.edit({ embeds: [updatedEmbed], components: passedGoal ? [] : [buttons] }).catch(() => { })
 
         if (passedGoal) voteCollector.stop("passed")
     }
@@ -2207,6 +2207,11 @@ functions.votekick = async function (member, channel, voteGoal, action = "timeou
     const voteInterval = setInterval(updateVoteEmbed, 1000)
 
     voteCollector.on("collect", async (interaction) => {
+        if (!(votes.size < voteGoal)) {
+            await interaction.reply({ content: "The vote is done.", flags: DiscordTypes.MessageFlags.Ephemeral }).catch(() => { })
+            return
+        }
+        
         const voter = interaction.user
         if (voter.id === user.id) {
             await interaction.reply({ content: "You can't vote on your own votekick!", flags: DiscordTypes.MessageFlags.Ephemeral }).catch(() => { })
@@ -2221,7 +2226,8 @@ functions.votekick = async function (member, channel, voteGoal, action = "timeou
             votes.delete(voter.id)
         }
 
-        await interaction.reply({ content: `Vote counted: **${interaction.customId.toUpperCase()}**`, flags: DiscordTypes.MessageFlags.Ephemeral }).catch(() => { })
+        interaction.reply({ content: `Vote counted: **${interaction.customId.toUpperCase()}**`, flags: DiscordTypes.MessageFlags.Ephemeral }).catch(() => { })
+        if (!(votes.size < voteGoal)) updateVoteEmbed()
     })
 
     voteCollector.on("end", async (_, reason) => {
