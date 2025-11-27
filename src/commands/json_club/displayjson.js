@@ -1,9 +1,7 @@
 module.exports = {
     name: ['displayjson'],
     args: [{
-        "name": "json", "required": true, "specifarg": false, "orig": "<json (psfiles, pspasta, funnygif, poop, dmphrases, shitting)>", "autocomplete": [
-            'psfiles',
-            'pspasta',
+        "name": "json", "required": true, "specifarg": false, "orig": "<json (funnygif, poop, dmphrases, shitting)>", "autocomplete": [
             'funnygif',
             'poop',
             'dmphrases',
@@ -22,7 +20,7 @@ module.exports = {
             await msg.reply('json club only').catch(() => { })
             return
         } else {
-            var types = ['psfiles', 'pspasta', 'funnygif', 'poop', 'dmphrases', 'shitting']
+            var types = ['funnygif', 'poop', 'dmphrases', 'shitting']
 
             if (args[1] === undefined) {
                 await msg.reply(`What is the JSON to display?! (Available: ${types.map(t => `**${t}**`).join(', ')})`).catch(() => { })
@@ -52,7 +50,7 @@ module.exports = {
         };
     },
     help: {
-        name: 'displayjson <json (psfiles, pspasta, funnygif, poop, dmphrases, shitting)>',
+        name: 'displayjson <json (funnygif, poop, dmphrases, shitting)>',
         value: "Displays the values of a JSON like oil or DM phrases."
     },
     cooldown: 2500,

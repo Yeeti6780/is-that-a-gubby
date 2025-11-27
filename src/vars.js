@@ -298,8 +298,6 @@ vars.battleStats = {
 }
 
 vars.fileJsons = {
-    psFiles: 'psfiles',
-    psPasta: 'pspasta',
     funnygifs: 'funnygif',
     poopPhrases: 'poop',
     dmPhrases: 'dmphrases',

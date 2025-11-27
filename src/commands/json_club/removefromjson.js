@@ -1,9 +1,7 @@
 module.exports = {
     name: ['removefromjson'],
     args: [{
-        "name": "json", "required": true, "specifarg": false, "orig": "<json (psfiles, pspasta, funnygif, poop, dmphrases, shitting)>", "autocomplete": [
-            'psfiles',
-            'pspasta',
+        "name": "json", "required": true, "specifarg": false, "orig": "<json (funnygif, poop, dmphrases, shitting)>", "autocomplete": [
             'funnygif',
             'poop',
             'dmphrases',
@@ -22,7 +20,7 @@ module.exports = {
             await msg.reply('json club only').catch(() => { })
             return
         } else {
-            var types = ['psfiles', 'pspasta', 'funnygif', 'poop', 'dmphrases', 'shitting']
+            var types = ['funnygif', 'poop', 'dmphrases', 'shitting']
 
             if (args[1] === undefined) {
                 await msg.reply(`What is the JSON to update?! (Available: ${types.map(t => `**${t}**`).join(', ')})`).catch(() => { })
@@ -54,8 +52,6 @@ module.exports = {
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
 
-            arrays.psFiles = globaldata.psfiles
-            arrays.psPasta = globaldata.pspasta
             arrays.funnygifs = globaldata.funnygif
             arrays.poopPhrases = globaldata.poop
             arrays.dmPhrases = globaldata.dmphrases
@@ -65,7 +61,7 @@ module.exports = {
         };
     },
     help: {
-        name: 'removefromjson <json (psfiles, pspasta, funnygif, poop, dmphrases, shitting)> <value>',
+        name: 'removefromjson <json (funnygif, poop, dmphrases, shitting)> <value>',
         value: "Removes a value from JSONs like oil or DM phrases."
     },
     cooldown: 2500,

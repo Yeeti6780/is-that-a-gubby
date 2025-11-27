@@ -31,26 +31,6 @@ async function start() {
             res.end()
         })
 
-        app.get('/api/psfiles', async function (req, res) {
-            if (req.query.nowait && !poopyStarted) {
-                res.end()
-                return
-            }
-
-            while (!poopyStarted) await sleep(1000)
-            res.type('json').send(poopy.globaldata.psfiles)
-        })
-
-        app.get('/api/pspasta', async function (req, res) {
-            if (req.query.nowait && !poopyStarted) {
-                res.end()
-                return
-            }
-
-            while (!poopyStarted) await sleep(1000)
-            res.type('json').send(poopy.globaldata.pspasta)
-        })
-
         app.get('/api/oil', async function (req, res) {
             if (req.query.nowait && !poopyStarted) {
                 res.end()

@@ -12,7 +12,7 @@ module.exports = {
 
         var messages = tempdata[msg.guild.id].messages.map(m => m.content)
         if (messages.length <= 0 || word) {
-            messages = json.sentenceJSON.data.map(s => s.sentence).concat(arrays.psPasta)
+            messages = json.sentenceJSON.data.map(s => s.sentence)
         }
 
         return markov(messages)

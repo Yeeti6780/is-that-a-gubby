@@ -364,16 +364,6 @@ module.exports = {
             required: false
         },
         
-        psfiles: {
-            type: Array,
-            required: false
-        },
-        
-        pspasta: {
-            type: Array,
-            required: false
-        },
-        
         funnygif: {
             type: Array,
             required: false
