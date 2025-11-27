@@ -1279,8 +1279,10 @@ class Poopy {
         }
 
         callbacks.reactionCallback = async (reaction) => {
-            const msg = reaction.message
+            const msg = await reaction.message.fetch({ force: true }).catch(() => { }) ?? reaction.message
             const emoji = reaction.emoji.toString()
+
+            reaction = msg.reactions.cache.find(r => r.emoji.toString() == emoji) ?? reaction
 
             const starboards = data.botData.starboards.filter(
                 s => s.guildId == msg?.guild?.id && s.emoji == emoji
