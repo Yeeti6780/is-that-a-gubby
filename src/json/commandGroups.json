@@ -75,13 +75,16 @@
         "description": "Beat people up. Yeah."
     },
     {
-        "name": "blud",
+        "name": "tumore",
         "cmds": [
-            "fraud",
-            "msgservice",
-            "unfraud"
+            "tbbban",
+            "tbbunban",
+            "tbbwipe",
+            "bludfraud",
+            "bludmsgservice",
+            "bludunfraud"
         ],
-        "description": "The Blud obby, is too hard."
+        "description": "I'm gonna have a heart attack!"
     },
     {
         "name": "caption",

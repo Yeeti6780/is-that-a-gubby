@@ -1,5 +1,5 @@
 module.exports = {
-    name: ['msgservice', 'messageservice'],
+    name: ['bludmsgservice', 'bludmessageservice'],
     args: [
         { "name": "topic", "required": true, "specifarg": false, "orig": "<topic>" },
         { "name": "inquery", "required": true, "specifarg": false, "orig": "{inquery}" },
@@ -10,7 +10,7 @@ module.exports = {
         let { axios } = poopy.modules
         let { tryJSONparse, parseNumber } = poopy.functions
 
-        if (!config.messengers.includes(msg.author.id)) {
+        if (!config.tumoreTesters.includes(msg.author.id)) {
             await msg.reply('Hey, you can\'t use this command! How unfortunate.').catch(() => { })
             return
         }
@@ -29,14 +29,14 @@ module.exports = {
             { PlayerId: parseNumber(inQueryRaw, { min: 1, round: true }) }
         ) : {}
 
-        var res = await axios.post(`https://apis.roblox.com/messaging-service/v1/universes/7091645916/topics/WhatKindOfMcDonaldsHasAMessage`, {
+        var res = await axios.post(`https://apis.roblox.com/messaging-service/v1/universes/7091645916/topics/${process.env.BLUD_TOPIC}`, {
             message: JSON.stringify({
                 Topic: topic,
                 Inquery: inQuery
             })
         }, {
             headers: {
-                "x-api-key": process.env.ROBLOX_KEY,
+                "x-api-key": process.env.BLUD_ROBLOX_KEY,
                 "content-type": "application/json"
             }
         }).catch(() => { })
@@ -50,7 +50,7 @@ module.exports = {
         return 'Messaging Service API request sent. Something sinister might happen soon...'
     },
     help: {
-        name: 'msgservice/messageservice <topic> {inQuery}',
+        name: 'bludmsgservice/bludmessageservice <topic> {inQuery}',
         value: 'Send a request to Roblox\'s Messaging Service API.'
     },
     type: 'Owner'

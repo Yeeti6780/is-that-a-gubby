@@ -1,5 +1,5 @@
 module.exports = {
-    name: ['unfraud', 'trust'],
+    name: ['tbbban'],
     args: [{ "name": "userId", "required": true, "specifarg": false, "orig": "<userId>" }],
     execute: async function (msg, args) {
         let poopy = this
@@ -7,7 +7,7 @@ module.exports = {
         let { axios } = poopy.modules
         let { parseNumber } = poopy.functions
 
-        if (!config.messengers.includes(msg.author.id)) {
+        if (!config.tumoreTesters.includes(msg.author.id)) {
             await msg.reply('Hey, you can\'t use this command! How unfortunate.').catch(() => { })
             return
         }
@@ -23,30 +23,27 @@ module.exports = {
             await msg.reply('That user ID isn\'t valid.').catch(() => { })
             return
         }
-
-        var res = await axios.post(`https://apis.roblox.com/messaging-service/v1/universes/7091645916/topics/WhatKindOfMcDonaldsHasAMessage`, {
-            message: JSON.stringify({
-                Topic: "Fraud",
-                Inquery: { PlayerId: Number(userId), Value: false }
-            })
+        
+        var res = await axios.post(`https://apis.roblox.com/datastores/v1/universes/3913007563/standard-datastores/datastore/entries/entry?datastoreName=${process.env.TBB_DATASTORE}&entryKey=${userId}`, {
+            Banned: true
         }, {
             headers: {
-                "x-api-key": process.env.ROBLOX_KEY,
+                "x-api-key": process.env.TBB_ROBLOX_KEY,
                 "content-type": "application/json"
             }
         }).catch(() => { })
 
         if (!res) {
-            await msg.reply('Unfraud request failed.').catch(() => { })
+            await msg.reply('Ban request failed.').catch(() => { })
             return
         }
 
-        await msg.reply('Unfraud request sent. They\'ll be trusted soon.').catch(() => { })
-        return 'Unfraud request sent. They\'ll be trusted soon.'
+        await msg.reply('Ban request sent. They\'ll be weeping soon.').catch(() => { })
+        return 'Ban request sent. They\'ll be weeping soon.'
     },
     help: {
-        name: 'unfraud/trust <userId>',
-        value: 'Retrust someone.'
+        name: 'tbbban <userId>',
+        value: 'Ban someone.'
     },
     type: 'Owner'
 }
