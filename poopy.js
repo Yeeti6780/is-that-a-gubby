@@ -1286,7 +1286,7 @@ class Poopy {
         }
 
         callbacks.reactionCallback = async (reaction) => {
-            const msg = await reaction.message.fetch({ force: true }).catch(() => { }) ?? reaction.message
+            const msg = await reaction.message.fetch(false).catch(() => { }) ?? reaction.message
             const emoji = reaction.emoji.toString()
 
             reaction = msg.reactions.cache.find(r => r.emoji.toString() == emoji) ?? reaction
