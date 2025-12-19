@@ -1114,11 +1114,6 @@ class Poopy {
                         }).catch(() => { })
                         await msg.channel.sendTyping().catch(() => { })
                     })
-                } else if (
-                    (words.includes('happy') || words.includes('hapy') || words.includes('happi')) &&
-                    (words.includes('birthday') || words.includes('birth') || words.includes('bday'))
-                ) {
-                    await msg.reply('Thank you!').catch(() => { })
                 } else if (words.includes('lore')) {
                     await msg.reply({
                         content: `Well... If you played a little bit with \`${config.globalPrefix}poop\`, I could give you some...`,
