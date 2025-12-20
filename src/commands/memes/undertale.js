@@ -30,6 +30,7 @@ module.exports = {
             lastUrl, downloadFile, sendFile, fetchPingPerms,
             validateFile, execPromise, findpreset
         } = poopy.functions
+        let { Discord } = poopy.modules
 
         await msg.channel.sendTyping().catch(() => { })
         var saidMessage = args.slice(1).join(' ').replace(/’/g, '\'')
