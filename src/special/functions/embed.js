@@ -39,7 +39,8 @@ module.exports = {
             msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) ||
             msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
             msg.author.id === msg.guild.ownerId ||
-            (config.ownerids.find(id => id == msg.author.id))
+            (config.ownerids.find(id => id == msg.author.id)) ||
+            isBot
         )
 
         if (isFiltered || isRestricted || tempdata[msg.guild.id][msg.channel.id].shutUp) return ''
