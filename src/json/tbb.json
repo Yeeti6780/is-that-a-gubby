@@ -2045,6 +2045,14 @@
         {
             "name": "Giant Pigface",
             "image": "https://cdn.discordapp.com/attachments/1453987001127665789/1454188459173613742/Render_Secret_Enemy_GiantPigface.png"
+        },
+        {
+            "name": "Gubby Samurai",
+            "image": "https://cdn.discordapp.com/attachments/853246754791358495/1459202665597898794/Render_Secret_GubbySamurai.png"
+        },
+        {
+            "name": "Crossweld",
+            "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1459273990333005906/Crossweld.png"
         }
     ]
 }
