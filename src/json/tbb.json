@@ -301,8 +301,8 @@
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/c/c3/Tumored_Slinger.png"
         },
         {
-            "name": "Eye Of Rah",
-            "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/8/85/Eye_Of_Rah.png"
+            "name": "Tarnished Slinger",
+            "image": "https://cdn.discordapp.com/attachments/853246754791358495/1460393830489657509/Tarnished_Slinger.png"
         },
         {
             "name": "Papaler",
@@ -2053,6 +2053,10 @@
         {
             "name": "Crossweld",
             "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1459273990333005906/Crossweld.png"
+        },
+        {
+            "name": "Venata",
+            "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1460392808639631574/Venata_TBB.png"
         }
     ]
 }
