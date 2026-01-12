@@ -395,7 +395,7 @@ vars.dataTemplate = {
                 channelId: {
                     lastUrls: [],
                     lastuse: 0,
-                    battling: 0
+                    custom: {}
                 }
             },
 

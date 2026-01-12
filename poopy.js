@@ -515,6 +515,9 @@ class Poopy {
             async function webhookify() {
                 webhooked = true
 
+                var customHook = data.guildData[msg.guild.id].channels[msg.channel.id].custom[msg.author.id] ??
+                    data.guildData[msg.guild.id].members[msg.author.id].custom
+
                 if (
                     msg.type === DiscordTypes.InteractionType.ApplicationCommand ||
                     !(origcontent || msg.attachments.size || msg.embeds.length || msg.stickers.size) ||
@@ -524,7 +527,7 @@ class Poopy {
                         msg.channel.type === Discord.ChannelType.AnnouncementThread
                     ) ||
                     !(
-                        data.guildData[msg.guild.id].members[msg.author.id].custom ||
+                        customHook ||
                         data.guildData[msg.guild.id].members[msg.author.id].impostor ||
                         data.guildData[msg.guild.id].channels[msg.channel.id].battling
                     )
@@ -587,10 +590,10 @@ class Poopy {
                     sendObject.avatarURL = battler.image
                 }
 
-                if (data.guildData[msg.guild.id].members[msg.author.id].custom) {
-                    turnInto = data.guildData[msg.guild.id].members[msg.author.id].custom.name
-                    sendObject.username = data.guildData[msg.guild.id].members[msg.author.id].custom.name.substring(0, 32)
-                    sendObject.avatarURL = data.guildData[msg.guild.id].members[msg.author.id].custom.avatar
+                if (customHook) {
+                    turnInto = customHook.name
+                    sendObject.username = customHook.name.substring(0, 32)
+                    sendObject.avatarURL = customHook.avatar
                 }
 
                 await sendWebhook(msg, sendObject).catch((e) => console.log(e))
@@ -1367,7 +1370,7 @@ class Poopy {
                     })
                     .setDescription(embedContent || "None.")
                     .setColor(0xF5C542)
-                
+
                 const origMember = tempdata[starboard.guildId].webhookMembers[msg.id]
                 if (origMember) {
                     starboardEmbed.setFooter({

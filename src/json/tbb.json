@@ -1,6 +1,10 @@
 {
     "battlers": [
         {
+            "name": "Casual Battler",
+            "image": "https://cdn.discordapp.com/attachments/853246754791358495/1460414649538314282/Casual_Battler.png"
+        },
+        {
             "name": "Battler",
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/c/c6/Battler.png"
         },
@@ -2053,10 +2057,6 @@
         {
             "name": "Crossweld",
             "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1459273990333005906/Crossweld.png"
-        },
-        {
-            "name": "Venata",
-            "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1460392808639631574/Venata_TBB.png"
         }
     ]
 }

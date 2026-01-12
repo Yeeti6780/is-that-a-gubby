@@ -2,47 +2,57 @@ module.exports = {
     name: ['webhook',
         'customhook',
         'customwebhook'],
-    args: [{
-        "name": "user",
-        "required": false,
-        "specifarg": false,
-        "orig": "[user]",
-        "autocomplete": async function (interaction) {
-            let poopy = this
-            let { data, config } = poopy
-            let { dataGather } = poopy.functions
+    args: [
+        {
+            "name": "user",
+            "required": false,
+            "specifarg": false,
+            "orig": "[user]",
+            "autocomplete": async function (interaction) {
+                let poopy = this
+                let { data, config } = poopy
+                let { dataGather } = poopy.functions
 
-            if (!data.guildData[interaction.guild.id]) {
-                data.guildData[interaction.guild.id] = !config.testing && process.env.MONGODB_URL && await dataGather.guildData(config.database, interaction.guild.id).catch((e) => console.log(e)) || {}
+                if (!data.guildData[interaction.guild.id]) {
+                    data.guildData[interaction.guild.id] = !config.testing && process.env.MONGODB_URL && await dataGather.guildData(config.database, interaction.guild.id).catch((e) => console.log(e)) || {}
+                }
+
+                var memberData = data.guildData[interaction.guild.id].allMembers ?? {}
+                var memberKeys = Object.keys(memberData).sort((a, b) => memberData[b].messages - memberData[a].messages)
+
+                return memberKeys.map(id => {
+                    return { name: memberData[id].username, value: id }
+                })
             }
-
-            var memberData = data.guildData[interaction.guild.id].allMembers ?? {}
-            var memberKeys = Object.keys(memberData).sort((a, b) => memberData[b].messages - memberData[a].messages)
-
-            return memberKeys.map(id => {
-                return { name: memberData[id].username, value: id }
-            })
+        },
+        {
+            "name": "text",
+            "required": false,
+            "specifarg": false,
+            "orig": "\"{text}\""
+        },
+        {
+            "name": "image",
+            "required": false,
+            "specifarg": false,
+            "orig": "{image}"
+        },
+        {
+            "name": "channelonly",
+            "required": false,
+            "specifarg": true,
+            "orig": "[-channelonly]"
         }
-    },
-    {
-        "name": "text",
-        "required": false,
-        "specifarg": false,
-        "orig": "\"{text}\""
-    },
-    {
-        "name": "image",
-        "required": false,
-        "specifarg": false,
-        "orig": "{image}"
-    }],
+    ],
     execute: async function (msg, args) {
         let poopy = this
         let config = poopy.config
         let vars = poopy.vars
         let data = poopy.data
         let { DiscordTypes } = poopy.modules
-        let { dataGather, fetchPingPerms, resolveUser } = poopy.functions
+        let { dataGather, fetchPingPerms, resolveUser, getOption } = poopy.functions
+
+        var channelOnly = getOption(args, 'channelonly', { n: 0, splice: true, dft: false })
 
         var saidMessage = args.slice(1).join(' ')
         var symbolReplacedMessage
@@ -57,7 +67,7 @@ module.exports = {
                 await msg.reply('That name is TOO LONG!').catch(() => { })
                 return
             }
-            
+
             var allBlank = true
 
             for (var i = 0; i < name.length; i++) {
@@ -94,11 +104,12 @@ module.exports = {
             data.guildData[msg.guild.id].members[member.id] = !config.testing && process.env.MONGODB_URL && await dataGather.memberData(config.database, msg.guild.id, msg.author.id).catch(() => { }) || {}
         }
 
-        if (!data.guildData[msg.guild.id].members[member.id].custom) {
-            data.guildData[msg.guild.id].members[member.id].custom = false
-        }
+        var customHook = channelOnly ? data.guildData[msg.guild.id].channels[msg.channel.id].custom[member.id] :
+            data.guildData[msg.guild.id].members[member.id].custom
+        
+        var channelHook = data.guildData[msg.guild.id].channels[msg.channel.id].custom[member.id]
 
-        if (data.guildData[msg.guild.id].members[member.id].custom === false) {
+        if (!customHook && !channelHook) {
             if (msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageWebhooks) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id)) {
                 if (!name) {
                     await msg.reply('Where\'s the name?!').catch(() => { })
@@ -109,31 +120,42 @@ module.exports = {
                     return
                 }
 
-                data.guildData[msg.guild.id].members[member.id].custom = {
+                var customHookData = {
                     name: name,
                     avatar: avatar
                 }
 
+                if (channelOnly) data.guildData[msg.guild.id].channels[msg.channel.id].custom[member.id] = customHookData
+                else data.guildData[msg.guild.id].members[member.id].custom = customHookData
+
                 if (!msg.nosend) await msg.reply({
-                    content: member.displayName.replace(/\@/g, '@‌') + ` is now ${name}.`,
+                    content: member.displayName.replace(/\@/g, '@‌') + ` is now ${name}${channelOnly ? ` in <#${msg.channel.id}>` : ""}.`,
                     allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
-                return member.displayName.replace(/\@/g, '@‌') + ` is now ${name}.`
+                return member.displayName.replace(/\@/g, '@‌') + ` is now ${name}${channelOnly ? ` in <#${msg.channel.id}>` : ""}.`
             } else {
                 await msg.reply('You need to have the manage webhooks/messages permission to execute that!').catch(() => { })
                 return;
             }
         } else {
+            if (!channelOnly && channelHook) {
+                channelOnly = true
+                customHook = channelHook
+            }
+
             if (!msg.nosend) await msg.reply({
-                content: member.displayName.replace(/\@/g, '@‌') + ` is not ${data.guildData[msg.guild.id].members[member.id].custom.name}.`,
+                content: member.displayName.replace(/\@/g, '@‌') + ` is not ${customHook.name}${channelOnly ? ` in <#${msg.channel.id}>` : ""}.`,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            data.guildData[msg.guild.id].members[member.id].custom = false
-            return member.displayName.replace(/\@/g, '@‌') + ` is not ${data.guildData[msg.guild.id].members[member.id].custom.name}.`
+
+            if (channelOnly) delete data.guildData[msg.guild.id].channels[msg.channel.id].custom[member.id]
+            else delete data.guildData[msg.guild.id].members[member.id].custom
+
+            return member.displayName.replace(/\@/g, '@‌') + ` is not ${customHook.name}${channelOnly ? ` in <#${msg.channel.id}>` : ""}.`
         }
     },
     help: {
-        name: 'webhook/customhook/customwebhook [user] "{text}" {image} (manage webhooks/messages permission only)',
+        name: 'webhook/customhook/customwebhook [user] "{text}" {image} [-channelonly] (manage webhooks/messages permission only)',
         value: 'Turns someone into the webhook you specified.'
     },
     cooldown: 2500,
