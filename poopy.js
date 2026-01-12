@@ -1361,9 +1361,20 @@ class Poopy {
                     !e.data.description
 
                 const starboardEmbed = new Discord.EmbedBuilder()
-                    .setAuthor({ name: `${(msg.member ?? msg.author).displayName} (${msg.author.username})`, iconURL: (msg.member ?? msg.author).displayAvatarURL({ dynamic: true, size: 1024, extension: "png" }) })
+                    .setAuthor({
+                        name: `${(msg.member ?? msg.author).displayName} (${msg.author.username})`,
+                        iconURL: (msg.member ?? msg.author).displayAvatarURL({ dynamic: true, size: 1024, extension: "png" })
+                    })
                     .setDescription(embedContent || "None.")
                     .setColor(0xF5C542)
+                
+                const origMember = tempdata[starboard.guildId].webhookMembers[msg.id]
+                if (origMember) {
+                    starboardEmbed.setFooter({
+                        text: `Original Author: ${origMember.displayName} (${origMember.user.username})`,
+                        iconURL: origMember.displayAvatarURL({ dynamic: true, size: 1024, extension: "png" })
+                    })
+                }
 
                 const starboardMsgEmbeds = [...origMsg.embeds.filter(e => !isAttachmentEmbed(e)), starboardEmbed]
 

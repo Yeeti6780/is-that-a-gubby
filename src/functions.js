@@ -3977,6 +3977,67 @@ functions.addLastUrl = function (msg, url) {
     data.guildData[msg.guild.id].channels[msg.channel.id].lastUrls = lasturls
 }
 
+functions.createLog = async function (type, member, logData) {
+    let poopy = this
+    let data = poopy.data
+    let { Discord } = poopy.modules
+
+    const guild = member.guild
+
+    const logChannelID = data.guildData[guild.id]?.logging[type]
+    if (!logChannelID) return
+
+    const logChannel = guild.channels.cache.get(logChannelID) ?? await guild.channels.fetch(logChannelID).catch(() => { })
+    if (!logChannel) return
+
+    const logPayload = {
+        allowedMentions: { parse: [] }
+    }
+
+    const logEmbed = new Discord.EmbedBuilder()
+        .setAuthor({
+            name: `${member.displayName} (${member.user.username})`,
+            iconURL: member.displayAvatarURL({ dynamic: true, size: 1024, extension: "png" })
+        })
+        .setColor(0xffcc4d)
+        .setTimestamp()
+
+    switch (type) {
+        case "webhooks": {
+            const { msg, webhookMsg, payload } = logData
+
+            if (webhookMsg.embeds.some(e => e.data.title == "Webhook message sent")) return
+
+            const attachments = webhookMsg.attachments
+            logPayload.files = attachments.map(a => new Discord.AttachmentBuilder(a.attachment))
+
+            logEmbed.setTitle("Webhook message sent")
+                .setDescription(
+                    `> **Channel:** ${msg.channel.name} (<#${msg.channel.id}>)\n` +
+                    `> **Message ID:** [${webhookMsg.id}](${webhookMsg.url})\n` +
+                    `> **Message author:** ${member.user.tag} (<@${member.user.id}>)\n` +
+                    `> **Message created:** <t:${Math.floor(Date.now() / 1000)}:R>`
+                )
+                .setFooter({
+                    text: `Webhook: ${payload.username ?? webhookMsg.author.username}`,
+                    iconURL: payload.avatarURL ?? webhookMsg.author.displayAvatarURL({ dynamic: true, size: 1024, extension: "png" })
+                })
+
+            if (webhookMsg.content) logEmbed.addFields(
+                { name: "Message", value: webhookMsg.content }
+            )
+            if (attachments.size) logEmbed.addFields(
+                { name: "Attachments", value: attachments.map(a => a.attachment).join("\n") }
+            )
+            break
+        }
+    }
+
+    logPayload.embeds = [logEmbed]
+
+    return await logChannel.send(logPayload).catch((e) => console.log(e))
+}
+
 functions.createWebhook = async function (msg) {
     let poopy = this
     let bot = poopy.bot
@@ -4008,67 +4069,6 @@ functions.createWebhook = async function (msg) {
     return findWebhooks[Number(BigInt(msg.author.id) % BigInt(findWebhooks.length))]
 }
 
-functions.createLog = async function (type, member, logData) {
-    let poopy = this
-    let data = poopy.data
-    let { Discord } = poopy.modules
-
-    const guild = member.guild
-
-    const logChannelID = data.guildData[guild.id]?.logging[type]
-    if (!logChannelID) return
-
-    const logChannel = guild.channels.cache.get(logChannelID) ?? await guild.channels.fetch(logChannelID).catch(() => { })
-    if (!logChannel) return
-
-    const payload = {
-        allowedMentions: { parse: [] }
-    }
-
-    const logEmbed = new Discord.EmbedBuilder()
-        .setAuthor({
-            name: `${member.displayName} (${member.user.username})`,
-            iconURL: member.displayAvatarURL({ dynamic: true, size: 1024, extension: "png" })
-        })
-        .setColor(0xffcc4d)
-        .setTimestamp()
-
-    switch (type) {
-        case "webhooks": {
-            const { msg, webhookMsg, payload } = logData
-
-            if (webhookMsg.embeds.some(e => e.data.title == "Webhook message sent")) return
-
-            const attachments = webhookMsg.attachments
-            payload.files = attachments.map(a => new Discord.AttachmentBuilder(a.attachment))
-
-            logEmbed.setTitle("Webhook message sent")
-                .setDescription(
-                    `> **Channel:** ${msg.channel.name} (<#${msg.channel.id}>)\n` +
-                    `> **Message ID:** [${webhookMsg.id}](${webhookMsg.url})\n` +
-                    `> **Message author:** ${member.user.tag} (<@${member.user.id}>)\n` +
-                    `> **Message created:** <t:${Math.floor(Date.now() / 1000)}:R>`
-                )
-                .setFooter({
-                    text: `Webhook: ${payload.username ?? webhookMsg.author.username}`,
-                    iconURL: payload.avatarURL ?? webhookMsg.author.displayAvatarURL({ dynamic: true, size: 1024, extension: "png" })
-                })
-
-            if (webhookMsg.content) logEmbed.addFields(
-                { name: "Message", value: webhookMsg.content }
-            )
-            if (attachments.size) logEmbed.addFields(
-                { name: "Attachments", value: attachments.map(a => a.attachment).join("\n") }
-            )
-            break
-        }
-    }
-
-    payload.embeds = [logEmbed]
-
-    return await logChannel.send(payload).catch((e) => console.log(e))
-}
-
 functions.sendWebhook = async function (msg, payload) {
     let poopy = this
     let tempdata = poopy.tempdata
@@ -4087,7 +4087,10 @@ functions.sendWebhook = async function (msg, payload) {
         if (webhook) webhookMsg = await webhook.send(payload).catch(() => { })
     }
 
-    if (webhookMsg) createLog("webhooks", msg.member, { payload, msg, webhookMsg }).catch((e) => console.log(e))
+    if (webhookMsg) {
+        tempdata[msg.guild.id].webhookMembers[webhookMsg.id] = msg.member
+        createLog("webhooks", msg.member, { payload, msg, webhookMsg }).catch((e) => console.log(e))
+    }
 
     return webhookMsg
 }
