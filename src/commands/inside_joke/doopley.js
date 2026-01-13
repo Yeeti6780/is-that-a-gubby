@@ -14,12 +14,12 @@ module.exports = {
         const text1 = randomChoice(textes)
         const text2 = randomChoice(textes)
 
-        const image = randomChoice(images)
+        const image = new Discord.AttachmentBuilder(randomChoice(images), { name: "doopley.png" })
 
         if (!msg.nosend) {
             if (config.textEmbeds) await msg.reply({
                 content: `# ${text1.substring(0, 256)}\n${text2}`,
-                files: [new Discord.AttachmentBuilder(image)],
+                files: [image],
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
 
@@ -30,10 +30,11 @@ module.exports = {
                         description: text2,
                         color: Math.floor(Math.random() * 0x1000000),
                         image: {
-                            url: image
+                            url: `attachment://doopley.png`
                         }
                     }
                 ],
+                files: [image],
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
         }
