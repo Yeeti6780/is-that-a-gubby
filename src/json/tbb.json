@@ -377,6 +377,10 @@
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/0/05/Ceramic_Battler.png"
         },
         {
+            "name": "Statue",
+            "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/b/ba/Statue.png"
+        },
+        {
             "name": "Cola Battler",
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/b/b9/Cola_Battler.png"
         },
