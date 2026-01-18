@@ -95,10 +95,7 @@ module.exports = {
                 return
             }
 
-            output = response.data.sentences.
-                map(s => s?.trans).
-                filter(Boolean).
-                join("")
+            output = response.data.translation
 
             lastlanguage = currentlanguage
             currentlanguage = i == repeat - 2 ? target : Object.keys(vars.languages)[Math.floor(Math.random() * Object.keys(vars.languages).length)]
