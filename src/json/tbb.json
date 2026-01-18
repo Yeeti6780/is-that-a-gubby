@@ -1,12 +1,12 @@
 {
     "battlers": [
         {
-            "name": "Casual Battler",
-            "image": "https://cdn.discordapp.com/attachments/853246754791358495/1460414649538314282/Casual_Battler.png"
-        },
-        {
             "name": "Battler",
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/c/c6/Battler.png"
+        },
+        {
+            "name": "Casual Battler",
+            "image": "https://cdn.discordapp.com/attachments/853246754791358495/1460414649538314282/Casual_Battler.png"
         },
         {
             "name": "Blonde Battler",
