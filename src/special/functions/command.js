@@ -23,6 +23,15 @@ module.exports = {
         var guildfilter = config.guildfilter
         var channelfilter = config.channelfilter
 
+        var bypassPerms = (
+            msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) ||
+            msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) ||
+            msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
+            msg.author.id === msg.guild.ownerId ||
+            (config.ownerids.find(id => id == msg.author.id)) ||
+            isBot
+        )
+
         var isFiltered = (guildfilter.blacklist && guildfilter.ids.includes(msg.guild.id)) ||
             (
                 !(guildfilter.blacklist) &&
@@ -42,15 +51,8 @@ module.exports = {
 
         var isRestricted = data.guildData[msg.guild.id].restricted.some(
             id => id == msg.channel?.id || id == msg.channel?.parent?.id || id == msg.channel?.parent?.parent?.id
-        ) && !(
-            msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) ||
-            msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) ||
-            msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
-            msg.author.id === msg.guild.ownerId ||
-            (config.ownerids.find(id => id == msg.author.id)) ||
-            isBot
-        )
-
+        ) && !bypassPerms
+        
         if (isFiltered || isRestricted || tempdata[msg.guild.id][msg.channel.id].shutUp) return ''
 
         if (globaldata.shit.find(id => id === msg.author.id)) return 'shit'
@@ -98,14 +100,24 @@ module.exports = {
                     var increaseCount = !(command.execute.toString().includes('sendFile') && msg.nosend)
 
                     if (increaseCount) {
-                        if (!opts.ownermode && tempdata[msg.author.id][msg.id].execCount >= 1 && data.guildData[msg.guild.id].chaincommands == false && !(msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerId || isBot)) {
+                        if (
+                            !opts.ownermode &&
+                            tempdata[msg.author.id][msg.id].execCount >= 1 &&
+                            !data.guildData[msg.guild.id].chaincommands &&
+                            !bypassPerms
+                        ) {
                             msg.content = content
                             return 'You can\'t chain commands in this server.'
                         }
-                        if (!opts.ownermode && tempdata[msg.author.id][msg.id].execCount >= config.commandLimit * ((msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerId || isBot) ? 5 : 1)) {
+
+                        if (
+                            !opts.ownermode &&
+                            tempdata[msg.author.id][msg.id].execCount >= config.commandLimit * (bypassPerms ? 5 : 1)
+                        ) {
                             msg.content = content
-                            return `Number of commands to run at the same time must be smaller or equal to **${config.commandLimit * ((msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerId || isBot) ? 5 : 1)}**!`
+                            return `Number of commands to run at the same time must be smaller or equal to **${config.commandLimit * (bypassPerms ? 5 : 1)}**!`
                         }
+
                         tempdata[msg.author.id][msg.id].execCount++
                     }
 
