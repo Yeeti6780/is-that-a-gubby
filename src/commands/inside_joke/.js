@@ -7,6 +7,7 @@ module.exports = {
         let { DiscordTypes } = poopy.modules
         let arrays = poopy.arrays
         let config = poopy.config
+        let data = poopy.data
 
         var bypassPerms = (
             msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) ||
