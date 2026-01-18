@@ -75,16 +75,10 @@ module.exports = {
         if (!response) return
 
         if (!msg.nosend) await msg.reply({
-            content: response.data.sentences.
-                map(s => s?.trans).
-                filter(Boolean).
-                join(""),
+            content: response.data.translation,
             allowedMentions: fetchPingPerms(msg)
         }).catch(() => { })
-        return response.data.sentences.
-            map(s => s?.trans).
-            filter(Boolean).
-            join("")
+        return response.data.translation
     },
     help: {
         name: 'translate/tr <message> [-source <language>] [-target <language>]',
