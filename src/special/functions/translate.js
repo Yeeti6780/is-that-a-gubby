@@ -27,7 +27,7 @@ module.exports = {
 
     var options = {
       method: 'GET',
-      url: "https://translate-pa.googleapis.com/v1/translate?" + new URLSearchParams({,
+      url: "https://translate-pa.googleapis.com/v1/translate?" + new URLSearchParams({
         "params.client": "gtx",
         "dataTypes": "TRANSLATION",
         "key": "AIzaSyDLEeFI5OtFBwYBIoK_jj5m32rZK5CkCXA", // some google API key
