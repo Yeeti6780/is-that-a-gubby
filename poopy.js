@@ -502,15 +502,17 @@ class Poopy {
             var allcontents = []
             var webhooked = false
 
-            var isRestricted = data.guildData[msg.guild.id].restricted.some(
-                id => id == msg.channel?.id || id == msg.channel?.parent?.id || id == msg.channel?.parent?.parent?.id
-            ) && !(
+            var bypassPerms = (
                 msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) ||
                 msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) ||
                 msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
                 msg.author.id === msg.guild.ownerId ||
                 (config.ownerids.find(id => id == msg.author.id))
             )
+
+            var isRestricted = data.guildData[msg.guild.id].restricted.some(
+                id => id == msg.channel?.id || id == msg.channel?.parent?.id || id == msg.channel?.parent?.parent?.id
+            ) && !bypassPerms
 
             async function webhookify() {
                 webhooked = true
@@ -764,14 +766,7 @@ class Poopy {
                                 } else return
                             }
 
-                            var isDisabled = data.guildData[msg.guild.id].disabled.find(cmd => cmd.find(n => n === args[0].toLowerCase())) && !(
-                                msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) ||
-                                msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) ||
-                                msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
-                                msg.author.id === msg.guild.ownerId ||
-                                (config.ownerids.find(id => id == msg.author.id))
-                            )
-
+                            var isDisabled = data.guildData[msg.guild.id].disabled.find(cmd => cmd.find(n => n === args[0].toLowerCase())) && !bypassPerms
                             if (isDisabled) {
                                 await msg.reply('This command is disabled in this server.').catch(() => { })
                             } else {
@@ -860,13 +855,7 @@ class Poopy {
                             var useCmd = await yesno(msg.channel, `Did you mean to use \`${similarCmds[0].name}\`?`, msg.author.id, undefined, msg).catch(() => { })
                             if (useCmd) {
                                 if (similarCmds[0].type === 'cmd') {
-                                    var isDisabled = data.guildData[msg.guild.id].disabled.find(cmd => cmd.find(n => n === similarCmds[0].name)) && !(
-                                        msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) ||
-                                        msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) ||
-                                        msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
-                                        msg.author.id === msg.guild.ownerId ||
-                                        (config.ownerids.find(id => id == msg.author.id))
-                                    )
+                                    var isDisabled = data.guildData[msg.guild.id].disabled.find(cmd => cmd.find(n => n === similarCmds[0].name)) && !bypassPerms
 
                                     if (isDisabled && hivemindPass) {
                                         await msg.reply('This command is disabled in this server.').catch(() => { })
@@ -1094,8 +1083,8 @@ class Poopy {
                         }
                     } else {
                         var eightballMsg = randomChoice(arrays.eightball)
-                        var resp = !process.env.AI21_KEY || data.guildData[msg.guild.id]?.disabled
-                            .find(cmd => cmd.find(n => n === "chat")) ?
+                        var resp = !process.env.AI21_KEY || (data.guildData[msg.guild.id]?.disabled
+                            .find(cmd => cmd.find(n => n === "chat")) && !bypassPerms) ?
                             eightballMsg :
                             await chat(origcontent, msg, {
                                 errorMsg: eightballMsg
