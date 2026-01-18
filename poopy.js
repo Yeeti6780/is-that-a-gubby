@@ -498,10 +498,6 @@ class Poopy {
                 return
             }
 
-            var cmds = data.guildData[msg.guild.id].chaincommands == true ? origcontent.split(/\s*-\|-\s*/) : [origcontent]
-            var allcontents = []
-            var webhooked = false
-
             var bypassPerms = (
                 msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) ||
                 msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) ||
@@ -509,6 +505,11 @@ class Poopy {
                 msg.author.id === msg.guild.ownerId ||
                 (config.ownerids.find(id => id == msg.author.id))
             )
+
+            var cmds = data.guildData[msg.guild.id].chaincommands || bypassPerms
+                ? origcontent.split(/\s*-\|-\s*/) : [origcontent]
+            var allcontents = []
+            var webhooked = false
 
             var isRestricted = data.guildData[msg.guild.id].restricted.some(
                 id => id == msg.channel?.id || id == msg.channel?.parent?.id || id == msg.channel?.parent?.parent?.id
@@ -773,7 +774,11 @@ class Poopy {
                                 var increaseCount = !(findCmd.execute.toString().includes('sendFile') && msg.nosend)
 
                                 if (increaseCount) {
-                                    if (tempdata[msg.author.id][msg.id]?.execCount >= 1 && data.guildData[msg.guild.id].chaincommands == false) {
+                                    if (
+                                        tempdata[msg.author.id][msg.id]?.execCount >= 1 &&
+                                        !data.guildData[msg.guild.id].chaincommands &&
+                                        !bypassPerms
+                                    ) {
                                         await msg.reply('You can\'t chain commands in this server.').catch(() => { })
                                         return
                                     }
@@ -830,7 +835,11 @@ class Poopy {
                             var increaseCount = !!phrase.trim()
 
                             if (increaseCount) {
-                                if (tempdata[msg.author.id][msg.id]?.execCount >= 1 && data.guildData[msg.guild.id].chaincommands == false) {
+                                if (
+                                    tempdata[msg.author.id][msg.id]?.execCount >= 1 &&
+                                    !data.guildData[msg.guild.id].chaincommands &&
+                                    !bypassPerms
+                                ) {
                                     await msg.reply('You can\'t chain commands in this server.').catch(() => { })
                                     return
                                 }
@@ -871,7 +880,11 @@ class Poopy {
                                         var increaseCount = !(findCmd.execute.toString().includes('sendFile') && msg.nosend)
 
                                         if (increaseCount) {
-                                            if (tempdata[msg.author.id][msg.id]?.execCount >= 1 && data.guildData[msg.guild.id].chaincommands == false) {
+                                            if (
+                                                tempdata[msg.author.id][msg.id]?.execCount >= 1 &&
+                                                !data.guildData[msg.guild.id].chaincommands &&
+                                                !bypassPerms
+                                            ) {
                                                 await msg.reply('You can\'t chain commands in this server.').catch(() => { })
                                                 return
                                             }
@@ -926,7 +939,11 @@ class Poopy {
                                     var increaseCount = !!phrase.trim()
 
                                     if (increaseCount) {
-                                        if (tempdata[msg.author.id][msg.id]?.execCount >= 1 && data.guildData[msg.guild.id].chaincommands == false) {
+                                        if (
+                                            tempdata[msg.author.id][msg.id]?.execCount >= 1 &&
+                                            !data.guildData[msg.guild.id].chaincommands &&
+                                            !bypassPerms
+                                        ) {
                                             await msg.reply('You can\'t chain commands in this server.').catch(() => { })
                                             return
                                         }
