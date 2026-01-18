@@ -36,7 +36,7 @@ module.exports = {
             if (Object.entries(vars.languages).find(language => language[0] == args[sourceindex + 1].toLowerCase() || language[1] == args[sourceindex + 1].toLowerCase())) {
                 source = Object.entries(vars.languages).find(language => language[0] == args[sourceindex + 1].toLowerCase() || language[1] == args[sourceindex + 1].toLowerCase())[0]
             } else {
-                await msg.reply(`Not a supported source language. A list of supported languages are:\n${Object.values(vars.languages).map(language => `\`${language}\``).join(', ')}`).catch(() => { })
+                await msg.reply(`Not a supported source language. A list of supported languages are:\n${Object.keys(vars.languages).map(language => `\`${language}\``).join(', ')}`).catch(() => { })
                 return
             }
             args.splice(sourceindex, 2)
@@ -48,7 +48,7 @@ module.exports = {
             if (Object.entries(vars.languages).find(language => language[0] == args[targetindex + 1].toLowerCase() || language[1] == args[targetindex + 1].toLowerCase())) {
                 target = Object.entries(vars.languages).find(language => language[0] == args[targetindex + 1].toLowerCase() || language[1] == args[targetindex + 1].toLowerCase())[0]
             } else {
-                await msg.reply(`Not a supported target language. A list of supported languages are:\n${Object.values(vars.languages).map(language => `\`${language}\``).join(', ')}`).catch(() => { })
+                await msg.reply(`Not a supported target language. A list of supported languages are:\n${Object.keys(vars.languages).map(language => `\`${language}\``).join(', ')}`).catch(() => { })
                 return
             }
             args.splice(targetindex, 2)
@@ -58,14 +58,13 @@ module.exports = {
 
         var options = {
             method: 'GET',
-            url: "https://translate.googleapis.com/translate_a/single?" + new URLSearchParams({
-                client: "gtx",
-                sl: source,
-                tl: target,
-                dt: "t",
-                dj: "1",
-                source: "input",
-                q: saidMessage
+            url: "https://translate-pa.googleapis.com/v1/translate?" + new URLSearchParams({,
+                "params.client": "gtx",
+                "dataTypes": "TRANSLATION",
+                "key": "AIzaSyDLEeFI5OtFBwYBIoK_jj5m32rZK5CkCXA", // some google API key
+                "query.sourceLanguage": source,
+                "query.targetLanguage": target,
+                "query.text": saidMessage
             })
         };
 
