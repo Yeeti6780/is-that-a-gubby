@@ -16,12 +16,12 @@ module.exports = {
         var channelfilter = config.channelfilter
 
         var bypassPerms = (
-            opts.ownermode ||
             msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) ||
             msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) ||
             msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
             msg.author.id === msg.guild.ownerId ||
-            (config.ownerids.find(id => id == msg.author.id))
+            (config.ownerids.find(id => id == msg.author.id)) ||
+            isBot
         )
 
         var isFiltered = (guildfilter.blacklist && guildfilter.ids.includes(msg.guild.id)) ||
@@ -61,6 +61,7 @@ module.exports = {
         tempdata[msg.author.id].coolDownMsg = msg.id
 
         if (
+            !opts.ownermode &&
             tempdata[msg.author.id][msg.id].execCount >= 1 &&
             !data.guildData[msg.guild.id].chaincommands &&
             !bypassPerms
