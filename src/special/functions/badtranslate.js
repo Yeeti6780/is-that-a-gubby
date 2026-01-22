@@ -10,7 +10,7 @@ module.exports = {
         var word = matches[1]
         var split = splitKeyFunc(word, { args: 4 })
         var phrase = split[0] ?? ''
-        var repeat = parseNumber(split[1] ?? 5, { min: 2, max: 50, dft: 5, round: true })
+        var repeat = parseNumber(split[1] ?? 5, { min: 2, max: 50, dft: 15, round: true })
         var target = split[2] ?? 'en'
         var source = split[3] ?? 'auto'
 

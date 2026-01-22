@@ -16,7 +16,7 @@ module.exports = {
                 return { name: language[1], value: language[0] }
             })
         }
-    }, { "name": "languages", "required": false, "specifarg": true, "orig": "[-languages <number (max 25)>]" },
+    }, { "name": "languages", "required": false, "specifarg": true, "orig": "[-languages <number (max 50)>]" },
     { "name": "details", "required": false, "specifarg": true, "orig": "[-details]" }],
     execute: async function (msg, args) {
         let poopy = this
@@ -59,7 +59,7 @@ module.exports = {
         var repeat = 5
         var languagesindex = args.indexOf('-languages')
         if (languagesindex > -1) {
-            repeat = isNaN(Number(args[languagesindex + 1])) ? 5 : Number(args[languagesindex + 1]) <= 2 ? 2 : Number(args[languagesindex + 1]) >= 50 ? 50 : Math.round(Number(args[languagesindex + 1])) || 5
+            repeat = isNaN(Number(args[languagesindex + 1])) ? 15 : Number(args[languagesindex + 1]) <= 2 ? 2 : Number(args[languagesindex + 1]) >= 50 ? 50 : Math.round(Number(args[languagesindex + 1])) || 15
             args.splice(languagesindex, 2)
         }
 
