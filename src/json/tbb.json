@@ -771,6 +771,14 @@
         {
             "name": "WhatsApp Hammer",
             "image": "https://cdn.discordapp.com/attachments/1050863721238515772/1398707813030821921/Render_WhatsappHammer.png"
+        },
+        {
+            "name": "WhatsApp Banhammer",
+            "image": "https://cdn.discordapp.com/attachments/1050863721238515772/1402082913708937330/Render_Secret_WhatsAppBanhammer.png"
+        },
+        {
+            "name": "Rapper Pal",
+            "image": "https://cdn.discordapp.com/attachments/1415073653585875004/1461057596084588614/Rapper_Pal.png"
         }
     ],
     "enemies": [
@@ -1492,7 +1500,7 @@
         },
         {
             "name": "Drakocage",
-            "image": "https://cdn.discordapp.com/attachments/1415073653585875004/1451251273146962112/Drakocage.png"
+            "image": "https://cdn.discordapp.com/attachments/1415073653585875004/1463780346188529675/Drakocage.png"
         },
         {
             "name": "Drako",
@@ -2092,11 +2100,27 @@
         },
         {
             "name": "Crossweld",
-            "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1459273990333005906/Crossweld.png"
+            "image": "https://cdn.discordapp.com/attachments/1415073653585875004/1460706816710148251/Crossweld_new.png"
+        },
+        {
+            "name": "Chargeweld",
+            "image": "https://cdn.discordapp.com/attachments/1415073653585875004/1464284855050174538/Chargeweld.png"
         },
         {
             "name": "A.B.S.O.R.B.",
             "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1462184012725620890/A.B.S.O.R.B..png"
+        },
+        {
+            "name": "Venata",
+            "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1463766224797302858/Venata_TBB.png"
+        },
+        {
+            "name": "Nivara",
+            "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1463565874412781568/Nivara.png"
+        },
+        {
+            "name": "Total",
+            "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1463573087374020753/Total.png"
         }
     ]
 }
