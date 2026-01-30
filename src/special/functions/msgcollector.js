@@ -19,7 +19,8 @@ module.exports = {
         var split = splitKeyFunc(word, { args: 3 })
         var collectphrase = split[0] ?? ''
         split[1] = await getKeywordsFor(split[1] ?? '', msg, isBot, opts).catch(() => { }) || ''
-        var timeout = isNaN(Number(split[1])) ? 10 : Number(split[1]) <= 1 ? 1 : (!opts.ownermode && Number(split[1]) >= 60) ? 60 : Number(split[1]) || 10
+        var bypassLimit = config.ownerids.find(id => id == msg.author.id) || isBot || opts.ownermode
+        var timeout = isNaN(Number(split[1])) ? 10 : Number(split[1]) <= 1 ? 1 : (!bypassLimit && Number(split[1]) >= 60) ? 60 : Number(split[1]) || 10
         var finishphrase = split[2] ?? ''
         var channel = msg.channel
         var guildid = msg.guild.id
@@ -34,7 +35,7 @@ module.exports = {
 
             var filter = m => (config.allowbotusage || (data.guildData[msg.guild.id].chaos && !m.webhookId) || !m.author.bot) && m.author.id != bot.user.id
             var collected = []
-            var collector = channel.createMessageCollector({ filter, time: timeout * 1000 })
+            var collector = channel.createMessageCollector({ filter, time: !(bypassLimit && !split[1]) ? timeout * 1000 : undefined })
 
             tempdata[guildid][channelid][authorid].messageCollector = collector
 
