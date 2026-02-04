@@ -21,7 +21,7 @@ module.exports = {
             return {
                 name: [lcmd.name],
                 type: 'Local',
-                execute: async () => await getKeywordsFor(lcmd.phrase, msg, true, { resetattempts: true, ownermode: lcmd.ownermode }).catch(() => { }) ?? 'error'
+                execute: async () => await getKeywordsFor(lcmd.phrase, msg, true, { resetAttempts: true, ownermode: lcmd.ownermode }).catch(() => { }) ?? 'error'
             }
         }))
 

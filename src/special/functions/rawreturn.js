@@ -7,7 +7,7 @@ module.exports = {
         let tempdata = poopy.tempdata
 
         var declopts = { ...opts }
-        declopts.declaredonly = true
+        declopts.declaredOnly = true
         var word = await getKeywordsFor(matches[1], msg, isBot, declopts).catch(() => { }) ?? ''
 
         tempdata[msg.author.id][msg.id].returnValue = word

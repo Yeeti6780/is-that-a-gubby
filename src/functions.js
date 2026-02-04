@@ -923,7 +923,7 @@ functions.cleverbot = async function (stim, msg, clear) {
     if (!tempdata[msg.guild.id][msg.channel.id]) tempdata[msg.guild.id][msg.channel.id] = {}
 
     var context = tempdata[msg.guild.id][msg.channel.id].cleverContext
-    if (!context || (Date.now() - context.lastMessage) > 1000 * 60 * 10 || clear) context = tempdata[msg.channel.id].cleverContext = {
+    if (!context || (Date.now() - context.lastMessage) > 1000 * 60 * 10 || clear) context = tempdata[msg.guild.id][msg.channel.id].cleverContext = {
         history: [],
         processing: false
     }
@@ -1149,7 +1149,7 @@ functions.infoPost = async function (message) {
     }).catch(() => { })
 }
 
-functions.getKeyFunc = function (string, { extrakeys = {}, extrafuncs = {}, declaredonly = false } = {}) {
+functions.getKeyFunc = function (string, { extraKeys = {}, extraFuncs = {}, declaredOnly = false } = {}) {
     let poopy = this
     let special = poopy.special
     let { matchLongestFunc, matchLongestKey } = poopy.functions
@@ -1164,8 +1164,8 @@ functions.getKeyFunc = function (string, { extrakeys = {}, extrafuncs = {}, decl
     var potentialindexes = []
     var rawMatch
 
-    var keylist = declaredonly ? {} : { ...special.keys }
-    var funclist = declaredonly ? {} : { ...special.functions }
+    var keylist = declaredOnly ? {} : { ...special.keys }
+    var funclist = declaredOnly ? {} : { ...special.functions }
     var pfunclist = []
 
     for (var k in keylist) {
@@ -1177,9 +1177,9 @@ functions.getKeyFunc = function (string, { extrakeys = {}, extrafuncs = {}, decl
             }
         }
     }
-    for (var k in extrakeys)
-        if (!declaredonly || (declaredonly && k.declared))
-            keylist[k] = extrakeys[k]
+    for (var k in extraKeys)
+        if (!declaredOnly || (declaredOnly && k.declared))
+            keylist[k] = extraKeys[k]
 
     for (var f in funclist) {
         if (funclist[f].potential) {
@@ -1191,9 +1191,9 @@ functions.getKeyFunc = function (string, { extrakeys = {}, extrafuncs = {}, decl
         }
     }
 
-    for (var f in extrafuncs)
-        if (!declaredonly || (declaredonly && f.declared))
-            funclist[f] = extrafuncs[f]
+    for (var f in extraFuncs)
+        if (!declaredOnly || (declaredOnly && f.declared))
+            funclist[f] = extraFuncs[f]
 
     var keys = Object.keys(keylist).sort((a, b) => b.length - a.length)
     var funcs = Object.keys(funclist).sort((a, b) => b.length - a.length)
@@ -1216,7 +1216,7 @@ functions.getKeyFunc = function (string, { extrakeys = {}, extrafuncs = {}, decl
     }
 
     function isNotInUrlOrIsDeclared(index, name, list, extra) {
-        return !(urlSpans.some(([start, end]) => index >= start && index < end)) || ((name in extra) || (declaredonly && (name in list)))
+        return !(urlSpans.some(([start, end]) => index >= start && index < end)) || ((name in extra) || (declaredOnly && (name in list)))
     }
 
     for (var i in string) {
@@ -1264,7 +1264,7 @@ functions.getKeyFunc = function (string, { extrakeys = {}, extrafuncs = {}, decl
                             potentialindexes.splice(potentialindexes.findIndex(ind => ind === parindex), 1)
                         } else {
                             if (!rawMatch) {
-                                if (isNotInUrlOrIsDeclared(lastParenthesesIndex, funcmatch[0], funclist, extrafuncs)) {
+                                if (isNotInUrlOrIsDeclared(lastParenthesesIndex, funcmatch[0], funclist, extraFuncs)) {
                                     lastParenthesesIndex++
                                     return {
                                         match: [funcmatch[0], string.substring(lastParenthesesIndex, i)],
@@ -1275,7 +1275,7 @@ functions.getKeyFunc = function (string, { extrakeys = {}, extrafuncs = {}, decl
                                 rawrequired--
                                 llastParenthesesIndex = i
                                 if (rawrequired <= 0) {
-                                    if (isNotInUrlOrIsDeclared(rawParenthesesIndex, rawMatch, funclist, extrafuncs)) {
+                                    if (isNotInUrlOrIsDeclared(rawParenthesesIndex, rawMatch, funclist, extraFuncs)) {
                                         rawParenthesesIndex++
                                         return {
                                             match: [rawMatch, string.substring(rawParenthesesIndex, i)],
@@ -1294,7 +1294,7 @@ functions.getKeyFunc = function (string, { extrakeys = {}, extrafuncs = {}, decl
             var keymatch = matchLongestKey(string.substring(i), keys)
             if (keymatch) {
                 keyindex = i
-                if (rawrequired <= 0 && isNotInUrlOrIsDeclared(i, keymatch[0], keylist, extrakeys)) {
+                if (rawrequired <= 0 && isNotInUrlOrIsDeclared(i, keymatch[0], keylist, extraKeys)) {
                     return {
                         match: keymatch[0],
                         type: 'key'
@@ -1306,7 +1306,7 @@ functions.getKeyFunc = function (string, { extrakeys = {}, extrafuncs = {}, decl
 
     if (llastParenthesesIndex > -1) {
         var funcmatch = matchLongestFunc(string.substring(0, lastParenthesesIndex), funcfiltered)
-        if (isNotInUrlOrIsDeclared(lastParenthesesIndex, funcmatch[0], funclist, extrafuncs)) {
+        if (isNotInUrlOrIsDeclared(lastParenthesesIndex, funcmatch[0], funclist, extraFuncs)) {
             lastParenthesesIndex++
             return {
                 match: [funcmatch[0], string.substring(lastParenthesesIndex, llastParenthesesIndex)],
@@ -1317,7 +1317,7 @@ functions.getKeyFunc = function (string, { extrakeys = {}, extrafuncs = {}, decl
 
     if (keyindex > -1) {
         var keymatch = matchLongestKey(string.substring(keyindex), keys)
-        if (isNotInUrlOrIsDeclared(keyindex, keymatch[0], keylist, extrakeys)) {
+        if (isNotInUrlOrIsDeclared(keyindex, keymatch[0], keylist, extraKeys)) {
             return {
                 match: keymatch[0],
                 type: 'key'
@@ -1328,7 +1328,7 @@ functions.getKeyFunc = function (string, { extrakeys = {}, extrafuncs = {}, decl
     return false
 }
 
-functions.splitKeyFunc = function (string, { extrafuncs = {}, args = Infinity, separator = '|', declaredonly = false } = {}) {
+functions.splitKeyFunc = function (string, { extraFuncs = {}, args = Infinity, separator = '|', declaredOnly = false } = {}) {
     let poopy = this
     let special = poopy.special
     let { matchLongestFunc } = poopy.functions
@@ -1341,7 +1341,7 @@ functions.splitKeyFunc = function (string, { extrafuncs = {}, args = Infinity, s
     var barfound = 0
     var split = []
 
-    var funclist = declaredonly ? {} : { ...special.functions }
+    var funclist = declaredOnly ? {} : { ...special.functions }
     var pfunclist = []
 
     for (var f in funclist) {
@@ -1353,9 +1353,9 @@ functions.splitKeyFunc = function (string, { extrafuncs = {}, args = Infinity, s
             }
         }
     }
-    for (var f in extrafuncs)
-        if (!declaredonly || (declaredonly && f.declared))
-            funclist[f] = extrafuncs[f]
+    for (var f in extraFuncs)
+        if (!declaredOnly || (declaredOnly && f.declared))
+            funclist[f] = extraFuncs[f]
 
     var funcs = Object.keys(funclist).sort((a, b) => b.length - a.length)
     var pfuncs = Object.keys(pfunclist).sort((a, b) => b.length - a.length)
@@ -4144,7 +4144,7 @@ functions.createCronJob = async function (cronData) {
                 poopy, guild, channel, member
             }, phrase)
 
-            const evaluatedPhrase = await getKeywordsFor(phrase, dummyMessage, true, { resetattempts: true }).catch(() => { }) ?? phrase
+            const evaluatedPhrase = await getKeywordsFor(phrase, dummyMessage, true, { resetAttempts: true }).catch(() => { }) ?? phrase
 
             cronMessage = await channel.send(evaluatedPhrase).catch((err) => {
                 if (!err.message.includes("discord.com")) abort = true
@@ -4314,14 +4314,35 @@ functions.escapeKeywordResult = async function (string) {
         .replace(/(?<!\\)\"/g, '\\\"')
 }
 
-functions.getKeywordsFor = async function (string, msg, isBot, { extrakeys = {}, extrafuncs = {}, resetattempts = false, ownermode = false, declaredonly = false } = {}) {
+functions.getDeclaredObject = function (msg, obj, globalFirst) {
+    let poopy = this
+    let tempdata = poopy.tempdata
+
+    if (globalFirst)
+        return tempdata[msg.guild.id][msg.channel.id][obj] ?? tempdata[msg.author.id][msg.id][obj]
+    else
+        return tempdata[msg.author.id][msg.id][obj] ?? tempdata[msg.guild.id][msg.channel.id][obj]
+}
+
+functions.getDeclaredValue = function (msg, obj, value, globalFirst) {
+    let poopy = this
+    let tempdata = poopy.tempdata
+
+    if (globalFirst)
+        return tempdata[msg.guild.id][msg.channel.id][obj][value] ?? tempdata[msg.author.id][msg.id][obj][value]
+    else
+        return tempdata[msg.author.id][msg.id][obj][value] ?? tempdata[msg.guild.id][msg.channel.id][obj][value]
+}
+
+functions.getKeywordsFor = async function (string, msg, isBot, { extraKeys = {}, extraFuncs = {}, resetAttempts = false, ownermode = false, declaredOnly = false } = {}) {
     let poopy = this
     let config = poopy.config
     let special = poopy.special
     let data = poopy.data
     let tempdata = poopy.tempdata
     let globaldata = poopy.globaldata
-    let { getKeyFunc, infoPost, equalValues, sleep, escapeKeywordResult } = poopy.functions
+    let { getKeyFunc, infoPost, equalValues,
+        escapeKeywordResult, reconcileDataWithTemplate } = poopy.functions
 
     if (!tempdata[msg.author.id]) {
         tempdata[msg.author.id] = {}
@@ -4336,55 +4357,62 @@ functions.getKeywordsFor = async function (string, msg, isBot, { extrakeys = {},
     }
     tempdata[msg.author.id][msg.id].keyExecuting++
 
+    if (!tempdata[msg.guild.id]) {
+        tempdata[msg.guild.id] = {}
+    }
+
+    if (!tempdata[msg.guild.id][msg.channel.id]) {
+        tempdata[msg.guild.id][msg.channel.id] = {}
+    }
+
     try {
         var startTime = Date.now()
-        var extradkeys = declaredonly ? { ...tempdata[msg.author.id][msg.id].keyDeclared } : { ...extrakeys, ...tempdata[msg.author.id][msg.id].keyDeclared }
-        var extradfuncs = declaredonly ? { ...tempdata[msg.author.id][msg.id].funcDeclared } : { ...extrafuncs, ...tempdata[msg.author.id][msg.id].funcDeclared }
         var started = false
+
+        var extraExecKeys, extraExecFuncs, keydata
 
         if (tempdata[msg.author.id].rateLimited || globaldata.shit.find(id => id === msg.author.id)) {
             return string
         }
 
-        var keydata
+        function declareExtraKeys() {
+            var extraKeyDeclared = { ...tempdata[msg.guild.id][msg.channel.id].keyDeclared, ...tempdata[msg.author.id][msg.id].keyDeclared }
+            var extraFuncDeclared = { ...tempdata[msg.guild.id][msg.channel.id].funcDeclared, ...tempdata[msg.author.id][msg.id].funcDeclared }
 
-        while ((keydata = getKeyFunc(string, {
-            extrakeys: extradkeys,
-            extrafuncs: extradfuncs,
-            declaredonly: declaredonly
-        })) && tempdata[msg.author.id][msg.id]?.returnValue == undefined) {
-            if (!started || !tempdata[msg.author.id][msg.id]) {
+            extraExecKeys = declaredOnly ?
+                { ...extraKeyDeclared } :
+                { ...extraKeys, ...extraKeyDeclared }
+
+            extraExecFuncs = declaredOnly ?
+                { ...extraFuncDeclared } :
+                { ...extraFuncs, ...extraFuncDeclared }
+        }
+
+        declareExtraKeys()
+
+        while (
+            (keydata = getKeyFunc(string, {
+                extraKeys: extraExecKeys,
+                extraFuncs: extraExecFuncs,
+                declaredOnly: declaredOnly
+            })) && tempdata[msg.author.id][msg.id]?.returnValue == undefined
+            && (
+                tempdata[msg.guild.id][msg.channel.id]?.returnValue == undefined ||
+                (keydata?.type == "func" && keydata?.match?.[0] == "startkeyexec")
+            )
+        ) {
+            if (!started || !tempdata[msg.author.id][msg.id] || !tempdata[msg.guild.id][msg.channel.id]) {
                 if (!tempdata[msg.author.id][msg.id]) {
                     tempdata[msg.author.id][msg.id] = {}
                 }
 
-                if (!tempdata[msg.author.id][msg.id].keyAttempts) {
-                    tempdata[msg.author.id][msg.id].keyAttempts = 0
+                reconcileDataWithTemplate(tempdata[msg.author.id][msg.id], vars.tempdataTemplate.userId.messageId)
+
+                if (!tempdata[msg.guild.id][msg.channel.id]) {
+                    tempdata[msg.guild.id][msg.channel.id] = {}
                 }
 
-                if (!tempdata[msg.author.id][msg.id].keyExecuting) {
-                    tempdata[msg.author.id][msg.id].keyExecuting = 0
-                }
-
-                if (!tempdata[msg.author.id][msg.id].keywordsExecuted) {
-                    tempdata[msg.author.id][msg.id].keywordsExecuted = []
-                }
-
-                if (!tempdata[msg.author.id][msg.id].arrays) {
-                    tempdata[msg.author.id][msg.id].arrays = {}
-                }
-
-                if (!tempdata[msg.author.id][msg.id].declared) {
-                    tempdata[msg.author.id][msg.id].declared = {}
-                }
-
-                if (!tempdata[msg.author.id][msg.id].keyDeclared) {
-                    tempdata[msg.author.id][msg.id].keyDeclared = {}
-                }
-
-                if (!tempdata[msg.author.id][msg.id].funcDeclared) {
-                    tempdata[msg.author.id][msg.id].funcDeclared = {}
-                }
+                reconcileDataWithTemplate(tempdata[msg.guild.id][msg.channel.id], vars.tempdataTemplate.guildId.channelId, msg)
 
                 started = true
             }
@@ -4399,17 +4427,17 @@ functions.getKeywordsFor = async function (string, msg, isBot, { extrakeys = {},
             }
 
             var opts = {
-                extrakeys: extradkeys,
-                extrafuncs: extradfuncs,
+                extraKeys: extraExecKeys,
+                extraFuncs: extraExecFuncs,
                 ownermode: ownermode
             }
 
             switch (keydata.type) {
                 case 'key':
                     var keyName = keydata.match
-                    var key = special.keys[keyName] || extradkeys[keyName]
+                    var key = special.keys[keyName] || extraExecKeys[keyName]
                     var keyCut = keyName
-                    if (key === undefined) var keyCut = keyName.substring(1); key = special.keys[keyCut] || extradkeys[keyCut]
+                    if (key === undefined) var keyCut = keyName.substring(1); key = special.keys[keyCut] || extraExecKeys[keyCut]
 
                     if (!ownermode && (key.limit != undefined && equalValues(tempdata[msg.author.id][msg.id].keywordsExecuted, keyName) >= key.limit) ||
                         (key.cmdconnected && data.guildData[msg.guild.id]?.disabled.find(cmd => cmd.find(n => n === key.cmdconnected)))) {
@@ -4437,9 +4465,9 @@ functions.getKeywordsFor = async function (string, msg, isBot, { extrakeys = {},
 
                 case 'func':
                     var [funcName, match] = keydata.match
-                    var func = special.functions[funcName] || extradfuncs[funcName]
+                    var func = special.functions[funcName] || extraExecFuncs[funcName]
                     var funcCut = funcName
-                    if (func === undefined) funcCut = funcName.substring(0, funcName.length - 1); func = special.functions[funcCut] || extradfuncs[funcCut]
+                    if (func === undefined) funcCut = funcName.substring(0, funcName.length - 1); func = special.functions[funcCut] || extraExecFuncs[funcCut]
                     var m = match
 
                     if (!ownermode && (func.limit != undefined && equalValues(tempdata[msg.author.id][msg.id].keywordsExecuted, funcName) >= func.limit) ||
@@ -4472,11 +4500,10 @@ functions.getKeywordsFor = async function (string, msg, isBot, { extrakeys = {},
                     break
             }
 
-            extradkeys = declaredonly ? { ...tempdata[msg.author.id][msg.id].keyDeclared } : { ...extrakeys, ...tempdata[msg.author.id][msg.id].keyDeclared }
-            extradfuncs = declaredonly ? { ...tempdata[msg.author.id][msg.id].funcDeclared } : { ...extrafuncs, ...tempdata[msg.author.id][msg.id].funcDeclared }
+            declareExtraKeys()
         }
 
-        if (resetattempts) {
+        if (resetAttempts) {
             if (tempdata[msg.author.id][msg.id].keywordsExecuted) {
                 if (tempdata[msg.author.id][msg.id].keywordsExecuted.length) {
                     infoPost(`Took ${(Date.now() - startTime) / 1000} seconds to execute keywords/functions: ${tempdata[msg.author.id][msg.id].keywordsExecuted.map(k => `\`${k}\``).join(', ')}`)
@@ -4488,6 +4515,10 @@ functions.getKeywordsFor = async function (string, msg, isBot, { extrakeys = {},
         if (tempdata[msg.author.id][msg.id].returnValue != undefined) {
             string = tempdata[msg.author.id][msg.id].returnValue
             delete tempdata[msg.author.id][msg.id].returnValue
+        }
+
+        if (tempdata[msg.guild.id][msg.channel.id].returnValue != undefined && started) {
+            string = tempdata[msg.guild.id][msg.channel.id].returnValue
         }
 
         if (tempdata[msg.author.id][msg.id].keyExecuting) {

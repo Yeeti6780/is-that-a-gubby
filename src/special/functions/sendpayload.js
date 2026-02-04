@@ -13,7 +13,7 @@ module.exports = {
         let config = poopy.config
 
         var jopts = { ...opts }
-        jopts.declaredonly = true
+        jopts.declaredOnly = true
 
         var word = await getKeywordsFor(matches[1], msg, isBot, jopts).catch((e) => console.log(e)) ?? matches[1]
 

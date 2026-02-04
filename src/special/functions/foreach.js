@@ -17,14 +17,14 @@ module.exports = {
         for (var index in array) {
             var val = array[index]
             var valOpts = { ...opts }
-            valOpts.extrakeys = { ...valOpts.extrakeys }
+            valOpts.extraKeys = { ...valOpts.extraKeys }
 
-            valOpts.extrakeys._val = {
+            valOpts.extraKeys._val = {
                 func: async () => {
                     return val
                 }
             }
-            valOpts.extrakeys._index = {
+            valOpts.extraKeys._index = {
                 func: async () => {
                     return index
                 }

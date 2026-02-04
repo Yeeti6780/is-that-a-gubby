@@ -9,7 +9,7 @@ module.exports = {
 
         var word = matches[1]
 
-        if (msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.roles.cache.find(role => role.name.match(/mod|dev|admin|owner|creator|founder|staff/ig)) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id) || isBot) {
+        if (msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id) || isBot) {
             for (var uid in tempdata[msg.guild.id][msg.channel.id]) {
                 var userdata = tempdata[msg.guild.id][msg.channel.id][uid]
                 if (userdata?.messageCollector?.stop) {
@@ -17,8 +17,6 @@ module.exports = {
                     delete tempdata[msg.guild.id][msg.channel.id][uid].messageCollector
                 }
             }
-        } else {
-            return 'You need the manage messages permission to use this function.'
         }
 
         return ''

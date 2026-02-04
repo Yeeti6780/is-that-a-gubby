@@ -27,7 +27,13 @@ module.exports = {
         var channelid = channel.id
         var authorid = msg.author.id
 
-        if (msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.roles.cache.find(role => role.name.match(/mod|dev|admin|owner|creator|founder|staff/ig)) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || authorid === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id) || isBot || authorid == bot.user.id) {
+        if (
+            msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) ||
+            msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) ||
+            msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
+            msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id) ||
+            isBot || msg.author.id == bot.user.id
+        ) {
             if (tempdata[guildid][channelid][authorid].messageCollector) {
                 tempdata[guildid][channelid][authorid].messageCollector.stop()
                 delete tempdata[guildid][channelid][authorid].messageCollector
@@ -47,28 +53,28 @@ module.exports = {
                     var content = await getKeywordsFor(m.content ?? '', m, false).catch((e) => console.log(e)) ?? m.content
 
                     var valOpts = { ...opts }
-                    valOpts.extrakeys = { ...valOpts.extrakeys }
-                    valOpts.extrafuncs = { ...valOpts.extrafuncs }
-                    
-                    valOpts.extrakeys._msg = {
+                    valOpts.extraKeys = { ...valOpts.extraKeys }
+                    valOpts.extraFuncs = { ...valOpts.extraFuncs }
+
+                    valOpts.extraKeys._msg = {
                         func: async () => {
                             return content
                         }
                     }
-                    valOpts.extrafuncs.resettimer = {
+                    valOpts.extraFuncs.resettimer = {
                         func: async () => {
                             collector.resetTimer()
                             return ''
                         }
                     }
-                    valOpts.extrafuncs.stop = {
+                    valOpts.extraFuncs.stop = {
                         func: async (matches) => {
                             var word = matches[1]
                             collector.stop(word ? 'time' : 'user')
                             return ''
                         }
                     }
-                    valOpts.extrafuncs.source = {
+                    valOpts.extraFuncs.source = {
                         func: async (matches) => {
                             var word = matches[1]
                             var content = await getKeywordsFor(word, msg, true, opts).catch((e) => console.log(e)) ?? word
@@ -96,7 +102,9 @@ module.exports = {
                     delete tempdata[guildid][channelid][authorid].messageCollector
                     if (reason === 'time') {
                         var valOpts = { ...opts }
-                        valOpts.extrakeys._collected = {
+                        valOpts.extraKeys = { ...valOpts.extraKeys }
+
+                        valOpts.extraKeys._collected = {
                             func: async () => {
                                 return collected.join(' | ')
                             }
@@ -113,11 +121,9 @@ module.exports = {
 
                 deleteMsgData(msg)
             })
-
-            return ''
-        } else {
-            return 'You need the manage messages permission to use this function.'
         }
+
+        return ''
     },
     raw: true,
     potential: {

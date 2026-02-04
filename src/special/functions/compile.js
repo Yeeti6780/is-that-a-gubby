@@ -8,7 +8,7 @@ module.exports = {
     let { axios } = poopy.modules
 
     var declopts = { ...opts }
-    declopts.declaredonly = true
+    declopts.declaredOnly = true
     var word = await getKeywordsFor(matches[1], msg, isBot, declopts).catch(() => { }) ?? ''
 
     var language

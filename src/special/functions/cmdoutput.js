@@ -77,7 +77,7 @@ module.exports = {
                 var content = msg.content
 
                 var ropts = { ...opts }
-                ropts.declaredonly = (command || localCommand).raw
+                ropts.declaredOnly = (command || localCommand).raw
                 args = await getKeywordsFor(args, msg, isBot, ropts).catch(() => { }) ?? args
                 args = (`${commandname}${args ? ` ${args}` : ''}`).split(' ')
                 delete msg.nosend

@@ -402,11 +402,15 @@ module.exports = {
 
                     params.phrase = saidMessage
 
-                    var findCommand = data.guildData[msg.guild.id].localcmds.findIndex(cmd => cmd.name === name.toLowerCase())
+                    var findCommand = data.guildData[msg.guild.id].localcmds.find(cmd => cmd.name === name.toLowerCase())
 
-                    if (findCommand > -1) {
+                    if (findCommand) {
+                        if (findCommand.ownermode && !config.ownerids.find(id => id == msg.author.id)) {
+                            findCommand.ownermode = false
+                        }
+
                         for (var param in params) {
-                            data.guildData[msg.guild.id].localcmds[findCommand][param] = params[param]
+                            findCommand[param] = params[param]
                         }
 
                         if (!msg.nosend) await msg.reply({

@@ -3,7 +3,7 @@ module.exports = {
   desc: "Clones a new array from an existing one, giving it a new name. If it doesn't exist, it'll just create a new one.",
   func: function (matches, msg, _, string) {
     let poopy = this
-    let { splitKeyFunc, regexClean } = poopy.functions
+    let { splitKeyFunc, regexClean, getDeclaredValue } = poopy.functions
     let tempdata = poopy.tempdata
 
     var word = matches[1]
@@ -13,7 +13,7 @@ module.exports = {
     var clone = split[1] ?? '0'
     var phrase = string.replace(new RegExp(`${regexClean(fullword)}\\s*`, 'i'), '')
 
-    var array = tempdata[msg.author.id][msg.id].arrays[name]
+    var array = getDeclaredValue(msg, "arrays", name, false)
     if (!array) return ''
 
     tempdata[msg.author.id][msg.id].arrays[clone] = [...(array || [])]

@@ -14,9 +14,9 @@ module.exports = {
 
     return await replaceAsync(phrase, regexp, async (match) => {
       var valOpts = { ...opts }
-      valOpts.extrakeys = { ...valOpts.extrakeys }
+      valOpts.extraKeys = { ...valOpts.extraKeys }
 
-      valOpts.extrakeys._match = {
+      valOpts.extraKeys._match = {
         func: async () => {
           return match
         }

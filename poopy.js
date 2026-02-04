@@ -622,7 +622,7 @@ class Poopy {
                         ) &&
                         ((!msg.author.bot && msg.author.id != bot.user.id) || config.allowbotusage)
                     ) {
-                        var change = await getKeywordsFor(cmd, msg, false, { resetattempts: true }).catch(async err => {
+                        var change = await getKeywordsFor(cmd, msg, false, { resetAttempts: true }).catch(async err => {
                             await msg.reply({
                                 content: err.stack,
                                 allowedMentions: fetchPingPerms(msg)
@@ -830,7 +830,7 @@ class Poopy {
                                 clearTimeout(t)
                             }, 60000)
                             infoPost(`Command \`${args[0].toLowerCase()}\` used`)
-                            var phrase = await getKeywordsFor(findLocalCmd.phrase, msg, true, { resetattempts: true, ownermode: findLocalCmd.ownermode }).catch((e) => console.log(e)) ?? 'error'
+                            var phrase = await getKeywordsFor(findLocalCmd.phrase, msg, true, { resetAttempts: true, ownermode: findLocalCmd.ownermode }).catch((e) => console.log(e)) ?? 'error'
 
                             var increaseCount = !!phrase.trim()
 
@@ -934,7 +934,7 @@ class Poopy {
                                         clearTimeout(t)
                                     }, 60000)
                                     infoPost(`Command \`${similarCmds[0].name}\` used`)
-                                    var phrase = findLocalCmd ? (await getKeywordsFor(findLocalCmd.phrase, msg, true, { resetattempts: true, ownermode: findLocalCmd.ownermode }).catch((e) => console.log(e)) ?? 'error') : 'error'
+                                    var phrase = findLocalCmd ? (await getKeywordsFor(findLocalCmd.phrase, msg, true, { resetAttempts: true, ownermode: findLocalCmd.ownermode }).catch((e) => console.log(e)) ?? 'error') : 'error'
 
                                     var increaseCount = !!phrase.trim()
 
@@ -1080,8 +1080,8 @@ class Poopy {
                         delete channelData.forceResponse
 
                         var res = await getKeywordsFor(forceres.res, msg, true, {
-                            resetattempts: true,
-                            extrakeys: {
+                            resetAttempts: true,
+                            extraKeys: {
                                 _msg: {
                                     func: async () => {
                                         return msg.content

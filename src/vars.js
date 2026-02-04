@@ -345,6 +345,14 @@ vars.shieldStatsDisplayInfo = [
     }
 ]
 
+vars.keywordStats = {
+    declared: {},
+    keyDeclared: {},
+    funcDeclared: {},
+    arrays: {},
+    returnValue: undefined
+}
+
 vars.dataTemplate = {
     botData: {
         messages: 0,
@@ -357,6 +365,7 @@ vars.dataTemplate = {
         crons: [],
         starboards: []
     },
+
     userData: {
         userId: {
             username: "",
@@ -371,6 +380,7 @@ vars.dataTemplate = {
             ...vars.battleStats
         }
     },
+
     guildData: {
         guildId: {
             prefix: undefined,
@@ -458,6 +468,8 @@ vars.tempdataTemplate = {
                 processing: false
             },
 
+            ...vars.keywordStats,
+
             userId: {
                 lastMessage: 0,
                 messageCollector: undefined,
@@ -493,11 +505,7 @@ vars.tempdataTemplate = {
             keyExecuting: 0,
             keywordsExecuted: [],
 
-            declared: {},
-            keyDeclared: {},
-            funcDeclared: {},
-            arrays: {},
-            returnValue: undefined
+            ...vars.keywordStats
         }
     }
 }

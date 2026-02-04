@@ -73,8 +73,8 @@ async function send(payload) {
             var content = typeof payload == 'object' ? (payload.content ?? '') : payload
             var m = msg
             var r = await getKeywordsFor(forceres.res, m, true, {
-                resetattempts: true,
-                extrakeys: {
+                resetAttempts: true,
+                extraKeys: {
                     _msg: {
                         func: async () => {
                             return content

@@ -98,8 +98,8 @@ for (var Discord of modules.Discord) {
             var content = typeof payload == 'object' ? (payload.content ?? '') : payload
             var msg = forceres.msg
             var res = await getKeywordsFor(forceres.res, msg, true, {
-                resetattempts: true,
-                extrakeys: {
+                resetAttempts: true,
+                extraKeys: {
                     _msg: {
                         func: async () => {
                             return content
@@ -159,8 +159,8 @@ for (var Discord of modules.Discord) {
             var content = typeof payload == 'object' ? (payload.content ?? '') : payload
             var msg = message
             var res = await getKeywordsFor(forceres.res, msg, true, {
-                resetattempts: true,
-                extrakeys: {
+                resetAttempts: true,
+                extraKeys: {
                     _msg: {
                         func: async () => {
                             return content
@@ -230,8 +230,8 @@ for (var Discord of modules.Discord) {
                 var content = typeof payload == 'object' ? (payload.content ?? '') : payload
                 var msg = interaction
                 var res = await getKeywordsFor(forceres.res, msg, true, {
-                    resetattempts: true,
-                    extrakeys: {
+                    resetAttempts: true,
+                    extraKeys: {
                         _msg: {
                             func: async () => {
                                 return content

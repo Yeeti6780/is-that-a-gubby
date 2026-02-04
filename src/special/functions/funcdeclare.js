@@ -20,9 +20,9 @@ module.exports = {
                 var split = splitKeyFunc(word)
 
                 var valOpts = { ...opts }
-                valOpts.extrafuncs = { ...valOpts.extrakeys }
+                valOpts.extraFuncs = { ...valOpts.extraFuncs }
 
-                valOpts.extrafuncs.val = {
+                valOpts.extraFuncs.val = {
                     func: async function (matches, msg, isBot, _, opts) {
                         var word = matches[1]
                         var index = Number(word.replace(/\+/g, '')) <= 0 ? 0 : Math.round(Number(word.replace(/\+/g, ''))) || 0
