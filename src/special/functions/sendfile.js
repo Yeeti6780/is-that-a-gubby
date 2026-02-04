@@ -1,5 +1,5 @@
 module.exports = {
-    helpf: '(url | name)',
+    helpf: '(url | name | message)',
     desc: 'Sends the file with that URL to the channel. Has the default cooldown of course.',
     func: async function (matches, msg, isBot, _, opts) {
         let poopy = this
@@ -11,9 +11,10 @@ module.exports = {
         let config = poopy.config
 
         var word = matches[1]
-        var split = splitKeyFunc(word, { args: 2 })
+        var split = splitKeyFunc(word, { args: 3 })
         var url = split[0]
         var name = split[1]
+        var message = split[2]
         
         if (!url || !(await axios.get(url).catch(() => { }))) return word
 
@@ -84,7 +85,10 @@ module.exports = {
         var fileinfo = await validateFile(url, 'very true').catch(() => { })
         if (!fileinfo) return word
         var filepath = await downloadFile(fileinfo.buffer, fileinfo.name, { buffer: true })
-        await sendFile(msg, filepath, fileinfo.name, { name: name || fileinfo.name })
+        await sendFile(msg, filepath, fileinfo.name, {
+            name: name || fileinfo.name,
+            content: message
+        })
 
         return ''
     },
