@@ -259,7 +259,8 @@
         "cmds": [
             "addtojson",
             "displayjson",
-            "removefromjson"
+            "removefromjson",
+            "updatefromjson"
         ],
         "description": "Exclusive to some people for editing the JSONs used by Poopy."
     },
