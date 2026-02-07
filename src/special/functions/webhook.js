@@ -83,14 +83,6 @@ module.exports = {
 
         data.guildData[msg.guild.id].members[msg.author.id].coolDown = (data.guildData[msg.guild.id].members[msg.author.id].coolDown || Date.now()) + 2500 / ((msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerId) ? 5 : 1)
 
-        if (
-            msg.channel.type === Discord.ChannelType.PublicThread ||
-            msg.channel.type === Discord.ChannelType.PrivateThread ||
-            msg.channel.type === Discord.ChannelType.AnnouncementThread
-        ) {
-            return 'Webhooks can\'t be used here.'
-        }
-
         for (var i = 0; i < name.length; i++) {
             var letter = name[i]
             if (letter !== ' ') {

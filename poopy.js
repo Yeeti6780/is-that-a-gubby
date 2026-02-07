@@ -524,11 +524,6 @@ class Poopy {
                 if (
                     msg.type === DiscordTypes.InteractionType.ApplicationCommand ||
                     !(origcontent || msg.attachments.size || msg.embeds.length || msg.stickers.size) ||
-                    (
-                        msg.channel.type === Discord.ChannelType.PublicThread ||
-                        msg.channel.type === Discord.ChannelType.PrivateThread ||
-                        msg.channel.type === Discord.ChannelType.AnnouncementThread
-                    ) ||
                     !(
                         customHook ||
                         data.guildData[msg.guild.id].members[msg.author.id].impostor ||

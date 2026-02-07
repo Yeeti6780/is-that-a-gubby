@@ -4042,18 +4042,27 @@ functions.createWebhook = async function (msg) {
     let poopy = this
     let bot = poopy.bot
     let tempdata = poopy.tempdata
+    let { Discord } = poopy.modules
 
-    var webhooks = tempdata[msg.guild.id][msg.channel.id].webhooks ?? await msg.channel.fetchWebhooks().then(w => [...w.values()]).catch(() => [])
-    tempdata[msg.guild.id][msg.channel.id].webhooks = webhooks
+    var isThread = msg.channel.type === Discord.ChannelType.PublicThread ||
+        msg.channel.type === Discord.ChannelType.PrivateThread ||
+        msg.channel.type === Discord.ChannelType.AnnouncementThread
+
+    var channel = isThread ? msg.channel.parent : msg.channel
+
+    if (!tempdata[msg.guild.id][channel.id]) tempdata[msg.guild.id][channel.id] = {}
+
+    var webhooks = tempdata[msg.guild.id][channel.id].webhooks ?? await channel.fetchWebhooks().then(w => [...w.values()]).catch(() => [])
+    tempdata[msg.guild.id][channel.id].webhooks = webhooks
 
     var findWebhooks = []
 
     if (webhooks?.length) findWebhooks = webhooks.filter(webhook => bot.user === webhook.owner)
 
     while (findWebhooks.length < Math.min(15 - webhooks.length, 5)) {
-        var createdWebhook = await msg.channel.createWebhook({
+        var createdWebhook = await channel.createWebhook({
             name: `Poopyhook`,
-            avatar: 'https://cdn.discordapp.com/attachments/760223418968047629/835923489834664056/poopy2.png'
+            avatar: 'https://i.imgur.com/5e2sZpQ.png'
         }).catch(() => { })
 
         if (!createdWebhook) return
@@ -4073,15 +4082,25 @@ functions.sendWebhook = async function (msg, payload) {
     let poopy = this
     let tempdata = poopy.tempdata
     let { createWebhook, createLog } = poopy.functions
+    let { Discord } = poopy.modules
 
     var err
 
     var webhook = await createWebhook(msg).catch(() => { })
     if (!webhook) return
 
+    var isThread = msg.channel.type === Discord.ChannelType.PublicThread ||
+        msg.channel.type === Discord.ChannelType.PrivateThread ||
+        msg.channel.type === Discord.ChannelType.AnnouncementThread
+
+    var channel = isThread ? msg.channel.parent : msg.channel
+
+    if (isThread) payload.threadId = msg.channel.id
+
     var webhookMsg = await webhook.send(payload).catch((e) => err = e)
     if (err && err.message == "Unknown Webhook") {
-        tempdata[msg.guild.id][msg.channel.id].webhooks = await msg.channel.fetchWebhooks().then(w => [...w.values()]).catch(() => [])
+        if (!tempdata[msg.guild.id][channel.id]) tempdata[msg.guild.id][channel.id] = {}
+        tempdata[msg.guild.id][channel.id].webhooks = await channel.fetchWebhooks().then(w => [...w.values()]).catch(() => [])
 
         webhook = await createWebhook(msg).catch(() => { })
         if (webhook) webhookMsg = await webhook.send(payload).catch(() => { })
