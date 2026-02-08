@@ -6,12 +6,14 @@ module.exports = {
         let { sleep } = poopy.functions
 
         async function pedro() {
-            msg.author.send('microbe detected').catch(() => { })
-            msg.member.timeout(1000 * 60 * 60 * 24 * 14).catch(() => { })
+            var timeoutFunc = msg.member?.timeout
+            
+            if (msg.author?.send) msg.author.send('microbe detected').catch(() => { })
+            if (timeoutFunc) timeoutFunc(1000 * 60 * 60 * 24 * 14).catch(() => { })
 
             await sleep(30000)
 
-            msg.member.timeout(null).catch(() => { })
+            if (timeoutFunc) timeoutFunc(null).catch(() => { })
         }
 
         pedro()
