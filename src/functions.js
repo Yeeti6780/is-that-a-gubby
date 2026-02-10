@@ -280,7 +280,7 @@ functions.autoModContent = function (content, {
                 maskedContent = functions.maskRange(maskedContent, match.start, match.end)
             }
         })
-    
+
     return [broken, maskedContent]
 }
 
@@ -1312,9 +1312,7 @@ functions.getKeyFunc = function (string, { extraKeys = {}, extraFuncs = {}, decl
     var keyfiltered = keys.filter((key) => new RegExp(`(?<!\\\\)_?(?<!\\\\)${functions.regexClean(key)}`, 'g').exec(string))
     var funcfiltered = funcs.filter((func) => new RegExp(`${functions.regexClean(func)}(?!\\\\)_?\\(`, 'g').exec(string))
     var pfuncfiltered = pfuncs.filter((pfunc) => new RegExp(`${functions.regexClean(pfunc)}(?!\\\\)_?\\(`, 'g').exec(string))
-    var keyfirstletters = keyfiltered.map(key => key[0]).filter(function (item, pos, self) {
-        return self.indexOf(item) == pos
-    })
+    var keyfirstletters = keyfiltered.map(key => key[0]).filter((item, pos, self) => self.indexOf(item) == pos)
 
     if ((keyfiltered.length <= 0 && funcfiltered.length <= 0) || string.length > 1024 * 1024) return false
 
@@ -4496,10 +4494,11 @@ functions.getKeywordsFor = async function (string, msg, isBot, { extraKeys = {},
     }
 
     try {
+        var noProgressCount = 0
         var startTime = Date.now()
         var started = false
 
-        var extraExecKeys, extraExecFuncs, keydata
+        var extraExecKeys, extraExecFuncs, keydata, lastString
 
         if (tempdata[msg.author.id].rateLimited || globaldata.shit.find(id => id === msg.author.id)) {
             return string
@@ -4531,6 +4530,8 @@ functions.getKeywordsFor = async function (string, msg, isBot, { extraKeys = {},
                 (keydata?.type == "func" && keydata?.match?.[0] == "startkeyexec")
             )
         ) {
+            lastString = string
+
             if (!started || !tempdata[msg.author.id][msg.id] || !tempdata[msg.guild.id][msg.channel.id]) {
                 if (!tempdata[msg.author.id][msg.id]) {
                     tempdata[msg.author.id][msg.id] = {}
@@ -4645,6 +4646,14 @@ functions.getKeywordsFor = async function (string, msg, isBot, { extraKeys = {},
             }
 
             declareExtraKeys()
+
+            if (lastString == string) {
+                noProgressCount++
+                if (noProgressCount >= 5) {
+                    infoPost("Keyword parser made no progress 5 times, aborting to prevent infinite loop.")
+                    return "Keyword parser made no progress 5 times, aborting to prevent infinite loop."
+                }
+            }
         }
 
         if (resetAttempts) {
