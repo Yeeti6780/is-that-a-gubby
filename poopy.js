@@ -993,7 +993,7 @@ class Poopy {
 
             if (
                 origcontent && ((!(msg.author.bot) && msg.author.id != bot.user.id) || config.allowbotusage)
-                && data.guildData[msg.guild?.id].read?.some(
+                && data.guildData[msg.guild?.id]?.read?.some(
                     id => id == msg.channel?.id || id == msg.channel?.parent?.id || id == msg.channel?.parent?.parent?.id
                 )
             ) {

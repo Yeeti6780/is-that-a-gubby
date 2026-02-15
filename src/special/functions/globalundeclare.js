@@ -7,8 +7,8 @@ module.exports = {
 
         var word = matches[1]
 
-        delete tempdata[msg.guild.id][msg.channel.id].declared[`{${word}}`]
-        delete tempdata[msg.guild.id][msg.channel.id].keyDeclared[`{${word}}`]
+        delete tempdata[msg.guild.id][msg.channel.id].declared[`[{${word}}]`]
+        delete tempdata[msg.guild.id][msg.channel.id].keyDeclared[`[{${word}}]`]
         
         return ""
     }

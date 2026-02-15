@@ -4356,7 +4356,10 @@ functions.dmSupport = function (msg) {
     if (!msg.author && msg.user) msg.author = msg.user
     if (!msg.user && msg.author) msg.user = msg.author
 
-    if (!msg.member && (msg.user || msg.author)) Object.defineProperty(msg, 'member', {
+    if (
+        (!msg.member && (msg.user || msg.author)) ||
+        msg.member && (!msg.member.displayAvatarURL)
+    ) Object.defineProperty(msg, 'member', {
         value: (msg.user || msg.author),
         writable: true
     })

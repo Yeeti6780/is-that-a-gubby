@@ -6,7 +6,7 @@ module.exports = {
         let tempdata = poopy.tempdata
 
         var word = matches[1]
-        var isDeclared = tempdata[msg.guild.id][msg.channel.id].keyDeclared[`{${word}}`] != undefined
+        var isDeclared = tempdata[msg.guild.id][msg.channel.id].keyDeclared[`[{${word}}]`] != undefined
         
         return isDeclared ? "true" : ""
     }

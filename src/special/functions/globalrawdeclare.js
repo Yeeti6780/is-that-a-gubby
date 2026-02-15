@@ -1,6 +1,6 @@
 module.exports = {
     helpf: '(name | value)',
-    desc: "Globally declares a variable with the name and value specified, but keywords and functions don't execute automatically. Variables can be used by typing in {variablename}.",
+    desc: "Globally declares a variable with the name and value specified, but keywords and functions don't execute automatically. Global variables can be used by typing in [{variablename}].",
     func: async function (matches, msg, isBot, string, opts) {
         let poopy = this
         let { splitKeyFunc, getKeywordsFor, regexClean } = poopy.functions
@@ -13,10 +13,10 @@ module.exports = {
         name = regexClean(name)
         var value = split[1] ?? ''
         var phrase = string.replace(new RegExp(`${regexClean(fullword)}\\s*`, 'i'), '')
-        tempdata[msg.guild.id][msg.channel.id].declared[`{${name}}`] = value.replace(new RegExp(`\\{${name}\\}`, 'ig'), tempdata[msg.guild.id][msg.channel.id].declared[`{${name}}`] || '')
-        tempdata[msg.guild.id][msg.channel.id].keyDeclared[`{${name}}`] = {
+        tempdata[msg.guild.id][msg.channel.id].declared[`[{${name}}]`] = value.replace(new RegExp(`\\[\\{${name}\\}\\]`, 'ig'), tempdata[msg.guild.id][msg.channel.id].declared[`[{${name}}]`] || '')
+        tempdata[msg.guild.id][msg.channel.id].keyDeclared[`[{${name}}]`] = {
             func: async function (msg, isBot, _, opts) {
-                return await getKeywordsFor(value.replace(new RegExp(`\\{${name}\\}`, 'ig'), tempdata[msg.guild.id][msg.channel.id].declared[`{${name}}`] || ''), msg, isBot, opts).catch(() => { }) ?? ''
+                return await getKeywordsFor(value.replace(new RegExp(`\\[\\{${name}\\}\\]`, 'ig'), tempdata[msg.guild.id][msg.channel.id].declared[`[{${name}}]`] || ''), msg, isBot, opts).catch(() => { }) ?? ''
             },
             declared: true
         }
