@@ -1288,7 +1288,7 @@ functions.getKeyFunc = function (string, { extraKeys = {}, extraFuncs = {}, decl
         }
     }
     for (var k in extraKeys)
-        if (!declaredOnly || (declaredOnly && k.declared))
+        if (!declaredOnly || (declaredOnly && extraKeys[k].declared))
             keylist[k] = extraKeys[k]
 
     for (var f in funclist) {
@@ -1302,7 +1302,7 @@ functions.getKeyFunc = function (string, { extraKeys = {}, extraFuncs = {}, decl
     }
 
     for (var f in extraFuncs)
-        if (!declaredOnly || (declaredOnly && f.declared))
+        if (!declaredOnly || (declaredOnly && extraFuncs[f].declared))
             funclist[f] = extraFuncs[f]
 
     var keys = Object.keys(keylist).sort((a, b) => b.length - a.length)
@@ -1462,7 +1462,7 @@ functions.splitKeyFunc = function (string, { extraFuncs = {}, args = Infinity, s
         }
     }
     for (var f in extraFuncs)
-        if (!declaredOnly || (declaredOnly && f.declared))
+        if (!declaredOnly || (declaredOnly && extraFuncs[f].declared))
             funclist[f] = extraFuncs[f]
 
     var funcs = Object.keys(funclist).sort((a, b) => b.length - a.length)
@@ -4533,6 +4533,7 @@ functions.getKeywordsFor = async function (string, msg, isBot, { extraKeys = {},
                 (keydata?.type == "func" && keydata?.match?.[0] == "startkeyexec")
             )
         ) {
+            console.log(keydata)
             lastString = string
 
             if (!started || !tempdata[msg.author.id][msg.id] || !tempdata[msg.guild.id][msg.channel.id]) {
