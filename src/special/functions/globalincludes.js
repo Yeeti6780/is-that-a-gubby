@@ -15,6 +15,5 @@ module.exports = {
         if (!array) return ''
 
         return array.includes(val) ? val : ''
-    },
-    raw: true
+    }
 }
