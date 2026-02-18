@@ -3160,8 +3160,7 @@ functions.displayShieldsShop = async function (channel, who, reply, shopObject, 
 }
 
 functions.createCollector = function ({
-    id, type,
-    time = Infinity,
+    id, type, time,
     filter = () => true
 } = {}) {
     let poopy = this
@@ -3172,11 +3171,12 @@ functions.createCollector = function ({
     collector.id = id
     collector.type = type
     collector.collected = []
-    collector.timeout = setTimeout(() => collector.stop("time"), time)
-    collector.resetTimer = collector.timeout.refresh
+    collector.resetTimer = time != null ? collector.timeout.refresh : () => { }
+
+    if (time != null) collector.timeout = setTimeout(() => collector.stop("time"), time)
 
     collector.collect = (...val) => {
-        if (!filter(val[0])) return null
+        if (!filter(...val)) return null
         collector.collected.push(...val)
         collector.emit("collect", ...val)
     }
@@ -3184,7 +3184,7 @@ functions.createCollector = function ({
     collector.stop = (reason) => {
         const collectorIndex = tempdata.collectors.findIndex(c => c == collector)
         if (collectorIndex > -1) tempdata.collectors.splice(collectorIndex, 1)
-        clearTimeout(collector.timeout)
+        if (collector.timeout) clearTimeout(collector.timeout)
         collector.emit("end", collector.collected, reason ?? "user")
     }
 
@@ -6320,7 +6320,7 @@ functions.queryPage = function (channel, who, page, lastPage, interaction) {
     let poopy = this
     let bot = poopy.bot
     let config = poopy.config
-    let { dmSupport, parseNumber } = poopy.functions
+    let { dmSupport, parseNumber, createCollector } = poopy.functions
     let { Discord } = poopy.modules
 
     var newpage = page
@@ -6329,7 +6329,10 @@ functions.queryPage = function (channel, who, page, lastPage, interaction) {
         if (config.useReactions) {
             var goMessage = await channel.send('Which page would you like to go...?').catch(() => { })
 
-            var pageCollector = channel.createMessageCollector({ time: 30000 })
+            var pageCollector = createCollector({
+                id: `${channel.id}_${who}`,
+                type: "message", time: 30000
+            })
 
             pageCollector.on('collect', (msg) => {
                 dmSupport(msg)

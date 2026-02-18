@@ -22,7 +22,7 @@ module.exports = {
     ],
     execute: async function (msg, args) {
         let poopy = this
-        let { cleverbot, dmSupport, getKeywordsFor, getOption, fetchPingPerms, deleteMsgData } = poopy.functions
+        let { cleverbot, dmSupport, getKeywordsFor, getOption, fetchPingPerms, deleteMsgData, createCollector } = poopy.functions
         let tempdata = poopy.tempdata
         let bot = poopy.bot
 
@@ -67,7 +67,10 @@ module.exports = {
             }
 
             var filter = m => !m.author.bot && m.author.id != bot.user.id && m.author.id === msg.author.id
-            var collector = channel.createMessageCollector({ filter, time: 30000 })
+            var collector = createCollector({
+                id: `${channel.id}_${msg.author.id}`,
+                type: "message", filter, time: 30000
+            })
 
             tempdata[guildid][channelid][authorid].messageCollector = collector
 

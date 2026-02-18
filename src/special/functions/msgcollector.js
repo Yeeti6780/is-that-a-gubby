@@ -8,7 +8,7 @@ module.exports = {
         '**_collected** - Used when the collector stops running, containing all collected messages.',
     func: async function (matches, msg, isBot, _, opts) {
         let poopy = this
-        let { splitKeyFunc, getKeywordsFor, dmSupport, fetchPingPerms, deleteMsgData } = poopy.functions
+        let { splitKeyFunc, getKeywordsFor, dmSupport, fetchPingPerms, deleteMsgData, createCollector } = poopy.functions
         let { DiscordTypes } = poopy.modules
         let config = poopy.config
         let data = poopy.data
@@ -41,7 +41,11 @@ module.exports = {
 
             var filter = m => (config.allowbotusage || (data.guildData[msg.guild.id].chaos && !m.webhookId) || !m.author.bot) && m.author.id != bot.user.id
             var collected = []
-            var collector = channel.createMessageCollector({ filter, time: !(bypassLimit && !split[1]) ? timeout * 1000 : undefined })
+            var collector = createCollector({
+                id: `${channelid}_${authorid}`,
+                type: "message", filter,
+                time: !(bypassLimit && !split[1]) ? timeout * 1000 : undefined
+            })
 
             tempdata[guildid][channelid][authorid].messageCollector = collector
 

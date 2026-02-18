@@ -598,6 +598,10 @@ class Poopy {
                 msg.delete().catch(() => { })
             }
 
+            tempdata.collectors.filter(
+                c => c.id.startsWith(msg.channel.id) && c.type == "message"
+            ).forEach(collector => collector.collect(msg))
+
             async function executeCommand() {
                 var executed = false
 

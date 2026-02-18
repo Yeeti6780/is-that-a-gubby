@@ -20,11 +20,11 @@ module.exports = {
         let poopy = this
         let commands = poopy.commands
         let data = poopy.data
-        let { similarity, navigateEmbed } = poopy.functions
+        let { similarity, navigateEmbed, createCollector } = poopy.functions
         let config = poopy.config
         let bot = poopy.bot
         let vars = poopy.vars
-            
+
         var page = 1
         var pageindex = args.indexOf('-page')
         if (pageindex > -1) {
@@ -53,7 +53,7 @@ module.exports = {
 
             if (fCmds.length) {
                 if (page > fCmds.length) page = fCmds.length
-                
+
                 fCmds.sort((a, b) =>
                     Math.abs(1 - similarity(a.name.find(name => name.toLowerCase().includes(saidMessage.toLowerCase())), saidMessage)) -
                     Math.abs(1 - similarity(b.name.find(name => name.toLowerCase().includes(saidMessage.toLowerCase())), saidMessage))
@@ -143,21 +143,21 @@ module.exports = {
 
         if (bot.user.id == "789189158639501312") {
             var idiot = await bot.users.fetch("464438783866175489").catch(() => { })
-            
+
             var thankEmbed = {
                 "title": `Poopy Help`,
                 "description": "**hey there, umm.. thank you so much for using this silly bot!**\n\n" +
-                    
+
                     "it really means a lot to me considering the fact it's a project that exists since late 2020... " +
                     "somehow, even with its VERY outdated code, it still manages to bring joy by making stupid gifs and videos...\n\n" +
-                    
+
                     "...ok enough rambling, here's some links:\n" +
                     `- **website:** <https://poopybot.vercel.app> ([privacy policy](<https://poopybot.vercel.app/privacy>) | [terms of service](<https://poopybot.vercel.app/tos>))\n` +
                     `- **invite:** <https://discord.com/oauth2/authorize?client_id=789189158639501312&scope=bot%20applications.commands&permissions=275415166152>\n` +
                     `- **discord:** <https://discord.com/invite/kGY3BDedFp>\n` +
                     `- **github:** <https://github.com/raleighed/poopy>\n` +
                     `- **donate:** <https://ko-fi.com/raleighed> (this helps poopy stay alive)\n\n` +
-                    
+
                     `-# (...will poopy truly live forever this time?)`,
                 "color": 0x472604,
                 "footer": {
@@ -204,7 +204,10 @@ module.exports = {
             function: async (page) => new Promise(async resolve => {
                 var goMessage = await dmChannel.send(`Which category would you like to go... Being case sensitive, we have:\n${Object.keys(categoryOptions).map(c => `- ${c}`).join('\n')}`).catch(() => { })
 
-                var pageCollector = dmChannel.createMessageCollector({ time: 30000 })
+                var pageCollector = createCollector({
+                    id: `${dmChannel.id}_${msg.author.id}`,
+                    type: "message", time: 30000
+                })
 
                 var newpage = page
 
