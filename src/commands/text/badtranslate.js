@@ -100,7 +100,7 @@ module.exports = {
             lastlanguage = currentlanguage
             currentlanguage = i == repeat - 2 ? target : Object.keys(vars.languages)[Math.floor(Math.random() * Object.keys(vars.languages).length)]
             if (lmessage && i != repeat - 1 && !msg.nosend) {
-                await lmessage.edit(`Translating from ${vars.languages[lastlanguage]} to ${vars.languages[currentlanguage]}. (${output})`).catch(() => { })
+                await (msg?.isUserApp ? msg.editReply : lmessage.edit).call(msg?.isUserApp ? msg : lmessage, `Translating from ${vars.languages[lastlanguage]} to ${vars.languages[currentlanguage]}. (${output})`).catch(() => { })
             }
         }
 

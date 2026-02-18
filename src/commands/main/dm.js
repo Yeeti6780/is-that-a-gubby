@@ -136,10 +136,10 @@ module.exports = {
                     allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
                 if (pending) {
-                    pending.edit(send ? 'You can send DMs to the user now.' : 'blocked on twitter').catch(() => { })
+                    (msg?.isUserApp ? msg.editReply : pending.edit).call(msg?.isUserApp ? msg : pending, send ? 'You can send DMs to the user now.' : 'blocked on twitter').catch(() => { })
                 }
             } else {
-                pending.edit('Couldn\'t send a message to this user. Make sure they share any of the servers I\'m in, or not have me blocked.').catch(() => { })
+                (msg?.isUserApp ? msg.editReply : pending.edit).call(msg?.isUserApp ? msg : pending, 'Couldn\'t send a message to this user. Make sure they share any of the servers I\'m in, or not have me blocked.').catch(() => { })
             }
         } else {
             if (data.userData[member.id].dms === false && member.id != msg.author.id && !data.guildData[msg.guild.id].chaos) {

@@ -66,7 +66,7 @@ module.exports = {
             var framemessage = await msg.reply(`Found 0 images.`).catch(() => { })
 
             var frameeditinterval = setInterval(() => {
-                if (framemessage) framemessage.edit(`Found ${validfilecount} images.`).catch(() => { })
+                if (framemessage) (msg?.isUserApp ? msg.editReply : framemessage.edit).call(msg?.isUserApp ? msg : framemessage, `Found ${validfilecount} images.`).catch(() => { })
             }, 5000)
 
             async function inspect(url) {

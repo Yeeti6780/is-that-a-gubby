@@ -1621,13 +1621,13 @@ functions.yesno = async function (channel, content, who, btdata, reply, keepCont
 
             collector.on('end', (_, reason) => {
                 if (reason == 'time') {
-                    yesnoMsg.edit({
+                    (reply?.isUserApp ? reply.editReply : yesnoMsg.edit).call(reply?.isUserApp ? reply : yesnoMsg, {
                         content: keepContent ? content : 'No response.'
                     }).catch(() => { })
                     yesnoMsg.reactions.removeAll().catch(() => { })
                     resolve(false)
                 } else {
-                    yesnoMsg.delete().catch(() => { })
+                    if (!yesnoMsg.isUserApp) yesnoMsg.delete().catch(() => { })
                 }
             })
 
@@ -1658,13 +1658,13 @@ functions.yesno = async function (channel, content, who, btdata, reply, keepCont
 
             collector.on('end', (_, reason) => {
                 if (reason == 'time') {
-                    yesnoMsg.edit({
+                    (reply?.isUserApp ? reply.editReply : yesnoMsg.edit).call(reply?.isUserApp ? reply : yesnoMsg, {
                         content: keepContent ? content : 'No response.',
                         components: []
                     }).catch(() => { })
                     resolve(false)
                 } else {
-                    yesnoMsg.delete().catch(() => { })
+                    if (!yesnoMsg.isUserApp) yesnoMsg.delete().catch(() => { })
                 }
             })
         }
@@ -1904,9 +1904,9 @@ functions.navigateEmbed = async function (channel, pageFunc, results, who, extra
                     if (allowedMentions) sendObject.allowedMentions = allowedMentions
 
                     if (config.textEmbeds) sendObject.content = resultEmbed
-                    else sendObject.embeds = [resultEmbed]
+                    else sendObject.embeds = [resultEmbed];
 
-                    resultsMsg.edit(sendObject).catch(() => { })
+                    (reply?.isUserApp ? reply.editReply : resultsMsg.edit).call(reply?.isUserApp ? reply : resultsMsg, sendObject).catch(() => { })
                 }
                 usingButton = false
             }
@@ -1922,9 +1922,9 @@ functions.navigateEmbed = async function (channel, pageFunc, results, who, extra
             if (allowedMentions) sendObject.allowedMentions = allowedMentions
 
             if (config.textEmbeds) sendObject.content = resultEmbed
-            else sendObject.embeds = [resultEmbed]
+            else sendObject.embeds = [resultEmbed];
 
-            resultsMsg.edit(sendObject).catch(() => { })
+            (reply?.isUserApp ? reply.editReply : resultsMsg.edit).call(reply?.isUserApp ? reply : resultsMsg, sendObject).catch(() => { })
 
             resultsMsg.reactions.removeAll().catch(() => { })
             if (endFunc) endFunc(reason, page, resultsMsg)
@@ -1943,7 +1943,6 @@ functions.navigateEmbed = async function (channel, pageFunc, results, who, extra
 
             if (!(button.user.id === who && ((button.user.id !== bot.user.id && !button.user.bot) || config.allowbotusage)) || usingButton) {
                 button.deferUpdate().catch(() => { })
-                console.log("nope im done")
                 return
             }
 
@@ -1953,15 +1952,12 @@ functions.navigateEmbed = async function (channel, pageFunc, results, who, extra
                 usingButton = true
                 collector.resetTimer()
 
-                console.log("lets see that page function")
                 var newpage = await buttonData.function(page, button, resultsMsg, collector)
                 button.deferUpdate().catch(() => { })
-                console.log("we did it")
 
                 if (buttonData.page) {
                     if (newpage < 1 || newpage > results || newpage == page) {
                         usingButton = false
-                        console.log("nope return again")
                         return
                     }
 
@@ -1971,7 +1967,6 @@ functions.navigateEmbed = async function (channel, pageFunc, results, who, extra
                     var sendObject = {
                         components: components.slice()
                     }
-                    console.log("the page has funced")
 
                     if (selectMenu) {
                         var menuRow = new Discord.ActionRowBuilder()
@@ -1990,10 +1985,9 @@ functions.navigateEmbed = async function (channel, pageFunc, results, who, extra
                     if (allowedMentions) sendObject.allowedMentions = allowedMentions
 
                     if (config.textEmbeds) sendObject.content = resultEmbed
-                    else sendObject.embeds = [resultEmbed]
+                    else sendObject.embeds = [resultEmbed];
 
-                    resultsMsg.edit(sendObject).catch(() => { })
-                    console.log("editerd")
+                    (reply?.isUserApp ? reply.editReply : resultsMsg.edit).call(reply?.isUserApp ? reply : resultsMsg, sendObject).catch(() => { })
                 }
                 usingButton = false
             }
@@ -2011,9 +2005,9 @@ functions.navigateEmbed = async function (channel, pageFunc, results, who, extra
             if (allowedMentions) sendObject.allowedMentions = allowedMentions
 
             if (config.textEmbeds) sendObject.content = resultEmbed
-            else sendObject.embeds = [resultEmbed]
+            else sendObject.embeds = [resultEmbed];
 
-            resultsMsg.edit(sendObject).catch(() => { })
+            (reply?.isUserApp ? reply.editReply : resultsMsg.edit).call(reply?.isUserApp ? reply : resultsMsg, sendObject).catch(() => { })
 
             if (endFunc) endFunc(reason, page, resultsMsg)
         })
@@ -2182,9 +2176,9 @@ functions.rainmaze = async function (channel, who, reply, w = 8, h = 6) {
         }
 
         if (config.textEmbeds) rainObject.content = `${raindraw.description}\n\n${raindraw.fields.map(f => `**${f.name}** - ${f.value}`).join('\n')}`
-        else rainObject.embeds = [raindraw]
+        else rainObject.embeds = [raindraw];
 
-        rainMsg.edit(rainObject).catch(() => { })
+        (reply?.isUserApp ? reply.editReply : rainMsg.edit).call(reply?.isUserApp ? reply : rainMsg, rainObject).catch(() => { })
     }
 
     if (config.useReactions) {
@@ -2479,7 +2473,7 @@ functions.displayShops = async function (msg, shopType, shopMsg) {
             shopMsg = await (msg ?? msg.channel)[msg ? 'reply' : 'send'](shopObject)
                 .catch((e) => console.log(e))
         else
-            shopMsg.edit(shopObject).catch((e) => console.log(e))
+            (msg?.isUserApp ? msg.editReply : shopMsg.edit).call(msg?.isUserApp ? msg : shopMsg, shopObject).catch((e) => console.log(e))
 
         if (!shopMsg) throw new Error(`Couldn't send shop to channel`)
 
@@ -2529,7 +2523,7 @@ functions.displayShops = async function (msg, shopType, shopMsg) {
             if (usingReactions) shopMsg.reactions.removeAll().catch(() => { })
             else shopObject.components = []
 
-            if (shopMsg && reason != 'switch') shopMsg.edit(shopObject).catch(() => { })
+            if (shopMsg && reason != 'switch') (msg?.isUserApp ? msg.editReply : shopMsg.edit).call(msg?.isUserApp ? msg : shopMsg, shopObject).catch(() => { })
         })
 
         return instruction
@@ -2730,7 +2724,7 @@ functions.displayUpgradesShop = async function (channel, who, reply, shopObject,
             else shopObject.components = []
         } else if (!config.useReactions) shopObject.components = components
 
-        if (shopMsg) shopMsg.edit(shopObject).catch(() => { })
+        if (shopMsg) (reply?.isUserApp ? reply.editReply : shopMsg.edit).call(reply?.isUserApp ? reply : shopMsg, shopObject).catch(() => { })
     }
 
     await updateShop().catch((e) => console.log(e))
@@ -3022,7 +3016,7 @@ functions.displayShieldsShop = async function (channel, who, reply, shopObject, 
             else shopObject.components = []
         } else if (usingComponents) shopObject.components = components
 
-        if (shopMsg) shopMsg.edit(shopObject).catch(() => { })
+        if (shopMsg) (reply?.isUserApp ? reply.editReply : shopMsg.edit).call(reply?.isUserApp ? reply : shopMsg, shopObject).catch(() => { })
     }
 
     await updateShop().catch((e) => console.log(e))
@@ -4574,7 +4568,6 @@ functions.getKeywordsFor = async function (string, msg, isBot, { extraKeys = {},
                 (keydata?.type == "func" && keydata?.match?.[0] == "startkeyexec")
             )
         ) {
-            console.log(keydata)
             lastString = string
 
             if (!started || !tempdata[msg.author.id][msg.id] || !tempdata[msg.guild.id][msg.channel.id]) {

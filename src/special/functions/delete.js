@@ -14,6 +14,7 @@ module.exports = {
             if (messageToDelete.catch) messageToDelete = await messageToDelete.catch(() => { })
 
             if (messageToDelete) {
+                if (msg.isUserApp && messageToDelete.id == msg.replied.id) await msg.deleteReply().catch(() => { })
                 await messageToDelete.delete().catch(() => { })
             }
         } else {

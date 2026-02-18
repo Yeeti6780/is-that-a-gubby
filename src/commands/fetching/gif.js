@@ -73,7 +73,8 @@ module.exports = {
                 style: DiscordTypes.ButtonStyle.Danger,
                 function: async (_, __, resultsMsg, collector) => {
                     collector.stop()
-                    resultsMsg.delete().catch(() => { })
+                    if (msg.isUserApp) msg.deleteReply().catch(() => { })
+                    else resultsMsg.delete().catch(() => { })
                 },
                 page: false
             }

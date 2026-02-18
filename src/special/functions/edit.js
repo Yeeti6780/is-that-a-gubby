@@ -22,7 +22,7 @@ module.exports = {
                     return ''
                 }
 
-                await messageToEdit.edit({
+                await (msg?.isUserApp ? msg.editReply : messageToEdit.edit).call(msg?.isUserApp ? msg : messageToEdit, {
                     allowedMentions: fetchPingPerms(msg),
                     content: phrase
                 }).catch(() => { })

@@ -118,7 +118,7 @@ module.exports = {
                 }).join('\n'))
 
                 var clipeditinterval = setInterval(() => {
-                    if (clipsmessage) clipsmessage.edit(`Processing clip ${clipsmade + 1} out of ${clips * repetitions}.`).catch(() => { })
+                    if (clipsmessage) (msg?.isUserApp ? msg.editReply : clipsmessage.edit).call(msg?.isUserApp ? msg : clipsmessage, `Processing clip ${clipsmade + 1} out of ${clips * repetitions}.`).catch(() => { })
                 }, 5000)
 
                 for (var h = 0; h < repetitions; h++) {
@@ -210,7 +210,7 @@ module.exports = {
                 }
 
                 clearInterval(clipeditinterval)
-                if (clipsmessage) clipsmessage.edit(`Concatenating clips.`).catch(() => { })
+                if (clipsmessage) (msg?.isUserApp ? msg.editReply : clipsmessage.edit).call(msg?.isUserApp ? msg : clipsmessage, `Concatenating clips.`).catch(() => { })
 
                 await execPromise(`ffmpeg -f concat -i ${filepath}/clips/list.txt -preset ${findpreset(args)} -c:v libx264 -pix_fmt yuv420p ${filepath}/output.mp4`)
                 if (clipsmessage && !msg.isUserApp) clipsmessage.delete().catch(() => { })
@@ -234,7 +234,7 @@ module.exports = {
                 }).join('\n'))
 
                 var clipeditinterval = setInterval(() => {
-                    clipsmessage.edit(`Processing clip ${clipsmade + 1} out of ${clips * repetitions}.`).catch(() => { })
+                    (msg?.isUserApp ? msg.editReply : clipsmessage.edit).call(msg?.isUserApp ? msg : clipsmessage, `Processing clip ${clipsmade + 1} out of ${clips * repetitions}.`).catch(() => { })
                 }, 5000)
 
                 for (var h = 0; h < repetitions; h++) {
@@ -262,7 +262,7 @@ module.exports = {
                 }
 
                 clearInterval(clipeditinterval)
-                if (clipsmessage) clipsmessage.edit(`Concatenating clips.`).catch(() => { })
+                if (clipsmessage) (msg?.isUserApp ? msg.editReply : clipsmessage.edit).call(msg?.isUserApp ? msg : clipsmessage, `Concatenating clips.`).catch(() => { })
 
                 await execPromise(`ffmpeg -f concat -i ${filepath}/clips/list.txt -preset ${findpreset(args)} -c:v libx264 -pix_fmt yuv420p ${filepath}/output.mp4`)
                 if (clipsmessage && !msg.isUserApp) clipsmessage.delete().catch(() => { })
@@ -291,7 +291,7 @@ module.exports = {
             }).join('\n'))
 
             var clipeditinterval = setInterval(() => {
-                clipsmessage.edit(`Processing clip ${clipsmade + 1} out of ${clips * repetitions}.`).catch(() => { })
+                (msg?.isUserApp ? msg.editReply : clipsmessage.edit).call(msg?.isUserApp ? msg : clipsmessage, `Processing clip ${clipsmade + 1} out of ${clips * repetitions}.`).catch(() => { })
             }, 5000)
 
             for (var h = 0; h < repetitions; h++) {
@@ -319,7 +319,7 @@ module.exports = {
             }
 
             clearInterval(clipeditinterval)
-            if (clipsmessage) clipsmessage.edit(`Concatenating clips.`).catch(() => { })
+            if (clipsmessage) (msg?.isUserApp ? msg.editReply : clipsmessage.edit).call(msg?.isUserApp ? msg : clipsmessage, `Concatenating clips.`).catch(() => { })
 
             await execPromise(`ffmpeg -f concat -i ${filepath}/clips/list.txt -filter_complex "[0:v]split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} -gifflags -offsetting ${filepath}/output.gif`)
             if (clipsmessage && !msg.isUserApp) clipsmessage.delete().catch(() => { })
@@ -347,7 +347,7 @@ module.exports = {
             }).join('\n'))
 
             var clipeditinterval = setInterval(() => {
-                clipsmessage.edit(`Processing clip ${clipsmade + 1} out of ${clips * repetitions}.`).catch(() => { })
+                (msg?.isUserApp ? msg.editReply : clipsmessage.edit).call(msg?.isUserApp ? msg : clipsmessage, `Processing clip ${clipsmade + 1} out of ${clips * repetitions}.`).catch(() => { })
             }, 5000)
 
             for (var h = 0; h < repetitions; h++) {
@@ -373,7 +373,7 @@ module.exports = {
             }
 
             clearInterval(clipeditinterval)
-            if (clipsmessage) clipsmessage.edit(`Concatenating clips.`).catch(() => { })
+            if (clipsmessage) (msg?.isUserApp ? msg.editReply : clipsmessage.edit).call(msg?.isUserApp ? msg : clipsmessage, `Concatenating clips.`).catch(() => { })
 
             await execPromise(`ffmpeg -f concat -i ${filepath}/clips/list.txt -preset ${findpreset(args)} ${filepath}/output.mp3`)
             if (clipsmessage && !msg.isUserApp) clipsmessage.delete().catch(() => { })

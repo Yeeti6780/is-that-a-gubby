@@ -177,7 +177,7 @@ module.exports = {
                 else shieldsObject.components = []
             } else if (usingComponents) shieldsObject.components = components
 
-            if (shieldsMsg) shieldsMsg.edit(shieldsObject).catch(() => { })
+            if (shieldsMsg) (msg?.isUserApp ? msg.editReply : shieldsMsg.edit).call(msg?.isUserApp ? msg : shieldsMsg, shieldsObject).catch(() => { })
         }
 
         await updateShield().catch((e) => console.log(e))
