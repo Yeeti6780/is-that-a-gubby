@@ -3169,13 +3169,6 @@ functions.createCollector = function ({
 
     const collector = new EventEmitter()
 
-    if (time != null) collector.timeout = setTimeout(() => collector.stop("time"), time)
-
-    collector.id = id
-    collector.type = type
-    collector.collected = []
-    collector.resetTimer = time != null ? collector.timeout.refresh : () => { }
-
     collector.collect = (...val) => {
         if (!filter(...val)) return null
         collector.collected.push(...val)
@@ -3188,6 +3181,13 @@ functions.createCollector = function ({
         if (collector.timeout) clearTimeout(collector.timeout)
         collector.emit("end", collector.collected, reason ?? "user")
     }
+
+    if (time != null) collector.timeout = setTimeout(() => collector.stop("time"), time)
+
+    collector.id = id
+    collector.type = type
+    collector.collected = []
+    collector.resetTimer = time != null ? collector.timeout.refresh : () => { }
 
     tempdata.collectors.push(collector)
 
