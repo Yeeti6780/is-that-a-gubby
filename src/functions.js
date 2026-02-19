@@ -3168,12 +3168,13 @@ functions.createCollector = function ({
     let { EventEmitter } = poopy.modules
 
     const collector = new EventEmitter()
+
+    if (time != null) collector.timeout = setTimeout(() => collector.stop("time"), time)
+
     collector.id = id
     collector.type = type
     collector.collected = []
     collector.resetTimer = time != null ? collector.timeout.refresh : () => { }
-
-    if (time != null) collector.timeout = setTimeout(() => collector.stop("time"), time)
 
     collector.collect = (...val) => {
         if (!filter(...val)) return null
