@@ -8,7 +8,7 @@ module.exports = {
         var word = matches[1]
 
         return (word
-            ? Object.values(tempdata[msg.guild.id][msg.channel.id]).some(u => u.messageCollector)
+            ? Object.values(tempdata[msg.guild.id][msg.channel.id]).some(u => u?.messageCollector)
             : !!tempdata[msg.guild.id][msg.channel.id][msg.author.id].messageCollector) || ''
     }
 }
