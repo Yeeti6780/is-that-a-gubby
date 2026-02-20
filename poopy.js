@@ -667,7 +667,7 @@ class Poopy {
                         ).forEach(collector => collector.collect(msg))
                     }
 
-                    if (origcontent.toLowerCase().startsWith(prefix.toLowerCase()) && ((!msg.author.bot && msg.author.id != bot.user.id) || config.allowbotusage)) {
+                    if (origcontent.toLowerCase().startsWith(prefix.toLowerCase()) && !isRestricted && ((!msg.author.bot && msg.author.id != bot.user.id) || config.allowbotusage)) {
                         data.guildData[msg.guild.id].lastuse = Date.now()
                         data.guildData[msg.guild.id].channels[msg.channel.id].lastuse = Date.now()
 
@@ -979,24 +979,10 @@ class Poopy {
                 return executed
             }
 
-            if (isRestricted) {
-                await getUrls(msg, {
-                    update: true,
-                    string: origcontent
-                }).catch(async err => {
-                    try {
-                        await msg.reply({
-                            content: err.stack,
-                            allowedMentions: fetchPingPerms(msg)
-                        }).catch(() => { })
-                    } catch (_) { }
-                })
-            }
-
-            var executed = !isRestricted ? await executeCommand().catch(async (e) => await msg.reply({
+            var executed = await executeCommand().catch(async (e) => await msg.reply({
                 content: e.stack,
                 allowedMentions: fetchPingPerms(msg)
-            }).catch(() => { })) : false
+            }).catch(() => { }))
 
             msg.content = origcontent = allcontents.length > 0 ? allcontents.join(' -|- ') : origcontent
 
