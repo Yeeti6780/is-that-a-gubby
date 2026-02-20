@@ -513,6 +513,7 @@ class Poopy {
                 ? origcontent.split(/\s*-\|-\s*/) : [origcontent]
             var allcontents = []
             var webhooked = false
+            var collected = false
 
             var isRestricted = data.guildData[msg.guild.id].restricted.some(
                 id => id == msg.channel?.id || id == msg.channel?.parent?.id || id == msg.channel?.parent?.parent?.id
@@ -601,10 +602,6 @@ class Poopy {
                 msg.delete().catch(() => { })
             }
 
-            tempdata.collectors.filter(
-                c => c.id.startsWith(msg.channel.id) && c.type == "message"
-            ).forEach(collector => collector.collect(msg))
-
             async function executeCommand() {
                 var executed = false
 
@@ -662,6 +659,13 @@ class Poopy {
                     })
 
                     if (tempdata[msg.guild.id][msg.channel.id].shutUp) break
+
+                    if (!collected && msg.type != DiscordTypes.InteractionType.ApplicationCommand) {
+                        collected = true
+                        tempdata.collectors.filter(
+                            c => c.id.startsWith(msg.channel.id) && c.type == "message"
+                        ).forEach(collector => collector.collect(msg))
+                    }
 
                     if (origcontent.toLowerCase().startsWith(prefix.toLowerCase()) && ((!msg.author.bot && msg.author.id != bot.user.id) || config.allowbotusage)) {
                         data.guildData[msg.guild.id].lastuse = Date.now()
