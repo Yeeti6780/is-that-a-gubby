@@ -2017,6 +2017,8 @@ functions.navigateEmbed = async function (channel, pageFunc, results, who, extra
             if (endFunc) endFunc(reason, page, resultsMsg)
         })
     }
+
+    return resultsMsg
 }
 
 functions.rainmaze = async function (channel, who, reply, w = 8, h = 6) {

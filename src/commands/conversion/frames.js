@@ -45,14 +45,13 @@ module.exports = {
             return await new Promise(async resolve => {
                 output.on('finish', async () => {
                     var frames = fs.readdirSync(`${filepath}/frames`)
-                    var catboxframes = {}
 
                     if (msg.nosend) {
                         resolve(await sendFile(msg, filepath, `output.zip`))
                         return
                     }
 
-                    await navigateEmbed(msg.channel, async (page, ended) => {
+                    let framesMsg = await navigateEmbed(msg.channel, async (page, ended) => {
                         var framepath = `${filepath}/frames/${frames[page - 1]}`
 
                         if (config.textEmbeds) return `${framepath}\n\nFrame ${page}/${frames.length}`
@@ -87,7 +86,7 @@ module.exports = {
                     ], undefined, undefined, undefined, (reason) => {
                         if (reason == 'time') fs.rmSync(filepath, { force: true, recursive: true })
                     }, msg)
-                    resolve(catboxframes[frames[0]])
+                    resolve(framesMsg?.embeds[0]?.image?.url)
                 });
 
                 archive.pipe(output)
