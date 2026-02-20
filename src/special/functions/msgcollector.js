@@ -54,7 +54,7 @@ module.exports = {
                     dmSupport(m)
 
                     if (tempdata[msg.guild.id][msg.channel.id].shutUp) return
-                    var content = await getKeywordsFor(m.content ?? '', m, false).catch((e) => console.log(e)) ?? m.content
+                    var content = m.content
 
                     var valOpts = { ...opts }
                     valOpts.extraKeys = { ...valOpts.extraKeys }
