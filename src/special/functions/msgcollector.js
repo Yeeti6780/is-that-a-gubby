@@ -51,8 +51,6 @@ module.exports = {
 
             collector.on('collect', async m => {
                 try {
-                    dmSupport(m)
-
                     if (tempdata[msg.guild.id][msg.channel.id].shutUp) return
                     var content = m.content
 
