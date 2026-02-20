@@ -5623,8 +5623,8 @@ functions.sendFile = async function (msg, filepath, filename, extraOptions) {
 
     var tooLarge = fileBuffer.length > 1024 * 1024 * 10
 
-    if (extraOptions.catbox || tooLarge) {
-        if (!extraOptions.catbox && tooLarge) await msg.reply('The output file is too large, so I\'m uploading it to catbox.moe.').catch(() => { })
+    if (extraOptions.catbox || (tooLarge && !extraOptions.nosend)) {
+        if (!extraOptions.catbox && tooLarge && !extraOptions.nosend) await msg.reply('The output file is too large, so I\'m uploading it to catbox.moe.').catch(() => { })
         infoPost(`Uploading file to catbox.moe`)
         var fileLink = await vars.Catbox.upload(`${filepath}/${filename}`).catch(() => { })
         if (fileLink) {
