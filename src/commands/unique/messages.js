@@ -243,7 +243,6 @@ module.exports = {
                         content: CryptoJS.AES.encrypt(cleanMessage, process.env.AUTH_TOKEN).toString(),
                         timestamp: Number.MAX_SAFE_INTEGER // genius
                     })
-                    data.guildData[msg.guild.id].messages.splice(50000)
 
                     tempdata[msg.guild.id].messages.unshift({
                         id: null,
@@ -251,7 +250,6 @@ module.exports = {
                         content: cleanMessage,
                         timestamp: Number.MAX_SAFE_INTEGER // genius
                     })
-                    tempdata[msg.guild.id].messages.splice(50000)
 
                     if (!msg.nosend) await msg.reply({
                         content: `✅ Added ${cleanMessage}`,
