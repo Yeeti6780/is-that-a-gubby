@@ -20,7 +20,7 @@ module.exports = {
             await msg.reply('Owner only!').catch(() => { })
             return
         } else {
-            var permanent = !!getOption(args, 'permanent', { splice: true, dft: false })
+            var permanent = !getOption(args, 'permanent', { splice: true, dft: false })
 
             if (args[1] === undefined) {
                 await msg.reply('What is the status type?! (Available: **Playing**, **Listening**, **Watching**, **Streaming**, **Competing**)').catch(() => { })

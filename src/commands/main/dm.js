@@ -147,7 +147,7 @@ module.exports = {
                 return
             }
 
-            var infoMessage = !anon ? `${msg.author.tag} from ${msg.guild.name}:\n\n` : ''
+            var infoMessage = !anon && member.id != msg.author.id ? `${msg.author.tag} from ${msg.guild.name}:\n\n` : ''
 
             var dmChannel = await member.createDM().catch(() => { })
             if (!dmChannel) return
