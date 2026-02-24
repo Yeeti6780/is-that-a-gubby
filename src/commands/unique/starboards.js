@@ -58,7 +58,7 @@ module.exports = {
             "name": "emoji",
             "required": false,
             "specifarg": false,
-            "orig": "{emoji}"
+            "orig": "{emoji (can also be ANY)}"
         }],
         "description": "Adds a new starboard with the specified threshold and emoji."
     },
@@ -84,7 +84,7 @@ module.exports = {
             "name": "emoji",
             "required": false,
             "specifarg": false,
-            "orig": "{emoji}"
+            "orig": "{emoji (can also be ANY}"
         }],
         "description": "Edits the starboard config with the specified ID."
     },
@@ -247,18 +247,21 @@ module.exports = {
 
                     let discordEmojiRegex = /^<a?:[a-zA-Z0-9_]+:[0-9]+>$/;
 
+                    if (inputEmoji.toUpperCase() == "ANY") inputEmoji = "ANY";
+
                     if (
                         vars.emojiRegex.test(inputEmoji) ||
-                        discordEmojiRegex.test(inputEmoji)
+                        discordEmojiRegex.test(inputEmoji) ||
+                        inputEmoji == "ANY"
                     ) {
-                        emoji = inputEmoji;
-
                         if (data.botData.starboards.find(
-                            s => s.channelId == channel.id && s.emoji == emoji
+                            s => s.channelId == channel.id && s.emoji == inputEmoji
                         )) {
                             await msg.reply('A starboard with that emoji already exists in the channel.').catch(() => { });
                             return;
                         }
+
+                        emoji = inputEmoji;
 
                         args.splice(1, 1);
                     } else {
@@ -333,15 +336,21 @@ module.exports = {
                     let emojiInput = args[2].trim();
                     let discordEmojiRegex = /^<a?:[a-zA-Z0-9_]+:[0-9]+>$/;
 
-                    if (vars.emojiRegex.test(emojiInput) || discordEmojiRegex.test(emojiInput)) {
-                        starboard.emoji = emojiInput;
+                    if (emojiInput.toUpperCase() == "ANY") emojiInput = "ANY";
 
+                    if (
+                        vars.emojiRegex.test(emojiInput) ||
+                        discordEmojiRegex.test(emojiInput) ||
+                        emojiInput == "ANY"
+                    ) {
                         if (data.botData.starboards.find(
                             s => s.channelId == starboard.channelId && s.emoji == emojiInput && s.id != starboardId
                         )) {
                             await msg.reply('A starboard with that emoji already exists in the channel.').catch(() => { });
                             return;
                         }
+
+                        starboard.emoji = emojiInput;
 
                         updates.push(`emoji to **${emojiInput}**`);
                     } else {
@@ -407,8 +416,8 @@ module.exports = {
         if (!args[1]) {
             var instruction = "**list** - Gets a list of starboards set up in the server.\n" +
                 "**info** <starboardId> - Displays the info of the starboard that has been set up with the respective ID.\n" +
-                "**add** [channel] {threshold} {emoji} (moderator only) - Sets up a new starboard with the specified threshold and emoji.\n" +
-                "**edit** <starboardId> {threshold} {emoji} (moderator only) - Edits the starboard config with the specified ID, if it exists.\n" +
+                "**add** [channel] {threshold} {emoji (can also be ANY)} (moderator only) - Sets up a new starboard with the specified threshold and emoji.\n" +
+                "**edit** <starboardId> {threshold} {emoji (can also be ANY)} (moderator only) - Edits the starboard config with the specified ID, if it exists.\n" +
                 "**delete** <starboardId> (moderator only) - Deletes the starboard config from the server, if it exists."
             if (!msg.nosend) {
                 if (config.textEmbeds) msg.reply(instruction).catch(() => { })
