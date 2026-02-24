@@ -1307,7 +1307,7 @@ class Poopy {
             reaction = msg.reactions.cache.find(r => r.emoji.toString() == emoji) ?? reaction
 
             const starboards = data.botData.starboards.filter(
-                s => s.guildId == msg?.guild?.id && s.emoji == emoji
+                s => s.guildId == msg?.guild?.id && (s.emoji == emoji || s.emoji == "ANY")
             )
 
             if (starboards.length <= 0) return
@@ -1359,7 +1359,7 @@ class Poopy {
 
                 const emojiContent = msg.reactions.cache.filter(
                     r => data.botData.starboards.some(
-                        sb => sb.channelId == starboard.channelId && sb.emoji == r.emoji.toString() && r.count >= sb.threshold
+                        sb => sb.channelId == starboard.channelId && (sb.emoji == r.emoji.toString() || sb.emoji == "ANY") && r.count >= sb.threshold
                     )
                 ).map(r => `${r.emoji.toString()} ${r.count}`).join("  ·  ")
 
