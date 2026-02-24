@@ -5371,6 +5371,7 @@ const googleImgQueue = {
     active: false,
     jobs: []
 }
+let googleImgCooldown = false
 
 functions.processQueue = async function (queue, interval = 15000) {
     if (queue.active || queue.jobs.length === 0) return
@@ -5399,6 +5400,7 @@ functions.fetchImages = async function (query, unsafe, provider = "google") {
     let { enqueue } = poopy.functions
 
     query = query.toLowerCase().trim()
+    unsafe = false
 
     if (tempdata.images[provider][query]) return tempdata.images[provider][query]
 
@@ -5422,6 +5424,8 @@ functions.fetchImages = async function (query, unsafe, provider = "google") {
         }
 
         case "google": {
+            if (googleImgCooldown) return ["https://i.imgur.com/K5kyI8P.png"]
+
             const urlBlacklist = [
                 "https://www.tiktok.com/api",
                 "https://lookaside.instagram.com/seo",
@@ -5436,7 +5440,9 @@ functions.fetchImages = async function (query, unsafe, provider = "google") {
                     queryStringAddition: `&safe=${unsafe ? 'images' : 'active'}`
                 }, async function (error, results) {
                     if (error || !results) {
+                        googleImgCooldown = true
                         resolve(["https://i.imgur.com/K5kyI8P.png"])
+                        setTimeout(() => googleImgCooldown = false, 60_000 * 5)
                         return
                     }
 
