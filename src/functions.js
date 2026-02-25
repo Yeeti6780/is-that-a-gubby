@@ -1,4 +1,4 @@
-const { os, fs, CryptoJS, DiscordTypes } = require('./modules')
+const { os, fs, CryptoJS, DiscordTypes, axios } = require('./modules')
 let vars = require('./vars')
 let functions = {}
 
@@ -213,7 +213,7 @@ functions.parseRegExp = function (pattern, flags = "iu") {
     return new RegExp(pattern, Array.from(flags).join(''))
 }
 
-functions.getAllMatches = function (regex, content) {
+functions.getAllMatches = function (regex, content, group = 0) {
     const matches = []
     const r = new RegExp(regex.source, regex.flags.includes("g") ? regex.flags : regex.flags + "g")
 
@@ -222,7 +222,7 @@ functions.getAllMatches = function (regex, content) {
         matches.push({
             start: match.index,
             end: match.index + match[0].length,
-            text: match[0]
+            text: match[group]
         })
 
         if (match.index === r.lastIndex) r.lastIndex++
@@ -5367,12 +5367,6 @@ functions.userToken = function (id, token) {
     return userTkn ? decrypt(userTkn) : randomKey(token)
 }
 
-const googleImgQueue = {
-    active: false,
-    jobs: []
-}
-let googleImgCooldown = false
-
 functions.processQueue = async function (queue, interval = 15000) {
     if (queue.active || queue.jobs.length === 0) return
     queue.active = true
@@ -5383,7 +5377,7 @@ functions.processQueue = async function (queue, interval = 15000) {
     setTimeout(() => {
         queue.active = false
         functions.processQueue(queue, interval)
-    }, interval)
+    }, interval + Math.floor(Math.random() * 800))
 }
 
 functions.enqueue = function (queue, fn, interval = 15000) {
@@ -5393,16 +5387,39 @@ functions.enqueue = function (queue, fn, interval = 15000) {
     })
 }
 
-functions.fetchImages = async function (query, unsafe, provider = "google") {
+const imgQueries = Object.fromEntries(["google", "startpage"].map(
+    (provider) => [provider, {
+        cooldown: false,
+        active: false,
+        jobs: [],
+        images: {}
+    }]
+))
+
+const axiosInstance = axios.create({
+    withCredentials: true,
+    headers: {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:147.0) Gecko/20100101 Firefox/147.0"
+    }
+})
+
+functions.fetchImages = async function (query, unsafe, provider = "startpage") {
     let poopy = this
-    let tempdata = poopy.tempdata
     let { gis, axios } = poopy.modules
     let { enqueue } = poopy.functions
 
     query = query.toLowerCase().trim()
     unsafe = false
 
-    if (tempdata.images[provider][query]) return tempdata.images[provider][query]
+    if (imgQueries[provider].images[query]) return imgQueries[provider].images[query]
+
+    const urlBlacklist = [
+        "https://www.tiktok.com/api",
+        "https://lookaside.instagram.com/seo",
+        "https://lookaside.fbsbx.com/lookaside/crawler/instagram",
+        "https://lookaside.fbsbx.com/lookaside/crawler/threads",
+        ".svg"
+    ]
 
     switch (provider) {
         case "unsplash": {
@@ -5417,32 +5434,47 @@ functions.fetchImages = async function (query, unsafe, provider = "google") {
             }).then(res => {
                 const images = res.data.results.map(img => img.urls.regular)
 
-                tempdata.images[provider][query] = images
+                imgQueries[provider].images[query] = images
 
                 return images
             })
         }
 
+        case "startpage": {
+            if (imgQueries[provider].cooldown) return ["https://i.imgur.com/K5kyI8P.png"]
+
+            return enqueue(imgQueries[provider], () => axiosInstance.get(`https://www.startpage.com/sp/search?lui=english&language=english&query=${encodeURIComponent(query)}&cat=images&qadf=${unsafe ? 'none' : 'heavy'}`).then((res) => {
+                const resJSON = JSON.parse(res.data.match(/React\.createElement\(UIStartpage\.AppSerpImages, (\{"render".+\})\)/)[1])
+
+                const images = resJSON.render.presenter.regions.mainline
+                    .sort((a, b) => b.presented_count - a.presented_count)
+                    .map((query) => query.results.map(
+                        (result) => result.rawImageUrl ?? decodeURIComponent(result.thumbnailUrl.replace("/av/proxy-image?piurl=", ""))
+                    ))
+                    .flat()
+                    .filter(
+                        (result, i, self) => !urlBlacklist.some(url => result.includes(url))
+                            && self.indexOf(result) == i
+                    )
+
+                imgQueries[provider].images[query] = images
+
+                return images
+            }).catch(() => ["https://i.imgur.com/K5kyI8P.png"]), 5000)
+        }
+
         case "google": {
-            if (googleImgCooldown) return ["https://i.imgur.com/K5kyI8P.png"]
+            if (imgQueries[provider].cooldown) return ["https://i.imgur.com/K5kyI8P.png"]
 
-            const urlBlacklist = [
-                "https://www.tiktok.com/api",
-                "https://lookaside.instagram.com/seo",
-                "https://lookaside.fbsbx.com/lookaside/crawler/instagram",
-                "https://lookaside.fbsbx.com/lookaside/crawler/threads",
-                ".svg"
-            ]
-
-            return enqueue(googleImgQueue, () => new Promise(resolve => {
+            return enqueue(imgQueries[provider], () => new Promise(resolve => {
                 gis({
                     searchTerm: query,
                     queryStringAddition: `&safe=${unsafe ? 'images' : 'active'}`
                 }, async function (error, results) {
                     if (error || !results) {
-                        googleImgCooldown = true
+                        imgQueries[provider].cooldown = true
                         resolve(["https://i.imgur.com/K5kyI8P.png"])
-                        setTimeout(() => googleImgCooldown = false, 60_000 * 5)
+                        setTimeout(() => imgQueries[provider].cooldown = false, 60_000 * 5)
                         return
                     }
 
@@ -5455,11 +5487,11 @@ functions.fetchImages = async function (query, unsafe, provider = "google") {
                             && self.indexOf(result) == i
                     )
 
-                    tempdata.images[provider][query] = images
+                    imgQueries[provider].images[query] = images
 
                     resolve(images)
                 })
-            }))
+            }), 15000)
         }
     }
 }

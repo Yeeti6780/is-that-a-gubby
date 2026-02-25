@@ -444,11 +444,6 @@ vars.tempdataTemplate = {
     discordUrls: {},
     collectors: [],
     crons: [],
-    
-    images: {
-        google: {},
-        unsplash: {}
-    },
 
     channelvideos: [],
     playlistvideos: [],
