@@ -5403,7 +5403,7 @@ const axiosInstance = axios.create({
     }
 })
 
-functions.fetchImages = async function (query, unsafe, provider = "startpage") {
+functions.fetchImages = async function (query, unsafe, provider = "google") {
     let poopy = this
     let { gis, axios } = poopy.modules
     let { enqueue } = poopy.functions
