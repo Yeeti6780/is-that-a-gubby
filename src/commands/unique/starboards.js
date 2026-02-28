@@ -115,7 +115,7 @@ module.exports = {
         var config = poopy.config
         var vars = poopy.vars
         var bot = poopy.bot
-        var { chunkArray, navigateEmbed, generateId, fetchPingPerms } = poopy.functions
+        var { chunkArray, navigateEmbed, generateId, fetchPingPerms, getOption } = poopy.functions
         var { DiscordTypes } = poopy.modules
 
         var options = {
