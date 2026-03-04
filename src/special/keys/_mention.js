@@ -3,6 +3,6 @@ module.exports = {
         let poopy = this
         let bot = poopy.bot
 
-        return !!msg.mentions.has(bot.user.id) || ''
+        return !!msg.mentions.members.find(member => member.user.id === bot.user.id) || ''
     }
 }

@@ -558,7 +558,7 @@ class Poopy {
                 if (msg.reference && !msg.messageSnapshots?.size) {
                     const referenceMsg = await msg.fetchReference().catch(() => { })
                     if (referenceMsg) {
-                        const replyMention = msg.mentions.has(referenceMsg.author.id) ? ` (${referenceMsg.author.toString()})` : ""
+                        const replyMention = msg.mentions.members.find(member => member.user.id === referenceMsg.author.id) ? ` (${referenceMsg.author.toString()})` : ""
                         sendObject.content = `> -# Reply to: ${referenceMsg.url}${replyMention}\n${sendObject.content ?? ""}`
                     }
                 }
@@ -1044,7 +1044,7 @@ class Poopy {
                 }
             } else if (
                 config.allowpingresponses &&
-                msg.mentions.has(bot.user.id) && (
+                msg.mentions.members.find(member => member.user.id === bot.user.id) && (
                     (!msg.author.bot && msg.author.id != bot.user.id) ||
                     config.allowbotusage
                 ) && !executed
@@ -1379,7 +1379,7 @@ class Poopy {
                 else if (msg.reference && !msg.messageSnapshots?.size) {
                     const referenceMsg = await msg.fetchReference().catch(() => { })
                     if (referenceMsg) {
-                        const replyMention = msg.mentions.has(referenceMsg.author.id) ? ` (${referenceMsg.author.toString()})` : ""
+                        const replyMention = msg.mentions.members.find(member => member.user.id === referenceMsg.author.id) ? ` (${referenceMsg.author.toString()})` : ""
                         msgContent = `> -# Reply to: ${referenceMsg.url}${replyMention}\n${origMsg.content ?? ""}`
                     }
                 }
