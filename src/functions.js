@@ -615,14 +615,25 @@ functions.fetchPingPerms = function (msg) {
     const userPings = [...msg.mentions.users.keys()]
     if (!userPings.includes(msg.author.id)) userPings.push(msg.author.id)
 
-    return hasPingPerms ? {
+    console.log("Expected pings:", hasPingPerms ? {
         parse: ['users', 'everyone', 'roles'],
         repliedUser: true
     } : {
         roles: rolePings,
         users: userPings,
         repliedUser: true
-    }
+    })
+
+    return {
+        parse: []
+    }//return hasPingPerms ? {
+    //    parse: ['users', 'everyone', 'roles'],
+    //    repliedUser: true
+    //} : {
+    //    roles: rolePings,
+    //    users: userPings,
+    //    repliedUser: true
+    //}
 }
 
 functions.execPromise = function (code, opts = {}) {
