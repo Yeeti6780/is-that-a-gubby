@@ -21,9 +21,9 @@ module.exports = {
         args[1] = args[1] ?? ' '
 
         if (!(
-            msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) ||
-            msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageWebhooks) ||
-            msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) ||
+            msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageGuild) ||
+            msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageWebhooks) ||
+            msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageMessages) ||
             msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
             msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id) ||
             opts.isBot

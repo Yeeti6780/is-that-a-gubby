@@ -218,8 +218,8 @@ module.exports = {
             },
 
             add: async (msg, args) => {
-                if (!(msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild)
-                    || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages)
+                if (!(msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageGuild)
+                    || msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageMessages)
                     || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator)
                     || msg.author.id === msg.guild.ownerId
                     || config.ownerids.includes(msg.author.id))) {
@@ -306,8 +306,8 @@ module.exports = {
 
 
             edit: async (msg, args) => {
-                if (!(msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild)
-                    || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages)
+                if (!(msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageGuild)
+                    || msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageMessages)
                     || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator)
                     || msg.author.id === msg.guild.ownerId
                     || config.ownerids.includes(msg.author.id))) {
@@ -381,8 +381,8 @@ module.exports = {
             },
 
             delete: async (msg, args) => {
-                if (!(msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild)
-                    || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages)
+                if (!(msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageGuild)
+                    || msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageMessages)
                     || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator)
                     || msg.author.id === msg.guild.ownerId
                     || config.ownerids.includes(msg.author.id))) {

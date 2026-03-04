@@ -607,7 +607,7 @@ functions.fetchPingPerms = function (msg) {
 
     const hasPingPerms = (
         msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
-        msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.MentionEveryone) ||
+        msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.MentionEveryone) ||
         msg.author.id == msg.guild.ownerId
     )
 
@@ -615,25 +615,15 @@ functions.fetchPingPerms = function (msg) {
     const userPings = [...msg.mentions.users.keys()]
     if (!userPings.includes(msg.author.id)) userPings.push(msg.author.id)
 
-    console.log("Expected pings:", hasPingPerms ? {
+    return hasPingPerms ? {
         parse: ['users', 'everyone', 'roles'],
         repliedUser: true
     } : {
+        parse: [],
         roles: rolePings,
         users: userPings,
         repliedUser: true
-    })
-
-    return {
-        parse: []
-    }//return hasPingPerms ? {
-    //    parse: ['users', 'everyone', 'roles'],
-    //    repliedUser: true
-    //} : {
-    //    roles: rolePings,
-    //    users: userPings,
-    //    repliedUser: true
-    //}
+    }
 }
 
 functions.execPromise = function (code, opts = {}) {

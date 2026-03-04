@@ -24,8 +24,8 @@ module.exports = {
         var channelfilter = config.channelfilter
 
         var bypassPerms = (
-            msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) ||
-            msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) ||
+            msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageGuild) ||
+            msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageMessages) ||
             msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
             msg.author.id === msg.guild.ownerId ||
             (config.ownerids.find(id => id == msg.author.id)) ||
@@ -115,7 +115,7 @@ module.exports = {
                     }
 
                     if (command.cooldown) {
-                        data.guildData[msg.guild.id].members[msg.author.id].coolDown = (data.guildData[msg.guild.id].members[msg.author.id].coolDown || Date.now()) + command.cooldown / ((msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerId) && (command.type === 'Text' || command.type === 'Main') ? 5 : 1)
+                        data.guildData[msg.guild.id].members[msg.author.id].coolDown = (data.guildData[msg.guild.id].members[msg.author.id].coolDown || Date.now()) + command.cooldown / ((msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerId) && (command.type === 'Text' || command.type === 'Main') ? 5 : 1)
                     }
 
                     vars.cps++

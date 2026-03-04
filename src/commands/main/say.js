@@ -9,7 +9,7 @@ module.exports = {
 
         await msg.channel.sendTyping().catch(() => { })
         var del = (
-            msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) ||
+            msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageMessages) ||
             msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
             msg.author.id === msg.guild.ownerId ||
             (config.ownerids.find(id => id == msg.author.id))
@@ -37,7 +37,7 @@ module.exports = {
             stickers: msg.stickers,
             tts: (
                 msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
-                msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.SendTTSMessages) ||
+                msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.SendTTSMessages) ||
                 msg.author.id === msg.guild.ownerId
             ) && tts
         }

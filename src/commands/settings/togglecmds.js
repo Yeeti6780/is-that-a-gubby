@@ -77,7 +77,7 @@ module.exports = {
             },
 
             toggle: async (msg, args) => {
-                if (msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerId || (config.ownerids.find(id => id == msg.author.id))) {
+                if (msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerId || (config.ownerids.find(id => id == msg.author.id))) {
                     if (!args[2]) {
                         await msg.reply('You gotta specify a command!')
                         return

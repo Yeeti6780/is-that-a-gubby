@@ -10,7 +10,7 @@ module.exports = {
         let tempdata = poopy.tempdata
 
         await msg.channel.sendTyping().catch(() => { })
-        if (msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id)) {
+        if (msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id)) {
             if (args[1] === undefined && args[2] === undefined) {
                 await msg.reply('How much do I spam?!').catch(() => { })
                 return;
@@ -54,7 +54,7 @@ module.exports = {
                 allowedMentions: fetchPingPerms(msg),
                 files: attachments,
                 stickers: msg.stickers,
-                tts: (msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.SendTTSMessages) || msg.author.id === msg.guild.ownerId) && tts
+                tts: (msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.SendTTSMessages) || msg.author.id === msg.guild.ownerId) && tts
             }
             if (saidMessage) {
                 sendObject.content = saidMessage

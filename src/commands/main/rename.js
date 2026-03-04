@@ -37,8 +37,8 @@ module.exports = {
         let { fetchPingPerms, resolveUser } = poopy.functions
 
         if (!(
-            msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ChangeNickname) ||
-            msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageNicknames) ||
+            msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ChangeNickname) ||
+            msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageNicknames) ||
             msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
             (config.ownerids.find(id => id == msg.author.id))
         )) {
@@ -80,7 +80,7 @@ module.exports = {
         var member = userQuery ? await resolveUser(userQuery, msg.guild, "member").catch(() => { }) : msg.member
 
         if (!member || (member != msg.member && !(
-            msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.ManageNicknames) ||
+            msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageNicknames) ||
             msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
             (config.ownerids.find(id => id == msg.author.id))
         ))) {
