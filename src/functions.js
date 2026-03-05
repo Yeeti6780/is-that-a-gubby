@@ -807,7 +807,7 @@ functions.gatherData = async function (msg) {
 
         if (!data.botData.leaderboard[msg.author.id]) data.botData.leaderboard[msg.author.id] = {}
 
-        data.botData.leaderboard[msg.author.id].tag ??= msg.author.tag ?? msg.author.id
+        data.botData.leaderboard[msg.author.id].tag = msg.author.tag ?? data.botData.leaderboard[msg.author.id].tag ?? msg.author.id
         data.botData.leaderboard[msg.author.id].bucks = data.userData[msg.author.id].bucks
     }
 
@@ -2185,7 +2185,7 @@ functions.rainmaze = async function (channel, who, reply, w = 8, h = 6) {
 
                 if (!data.botData.leaderboard[who]) data.botData.leaderboard[who] = {}
 
-                data.botData.leaderboard[who].tag ??= tag ?? who
+                data.botData.leaderboard[who].tag = tag ?? data.botData.leaderboard[who].tag ?? who
                 data.botData.leaderboard[who].bucks = data.userData[who].bucks
             }
         }
@@ -4876,14 +4876,14 @@ functions.dealDamage = function (damage, subjUser, subjData, subjShield, subjShi
     if (otherSubjId) {
         if (!data.botData.leaderboard[otherSubjId]) data.botData.leaderboard[otherSubjId] = {}
 
-        data.botData.leaderboard[otherSubjId].tag ??= otherSubjUser.tag ?? otherSubjUser.user?.tag ?? otherSubjUser.id
+        data.botData.leaderboard[otherSubjId].tag = otherSubjUser.tag ?? otherSubjUser.user?.tag ?? data.botData.leaderboard[otherSubjId].tag ?? otherSubjUser.id
         data.botData.leaderboard[otherSubjId].bucks = otherSubjData.bucks ?? 20
     }
 
     if (subjId) {
         if (!data.botData.leaderboard[subjId]) data.botData.leaderboard[subjId] = {}
 
-        data.botData.leaderboard[subjId].tag ??= subjUser.tag ?? subjUser.user?.tag ?? subjUser.id
+        data.botData.leaderboard[subjId].tag = subjUser.tag ?? subjUser.user?.tag ?? data.botData.leaderboard[subjId].tag ?? subjUser.id
         data.botData.leaderboard[subjId].bucks = subjData.bucks ?? 20
     }
 
