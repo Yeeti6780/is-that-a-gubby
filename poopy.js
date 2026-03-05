@@ -842,7 +842,7 @@ class Poopy {
                             infoPost(`Command \`${args[0].toLowerCase()}\` used`)
                             var phrase = await getKeywordsFor(findLocalCmd.phrase, msg, true, { resetAttempts: true, ownermode: findLocalCmd.ownermode }).catch((e) => console.log(e)) ?? 'error'
 
-                            var increaseCount = !(!!phrase.trim() && !msg.replied && msg.nosend)
+                            var increaseCount = !!phrase.trim()
 
                             if (increaseCount) {
                                 if (
@@ -946,7 +946,7 @@ class Poopy {
                                     infoPost(`Command \`${similarCmds[0].name}\` used`)
                                     var phrase = findLocalCmd ? (await getKeywordsFor(findLocalCmd.phrase, msg, true, { resetAttempts: true, ownermode: findLocalCmd.ownermode }).catch((e) => console.log(e)) ?? 'error') : 'error'
 
-                                    var increaseCount = !(!!phrase.trim() && !msg.replied && msg.nosend)
+                                    var increaseCount = !!phrase.trim()
 
                                     if (increaseCount) {
                                         if (
