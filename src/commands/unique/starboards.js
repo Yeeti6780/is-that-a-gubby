@@ -294,11 +294,12 @@ module.exports = {
                 tempdata[msg.guild.id][channel.id].starboardMessages ??= {}
 
                 if (!msg.nosend) {
-                    await msg.reply(
-                        `✅ Added starboard \`${starboardId}\` in <#${channel.id}>.\n` +
-                        `-# **Threshold:** ${threshold}\n` +
-                        `-# **Emoji:** ${emoji}`
-                    ).catch(() => { });
+                    await msg.reply({
+                        content: `✅ Added starboard \`${starboardId}\` in <#${channel.id}>.\n` +
+                           `-# **Threshold:** ${threshold}\n` +
+                           `-# **Emoji:** ${emoji}`,
+                        allowedMentions: fetchPingPerms(msg)
+                    }).catch(() => { });
                 }
 
                 return `✅ Added starboard \`${starboardId}\`.`;
@@ -372,8 +373,9 @@ module.exports = {
                 }
 
                 if (!msg.nosend) {
-                    await msg.reply(
-                        `✅ Updated starboard \`${starboardId}\`. (${updates.join(" and ")})`
+                    await msg.reply({
+                        content: `✅ Updated starboard \`${starboardId}\`. (${updates.join(" and ")})`,
+                        allowedMentions: fetchPingPerms(msg)
                     ).catch(() => { });
                 }
 
@@ -411,9 +413,10 @@ module.exports = {
                     delete tempdata[removed.guildId][removed.channelId].starboardMessages;
 
                 if (!msg.nosend) {
-                    await msg.reply(
-                        `✅ Removed starboard \`${removed.id}\` assigned to <#${removed.channelId}>.`
-                    ).catch(() => { });
+                    await msg.reply({
+                        content: `✅ Removed starboard \`${removed.id}\` assigned to <#${removed.channelId}>.`,
+                        allowedMentions: fetchPingPerms(msg)
+                    }).catch(() => { });
                 }
 
                 return `✅ Removed starboard \`${removed.id}\`.`;
