@@ -376,7 +376,7 @@ module.exports = {
                     await msg.reply({
                         content: `✅ Updated starboard \`${starboardId}\`. (${updates.join(" and ")})`,
                         allowedMentions: fetchPingPerms(msg)
-                    ).catch(() => { });
+                    }).catch(() => { });
                 }
 
                 return `✅ Updated starboard \`${starboardId}\`.`;
