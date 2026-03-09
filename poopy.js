@@ -581,11 +581,13 @@ class Poopy {
                         data.guildData[msg.guild.id].channels[msg.channel.id].battling == 2 ? "enemies" :
                             "all"
 
+                    var allBattlers = poopy.json.battlerJSON.battlers.concat(poopy.json.battlerJSON.enemies)
+
                     var battlers = type == "all"
-                        ? poopy.json.battlerJSON.battlers.concat(poopy.json.battlerJSON.enemies)
+                        ? allBattlers
                         : poopy.json.battlerJSON[type]
 
-                    var battler = battlers.reduce((closestBattler, currentBattler) =>
+                    var battler = allBattlers.find(battler => battler.custom.some(id => id == msg.author.id)) ?? battlers.reduce((closestBattler, currentBattler) =>
                         similarity(currentBattler.name ?? "", msg.member.displayName ?? msg.author.displayName ?? "")
                             > similarity(closestBattler.name ?? "", msg.member.displayName ?? msg.author.displayName ?? "")
                             ? currentBattler : closestBattler

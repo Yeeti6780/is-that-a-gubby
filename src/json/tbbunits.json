@@ -766,19 +766,24 @@
         },
         {
             "name": "Deinx94",
-            "image": "https://cdn.discordapp.com/attachments/1050863721238515772/1399092400994914354/Render_Secret_Deinx94.png"
+            "image": "https://cdn.discordapp.com/attachments/1050863721238515772/1399092400994914354/Render_Secret_Deinx94.png",
+            "custom": ["613501149282172970"],
+            "joke": true
         },
         {
             "name": "WhatsApp Hammer",
-            "image": "https://cdn.discordapp.com/attachments/1050863721238515772/1398707813030821921/Render_WhatsappHammer.png"
+            "image": "https://cdn.discordapp.com/attachments/1050863721238515772/1398707813030821921/Render_WhatsappHammer.png",
+            "joke": true
         },
         {
             "name": "WhatsApp Banhammer",
-            "image": "https://cdn.discordapp.com/attachments/1050863721238515772/1402082913708937330/Render_Secret_WhatsAppBanhammer.png"
+            "image": "https://cdn.discordapp.com/attachments/1050863721238515772/1402082913708937330/Render_Secret_WhatsAppBanhammer.png",
+            "joke": true
         },
         {
             "name": "Rapper Pal",
-            "image": "https://cdn.discordapp.com/attachments/1415073653585875004/1461057596084588614/Rapper_Pal.png"
+            "image": "https://cdn.discordapp.com/attachments/1415073653585875004/1461057596084588614/Rapper_Pal.png",
+            "joke": true
         }
     ],
     "enemies": [
@@ -2084,59 +2089,80 @@
         },
         {
             "name": "Thief King",
-            "image": "https://cdn.discordapp.com/attachments/1050863721238515772/1399145121466941471/Render_Enemy_ThiefKing.png"
+            "image": "https://cdn.discordapp.com/attachments/1050863721238515772/1399145121466941471/Render_Enemy_ThiefKing.png",
+            "joke": true
         },
         {
             "name": "Colossus",
-            "image": "https://cdn.discordapp.com/attachments/853246754791358495/1458987519814270998/Colossus.png"
+            "image": "https://cdn.discordapp.com/attachments/853246754791358495/1458987519814270998/Colossus.png",
+            "joke": true
         },
         {
             "name": "Giant Pigface",
-            "image": "https://cdn.discordapp.com/attachments/1453987001127665789/1454188459173613742/Render_Secret_Enemy_GiantPigface.png"
+            "image": "https://cdn.discordapp.com/attachments/1453987001127665789/1454188459173613742/Render_Secret_Enemy_GiantPigface.png",
+            "joke": true
         },
         {
             "name": "Gubby Samurai",
-            "image": "https://cdn.discordapp.com/attachments/853246754791358495/1459202665597898794/Render_Secret_GubbySamurai.png"
+            "image": "https://cdn.discordapp.com/attachments/853246754791358495/1459202665597898794/Render_Secret_GubbySamurai.png",
+            "joke": true
         },
         {
             "name": "Crossweld",
-            "image": "https://cdn.discordapp.com/attachments/1415073653585875004/1460706816710148251/Crossweld_new.png"
+            "image": "https://cdn.discordapp.com/attachments/1415073653585875004/1460706816710148251/Crossweld_new.png",
+            "joke": true
         },
         {
             "name": "Chargeweld",
-            "image": "https://cdn.discordapp.com/attachments/1415073653585875004/1464284855050174538/Chargeweld.png"
+            "image": "https://cdn.discordapp.com/attachments/1415073653585875004/1464284855050174538/Chargeweld.png",
+            "joke": true
         },
         {
             "name": "A.B.S.O.R.B.",
-            "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1462184012725620890/A.B.S.O.R.B..png"
+            "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1462184012725620890/A.B.S.O.R.B..png",
+            "joke": true
         },
         {
             "name": "Venata",
-            "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1463766224797302858/Venata_TBB.png"
+            "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1463766224797302858/Venata_TBB.png",
+            "custom": ["898556800029302824"],
+            "joke": true
         },
         {
             "name": "Nivara",
-            "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1463565874412781568/Nivara.png"
+            "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1463565874412781568/Nivara.png",
+            "custom": ["898556800029302824"],
+            "joke": true
         },
         {
             "name": "Total",
-            "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1463573087374020753/Total.png"
+            "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1463573087374020753/Total.png",
+            "custom": ["468171274489692181"],
+            "joke": true
         },
         {
             "name": "Raleigh",
-            "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1465351733554446626/raleighed.png"
+            "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1465351733554446626/raleighed.png",
+            "custom": ["464438783866175489"],
+            "joke": true
         },
         {
             "name": "Edgar",
-            "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1466537802458988807/Edgar.png"
+            "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1466537802458988807/Edgar.png",
+            "custom": ["454381953693777922"],
+            "joke": true
         },
         {
             "name": "Lauren",
-            "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1466540729886183575/Lauren.png"
+            "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1466540729886183575/Lauren.png",
+            "custom": ["251851887039479808"],
+            "joke": true
         },
         {
             "name": "Robert",
-            "image": "https://cdn.discordapp.com/attachments/1333220680661074062/1468317829290786837/Robert.png"
+            "image": "https://cdn.discordapp.com/attachments/1333220680661074062/1468317829290786837/Robert.png",
+            "custom": ["201072044278939648"],
+            "joke": true
         }
     ]
 }
