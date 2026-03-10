@@ -5,12 +5,12 @@ module.exports = {
     let json = poopy.json
     let { randomChoice } = poopy.functions
 
-    return randomChoice(json.battlerJSON.battlers.concat(json.battlerJSON.enemies)).name
+    return randomChoice(json.battlerJSON.battlers.concat(json.battlerJSON.enemies).filter(b => !b.joke && !b.spoiler && !b.origin)).name
   },
   array: function () {
     let poopy = this
     let json = poopy.json
 
-    return json.battlerJSON.battlers.concat(json.battlerJSON.enemies).map(b => b.name)
+    return json.battlerJSON.battlers.concat(json.battlerJSON.enemies).filter(b => !b.joke && !b.spoiler && !b.origin).map(b => b.name)
   }
 }

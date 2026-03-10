@@ -583,9 +583,11 @@ class Poopy {
 
                     var allBattlers = poopy.json.battlerJSON.battlers.concat(poopy.json.battlerJSON.enemies)
 
-                    var battlers = type == "all"
-                        ? allBattlers
-                        : poopy.json.battlerJSON[type]
+                    var battlers = (
+                        type == "all"
+                            ? allBattlers
+                            : poopy.json.battlerJSON[type]
+                    ).filter(b => !b.custom || (b.custom && !b.ignoreCustomBlacklist))
 
                     var battler = allBattlers.find(battler => battler.custom.some(id => id == msg.author.id)) ?? battlers.reduce((closestBattler, currentBattler) =>
                         similarity(currentBattler.name ?? "", msg.member.displayName ?? msg.author.displayName ?? "")

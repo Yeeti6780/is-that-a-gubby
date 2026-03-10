@@ -3910,7 +3910,11 @@ functions.getUrls = async function (msg, options = {}) {
         {
             regexp: /[0-9]{10,}/g,
             func: async function (id) {
-                var user = await msg.guild.members.fetch(id).catch(() => { }) ?? await bot.users.fetch(id).catch(() => { })
+                var user = msg.guild.members.cache.get(id) ??
+                    await msg.guild.members.fetch(id).catch(() => { }) ??
+                    bot.users.cache.get(id) ??
+                    await bot.users.fetch(id).catch(() => { })
+
                 if (user) {
                     infoPost(`Discord avatar URL detected`)
                     return user.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' })
