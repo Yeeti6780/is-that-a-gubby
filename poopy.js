@@ -589,11 +589,12 @@ class Poopy {
                             : poopy.json.battlerJSON[type]
                     ).filter(b => !b.custom || (b.custom && !b.ignoreCustomBlacklist))
 
-                    var battler = allBattlers.find(battler => battler.custom.some(id => id == msg.author.id)) ?? battlers.reduce((closestBattler, currentBattler) =>
-                        similarity(currentBattler.name ?? "", msg.member.displayName ?? msg.author.displayName ?? "")
-                            > similarity(closestBattler.name ?? "", msg.member.displayName ?? msg.author.displayName ?? "")
-                            ? currentBattler : closestBattler
-                    )
+                    var battler = allBattlers.find(battler => battler.custom && battler.custom.some(id => id == msg.author.id)) ??
+                        battlers.reduce((closestBattler, currentBattler) =>
+                            similarity(currentBattler.name ?? "", msg.member.displayName ?? msg.author.displayName ?? "")
+                                > similarity(closestBattler.name ?? "", msg.member.displayName ?? msg.author.displayName ?? "")
+                                ? currentBattler : closestBattler
+                        )
 
                     turnInto = battler.name
                     sendObject.username = battler.name
