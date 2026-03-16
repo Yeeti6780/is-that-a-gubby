@@ -1009,6 +1009,8 @@
         {
             "name": "Casual Battler",
             "image": "https://cdn.discordapp.com/attachments/853246754791358495/1460414649538314282/Casual_Battler.png",
+            "custom": ["710276888039522316"],
+            "ignoreCustomBlacklist": true,
             "joke": true
         },
         {
