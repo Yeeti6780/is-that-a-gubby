@@ -977,6 +977,36 @@
             "summon": true
         },
         {
+            "name": "Bean Battler",
+            "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1476536426094002237/Bean_Battler_FRIENDLY.png",
+            "alt": "Burrito Battler",
+            "spoiler": true
+        },
+        {
+            "name": "Blaze",
+            "image": "https://cdn.discordapp.com/attachments/1415073653585875004/1474903863189573672/blaze_2.png",
+            "alt": "Micro",
+            "spoiler": true
+        },
+        {
+            "name": "Micro",
+            "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1477450401887420426/micro_replacement.png",
+            "normal": "Blaze",
+            "spoiler": true
+        },
+        {
+            "name": "Gamma",
+            "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1477314830292488252/Gamma_Model_Accurate.png",
+            "alt": "Chartreuse",
+            "spoiler": true
+        },
+        {
+            "name": "Chartreuse",
+            "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1477667027375230996/chartreuse_omg.png",
+            "normal": "Gamma",
+            "spoiler": true
+        },
+        {
             "name": "Casual Battler",
             "image": "https://cdn.discordapp.com/attachments/853246754791358495/1460414649538314282/Casual_Battler.png",
             "joke": true
@@ -2673,31 +2703,37 @@
         {
             "name": "Venomshank",
             "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1452946864776417363/Venomshank.png",
+            "alt": "Dual Venomshank",
             "spoiler": true
         },
         {
             "name": "Chuck",
             "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1452947001871175720/Chuck.png",
+            "alt": "Cartil",
             "spoiler": true
         },
         {
             "name": "Cheez",
             "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1452947001049354385/Cheez.png",
+            "alt": "Chardy",
             "spoiler": true
         },
         {
             "name": "Bean Battler",
-            "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1452947000067883059/Bean_Battler.png",
+            "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1476536426505175143/Bean_Battler.png",
+            "alt": "Burrito Battler",
             "spoiler": true
         },
         {
             "name": "Ghostwalker",
             "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1452946999669297274/Ghostwalker_NEW.png",
+            "alt": "Dual Ghostwalker",
             "spoiler": true
         },
         {
             "name": "Sign Buddy",
             "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1452946999262318653/Sign_Buddy.png",
+            "alt": "Fish Buddy",
             "spoiler": true
         },
         {
@@ -2711,27 +2747,32 @@
         {
             "name": "Pizza Pal",
             "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1452961152199032912/Pizza_Pal.png",
+            "alt": "Delivery Pal",
             "spoiler": true
         },
         {
             "name": "Chef Sarge",
             "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1452999085060521984/Chef_Sarge.png",
+            "alt": "Sargent",
             "boss": true,
             "spoiler": true
         },
         {
             "name": "Duck Battler",
             "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1453141608223477951/Duck_Battler.png",
+            "alt": "EpikDuck Battler",
             "spoiler": true
         },
         {
             "name": "Bouncer",
             "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1453144021387055234/Bouncer.png",
+            "alt": "Cyclist",
             "spoiler": true
         },
         {
             "name": "Drakocage",
             "image": "https://cdn.discordapp.com/attachments/1415073653585875004/1463780346188529675/Drakocage.png",
+            "alt": "Monfined",
             "spoiler": true
         },
         {
@@ -2745,6 +2786,7 @@
         {
             "name": "Funk1d",
             "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1452947155550601370/Funk1d.png",
+            "alt": "the alt form of funk1d",
             "boss": true,
             "spoiler": true
         },
@@ -2765,21 +2807,25 @@
         {
             "name": "Dual Venomshank",
             "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1453398679431155806/Dual_Venomshank.png",
+            "normal": "Venomshank",
             "spoiler": true
         },
         {
             "name": "Cartil",
-            "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1453398680122949835/Cartil.png",
+            "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1478779453567012967/Cartil.png",
+            "normal": "Chuck",
             "spoiler": true
         },
         {
             "name": "Dual Ghostwalker",
             "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1453398680672665680/Dual_Ghostwalker_NEW.png",
+            "normal": "Ghostwalker",
             "spoiler": true
         },
         {
             "name": "Fish Buddy",
             "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1462182455128887328/Fish_Buddy.png",
+            "normal": "Sign Buddy",
             "spoiler": true
         },
         {
@@ -2793,16 +2839,19 @@
         {
             "name": "Delivery Pal",
             "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1453398758275682354/Delivery_Pal_2.png",
+            "normal": "Pizza Pal",
             "spoiler": true
         },
         {
             "name": "Cyclist",
             "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1453398682274762772/Cyclist.png",
+            "normal": "Bouncer",
             "spoiler": true
         },
         {
             "name": "Monfined",
             "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1462182455778742597/Monfined.png",
+            "normal": "Drakocage",
             "spoiler": true
         },
         {
@@ -2848,6 +2897,7 @@
         {
             "name": "A.B.S.O.R.B.",
             "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1462184012725620890/A.B.S.O.R.B..png",
+            "spoiler": true,
             "joke": true
         },
         {
@@ -2891,6 +2941,14 @@
         {
             "name": "Robert",
             "image": "https://cdn.discordapp.com/attachments/1333220680661074062/1468317829290786837/Robert.png",
+            "alt": "Synthwave",
+            "custom": ["201072044278939648"],
+            "joke": true
+        },
+        {
+            "name": "Synthwave",
+            "image": "https://cdn.discordapp.com/attachments/1415073653585875004/1475216330411217140/Synthwave.png",
+            "normal": "Robert",
             "custom": ["201072044278939648"],
             "joke": true
         }
