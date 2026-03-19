@@ -6672,7 +6672,7 @@ functions.pronouns = async function (user, guild) {
     })
 
     var userCachedPronouns = userTempdata.pronouns
-    if (userCachedPronouns.length > 0 && userTempdata.pronounsExpireDate > Date.now())
+    if (userCachedPronouns && userCachedPronouns.length > 0 && userTempdata.pronounsExpireDate > Date.now())
         return userCachedPronouns
 
     var defaultPronouns = ['they', 'he', 'she', 'it']

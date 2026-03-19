@@ -36,7 +36,7 @@ module.exports = {
             var battleValue = args[1] ? args[1].toLowerCase() : "battler"
 
             if (battleValue == "friendly" || battleValue == "friendlies" || battleValue == "1") battleValue = 1
-            if (battleValue == "enemy" || battleValue == "enemies" || battleValue == "2") battleValue = 2
+            else if (battleValue == "enemy" || battleValue == "enemies" || battleValue == "2") battleValue = 2
             else battleValue = 3
 
             data.guildData[msg.guild.id].channels[msg.channel.id].battling = battleValue

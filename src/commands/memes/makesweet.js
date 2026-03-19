@@ -13,8 +13,7 @@ module.exports = {
     execute: async function (msg, args) {
         let poopy = this
         let vars = poopy.vars
-        let { getUrls, validateFile, downloadFile, sendFile } = poopy.functions
-        let { DiscordTypes } = poopy.modules
+        let { getUrls, validateFile, downloadFile, sendFile, fetchPingPerms } = poopy.functions
         let config = poopy.config
         let { fs, FormData, axios } = poopy.modules
 
