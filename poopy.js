@@ -1793,6 +1793,8 @@ class Poopy {
 
         activeBots[config.database] = poopy
 
+        var dataLoadError = false
+
         async function requestData() {
             var data = {
                 data: {},
@@ -1802,7 +1804,18 @@ class Poopy {
             if (config.testing || !process.env.MONGODB_URL) {
                 console.log(`${bot.user.displayName}: gathering from json`)
                 if (fs.existsSync(`data/${config.database}.json`)) {
-                    data.data = fs.readJSONSync(`data/${config.database}.json`)
+                    try {
+                        data.data = fs.readJSONSync(`data/${config.database}.json`)
+                    } catch (_) {
+                        dataLoadError = true
+                        config.notSave = true
+                        console.log(`${bot.user.displayName}: ERROR LOADING DATA. disabling saving...`)
+                        data.data = {
+                            botData: {},
+                            userData: {},
+                            guildData: {}
+                        }
+                    }
                 } else {
                     data.data = {
                         botData: {},
@@ -1813,7 +1826,14 @@ class Poopy {
 
                 if (Object.keys(globaldata).length <= 0) {
                     if (fs.existsSync(`data/globaldata.json`)) {
-                        data.globaldata = fs.readJSONSync(`data/globaldata.json`)
+                        try {
+                            data.globaldata = fs.readJSONSync(`data/globaldata.json`)
+                        } catch (_) {
+                            dataLoadError = true
+                            config.notSave = true
+                            console.log(`${bot.user.displayName}: ERROR LOADING DATA. disabling saving...`)
+                            data.globaldata = {}
+                        }
                     } else {
                         data.globaldata = {}
                     }
@@ -1944,10 +1964,19 @@ class Poopy {
         }, 300000)
 
         var wakecount = data.botData.reboots + 1
+        var wakeChannel = bot.guilds.cache.get('834431435704107018')?.channels.cache.get('947167169718923341')
 
-        bot.guilds.cache.get('834431435704107018')?.channels.cache.get('947167169718923341')?.send(!config.stfu ? 'i wake up to ash and dust' : '').catch(() => { })
-        bot.guilds.cache.get('834431435704107018')?.channels.cache.get('947167169718923341')?.send(!config.stfu ? (config.testing ? 'raleigh is testing' : `this is the ${toOrdinal(wakecount)} time this happens`) : '').catch(() => { })
-
+        if (wakeChannel) {
+            wakeChannel.send(!config.stfu ? 'i wake up to ash and dust' : '').catch(() => { })
+            wakeChannel.send(!config.stfu ? (
+                config.testing ?
+                'raleigh is testing' :
+                dataLoadError ? 
+                'ERROR LOADING EXISTING DATA. temporarily using new data as fallback...' :
+                `this is the ${toOrdinal(wakecount)} time this happens`) : ''
+            ).catch(() => { })
+        }
+        
         updateHivemindStatus()
         vars.hivemindStatusInterval = setInterval(function () {
             updateHivemindStatus()
