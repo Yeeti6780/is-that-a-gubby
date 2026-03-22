@@ -119,7 +119,6 @@ async function start() {
 
                         cachedMediaResponses[url] = cached
                     } else {
-                        console.error(err)
                         res.status(500).send("Error fetching media")
                         return
                     }
