@@ -191,6 +191,7 @@ var dataGetters = {
             cahJSON: 'cah',
             battlerJSON: 'tbbunits',
             stageJSON: 'tbbstages',
+            tsunamiJSON: 'tsunamis',
             shieldJSON: 'shields',
             doopleyJSON: 'doopley',
             eggphraseJSON: 'eggphrases',
