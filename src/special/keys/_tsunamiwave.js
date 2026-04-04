@@ -5,7 +5,7 @@ module.exports = {
     let json = poopy.json
     let { randomChoice } = poopy.functions
 
-    return randomChoice(json.tsunamiJSON).name
+    return randomChoice(json.tsunamiJSON).Name
   },
   array: function () {
     let poopy = this
