@@ -615,10 +615,7 @@ functions.fetchPingPerms = function (msg) {
     const userPings = [...msg.mentions.users.keys()]
     if (!userPings.includes(msg.author.id)) userPings.push(msg.author.id)
 
-    return /*hasPingPerms ? {
-        parse: ['users', 'everyone', 'roles'],
-        repliedUser: true
-    } :*/ {
+    return {
         parse: [],
         roles: rolePings,
         users: userPings,
