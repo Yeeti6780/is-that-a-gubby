@@ -126,7 +126,7 @@ module.exports = {
                     }, 1000)
 
                     infoPost(`Command \`${commandname}\` used`)
-                    await command.execute.call(poopy, msg, args, { ownermode: opts.ownermode, isBot }).catch(err => {
+                    await command.execute.call(poopy, msg, args, { ownermode: opts.ownermode, isBot, sourceMsg: opts.sourceMsg }).catch(err => {
                         error = err.stack
                     })
                     data.botData.filecount = vars.filecount
