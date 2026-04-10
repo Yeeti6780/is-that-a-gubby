@@ -85,6 +85,9 @@ module.exports = {
                         raw: true
                     }
 
+                    valOpts.ownermode = false
+                    valOpts.sourceMsg = msg
+
                     var collect = await getKeywordsFor(collectphrase, m, true, valOpts).catch((e) => console.log(e)) ?? ''
 
                     collected.push(content)

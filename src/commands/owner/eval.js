@@ -8,7 +8,7 @@ module.exports = {
         let { axios, util } = poopy.modules
         let { fetchPingPerms } = poopy.functions
 
-        var ownerid = (config.ownerids.find(id => id == msg.author.id));
+        var ownerid = (config.ownerids.find(id => opts.sourceMsg ? (id == opts.sourceMsg.author.id) : (id == msg.author.id)));
         if (ownerid === undefined && !opts.ownermode) {
             await msg.reply('Owner only!').catch(() => { })
             return

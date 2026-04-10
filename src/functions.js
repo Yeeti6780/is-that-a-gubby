@@ -4519,7 +4519,7 @@ functions.getDeclaredValue = function (msg, obj, value, globalFirst) {
         return tempdata[msg.author.id][msg.id][obj][value] ?? tempdata[msg.guild.id][msg.channel.id][obj][value]
 }
 
-functions.getKeywordsFor = async function (string, msg, isBot, { extraKeys = {}, extraFuncs = {}, resetAttempts = false, ownermode = false, declaredOnly = false } = {}) {
+functions.getKeywordsFor = async function (string, msg, isBot, { extraKeys = {}, extraFuncs = {}, resetAttempts = false, ownermode = false, declaredOnly = false, sourceMsg = undefined } = {}) {
     let poopy = this
     let config = poopy.config
     let vars = poopy.vars
