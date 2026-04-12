@@ -6207,6 +6207,20 @@ functions.requestData = async function () {
                     }
                 }
             }
+        } else if (fs.existsSync(`data/${config.database}_bak.json`)) {
+            try {
+                data.data = fs.readJSONSync(`data/${config.database}_bak.json`)
+            } catch (_) {
+                console.log(`${bot.user.displayName}: GENERAL ERROR LOADING DATA. using fallback and disabling saving...`)
+
+                config.notSave = true
+                config.dataLoadError = true
+                data.data = {
+                    botData: {},
+                    userData: {},
+                    guildData: {}
+                }
+            }
         } else {
             console.log(`${bot.user.displayName}: creating new data`)
             data.data = {
@@ -6231,6 +6245,16 @@ functions.requestData = async function () {
                         config.dataLoadError = true
                         data.globaldata = {}
                     }
+                }
+            } else if (fs.existsSync(`data/globaldata_bak.json`)) {
+                try {
+                    data.globaldata = fs.readJSONSync(`data/globaldata_bak.json`)
+                } catch (_) {
+                    console.log(`${bot.user.displayName}: GENERAL ERROR LOADING GLOBAL DATA. using fallback and disabling saving...`)
+
+                    config.notSave = true
+                    config.dataLoadError = true
+                    data.globaldata = {}
                 }
             } else {
                 console.log(`${bot.user.displayName}: creating global data`)
