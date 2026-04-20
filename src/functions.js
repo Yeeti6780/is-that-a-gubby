@@ -606,8 +606,8 @@ functions.fetchPingPerms = function (msg) {
     let { DiscordTypes } = poopy.modules
 
     const hasPingPerms = (
-        msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
-        msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.MentionEveryone) ||
+        msg.member?.permissions?.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
+        msg.channel?.permissionsFor(msg.member)?.has(DiscordTypes.PermissionFlagsBits.MentionEveryone) ||
         msg.author.id == msg.guild.ownerId
     )
 
