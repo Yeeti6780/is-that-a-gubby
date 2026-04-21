@@ -28,7 +28,7 @@ module.exports = {
                 return
             })
 
-            if (!messageToReact) return
+            if (!messageToReact?.react) return
 
             for (var emoji of emojisArray) {
                 var err = false

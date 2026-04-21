@@ -43,7 +43,7 @@ module.exports = {
             var filepath = await downloadFile(currenturl, `input.mp4`, {
                 fileinfo            })
             var filename = `input.mp4`
-            var iduration = Number(fileinfo.info.duration.includes('N/A') ? '0' : fileinfo.info.duration)
+            var iduration = Number((!fileinfo.info.duration || fileinfo.info.duration.includes('N/A')) ? '0' : fileinfo.info.duration)
 
             await execPromise(`ffmpeg -i ${filepath}/${filename} -filter_complex "[0:v]scale='min(1500,iw)':min'(1500,ih)':force_original_aspect_ratio=decrease,split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} -t ${duration >= iduration ? iduration : duration} -r ${fps} -gifflags -offsetting ${filepath}/output.gif`)
             return await sendFile(msg, filepath, `output.gif`)

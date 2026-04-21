@@ -233,14 +233,14 @@ module.exports = {
                 return await sendFile(msg, filepath, `output.gif`)
             } else if ((filetype.mime.startsWith('image') && !(vars.gifFormats.find(f => f === filetype.ext))) && ((filetype2.mime.startsWith('image') && vars.gifFormats.find(f => f === filetype2.ext)))) {
                 var fps2 = fileinfo2.info.fps
-                var iduration2 = Number(fileinfo2.info.duration.includes('N/A') ? '0': fileinfo2.info.duration)
+                var iduration2 = Number((!fileinfo2.info.duration || fileinfo2.info.duration.includes('N/A')) ? '0' : fileinfo2.info.duration)
 
                 await execPromise(`ffmpeg -stream_loop -1 -t ${iduration2} -r ${fps2.includes('0/0') ? '60': fps2} -i ${filepath}/${filename} -stream_loop -1 -t ${iduration2 + (args.find(arg => arg === '-waituntilend') ? duration: 0)} -r ${fps2.includes('0/0') ? '60': fps2} -i ${filepath}/${filename2} -stream_loop -1 -t ${iduration2} -r ${fps2.includes('0/0') ? '60': fps2} -i assets/image/transparent.png -filter_complex "[1:v]scale=-1:${height}[vid];[2:v]scale=${width}:${height}[transparent];[transparent][vid]overlay=x=W/2-w/2:y=H/2-h/2:format=auto[transition];[0:v][transition]xfade=transition=${transition}:duration=${duration >= iduration2 && !(filetype2.mime.startsWith('image') && !(vars.gifFormats.find(f => f === filetype2.ext))) ? iduration2: duration},scale='min(400,iw)':min'(400,ih)':force_original_aspect_ratio=decrease,split[gnout][gpout];[gpout]palettegen=reserve_transparent=1[palette];[gnout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} -t ${iduration2} ${filepath}/output.gif`)
                 return await sendFile(msg, filepath, `output.gif`)
             } else if ((filetype.mime.startsWith('image') && vars.gifFormats.find(f => f === filetype.ext)) && (filetype2.mime.startsWith('image') && !(vars.gifFormats.find(f => f === filetype2.ext)))) {
                 var fps = fileinfo.info.fps
 
-                var iduration = Number(fileinfo.info.duration.includes('N/A') ? '0': fileinfo.info.duration)
+                var iduration = Number((!fileinfo.info.duration || fileinfo.info.duration.includes('N/A')) ? '0' : fileinfo.info.duration)
 
                 await execPromise(`ffmpeg -stream_loop -1 -t ${iduration + (args.find(arg => arg === '-waituntilend') ? duration: 0)} -r ${fps.includes('0/0') ? '50': fps} -i ${filepath}/${filename} -stream_loop -1 -t ${iduration} -r ${fps.includes('0/0') ? '50': fps} -i ${filepath}/${filename2} -stream_loop -1 -t ${iduration} -r ${fps.includes('0/0') ? '50': fps} -i assets/image/transparent.png -filter_complex "[1:v]scale=-1:${height}[vid];[2:v]scale=${width}:${height}[transparent];[transparent][vid]overlay=x=W/2-w/2:y=H/2-h/2:format=auto[transition];[0:v][transition]xfade=transition=${transition}:duration=${duration}${iduration - duration > duration ? `:offset=${iduration - duration + (args.find(arg => arg === '-waituntilend') ? duration: 0)}`: ''},split[gnout][gpout];[gpout]palettegen=reserve_transparent=1[palette];[gnout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} -t ${iduration} ${filepath}/output.gif`)
                 return await sendFile(msg, filepath, `output.gif`)
@@ -249,8 +249,8 @@ module.exports = {
                 var audio2 = fileinfo2.info.audio
                 var fps = filetype.mime.startsWith('video') ? fileinfo.info.fps: fileinfo2.info.fps
 
-                var iduration = Number(fileinfo.info.duration.includes('N/A') ? '0': fileinfo.info.duration)
-                var iduration2 = Number(fileinfo2.info.duration.includes('N/A') ? '0': fileinfo2.info.duration)
+                var iduration = Number((!fileinfo.info.duration || fileinfo.info.duration.includes('N/A')) ? '0' : fileinfo.info.duration)
+                var iduration2 = Number((!fileinfo2.info.duration || fileinfo2.info.duration.includes('N/A')) ? '0' : fileinfo2.info.duration)
 
                 await execPromise(`ffmpeg -i ${filepath}/${filename} -vf "scale=ceil(iw/2)*2:ceil(ih/2)*2" -c:v libx264 -video_track_timescale 30k -pix_fmt yuv420p -c:a aac -ac 6 -ar 44100 ${filepath}/concat.mp4`)
                 await execPromise(`ffmpeg -i ${filepath}/${filename2} -vf "scale=ceil(iw/2)*2:ceil(ih/2)*2" -c:v libx264 -video_track_timescale 30k -pix_fmt yuv420p -c:a aac -ac 6 -ar 44100 ${filepath}/concat2.mp4`)
@@ -259,8 +259,8 @@ module.exports = {
             } else {
                 var fps = fileinfo.info.fps
 
-                var iduration = Number(fileinfo.info.duration.includes('N/A') ? '0': fileinfo.info.duration)
-                var iduration2 = Number(fileinfo2.info.duration.includes('N/A') ? '0': fileinfo2.info.duration)
+                var iduration = Number((!fileinfo.info.duration || fileinfo.info.duration.includes('N/A')) ? '0' : fileinfo.info.duration)
+                var iduration2 = Number((!fileinfo2.info.duration || fileinfo2.info.duration.includes('N/A')) ? '0' : fileinfo2.info.duration)
 
                 await execPromise(`ffmpeg -stream_loop -1 -t ${iduration + (args.find(arg => arg === '-waituntilend') ? duration: 0)} -r ${fps.includes('0/0') ? '50': fps} -i ${filepath}/${filename} -stream_loop -1 -t ${iduration2} -i ${filepath}/${filename2} -stream_loop -1 -t ${iduration2} -r ${fps.includes('0/0') ? '50': fps} -i assets/image/transparent.png -filter_complex "[1:v]scale=-1:${height}[vid];[2:v]scale=${width}:${height}[transparent];[transparent][vid]overlay=x=W/2-w/2:y=H/2-h/2:format=auto,fps=${fps.includes('0/0') ? '50': fps}[transition];[0:v][transition]xfade=transition=${transition}:duration=${duration >= iduration2 && !(filetype2.mime.startsWith('image') && !(vars.gifFormats.find(f => f === filetype2.ext))) ? iduration2: duration}${iduration - duration > duration ? `:offset=${iduration - duration + (args.find(arg => arg === '-waituntilend') ? duration: 0)}`: ''},split[gnout][gpout];[gpout]palettegen=reserve_transparent=1[palette];[gnout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} -t ${iduration + iduration2} ${filepath}/output.gif`)
                 return await sendFile(msg, filepath, `output.gif`)
@@ -284,8 +284,8 @@ module.exports = {
                 var audio2 = fileinfo2.info.audio
                 var fps = filetype.mime.startsWith('video') ? fileinfo.info.fps: fileinfo2.info.fps
 
-                var iduration = Number(fileinfo.info.duration.includes('N/A') ? '0': fileinfo.info.duration)
-                var iduration2 = Number(fileinfo2.info.duration.includes('N/A') ? '0': fileinfo2.info.duration)
+                var iduration = Number((!fileinfo.info.duration || fileinfo.info.duration.includes('N/A')) ? '0' : fileinfo.info.duration)
+                var iduration2 = Number((!fileinfo2.info.duration || fileinfo2.info.duration.includes('N/A')) ? '0' : fileinfo2.info.duration)
 
                 await execPromise(`ffmpeg -i ${filepath}/${filename} -vf "scale=ceil(iw/2)*2:ceil(ih/2)*2" -c:v libx264 -video_track_timescale 30k -pix_fmt yuv420p -c:a aac -ac 6 -ar 44100 ${filepath}/concat.mp4`)
                 await execPromise(`ffmpeg -i ${filepath}/${filename2} -vf "scale=ceil(iw/2)*2:ceil(ih/2)*2" -c:v libx264 -video_track_timescale 30k -pix_fmt yuv420p -c:a aac -ac 6 -ar 44100 ${filepath}/concat2.mp4`)
@@ -294,8 +294,8 @@ module.exports = {
             } else {
                 var fps = fileinfo.info.fps
 
-                var iduration = Number(fileinfo.info.duration.includes('N/A') ? '0': fileinfo.info.duration)
-                var iduration2 = Number(fileinfo2.info.duration.includes('N/A') ? '0': fileinfo2.info.duration)
+                var iduration = Number((!fileinfo.info.duration || fileinfo.info.duration.includes('N/A')) ? '0' : fileinfo.info.duration)
+                var iduration2 = Number((!fileinfo2.info.duration || fileinfo2.info.duration.includes('N/A')) ? '0' : fileinfo2.info.duration)
 
                 await execPromise(`ffmpeg -r ${fps.includes('0/0') ? '50': fps} -i ${filepath}/${filename} -i ${filepath}/${filename2} -r ${fps.includes('0/0') ? '50': fps} -i assets/image/transparent.png -filter_complex "[1:v]scale=-1:${height}[vid];[2:v]scale=${width}:${height}[transparent];[transparent][vid]overlay=x=W/2-w/2:y=H/2-h/2:format=auto,setsar=sar=1,setdar=dar=1,fps=${fps.includes('0/0') ? '50': fps}[transition2];[0:v]setsar=sar=1,setdar=dar=1[transition];[transition][transition2]concat,split[gnout][gpout];[gpout]palettegen=reserve_transparent=1[palette];[gnout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -aspect ${width}:${height} -preset ${findpreset(args)} -t ${iduration + iduration2} ${filepath}/output.gif`)
                 return await sendFile(msg, filepath, `output.gif`)

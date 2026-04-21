@@ -19,9 +19,9 @@ module.exports = {
 
         var shitting = arrays.shitting.filter(file => {
             switch (type) {
-                case 'image': return file.match(/\.(png|jpe?g|bmp|tiff)/)
+                case 'image': return file.match(/\.(png|jpe?g|bmp|webp|tiff)/)
 
-                case 'video': return file.match(/\.(mov|mp4|wmv|avi)/)
+                case 'video': return file.match(/\.(mov|mp4|wmv|avi|webm)/)
 
                 case 'gif': return file.match(/\.(gif|apng)/)
 

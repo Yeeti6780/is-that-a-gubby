@@ -4,7 +4,7 @@ module.exports = {
     execute: async function (msg, args) {
         let poopy = this
         let { lastUrl, validateFile, execPromise, fetchPingPerms } = poopy.functions
-        let { prettyBytes, DiscordTypes } = poopy.modules
+        let { prettyBytes, mathjs } = poopy.modules
         let vars = poopy.vars
         let bot = poopy.bot
         let config = poopy.config
@@ -98,8 +98,8 @@ module.exports = {
                             }
                         },
                         function () {
-                            if (videoStream["duration"]) {
-                                var totalSeconds = videoStream["duration"]
+                            if (videoStream["duration"] || jsoninfo["format"]?.["duration"]) {
+                                var totalSeconds = videoStream["duration"] || jsoninfo["format"]?.["duration"]
                                 var days = Math.floor(totalSeconds / 86400);
                                 totalSeconds %= 86400;
                                 var hours = Math.floor(totalSeconds / 3600);
@@ -138,8 +138,12 @@ module.exports = {
                             }
                         },
                         function () {
-                            if (videoStream["nb_frames"]) {
-                                params.push(`**Frames**: ${videoStream["nb_frames"]}`)
+                            var duration = (videoStream["duration"] || jsoninfo["format"]?.["duration"])
+                            var fps = videoStream["r_frame_rate"]
+
+                            if (videoStream["nb_frames"] || (duration != "N/A" && duration != "0" && fps != "0/0")) {
+                                var frames = videoStream["nb_frames"] || mathjs.evaluate(`${duration}/(1/${fps})`)
+                                params.push(`**Frames**: ${frames}`)
                             }
                         },
                         function () {
@@ -206,8 +210,8 @@ module.exports = {
                             }
                         },
                         function () {
-                            if (videoStream["duration"]) {
-                                var totalSeconds = videoStream["duration"]
+                            if (videoStream["duration"] || jsoninfo["format"]?.["duration"]) {
+                                var totalSeconds = videoStream["duration"] || jsoninfo["format"]?.["duration"]
                                 var days = Math.floor(totalSeconds / 86400);
                                 totalSeconds %= 86400;
                                 var hours = Math.floor(totalSeconds / 3600);
@@ -225,8 +229,12 @@ module.exports = {
                             }
                         },
                         function () {
-                            if (videoStream["nb_frames"]) {
-                                params.push(`**Frames**: ${videoStream["nb_frames"]}`)
+                            var duration = (videoStream["duration"] || jsoninfo["format"]?.["duration"])
+                            var fps = videoStream["r_frame_rate"]
+
+                            if (videoStream["nb_frames"] || (duration != "N/A" && duration != "0" && fps != "0/0")) {
+                                var frames = videoStream["nb_frames"] || mathjs.evaluate(`${duration}/(1/${fps})`)
+                                params.push(`**Frames**: ${frames}`)
                             }
                         },
                         function () {
@@ -252,8 +260,8 @@ module.exports = {
                 if (audioStream) {
                     paramFunctions = [
                         function () {
-                            if (audioStream["duration"]) {
-                                var totalSeconds = audioStream["duration"]
+                            if (audioStream["duration"] || jsoninfo["format"]?.["duration"]) {
+                                var totalSeconds = audioStream["duration"] || jsoninfo["format"]?.["duration"]
                                 var days = Math.floor(totalSeconds / 86400);
                                 totalSeconds %= 86400;
                                 var hours = Math.floor(totalSeconds / 3600);

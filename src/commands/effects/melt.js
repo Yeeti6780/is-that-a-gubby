@@ -38,7 +38,7 @@ module.exports = {
             var filepath = await downloadFile(currenturl, `input.mp4`, {
                 fileinfo            })
             var filename = `input.mp4`
-            var iduration = Number(fileinfo.info.duration.includes('N/A') ? '0' : fileinfo.info.duration)
+            var iduration = Number((!fileinfo.info.duration || fileinfo.info.duration.includes('N/A')) ? '0' : fileinfo.info.duration)
 
             await execPromise(args.indexOf('-loop') > -1 ? `ffmpeg -stream_loop 1 -i ${filepath}/${filename} -map 0:a? -filter_complex "[0:v]lagfun=decay=${decay / 100},scale=ceil(iw/2)*2:ceil(ih/2)*2[out]" -map "[out]" -preset ${findpreset(args)} -c:v libx264 -pix_fmt yuv420p -ss ${iduration} ${filepath}/output.mp4` : `ffmpeg -i ${filepath}/${filename} -map 0:a? -filter_complex "[0:v]lagfun=decay=${decay / 100},scale=ceil(iw/2)*2:ceil(ih/2)*2[out]" -map "[out]" -preset ${findpreset(args)} -c:v libx264 -pix_fmt yuv420p ${filepath}/output.mp4`)
             return await sendFile(msg, filepath, `output.mp4`)
@@ -46,7 +46,7 @@ module.exports = {
             var filepath = await downloadFile(currenturl, `input.gif`, {
                 fileinfo            })
             var filename = `input.gif`
-            var iduration = Number(fileinfo.info.duration.includes('N/A') ? '0' : fileinfo.info.duration)
+            var iduration = Number((!fileinfo.info.duration || fileinfo.info.duration.includes('N/A')) ? '0' : fileinfo.info.duration)
 
             await execPromise(args.indexOf('-loop') > -1 ? `ffmpeg -stream_loop 1 -i ${filepath}/${filename} -i assets/image/black.png -filter_complex "[1:v][0:v]scale=rw:rh[black];[black]split[blackw][blackn];[0:v]hue=b=10[white];[blackw][white]overlay=x=0:y=0:format=auto,lagfun=decay=${decay / 100}[meltalpha];[blackn][0:v]overlay=x=0:y=0:format=auto,lagfun=decay=${decay / 100}[melt];[melt][meltalpha]alphamerge,split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} -gifflags -offsetting -ss ${iduration} ${filepath}/output.gif` : `ffmpeg -i ${filepath}/${filename} -i assets/image/black.png -filter_complex "[1:v][0:v]scale=rw:rh[black];[black]split[blackw][blackn];[0:v]hue=b=10[white];[blackw][white]overlay=x=0:y=0:format=auto,lagfun=decay=${decay / 100}[meltalpha];[blackn][0:v]overlay=x=0:y=0:format=auto,lagfun=decay=${decay / 100}[melt];[melt][meltalpha]alphamerge,split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} -gifflags -offsetting ${filepath}/output.gif`)
             return await sendFile(msg, filepath, `output.gif`)

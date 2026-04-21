@@ -191,7 +191,7 @@ module.exports = {
             for (var j in words) {
                 var word = words[j]
                 wordsS.push(word)
-                wordsS.push(' '.repeat(Math.floor((Math.floor(Math.random() * 61) + 30) / words.length / (word.length / 15))))
+                wordsS.push(' '.repeat(Math.floor((Math.floor(Math.random() * 61) + 30) / (words.length || 1) / ((word.length || 1) / 15))))
             }
             wordsS.splice(wordsS.length - 1)
             var text = wordsS.join('')

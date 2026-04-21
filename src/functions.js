@@ -1,4 +1,4 @@
-const { os, fs, CryptoJS, DiscordTypes, axios } = require('./modules')
+const { os, fs, CryptoJS, DiscordTypes, axios, mathjs } = require('./modules')
 let vars = require('./vars')
 let functions = {}
 
@@ -5680,9 +5680,13 @@ functions.sendFile = async function (msg, filepath, filename, extraOptions) {
     var tooLarge = fileBuffer.length > getUploadLimit(msg)
 
     if (extraOptions.catbox || (tooLarge && !extraOptions.nosend)) {
-        if (!extraOptions.catbox && tooLarge && !extraOptions.nosend) await msg.reply('The output file is too large, so I\'m uploading it to Catbox.moe.').catch(() => { })
+        if (!extraOptions.catbox && tooLarge && !extraOptions.nosend) await msg.reply('The output file is too large, so I\'m uploading it to Catbox or Litterbox.').catch(() => { })
         infoPost(`Uploading file to catbox.moe`)
-        var fileLink = await vars.Catbox.upload(`${filepath}/${filename}`).catch(() => { })
+        var fileLink = (
+            await vars.Catbox.upload(`${filepath}/${filename}`).catch(() => { }) ||
+            await vars.Litterbox.upload(`${filepath}/${filename}`).catch(() => { })
+        )
+        
         if (fileLink) {
             var isUrl = vars.validUrl.test(fileLink)
 
@@ -5752,11 +5756,15 @@ functions.sendFile = async function (msg, filepath, filename, extraOptions) {
         if (extraOptions.content) sendObject.content = extraOptions.content
 
         var fileMsg = await msg.reply(sendObject).catch(() => { })
-
+        
         if (!fileMsg) {
-            await msg.reply('There was an error sending the file, so I\'m uploading it to Catbox.moe.').catch(() => { })
+            await msg.reply('There was an error sending the file, so I\'m uploading it to Catbox or Litterbox.').catch(() => { })
             infoPost(`Failed to send file to channel, uploading to catbox.moe`)
-            var fileLink = await vars.Catbox.upload(`${filepath}/${filename}`).catch(() => { })
+            var fileLink = (
+                await vars.Catbox.upload(`${filepath}/${filename}`).catch(() => { }) ||
+                await vars.Litterbox.upload(`${filepath}/${filename}`).catch(() => { })
+            )
+
             if (fileLink) {
                 var isUrl = vars.validUrl.test(fileLink)
                 await msg.reply({
@@ -5881,15 +5889,15 @@ functions.validateFileFromPath = async function (path, exception, rejectMessages
                     var videoStream = jsoninfo["streams"].find(stream => stream["codec_type"] === 'video')
                     var audioStream = jsoninfo["streams"].find(stream => stream["codec_type"] === 'audio')
 
+                    if ((type.mime.startsWith('image') && vars.gifFormats.find(f => f === type.ext)) || type.mime.startsWith('video') || type.mime.startsWith('audio')) {
+                        info.duration = (videoStream || audioStream)["duration"] || jsoninfo["format"]?.["duration"] || 0
+                    }
                     if ((type.mime.startsWith('image') && vars.gifFormats.find(f => f === type.ext)) || type.mime.startsWith('video')) {
-                        info.frames = videoStream["nb_frames"] || 0
                         info.fps = videoStream["r_frame_rate"] || '0/0'
+                        info.frames = videoStream["nb_frames"] || (info.duration != "N/A" && info.duration != "0" && info.fps != "0/0" && mathjs.evaluate(`${info.duration}/(1/${info.fps})`)) || 0
                     }
                     if (type.mime.startsWith('video') || type.mime.startsWith('audio')) {
                         info.audio = !!audioStream
-                    }
-                    if ((type.mime.startsWith('image') && vars.gifFormats.find(f => f === type.ext)) || type.mime.startsWith('video') || type.mime.startsWith('audio')) {
-                        info.duration = (videoStream || audioStream)["duration"] || 0
                     }
                     if ((type.mime.startsWith('video') || type.mime.startsWith('audio')) && info.audio) {
                         info.aduration = audioStream["duration"] || 0
@@ -6076,15 +6084,15 @@ functions.validateFile = async function (url, exception, rejectMessages) {
                     var videoStream = jsoninfo["streams"].find(stream => stream["codec_type"] === 'video')
                     var audioStream = jsoninfo["streams"].find(stream => stream["codec_type"] === 'audio')
 
+                    if ((type.mime.startsWith('image') && vars.gifFormats.find(f => f === type.ext)) || type.mime.startsWith('video') || type.mime.startsWith('audio')) {
+                        info.duration = (videoStream || audioStream)["duration"] || jsoninfo["format"]?.["duration"] || 0
+                    }
                     if ((type.mime.startsWith('image') && vars.gifFormats.find(f => f === type.ext)) || type.mime.startsWith('video')) {
-                        info.frames = videoStream["nb_frames"] || 0
                         info.fps = videoStream["r_frame_rate"] || '0/0'
+                        info.frames = videoStream["nb_frames"] || (info.duration != "N/A" && info.duration != "0" && info.fps != "0/0" && mathjs.evaluate(`${info.duration}/(1/${info.fps})`)) || 0
                     }
                     if (type.mime.startsWith('video') || type.mime.startsWith('audio')) {
                         info.audio = !!audioStream
-                    }
-                    if ((type.mime.startsWith('image') && vars.gifFormats.find(f => f === type.ext)) || type.mime.startsWith('video') || type.mime.startsWith('audio')) {
-                        info.duration = (videoStream || audioStream)["duration"] || 0
                     }
                     if ((type.mime.startsWith('video') || type.mime.startsWith('audio')) && info.audio) {
                         info.aduration = audioStream["duration"] || 0

@@ -39,7 +39,7 @@ module.exports = {
                     fileinfo                })
                 var filename = `input.mp4`
                 var fps = fileinfo.info.fps
-                var duration = Number(fileinfo.info.duration.includes('N/A') ? '0' : fileinfo.info.duration)
+                var duration = Number((!fileinfo.info.duration || fileinfo.info.duration.includes('N/A')) ? '0' : fileinfo.info.duration)
                 var aduration = Number(fileinfo.info.aduration.includes('N/A') ? '0' : fileinfo.info.aduration)
                 var ratio = aduration / duration
                 var total = 0
@@ -78,7 +78,7 @@ module.exports = {
             var filepath = await downloadFile(currenturl, `input.mp3`, {
                 fileinfo            })
             var filename = `input.mp3`
-            var duration = Number(fileinfo.info.duration.includes('N/A') ? '0' : fileinfo.info.duration)
+            var duration = Number((!fileinfo.info.duration || fileinfo.info.duration.includes('N/A')) ? '0' : fileinfo.info.duration)
 
             var f = duration / n
 

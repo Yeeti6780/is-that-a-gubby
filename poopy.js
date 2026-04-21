@@ -1375,6 +1375,8 @@ class Poopy {
                     ?? await bot.users.fetch(channelId).catch(() => { })
                 )
 
+                if (!channel) continue
+
                 tempdata[starboard.guildId] ??= {}
                 tempdata[starboard.guildId][starboard.channelId] ??= {}
                 tempdata[starboard.guildId][starboard.channelId].starboardMessages ??= {}

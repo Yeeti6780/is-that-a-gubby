@@ -43,7 +43,7 @@ module.exports = {
             var filepath = await downloadFile(currenturl, `input.mp4`, {
                 fileinfo            })
             var filename = `input.mp4`
-            var iduration = Number(fileinfo.info.duration.includes('N/A') ? '0' : fileinfo.info.duration)
+            var iduration = Number((!fileinfo.info.duration || fileinfo.info.duration.includes('N/A')) ? '0' : fileinfo.info.duration)
 
             await execPromise(`ffmpeg -i ${filepath}/${filename} -filter_complex "[0:v]scale='min(400,iw)':min'(400,ih)':force_original_aspect_ratio=decrease[out]" -map "[out]" -preset ${findpreset(args)} -plays 0 -t ${duration >= iduration ? iduration : duration} -r ${fps} ${filepath}/output.apng`)
             try {
@@ -59,7 +59,7 @@ module.exports = {
             var filepath = await downloadFile(currenturl, `input.gif`, {
                 fileinfo            })
             var filename = `input.gif`
-            var iduration = Number(fileinfo.info.duration.includes('N/A') ? '0' : fileinfo.info.duration)
+            var iduration = Number((!fileinfo.info.duration || fileinfo.info.duration.includes('N/A')) ? '0' : fileinfo.info.duration)
 
             await execPromise(`ffmpeg -i ${filepath}/${filename} -plays 0 -t ${duration >= iduration ? iduration : duration} -r ${fps} -preset ${findpreset(args)} ${filepath}/output.apng`)
             try {

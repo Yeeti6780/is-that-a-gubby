@@ -40,7 +40,7 @@ module.exports = {
 
             if (audio) {
                 var fps = fileinfo.info.fps
-                var duration = Number(fileinfo.info.duration.includes('N/A') ? '0' : fileinfo.info.duration)
+                var duration = Number((!fileinfo.info.duration || fileinfo.info.duration.includes('N/A')) ? '0' : fileinfo.info.duration)
                 var aduration = Number(fileinfo.info.aduration.includes('N/A') ? '0' : fileinfo.info.aduration)
                 var ratio = aduration / duration
                 var total = 0
@@ -80,7 +80,7 @@ module.exports = {
                 return await sendFile(msg, filepath, `output.mp4`)
             } else {
                 var fps = fileinfo.info.fps
-                var duration = Number(fileinfo.info.duration.includes('N/A') ? '0' : fileinfo.info.duration)
+                var duration = Number((!fileinfo.info.duration || fileinfo.info.duration.includes('N/A')) ? '0' : fileinfo.info.duration)
 
                 await execPromise(`ffmpeg -i ${filepath}/${filename} -filter_complex "[0:v]fps=fps='min(60,${fps.includes('0/0') ? '60' : fps}*${speed})',setpts='(1/lerp(1,${speed},T/${duration}))*PTS'[v]" -map "[v]" -preset ${findpreset(args)} -c:v libx264 -pix_fmt yuv420p ${filepath}/output.mp4`)
                 return await sendFile(msg, filepath, `output.mp4`)
@@ -89,7 +89,7 @@ module.exports = {
             var filepath = await downloadFile(currenturl, `input.mp3`, {
                 fileinfo            })
             var filename = `input.mp3`
-            var duration = Number(fileinfo.info.duration.includes('N/A') ? '0' : fileinfo.info.duration)
+            var duration = Number((!fileinfo.info.duration || fileinfo.info.duration.includes('N/A')) ? '0' : fileinfo.info.duration)
 
             var f = duration / n
 
@@ -111,7 +111,7 @@ module.exports = {
                 fileinfo            })
             var filename = `input.gif`
             var fps = fileinfo.info.fps
-            var duration = Number(fileinfo.info.duration.includes('N/A') ? '0' : fileinfo.info.duration)
+            var duration = Number((!fileinfo.info.duration || fileinfo.info.duration.includes('N/A')) ? '0' : fileinfo.info.duration)
 
             await execPromise(`ffmpeg -i ${filepath}/${filename} -filter_complex "[0:v]fps=fps='min(50,${fps.includes('0/0') ? '50' : fps}*${speed})',setpts='(1/lerp(1,${speed},T/${duration}))*PTS',split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} -gifflags -offsetting ${filepath}/output.gif`)
             return await sendFile(msg, filepath, `output.gif`)

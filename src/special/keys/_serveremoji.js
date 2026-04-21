@@ -4,7 +4,7 @@ module.exports = {
         let poopy = this
         let { randomChoice } = poopy.functions
 
-        return randomChoice([...msg.guild.emojis.cache.values()]).toString()
+        return (randomChoice([...msg.guild.emojis.cache.values()]) ?? "").toString()
     },
     array: function (msg) {
         let poopy = this
