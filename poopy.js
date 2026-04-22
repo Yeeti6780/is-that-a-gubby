@@ -1420,7 +1420,7 @@ class Poopy {
                     .setDescription(embedContent || "None.")
                     .setColor(0xF5C542)
 
-                const origMember = tempdata[starboard.guildId].webhookMembers[msg.id]
+                const origMember = tempdata[starboard.guildId]?.webhookMembers?.[msg.id]
                 if (origMember) {
                     starboardEmbed.setFooter({
                         text: `Original Author: ${origMember.displayName} (${origMember.user.username})`,
