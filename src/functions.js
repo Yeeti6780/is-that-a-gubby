@@ -624,7 +624,7 @@ functions.fetchPingPerms = function (msg) {
 }
 
 functions.execPromise = function (code, opts = {}) {
-    const DEBUG = true
+    const DEBUG = false
 
     let poopy = this
     let config = poopy.config
