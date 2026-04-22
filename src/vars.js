@@ -132,27 +132,27 @@ vars.defaultConfig = {
     pingresponsecooldown: 60000,
     limits: {
         size: {
-            image: 20,
-            gif: 20,
-            video: 20,
-            audio: 20,
+            image: 25,
+            gif: 25,
+            video: 25,
+            audio: 25,
             message: `that file exceeds the size limit of {param} mb hahahaha (try to use the shrink, setfps, trim or crunch commands)`
         },
         frames: {
-            gif: 1000,
+            gif: 1500,
             video: 10000,
             message: `the frames in that file exceed the limit of {param} hahahaha (try to use the setfps or the trim commands)`
         },
         width: {
-            image: 3000,
-            gif: 1000,
-            video: 2000,
+            image: 5000,
+            gif: 1500,
+            video: 2500,
             message: `the width of that file exceeds the limit of {param} hahahaha (try to use the shrink command)`
         },
         height: {
-            image: 3000,
-            gif: 1000,
-            video: 2000,
+            image: 5000,
+            gif: 1500,
+            video: 2500,
             message: `the height of that file exceeds the limit of {param} hahahaha (try to use the shrink command)`
         }
     },
@@ -171,20 +171,20 @@ vars.defaultConfig = {
         },
         width: {
             image: 10000,
-            gif: 2000,
+            gif: 2500,
             video: 5000,
             message: `the width of that file exceeds the exception limit of {param} hahahaha there's nothing you can do`
         },
         height: {
             image: 10000,
-            gif: 2000,
+            gif: 2500,
             video: 5000,
             message: `the height of that file exceeds the exception limit of {param} hahahaha there's nothing you can do`
         }
     },
     commandLimit: 5,
     defaultDisabled: [],
-    keyLimit: 2500,
+    keyLimit: 3000,
     rateLimit: 3,
     rateLimitTime: 60000 * 2,
     processTimeout: 60000 * 2,

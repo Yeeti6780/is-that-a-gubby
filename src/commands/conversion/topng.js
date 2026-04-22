@@ -7,7 +7,7 @@ module.exports = {
             lastUrl, validateFile, downloadFile, execPromise,
             findpreset, sendFile, fetchPingPerms
         } = poopy.functions
-        let { DiscordTypes } = poopy.modules
+        let { Discord } = poopy.modules
         let vars = poopy.vars
 
         await msg.channel.sendTyping().catch(() => { })
@@ -29,7 +29,7 @@ module.exports = {
         if (!fileinfo) return
         var type = fileinfo.type
 
-        if (type.mime.startsWith('video') || type.mime.startsWith('image') && vars.gifFormats.find(f => f === type.ext)) {
+        if (type.mime.startsWith('video') || type.mime.startsWith('image') && (vars.gifFormats.find(f => f === type.ext) || type.ext !== "png")) {
             var filepath = await downloadFile(currenturl, `input.${fileinfo.shortext}`, {
                 fileinfo            })
             var filename = `input.${fileinfo.shortext}`
@@ -43,7 +43,14 @@ module.exports = {
 
             await execPromise(`ffmpeg -i ${filepath}/${filename} -filter_complex "[0:v]select='eq(n,${pos - 1})'[out]" -map "[out]" -preset ${findpreset(args)} ${filepath}/output.png`)
             return await sendFile(msg, filepath, `output.png`)
-        } else {
+        } else if (type.mime.startsWith('image') && type.ext === 'png') {
+            var fileMsg
+            if (!msg.nosend) fileMsg = await msg.channel.send({
+                files: [new Discord.AttachmentBuilder(currenturl, { name: "output.png" })],
+                allowedMentions: fetchPingPerms(msg)
+            }).catch(() => { })
+            return fileMsg ? fileMsg.attachments.first().url : currenturl
+        }  else {
             await msg.reply({
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)

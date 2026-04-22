@@ -7,7 +7,7 @@ module.exports = {
             lastUrl, validateFile, downloadFile, execPromise,
             findpreset, sendFile, fetchPingPerms
         } = poopy.functions
-        let { DiscordTypes } = poopy.modules
+        let { Discord } = poopy.modules
 
         await msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && args[1] === undefined) {
@@ -28,12 +28,19 @@ module.exports = {
         if (!fileinfo) return
         var type = fileinfo.type
 
-        if (type.mime.startsWith('image')) {
+        if (type.mime.startsWith('image') || (type.mime.startsWith('video') && type.ext !== 'mp4')) {
             var filepath = await downloadFile(currenturl, `input.${fileinfo.shortext}`, {
                 fileinfo            })
             var filename = `input.${fileinfo.shortext}`
-            await execPromise(`ffmpeg -i ${filepath}/${filename} -vf "scale='min(1000,iw)':min'(1000,ih)':force_original_aspect_ratio=decrease,scale=ceil(iw/2)*2:ceil(ih/2)*2" -preset ${findpreset(args)} -c:v libx264 -pix_fmt yuv420p ${filepath}/output.mp4`)
+            await execPromise(`ffmpeg -i ${filepath}/${filename} -vf "scale='min(2000,iw)':min'(2000,ih)':force_original_aspect_ratio=decrease,scale=ceil(iw/2)*2:ceil(ih/2)*2" -preset ${findpreset(args)} -c:v libx264 -pix_fmt yuv420p ${filepath}/output.mp4`)
             return await sendFile(msg, filepath, `output.mp4`)
+        } else if (type.mime.startsWith('video') && type.ext !== 'mp4') {
+            var fileMsg
+            if (!msg.nosend) fileMsg = await msg.channel.send({
+                files: [new Discord.AttachmentBuilder(currenturl, { name: "output.mp4" })],
+                allowedMentions: fetchPingPerms(msg)
+            }).catch(() => { })
+            return fileMsg ? fileMsg.attachments.first().url : currenturl
         } else {
             await msg.reply({
                 content: `Unsupported file: \`${currenturl}\``,

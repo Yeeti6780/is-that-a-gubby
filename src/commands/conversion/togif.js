@@ -7,7 +7,7 @@ module.exports = {
             lastUrl, validateFile, downloadFile, execPromise,
             findpreset, sendFile, fetchPingPerms
         } = poopy.functions
-        let { DiscordTypes } = poopy.modules
+        let { Discord } = poopy.modules
         let vars = poopy.vars
 
         await msg.channel.sendTyping().catch(() => { })
@@ -39,10 +39,10 @@ module.exports = {
         if (!fileinfo) return
         var type = fileinfo.type
 
-        if (type.mime.startsWith('video')) {
-            var filepath = await downloadFile(currenturl, `input.mp4`, {
+        if (type.mime.startsWith('video') || (type.mime.startsWith('image') && type.ext === 'apng')) {
+            var filepath = await downloadFile(currenturl, `input.${fileinfo.shortext}`, {
                 fileinfo            })
-            var filename = `input.mp4`
+            var filename = `input.${fileinfo.shortext}`
             var iduration = Number((!fileinfo.info.duration || fileinfo.info.duration.includes('N/A')) ? '0' : fileinfo.info.duration)
 
             await execPromise(`ffmpeg -i ${filepath}/${filename} -filter_complex "[0:v]scale='min(1500,iw)':min'(1500,ih)':force_original_aspect_ratio=decrease,split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} -t ${duration >= iduration ? iduration : duration} -r ${fps} -gifflags -offsetting ${filepath}/output.gif`)
@@ -54,6 +54,13 @@ module.exports = {
 
             await execPromise(`ffmpeg -i ${filepath}/${filename} -filter_complex "[0:v]scale='min(800,iw)':min'(800,ih)':force_original_aspect_ratio=decrease,split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} -gifflags -offsetting ${filepath}/output.gif`)
             return await sendFile(msg, filepath, `output.gif`)
+        } else if (type.mime.startsWith('image') && type.ext === 'gif') {
+            var fileMsg
+            if (!msg.nosend) fileMsg = await msg.channel.send({
+                files: [new Discord.AttachmentBuilder(currenturl, { name: "output.gif" })],
+                allowedMentions: fetchPingPerms(msg)
+            }).catch(() => { })
+            return fileMsg ? fileMsg.attachments.first().url : currenturl
         } else {
             await msg.reply({
                 content: `Unsupported file: \`${currenturl}\``,

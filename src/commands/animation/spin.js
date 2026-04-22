@@ -36,7 +36,7 @@ module.exports = {
         if (type.mime.startsWith('image') || type.mime.startsWith('video')) {
             var filepath = await downloadFile(currenturl, `input.gif`)
             var filename = `input.gif`
-            await execPromise(`ffmpeg -r 50 -stream_loop -1 -t ${duration} -i ${filepath}/${filename} -filter_complex "[0:v]scale='min(400,iw)':min'(400,ih)':force_original_aspect_ratio=decrease,rotate=t/${duration}*360*PI/180:ow='max(iw,ih)':oh=max'(iw,ih)':c=0x00000000,split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} -gifflags -offsetting -r 50 -t ${duration} ${filepath}/output.gif`)
+            await execPromise(`ffmpeg -r 50 -stream_loop -1 -t ${duration} -i ${filepath}/${filename} -filter_complex "[0:v]scale='min(1000,iw)':min'(400,ih)':force_original_aspect_ratio=decrease,rotate=t/${duration}*360*PI/180:ow='max(iw,ih)':oh=max'(iw,ih)':c=0x00000000,split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} -gifflags -offsetting -r 50 -t ${duration} ${filepath}/output.gif`)
             return await sendFile(msg, filepath, `output.gif`)
         } else {
             await msg.reply({

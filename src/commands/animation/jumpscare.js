@@ -45,7 +45,7 @@ module.exports = {
             var width = fileinfo.info.width
             var height = fileinfo.info.height
 
-            await execPromise(`ffmpeg -stream_loop -1 -t ${zoomtime} -i ${filepath}/${filename} -f lavfi -stream_loop -1 -t ${zoomtime} -r 50 -i "color=0x00000000:s=${width}x${height},format=rgba" -filter_complex "[0:v]fps=50,scale=${width}*(t/${zoomtime})*${zoomsize}:${height}*(t/${zoomtime})*${zoomsize}:eval=frame[overlay];[1:v][overlay]overlay=x=(W-w)/2:y=(H-h)/2:format=auto,scale='min(400,iw)':min'(400,ih)':force_original_aspect_ratio=decrease,split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} -y -shortest -gifflags -offsetting ${filepath}/output.gif`)
+            await execPromise(`ffmpeg -stream_loop -1 -t ${zoomtime} -i ${filepath}/${filename} -f lavfi -stream_loop -1 -t ${zoomtime} -r 50 -i "color=0x00000000:s=${width}x${height},format=rgba" -filter_complex "[0:v]fps=50,scale=${width}*(t/${zoomtime})*${zoomsize}:${height}*(t/${zoomtime})*${zoomsize}:eval=frame[overlay];[1:v][overlay]overlay=x=(W-w)/2:y=(H-h)/2:format=auto,scale='min(1000,iw)':min'(400,ih)':force_original_aspect_ratio=decrease,split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} -y -shortest -gifflags -offsetting ${filepath}/output.gif`)
             return await sendFile(msg, filepath, `output.gif`)
         } else {
             await msg.reply({

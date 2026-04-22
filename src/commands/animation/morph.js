@@ -88,10 +88,10 @@ module.exports = {
 
         fs.mkdirSync(`${filepath}/frames`)
 
-        await execPromise(`ffmpeg -i ${filepath}/${filename} -vf "scale='min(400,iw)':min'(400,ih)':force_original_aspect_ratio=decrease" -vframes 1 ${filepath}/static.png`)
-        await execPromise(`ffmpeg -i ${filepath}/${filename2} -vf "scale='min(400,iw)':min'(400,ih)':force_original_aspect_ratio=decrease" -vframes 1 ${filepath}/static2.png`)
+        await execPromise(`ffmpeg -i ${filepath}/${filename} -vf "scale='min(1000,iw)':min'(400,ih)':force_original_aspect_ratio=decrease" -vframes 1 ${filepath}/static.png`)
+        await execPromise(`ffmpeg -i ${filepath}/${filename2} -vf "scale='min(1000,iw)':min'(400,ih)':force_original_aspect_ratio=decrease" -vframes 1 ${filepath}/static2.png`)
         await execPromise(`gmic ${filepath}/static.png ${filepath}/static2.png morph 20 output ${filepath}/frames/frame.png`)
-        await execPromise(`ffmpeg -i ${filepath}/frames/frame_%06d.png -filter_complex "[0:v]scale='min(400,iw)':min'(400,ih)':force_original_aspect_ratio=decrease,split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} ${filepath}/output.gif`)
+        await execPromise(`ffmpeg -i ${filepath}/frames/frame_%06d.png -filter_complex "[0:v]scale='min(1000,iw)':min'(400,ih)':force_original_aspect_ratio=decrease,split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} ${filepath}/output.gif`)
         return await sendFile(msg, filepath, `output.gif`)
     },
     help: {

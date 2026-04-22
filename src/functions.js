@@ -624,6 +624,8 @@ functions.fetchPingPerms = function (msg) {
 }
 
 functions.execPromise = function (code, opts = {}) {
+    const DEBUG = true
+
     let poopy = this
     let config = poopy.config
     let vars = poopy.vars
@@ -703,11 +705,13 @@ functions.execPromise = function (code, opts = {}) {
         proc.stdout.on('data', (buffer) => {
             if (!buffer.toString()) return
             stdout.push(buffer.toString())
+            if (DEBUG) console.log(buffer.toString())
         })
 
         proc.stderr.on('data', (buffer) => {
             if (!buffer.toString()) return
             stderr.push(buffer.toString())
+            if (DEBUG) console.log(buffer.toString())
         })
 
         proc.stdout.on('close', () => {
@@ -5590,71 +5594,6 @@ functions.sendFile = async function (msg, filepath, filename, extraOptions) {
     var prefix = data.guildData[msg.guild.id].prefix
     var args = msg.content.substring(prefix.toLowerCase().length).split(' ')
 
-    extraOptions.catbox = extraOptions.catbox ?? args.includes('-catbox')
-    extraOptions.nosend = extraOptions.nosend ?? msg.nosend ?? args.includes('-nosend')
-    extraOptions.compress = extraOptions.compress ?? args.includes('-compress')
-
-    if (extraOptions.compress) {
-        var fileinfo = await validateFileFromPath(`${filepath}/${filename}`, 'very true').catch(() => { })
-
-        if (!fileinfo) {
-            await msg.reply('Couldn\'t send file.').catch(() => { })
-            infoPost(`Couldn\'t send file`)
-            await rateLimit(msg)
-
-            if (extraOptions.keep ||
-                filepath == undefined ||
-                filepath.startsWith('tempfiles')) return
-
-            fs.rm(filepath, { force: true, recursive: true })
-            return
-        }
-
-        var size = fs.readFileSync(`${filepath}/${filename}`).length
-        var tries = 1
-        while (size > (8 * 1024 * 1024) && tries < 5) {
-            fs.renameSync(`${filepath}/${filename}`, `${filepath}/compress_${filename}`)
-
-            switch (fileinfo.shorttype) {
-                case 'image':
-                    await execPromise(`ffmpeg -i ${filepath}/compress_${filename} -vf "scale=iw*${7 / fileinfo.size / tries}:ih*${7 / fileinfo.size / tries}" ${filepath}/${filename}`)
-                    break;
-
-                case 'gif':
-                    await execPromise(`ffmpeg -i ${filepath}/compress_${filename} -filter_complex "[0:v]scale=iw*${7 / fileinfo.size / tries}:ih*${7 / fileinfo.size / tries},split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -gifflags -offsetting ${filepath}/compress2_${filename}`)
-                    await execPromise(`gifsicle -O3 --lossy=${Math.min(Math.max(Math.round(fileinfo.size * 10) * tries, 30), 200)} -o ${filepath}/${filename} ${filepath}/compress2_${filename}`)
-                    fs.rmSync(`${filepath}/compress2_${filename}`)
-                    break;
-
-                case 'video':
-                    await execPromise(`ffmpeg -i ${filepath}/compress_${filename} -vf "scale='ceil(iw*${7 / fileinfo.size / tries}/2)*2':'ceil(ih*${7 / fileinfo.size / tries}/2)*2'" ${tries > 1 ? `-crf ${Math.min(28 + 10 * tries, 51)} -b:v ${Math.round(128 / tries)}k -b:a ${Math.round(256 / tries)}k ` : ''}-preset veryslow ${filepath}/${filename}`)
-                    break;
-
-                case 'audio':
-                    await execPromise(`ffmpeg -i ${filepath}/compress_${filename} -b:a ${Math.round(128 / tries)}k ${filepath}/${filename}`)
-                    break;
-
-                default:
-                    fs.copyFileSync(`${filepath}/compress_${filename}`, `${filepath}/${filename}`)
-                    tries = 5
-                    break;
-            }
-
-            if (fs.existsSync(`${filepath}/${filename}`)) fs.rmSync(`${filepath}/compress_${filename}`)
-            else {
-                fs.renameSync(`${filepath}/compress_${filename}`, `${filepath}/${filename}`)
-                break
-            }
-            size = fs.readFileSync(`${filepath}/${filename}`).length
-            tries++
-        }
-    }
-
-    var nameindex = args.indexOf('-filename')
-    if (nameindex > -1 && args[nameindex + 1]) {
-        extraOptions.name = args[nameindex + 1].replace(/[/\\?%*:|"<>]/g, '-').substring(0, 128)
-    }
-
     var fileBuffer
 
     try {
@@ -5672,15 +5611,103 @@ functions.sendFile = async function (msg, filepath, filename, extraOptions) {
         return
     }
 
+    var tooLarge = fileBuffer.length > getUploadLimit(msg)
+
+    extraOptions.catbox = extraOptions.catbox ?? args.includes('-catbox')
+    extraOptions.nosend = extraOptions.nosend ?? msg.nosend ?? args.includes('-nosend')
+    extraOptions.nocompress = extraOptions.nocompress ?? args.includes('-nocompress')
+
+    var compress = (tooLarge && !extraOptions.catbox && !extraOptions.nosend) && !extraOptions.nocompress
+
+    if (compress) {
+        if (!extraOptions.nosend) await msg.reply('Output file too large to be sent to channel, so I\'m gonna try to compress it...\n-# (...unless you didn\'t want this, then you can specify `-nocompress` next time)').catch(() => { })
+        var fileinfo = await validateFileFromPath(`${filepath}/${filename}`, 'very true').catch(() => { })
+
+        if (!fileinfo) {
+            await msg.reply('Couldn\'t send file.').catch(() => { })
+            infoPost(`Couldn\'t send file`)
+            await rateLimit(msg)
+
+            if (extraOptions.keep ||
+                filepath == undefined ||
+                filepath.startsWith('tempfiles')) return
+
+            fs.rm(filepath, { force: true, recursive: true })
+            return
+        }
+
+        var size = fs.readFileSync(`${filepath}/${filename}`).length
+        var tries = 1
+        while (size > getUploadLimit(msg) && tries <= 5) {
+            fs.renameSync(`${filepath}/${filename}`, `${filepath}/compress_${filename}`)
+
+            switch (fileinfo.shorttype) {
+                case 'image':
+                    await execPromise(`ffmpeg -i ${filepath}/compress_${filename} -vf "scale=iw*${1 / (tries * 0.5 + 1)}:ih*${1 / (tries * 0.5 + 1)}" ${filepath}/${filename}`)
+                    break;
+
+                case 'gif':
+                    await execPromise(`ffmpeg -i ${filepath}/compress_${filename} -filter_complex "[0:v]scale=iw*${1 / (tries * 0.5 + 1)}:ih*${1 / (tries * 0.5 + 1)},split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -gifflags -offsetting ${filepath}/compress2_${filename}`)
+                    await execPromise(`gifsicle -O3 --lossy=${40 * tries} -o ${filepath}/${filename} ${filepath}/compress2_${filename}`)
+                    if (fs.existsSync(`${filepath}/compress2_${filename}`)) fs.rmSync(`${filepath}/compress2_${filename}`)
+                    break;
+
+                case 'video':
+                    await execPromise(`ffmpeg -i ${filepath}/compress_${filename} -vf "scale='ceil(iw*${1 / (tries * 0.5 + 1)}/2)*2':'ceil(ih*${1 / (tries * 0.5 + 1)}/2)*2'" ${tries > 1 ? `-crf ${Math.min(28 + 10 * tries, 51)} -b:v ${Math.round(128 / (tries * 0.5 + 1))}k -b:a ${Math.round(256 / (tries * 0.5 + 1))}k ` : ''}-preset veryslow ${filepath}/${filename}`)
+                    break;
+
+                case 'audio':
+                    await execPromise(`ffmpeg -i ${filepath}/compress_${filename} -b:a ${Math.round(256 / (tries * 0.5 + 1))}k ${filepath}/${filename}`)
+                    break;
+
+                default:
+                    fs.copyFileSync(`${filepath}/compress_${filename}`, `${filepath}/${filename}`)
+                    tries = 5
+                    break;
+            }
+
+            if (fs.existsSync(`${filepath}/compress_${filename}`)) {
+                if (fs.existsSync(`${filepath}/${filename}`)) fs.rmSync(`${filepath}/compress_${filename}`)
+                else {
+                    fs.renameSync(`${filepath}/compress_${filename}`, `${filepath}/${filename}`)
+                    break
+                }
+            }
+
+            size = fs.readFileSync(`${filepath}/${filename}`).length
+            tries++
+        }
+
+        try {
+            fileBuffer = fs.readFileSync(`${filepath}/${filename}`)
+        } catch (_) {
+            await msg.reply('Couldn\'t send file.').catch(() => { })
+            infoPost(`Couldn\'t send file`)
+            await rateLimit(msg)
+    
+            if (extraOptions.keep ||
+                filepath == undefined ||
+                filepath.startsWith('tempfiles')) return
+    
+            fs.rm(filepath, { force: true, recursive: true })
+            return
+        }
+
+        tooLarge = fileBuffer.length > getUploadLimit(msg)
+    }
+
+    var nameindex = args.indexOf('-filename')
+    if (nameindex > -1 && args[nameindex + 1]) {
+        extraOptions.name = args[nameindex + 1].replace(/[/\\?%*:|"<>]/g, '-').substring(0, 128)
+    }
+
     if (extraOptions.name) {
         fs.renameSync(`${filepath}/${filename}`, `${filepath}/${extraOptions.name}`)
         filename = extraOptions.name
     }
 
-    var tooLarge = fileBuffer.length > getUploadLimit(msg)
-
     if (extraOptions.catbox || (tooLarge && !extraOptions.nosend)) {
-        if (!extraOptions.catbox && tooLarge && !extraOptions.nosend) await msg.reply('The output file is too large, so I\'m uploading it to Catbox or Litterbox.').catch(() => { })
+        if (tooLarge && !extraOptions.catbox && !extraOptions.nosend) await msg.reply(`${extraOptions.nocompress ? "Output file too" : "Still"} large${extraOptions.nocompress ? " to be sent to channel" : ""}, guess I\'m gonna try uploading it to Catbox or Litterbox.`).catch(() => { })
         infoPost(`Uploading file to catbox.moe`)
         var fileLink = await vars.Catbox.upload(`${filepath}/${filename}`).catch(() => { })
 
@@ -5757,7 +5784,7 @@ functions.sendFile = async function (msg, filepath, filename, extraOptions) {
         var fileMsg = await msg.reply(sendObject).catch(() => { })
         
         if (!fileMsg) {
-            await msg.reply('There was an error sending the file, so I\'m uploading it to Catbox or Litterbox.').catch(() => { })
+            await msg.reply('There was an error sending the file, so I\'m gonna try uploading it to Catbox or Litterbox.').catch(() => { })
             infoPost(`Failed to send file to channel, uploading to catbox.moe`)
             var fileLink = await vars.Catbox.upload(`${filepath}/${filename}`).catch(() => { })
 

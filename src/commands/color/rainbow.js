@@ -39,7 +39,7 @@ module.exports = {
                 fileinfo
             })
             var filename = `input.png`
-            await execPromise(`ffmpeg -stream_loop -1 -t ${duration} -r 50 -i ${filepath}/${filename} -filter_complex "[0:v]hue=s=0,negate,curves=r='0/0 1/1':g='0/0 1/0':b='0/0 1/0',hue=H=(PI*2)*(t/${duration}-0.5),negate,scale='min(400,iw)':min'(400,ih)':force_original_aspect_ratio=decrease,split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} -gifflags -offsetting ${filepath}/output.gif`)
+            await execPromise(`ffmpeg -stream_loop -1 -t ${duration} -r 50 -i ${filepath}/${filename} -filter_complex "[0:v]hue=s=0,negate,curves=r='0/0 1/1':g='0/0 1/0':b='0/0 1/0',hue=H=(PI*2)*(t/${duration}-0.5),negate,scale='min(1000,iw)':min'(400,ih)':force_original_aspect_ratio=decrease,split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} -gifflags -offsetting ${filepath}/output.gif`)
             return await sendFile(msg, filepath, `output.gif`)
         } else if (type.mime.startsWith('video')) {
             var filepath = await downloadFile(currenturl, `input.mp4`, {

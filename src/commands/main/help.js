@@ -131,7 +131,9 @@ module.exports = {
             }
         })
 
-        if (msg.nosend) return `**${vars.shelpCmds[page - 1].type} Commands**\n\n` + "Arguments between \"<>\" are required.\nArguments between \"[]\" are optional.\nArguments between \"{}\" are optional but should normally be supplied.\nMultiple commands can be executed separating them with \"-|-\".\nFile manipulation commands have special options that can be used:\n`-encodingpreset <preset>` - More info in `reencode` command.\n`-filename <name>` - Saves the file as the specified name.\n`-catbox` - Forces the file to be uploaded to catbox.moe.\n`-nosend` - Does not send anything, can be used to execute commands silently.\n`-compress` - Compresses the file before sending it if it's above 8 MB.\n\n" + vars.shelpCmds[page - 1].commands.map(k => `\`${k.name}\`\n> ${k.value}`).join('\n') + `\n\nPage 1/${vars.shelpCmds.length}`
+        var argumentHelp = "Arguments between \"<>\" are required.\nArguments between \"[]\" are optional.\nArguments between \"{}\" are optional but should normally be supplied.\nMultiple commands can be executed separating them with \"-|-\".\nFile manipulation commands have special options that can be used:\n`-encodingpreset <preset>` - More info in `reencode` command.\n`-filename <name>` - Saves the file with the specified name.\n`-catbox` - Forces the file to be uploaded to Catbox or Litterbox.\n`-nosend` - Does not send anything, useful for executing commands silently and only fetching the output.\n`-nocompress` - Forces the file to not be automatically compressed even when above the channel size limit.\n\n"
+
+        if (msg.nosend) return `**${vars.shelpCmds[page - 1].type} Commands**\n\n` + argumentHelp + vars.shelpCmds[page - 1].commands.map(k => `\`${k.name}\`\n> ${k.value}`).join('\n') + `\n\nPage 1/${vars.shelpCmds.length}`
 
         var helped = false
 
@@ -178,10 +180,10 @@ module.exports = {
         if (page > vars.shelpCmds.length) page = vars.shelpCmds.length
 
         await navigateEmbed(dmChannel, async (page) => {
-            var helpEmbedText = `**${vars.shelpCmds[page - 1].type} Commands**\n\n` + "Arguments between \"<>\" are required.\nArguments between \"[]\" are optional.\nArguments between \"{}\" are optional but should normally be supplied.\nMultiple commands can be executed separating them with \"-|-\".\nFile manipulation commands have special options that can be used:\n`-encodingpreset <preset>` - More info in `reencode` command.\n`-filename <name>` - Saves the file as the specified name.\n`-catbox` - Forces the file to be uploaded to catbox.moe.\n`-nosend` - Does not send anything, can be used to execute commands silently.\n`-compress` - Compresses the file before sending it if it's above 8 MB.\n\n" + vars.shelpCmds[page - 1].commands.map(k => `\`${k.name}\`\n> ${k.value}`).join('\n') + `\n\nPage ${page}/${vars.shelpCmds.length}`
+            var helpEmbedText = `**${vars.shelpCmds[page - 1].type} Commands**\n\n` + argumentHelp + vars.shelpCmds[page - 1].commands.map(k => `\`${k.name}\`\n> ${k.value}`).join('\n') + `\n\nPage ${page}/${vars.shelpCmds.length}`
             var helpEmbed = {
                 "title": `${vars.shelpCmds[page - 1].type} Commands`,
-                "description": "Arguments between \"<>\" are required.\nArguments between \"[]\" are optional.\nArguments between \"{}\" are optional but should normally be supplied.\nMultiple commands can be executed separating them with \"-|-\".\nFile manipulation commands have special options that can be used:\n`-encodingpreset <preset>` - More info in `reencode` command.\n`-filename <name>` - Saves the file as the specified name.\n`-catbox` - Forces the file to be uploaded to catbox.moe.\n`-nosend` - Does not send anything, can be used to execute commands silently.\n`-compress` - Compresses the file before sending it if it's above 8 MB.",
+                "description": argumentHelp,
                 "color": 0x472604,
                 "footer": {
                     "icon_url": bot.user.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' }),
@@ -289,7 +291,7 @@ module.exports = {
             return
         })
 
-        return `**${vars.shelpCmds[page - 1].type} Commands**\n\n` + "Arguments between \"<>\" are required.\nArguments between \"[]\" are optional.\nArguments between \"{}\" are optional but should normally be supplied.\nMultiple commands can be executed separating them with \"-|-\".\nFile manipulation commands have special options that can be used:\n`-encodingpreset <preset>` - More info in `reencode` command.\n`-filename <name>` - Saves the file as the specified name.\n`-catbox` - Forces the file to be uploaded to catbox.moe.\n`-nosend` - Does not send anything, can be used to execute commands silently.\n`-compress` - Compresses the file before sending it if it's above 8 MB.\n\n" + vars.shelpCmds[page - 1].commands.map(k => `\`${k.name}\`\n> ${k.value}`).join('\n') + `\n\nPage 1/${vars.shelpCmds.length}`
+        return `**${vars.shelpCmds[page - 1].type} Commands**\n\n` + argumentHelp + vars.shelpCmds[page - 1].commands.map(k => `\`${k.name}\`\n> ${k.value}`).join('\n') + `\n\nPage 1/${vars.shelpCmds.length}`
     },
     help: {
         name: 'help/commands/cmds [command] [-page]',
