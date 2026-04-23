@@ -1252,7 +1252,7 @@ class Poopy {
                     ?? await starboardChannel.messages.fetch(starboardMsgId).catch(() => { })
                 if (!starboardMsg) continue
 
-                starboardMsg.delete()
+                starboardMsg.delete().catch(() => { })
             }
         }
 

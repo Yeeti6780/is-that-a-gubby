@@ -1855,7 +1855,7 @@ functions.navigateEmbed = async function (channel, pageFunc, results, who, extra
     }
 
     if (config.textEmbeds) sendObject.content = resultEmbed
-    else if (resultEmbed.embeds) for (let key in resultEmbed) sendObject[key] = resultEmbed[key]
+    else if (resultEmbed?.embeds) for (let key in resultEmbed) sendObject[key] = resultEmbed[key]
     else sendObject.embeds = [resultEmbed]
 
     var resultsMsg = await (reply ?? channel)[reply ? 'reply' : 'send'](sendObject).catch(() => { })
@@ -1914,7 +1914,7 @@ functions.navigateEmbed = async function (channel, pageFunc, results, who, extra
                     if (allowedMentions) sendObject.allowedMentions = allowedMentions
 
                     if (config.textEmbeds) sendObject.content = resultEmbed
-                    else if (resultEmbed.embeds) for (let key in resultEmbed) sendObject[key] = resultEmbed[key]
+                    else if (resultEmbed?.embeds) for (let key in resultEmbed) sendObject[key] = resultEmbed[key]
                     else sendObject.embeds = [resultEmbed];
 
                     (reply?.isUserApp ? reply.editReply : resultsMsg.edit).call(reply?.isUserApp ? reply : resultsMsg, sendObject).catch(() => { })
@@ -1933,7 +1933,7 @@ functions.navigateEmbed = async function (channel, pageFunc, results, who, extra
             if (allowedMentions) sendObject.allowedMentions = allowedMentions
 
             if (config.textEmbeds) sendObject.content = resultEmbed
-            else if (resultEmbed.embeds) for (let key in resultEmbed) sendObject[key] = resultEmbed[key]
+            else if (resultEmbed?.embeds) for (let key in resultEmbed) sendObject[key] = resultEmbed[key]
             else sendObject.embeds = [resultEmbed];
 
             (reply?.isUserApp ? reply.editReply : resultsMsg.edit).call(reply?.isUserApp ? reply : resultsMsg, sendObject).catch(() => { })
@@ -1991,13 +1991,13 @@ functions.navigateEmbed = async function (channel, pageFunc, results, who, extra
 
                         sendObject.components.push(menuRow)
 
-                        if (resultEmbed.menuText) delete resultEmbed.menuText
+                        if (resultEmbed?.menuText) delete resultEmbed.menuText
                     }
 
                     if (allowedMentions) sendObject.allowedMentions = allowedMentions
 
                     if (config.textEmbeds) sendObject.content = resultEmbed
-                    else if (resultEmbed.embeds) for (let key in resultEmbed) sendObject[key] = resultEmbed[key]
+                    else if (resultEmbed?.embeds) for (let key in resultEmbed) sendObject[key] = resultEmbed[key]
                     else sendObject.embeds = [resultEmbed];
 
                     (reply?.isUserApp ? reply.editReply : resultsMsg.edit).call(reply?.isUserApp ? reply : resultsMsg, sendObject).catch(() => { })
@@ -2018,7 +2018,7 @@ functions.navigateEmbed = async function (channel, pageFunc, results, who, extra
             if (allowedMentions) sendObject.allowedMentions = allowedMentions
 
             if (config.textEmbeds) sendObject.content = resultEmbed
-            else if (resultEmbed.embeds) for (let key in resultEmbed) sendObject[key] = resultEmbed[key]
+            else if (resultEmbed?.embeds) for (let key in resultEmbed) sendObject[key] = resultEmbed[key]
             else sendObject.embeds = [resultEmbed];
 
             (reply?.isUserApp ? reply.editReply : resultsMsg.edit).call(reply?.isUserApp ? reply : resultsMsg, sendObject).catch(() => { })
