@@ -27,7 +27,7 @@ String.prototype.toCapperCase = function toCapperCase() {
 }
 
 functions.sleep = function (ms) {
-    return new Promise(resolve => setTimeout(resolve, Math.max(Math.min(ms ?? 0, 0), Number.MAX_SAFE_INTEGER)))
+    return new Promise(resolve => setTimeout(resolve, Math.max(Math.min(ms ?? 0, 2 ** 31 - 1), 0)))
 }
 
 functions.requireJSON = function (path) {
@@ -3202,7 +3202,7 @@ functions.createCollector = function ({
         if (collector.timeout) collector.timeout.refresh()
     }
 
-    if (time != null) collector.timeout = setTimeout(() => collector.stop("time"), Math.max(Math.min(time, 0), Number.MAX_SAFE_INTEGER))
+    if (time != null) collector.timeout = setTimeout(() => collector.stop("time"), Math.max(Math.min(time, Number.MAX_SAFE_INTEGER), 0))
 
     collector.id = id
     collector.type = type

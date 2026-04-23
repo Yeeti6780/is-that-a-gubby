@@ -226,7 +226,7 @@ var dataGetters = {
 }
 
 function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, Math.max(Math.min(ms ?? 0, 0), Number.MAX_SAFE_INTEGER)));
+    return new Promise(resolve => setTimeout(resolve, Math.max(Math.min(ms ?? 0, 2 ** 31 - 1), 0)));
 }
 
 function createData(dataType) {
