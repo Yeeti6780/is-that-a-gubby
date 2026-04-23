@@ -27,7 +27,7 @@ String.prototype.toCapperCase = function toCapperCase() {
 }
 
 functions.sleep = function (ms) {
-    return new Promise(resolve => setTimeout(resolve, ms ?? 0))
+    return new Promise(resolve => setTimeout(resolve, Math.max(Math.min(ms ?? 0, 0), Number.MAX_SAFE_INTEGER)))
 }
 
 functions.requireJSON = function (path) {
@@ -984,7 +984,7 @@ functions.chat = async function (stim, msg, {
                 headers: {
                     Authorization: `Bearer ${userToken(msg.author.id, 'AI21_KEY')}`
                 }
-            }).catch((e) => console.log(e))
+            }).catch(() => { })
 
             data = resp?.data?.choices?.[0]
             message = data?.message
@@ -3202,7 +3202,7 @@ functions.createCollector = function ({
         if (collector.timeout) collector.timeout.refresh()
     }
 
-    if (time != null) collector.timeout = setTimeout(() => collector.stop("time"), time)
+    if (time != null) collector.timeout = setTimeout(() => collector.stop("time"), Math.max(Math.min(time, 0), Number.MAX_SAFE_INTEGER))
 
     collector.id = id
     collector.type = type
@@ -4147,6 +4147,7 @@ functions.createLog = async function (type, member, logData) {
     let poopy = this
     let data = poopy.data
     let { Discord } = poopy.modules
+    let { validUrl } = poopy.vars
 
     const guild = member.guild
 
@@ -4177,6 +4178,8 @@ functions.createLog = async function (type, member, logData) {
             const attachments = webhookMsg.attachments
             logPayload.files = attachments.map(a => new Discord.AttachmentBuilder(a.attachment))
 
+            const footerAvatar = payload.avatarURL ?? webhookMsg.author.displayAvatarURL({ dynamic: true, size: 1024, extension: "png" }) ?? ""
+
             logEmbed.setTitle("Webhook message sent")
                 .setDescription(
                     `> **Channel:** ${msg.channel.name} (<#${msg.channel.id}>)\n` +
@@ -4186,7 +4189,7 @@ functions.createLog = async function (type, member, logData) {
                 )
                 .setFooter({
                     text: `Webhook: ${payload.username ?? webhookMsg.author.username}`,
-                    iconURL: payload.avatarURL ?? webhookMsg.author.displayAvatarURL({ dynamic: true, size: 1024, extension: "png" })
+                    iconURL: validUrl.test(footerAvatar) ? footerAvatar : undefined
                 })
 
             if (webhookMsg.content) logEmbed.addFields(
