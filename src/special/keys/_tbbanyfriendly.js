@@ -1,5 +1,5 @@
 module.exports = {
-  desc: 'Returns the name of any TBB friendly, including joke and spoiler ones.',
+  desc: 'Returns the name of any TBB friendly, including joke, spoiler and unobtainable ones.',
   func: function () {
     let poopy = this
     let json = poopy.json

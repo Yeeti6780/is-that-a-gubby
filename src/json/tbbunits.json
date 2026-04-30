@@ -385,52 +385,62 @@
         {
             "name": "Tumored Slinger",
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/c/c3/Tumored_Slinger.png",
-            "alt": "Tarnished Slinger"
+            "alt": "Tarnished Slinger",
+            "unobtainable": true
         },
         {
             "name": "Tarnished Slinger",
-            "image": "https://cdn.discordapp.com/attachments/853246754791358495/1460393830489657509/Tarnished_Slinger.png",
-            "normal": "Tumored Slinger"
+            "image": "https://cdn.discordapp.com/attachments/1415073653585875004/1499412410593710211/Tarnished_Slinger_VenataTake3.png",
+            "normal": "Tumored Slinger",
+            "unobtainable": true
         },
         {
             "name": "Papaler",
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/1/11/Papaler.png",
-            "alt": "Veteran Papaler"
+            "alt": "Veteran Papaler",
+            "unobtainable": true
         },
         {
             "name": "Veteran Papaler",
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/3/30/Veteran_Papaler.png",
-            "normal": "Papaler"
+            "normal": "Papaler",
+            "unobtainable": true
         },
         {
             "name": "Golden Hammer",
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/9/93/Golden_Hammer.png",
-            "alt": "Golden Banhammer"
+            "alt": "Golden Banhammer",
+            "unobtainable": true
         },
         {
             "name": "Golden Banhammer",
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/8/82/Golden_Banhammer.png",
-            "normal": "Golden Hammer"
+            "normal": "Golden Hammer",
+            "unobtainable": true
         },
         {
             "name": "RAIG",
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/7/7f/RAIG.png",
-            "alt": "RAIG COLOSSAL"
+            "alt": "RAIG COLOSSAL",
+            "unobtainable": true
         },
         {
             "name": "RAIG COLOSSAL",
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/5/55/RAIG_COLOSSAL.png",
-            "normal": "RAIG"
+            "normal": "RAIG",
+            "unobtainable": true
         },
         {
             "name": "FRIEND",
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/f/f0/FRIEND.png",
-            "alt": "OMEGA FRIEND"
+            "alt": "OMEGA FRIEND",
+            "unobtainable": true
         },
         {
             "name": "OMEGA FRIEND",
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/a/a2/OMEGA_FRIEND.png",
-            "normal": "FRIEND"
+            "normal": "FRIEND",
+            "unobtainable": true
         },
         {
             "name": "Blud",
@@ -983,6 +993,12 @@
             "spoiler": true
         },
         {
+            "name": "Duck Battler",
+            "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1499482739987058708/Duck_Battler_Friendly.png",
+            "alt": "EpikDuck Battler",
+            "spoiler": true
+        },
+        {
             "name": "Blaze",
             "image": "https://cdn.discordapp.com/attachments/1415073653585875004/1474903863189573672/blaze_2.png",
             "alt": "Micro",
@@ -1005,6 +1021,24 @@
             "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1477667027375230996/chartreuse_omg.png",
             "normal": "Gamma",
             "spoiler": true
+        },
+        {
+            "name": "Alpha",
+            "image": "https://cdn.discordapp.com/attachments/1415073653585875004/1495556356227334355/Alpha_concept_thanks_plzdontcensored.png",
+            "alt": "Azure",
+            "joke": true
+        },
+        {
+            "name": "Azure",
+            "image": "https://cdn.discordapp.com/attachments/1415073653585875004/1495556356575330334/azure_concept_thanks_plzdontcensored.png",
+            "normal": "Alpha",
+            "joke": true
+        },
+        {
+            "name": "Tumored Rocket",
+            "image": "https://cdn.discordapp.com/attachments/1468528136390967522/1498721849142415390/i_forgot_his_name.png",
+            "alt": "Tarnished Rocket",
+            "joke": true
         },
         {
             "name": "Casual Battler",
@@ -1047,6 +1081,12 @@
             "name": "Gloober",
             "image": "https://cdn.discordapp.com/attachments/1415073653585875004/1462647495116062720/Gloober.png",
             "custom": ["1285690452510638080"],
+            "joke": true
+        },
+        {
+            "name": "Bazard",
+            "image": "https://cdn.discordapp.com/attachments/1415073653585875004/1499411275636146186/Bazard.png",
+            "custom": ["257657151227559937"],
             "joke": true
         }
     ],
@@ -1286,9 +1326,24 @@
             "alt": "Uzi Rambo"
         },
         {
+            "name": "Cannonry",
+            "image": "https://cdn.discordapp.com/attachments/1497250610997891082/1497250611534627007/Cannonry_fanmade.png",
+            "alt": "Mercenary",
+            "origin": "Arm Cannoneer",
+            "spoiler": true
+        },
+        {
             "name": "Redbeard",
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/8/83/Redbeard.png",
             "alt": "Bulldozer",
+            "boss": true
+        },
+        {
+            "name": "Captain Red",
+            "image": "https://cdn.discordapp.com/attachments/1497250610997891082/1497250612239401030/captain_red_fanmade.png",
+            "alt": "Scarlet Storm",
+            "origin": "Redbeard",
+            "spoiler": true,
             "boss": true
         },
         {
@@ -1378,6 +1433,13 @@
             "name": "Uzi Rambo",
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/7/71/Uzi_Rambo.png",
             "normal": "Arm Cannoneer"
+        },
+        {
+            "name": "Mercenary",
+            "image": "https://cdn.discordapp.com/attachments/1415073653585875004/1499413295206109314/Mercenary_fanmade.png",
+            "normal": "Cannonry",
+            "origin": "Uzi Rambo",
+            "spoiler": true
         },
         {
             "name": "Bulldozer",
@@ -2715,7 +2777,7 @@
             "spoiler": true
         },
         {
-            "name": "Cheez",
+            "name": "Chez",
             "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1452947001049354385/Cheez.png",
             "alt": "Chardy",
             "spoiler": true
@@ -2761,7 +2823,7 @@
         },
         {
             "name": "Duck Battler",
-            "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1453141608223477951/Duck_Battler.png",
+            "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1499482183235014777/Duck_Battler.png",
             "alt": "EpikDuck Battler",
             "spoiler": true
         },
@@ -2773,13 +2835,13 @@
         },
         {
             "name": "Drakocage",
-            "image": "https://cdn.discordapp.com/attachments/1415073653585875004/1463780346188529675/Drakocage.png",
+            "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1463527312040398912/Drakocage.png",
             "alt": "Monfined",
             "spoiler": true
         },
         {
             "name": "Drako",
-            "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1462232765029290219/Drako.png",
+            "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1463523201253376062/Drako.png",
             "alt": "Monsuer",
             "origin": "Drakocage",
             "spoiler": true,
@@ -2826,7 +2888,7 @@
         },
         {
             "name": "Fish Buddy",
-            "image": "https://cdn.discordapp.com/attachments/1445846961470312592/1462182455128887328/Fish_Buddy.png",
+            "image": "https://cdn.discordapp.com/attachments/1452946864377696317/1493692217230098652/Fish_Buddy_NEW.png",
             "normal": "Sign Buddy",
             "spoiler": true
         },
