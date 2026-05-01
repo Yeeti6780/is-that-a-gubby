@@ -4,6 +4,7 @@ module.exports = {
     func: async function (matches, msg) {
         let poopy = this
         let config = poopy.config
+        let bot = poopy.bot
         let { splitKeyFunc } = poopy.functions
         let { DiscordTypes } = poopy.modules
 
@@ -18,15 +19,16 @@ module.exports = {
             }
         }
 
-        var user = await msg.guild.members.fetch(id).catch(() => { })
+        var user = msg.guild.members.cache.get(id) ?? await msg.guild.members.fetch(id).catch(() => { })
+            ?? bot.users.cache.get(id) ?? await bot.users.fetch(id).catch(() => { })
 
         if (user) {
-            if (config.ownerids.find(id => id == user.user.id)) return 'true'
+            if (config.ownerids.find(id => id == user?.user?.id ?? id == user?.id)) return 'true'
 
             for (var i in perms) {
                 var perm = perms[i]
 
-                if (!(user.permissions.has(DiscordTypes.PermissionFlagsBits[perm]))) {
+                if (user.permissions && !(user.permissions.has(DiscordTypes.PermissionFlagsBits[perm]))) {
                     return ''
                 }
             }

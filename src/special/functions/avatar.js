@@ -12,7 +12,7 @@ module.exports = {
     var user = await msg.guild.members.fetch(id).catch(() => { }) ??
       await bot.users.fetch(id).catch(() => { })
 
-    if (global && user.user) user = user.user
+    if (global && user?.user) user = user.user
 
     return user ? user.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' }) : ''
   }

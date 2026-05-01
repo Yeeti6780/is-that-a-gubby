@@ -14,9 +14,9 @@ module.exports = {
     var separator = await getKeywordsFor(split[2] ?? '', msg, isBot, opts).catch(() => { }) ?? ''
     var repeat = []
     for (var i = 0; i < times; i++) {
+      tempdata[msg.author.id][msg.id].keyAttempts++
       repeat.push(await getKeywordsFor(phrase, msg, isBot, opts).catch(() => { }) ?? '')
       await sleep()
-      tempdata[msg.author.id][msg.id].keyAttempts++
       if (!opts.ownermode && tempdata[msg.author.id][msg.id].keyAttempts >= config.keyLimit) break
     }
     return repeat.join(separator)

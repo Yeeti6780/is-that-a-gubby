@@ -4,6 +4,7 @@ module.exports = {
     func: async function (matches, msg) {
         let poopy = this
         let tempdata = poopy.tempdata
+        let config = poopy.config
         let { DiscordTypes } = poopy.modules
 
         if (!(

@@ -4173,7 +4173,7 @@ functions.createLog = async function (type, member, logData) {
         case "webhooks": {
             const { msg, webhookMsg, payload } = logData
 
-            if (webhookMsg.embeds.some(e => e.data.title == "Webhook message sent")) return
+            if (webhookMsg?.embeds && webhookMsg?.embeds?.some(e => e.data.title == "Webhook message sent")) return
 
             const attachments = webhookMsg.attachments
             logPayload.files = attachments.map(a => new Discord.AttachmentBuilder(a.attachment))
@@ -4644,6 +4644,7 @@ functions.getKeywordsFor = async function (string, msg, isBot, { extraKeys = {},
                     tempdata[msg.author.id][msg.id].keywordsExecuted.push(keyName)
 
                     var change
+                    tempdata[msg.author.id][msg.id].keyAttempts += !data.guildData[msg.guild.id].chaos ? (key.attemptvalue ?? 1) : 0
 
                     try {
                         var doEscape = keyCut !== keyName
@@ -4663,7 +4664,6 @@ functions.getKeywordsFor = async function (string, msg, isBot, { extraKeys = {},
                     }
 
                     string = replaceAllContent ? change : string.replace(keydata.match, change.replace(/\$&/g, '$\\&'))
-                    tempdata[msg.author.id][msg.id].keyAttempts += !data.guildData[msg.guild.id].chaos ? (key.attemptvalue ?? 1) : 0
                     break
 
                 case 'func':
@@ -4687,6 +4687,7 @@ functions.getKeywordsFor = async function (string, msg, isBot, { extraKeys = {},
                     }
 
                     var change
+                    tempdata[msg.author.id][msg.id].keyAttempts += !data.guildData[msg.guild.id].chaos ? (func.attemptvalue ?? 1) : 0
 
                     try {
                         var doEscape = funcCut !== funcName
@@ -4706,7 +4707,6 @@ functions.getKeywordsFor = async function (string, msg, isBot, { extraKeys = {},
                     }
 
                     string = replaceAllContent ? change : string.replace(`${funcName}(${match})`, change.replace(/\$&/g, '$\\&'))
-                    tempdata[msg.author.id][msg.id].keyAttempts += !data.guildData[msg.guild.id].chaos ? (func.attemptvalue ?? 1) : 0
                     break
             }
 

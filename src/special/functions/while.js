@@ -13,9 +13,9 @@ module.exports = {
     var func = split[1] ?? ''
 
     while (await getKeywordsFor(condition, msg, isBot, opts).catch(() => { }) ?? '') {
+      tempdata[msg.author.id][msg.id].keyAttempts++
       await getKeywordsFor(func, msg, isBot, opts).catch(() => { })
       await sleep()
-      tempdata[msg.author.id][msg.id].keyAttempts++
       if (!opts.ownermode && tempdata[msg.author.id][msg.id].keyAttempts >= config.keyLimit) break
     }
 
