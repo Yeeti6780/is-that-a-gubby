@@ -1916,9 +1916,11 @@ class Poopy {
         }
 
         updateHivemindStatus()
-        vars.hivemindStatusInterval = setInterval(function () {
-            updateHivemindStatus()
-        }, 60000)
+        if (process.env.HIVEMIND_ID) {
+            vars.hivemindStatusInterval = setInterval(function () {
+                updateHivemindStatus()
+            }, 60000)
+        }
 
         if (!config.apiMode) {
             bot.on('messageCreate', (msg) => callbacks.messageCallback(msg).catch((e) => console.log(e)))
@@ -1951,8 +1953,10 @@ class Poopy {
 
         clearInterval(vars.statusInterval)
         clearInterval(vars.saveInterval)
-        clearInterval(vars.hivemindStatusInterval)
-
+        if (vars.hivemindStatusInterval !== undefined) {
+            clearInterval(vars.hivemindStatusInterval)
+        }
+        
         vars.started = false
         delete activeBots[config.database]
         bot.destroy()
