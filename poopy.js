@@ -613,6 +613,7 @@ class Poopy {
 
             async function executeCommand() {
                 var executed = false
+                var localExecuted = false
 
                 for (var i in cmds) {
                     var cmd = cmds[i]
@@ -832,6 +833,7 @@ class Poopy {
                             }
                         } else if (findLocalCmd) {
                             executed = true
+
                             if (!hivemindPass) {
                                 if (findLocalCmd.hivemindForce) {
                                     msg.nosend = true
@@ -853,7 +855,7 @@ class Poopy {
                                 if (
                                     tempdata[msg.author.id][msg.id]?.execCount >= 1 &&
                                     !data.guildData[msg.guild.id].chaincommands &&
-                                    !bypassPerms
+                                    !bypassPerms && !localExecuted
                                 ) {
                                     await msg.reply('You can\'t chain commands in this server.').catch(() => { })
                                     return
@@ -867,7 +869,9 @@ class Poopy {
                                 if (!data.guildData[msg.guild.id].chaos && tempdata[msg.author.id][msg.id]) tempdata[msg.author.id][msg.id].execCount++
                             }
 
+                            localExecuted = true
                             if (tempdata[msg.guild.id][msg.channel.id].shutUp) break
+
                             await msg.reply({
                                 content: phrase,
                                 allowedMentions: fetchPingPerms(msg)
@@ -957,7 +961,7 @@ class Poopy {
                                         if (
                                             tempdata[msg.author.id][msg.id]?.execCount >= 1 &&
                                             !data.guildData[msg.guild.id].chaincommands &&
-                                            !bypassPerms
+                                            !bypassPerms && !executed
                                         ) {
                                             await msg.reply('You can\'t chain commands in this server.').catch(() => { })
                                             return
@@ -971,6 +975,7 @@ class Poopy {
                                         if (!data.guildData[msg.guild.id].chaos && tempdata[msg.author.id][msg.id]) tempdata[msg.author.id][msg.id].execCount++
                                     }
 
+                                    localExecuted = true
                                     if (tempdata[msg.guild.id][msg.channel.id].shutUp) return
 
                                     await msg.reply({
