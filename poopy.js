@@ -961,7 +961,7 @@ class Poopy {
                                         if (
                                             tempdata[msg.author.id][msg.id]?.execCount >= 1 &&
                                             !data.guildData[msg.guild.id].chaincommands &&
-                                            !bypassPerms && !executed
+                                            !bypassPerms && !localExecuted
                                         ) {
                                             await msg.reply('You can\'t chain commands in this server.').catch(() => { })
                                             return
