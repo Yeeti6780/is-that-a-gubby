@@ -109,8 +109,15 @@ module.exports = {
         
         var channelHook = data.guildData[msg.guild.id].channels[msg.channel.id].custom[member.id]
 
+        var hasChangingPerms = msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageWebhooks) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id) || opts.isBot
+
+        if (!hasChangingPerms && member.id != msg.author.id) {
+            await msg.reply('You need to have the manage webhooks/messages permission to execute that!').catch(() => { })
+            return
+        }
+        
         if (!customHook && !channelHook) {
-            if (msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageWebhooks) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id) || opts.isBot) {
+            if (hasChangingPerms) {
                 if (!name) {
                     await msg.reply('Where\'s the name?!').catch(() => { })
                     return
