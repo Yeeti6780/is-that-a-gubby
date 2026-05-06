@@ -1,19 +1,13 @@
 module.exports = {
-    name: ['markov'],
+    name: ['markov', 'genai'],
     args: [
-        { "name": "message", "required": false, "specifarg": false, "orig": "[message]" },
-        { "name": "words", "required": false, "specifarg": true, "orig": "[-words <wordNumber>]" },
-        { "name": "nopunctuation", "required": false, "specifarg": true, "orig": "[-nopunctuation]" },
-        { "name": "keepcase", "required": false, "specifarg": true, "orig": "[-keepcase]" },
-        { "name": "randlerp", "required": false, "specifarg": true, "orig": "[-randlerp <number (from 0 to 1)>]" },
+        { "name": "begin", "required": false, "specifarg": false, "orig": "[begin]" },
+        { "name": "maxlength", "required": false, "specifarg": true, "orig": "[-maxlength <charNumber (1 to 2000)>]" },
         { "name": "randomsentences", "required": false, "specifarg": true, "orig": "[-randomsentences]" }
     ],
     execute: async function (msg, args) {
         let poopy = this
-        let {
-            getOption, parseNumber, markovChainGenerator,
-            fetchPingPerms, markovMe
-        } = poopy.functions
+        let { getOption, parseNumber, genAi, fetchPingPerms } = poopy.functions
         let tempdata = poopy.tempdata
         let json = poopy.json
         let arrays = poopy.arrays
@@ -21,10 +15,7 @@ module.exports = {
         let config = poopy.config
         let { fs, Discord } = poopy.modules
 
-        var wordNumber = getOption(args, 'words', { dft: Math.floor(Math.random() * 20) + 1, splice: true, n: 1, join: true, func: (opt) => parseNumber(opt, { dft: Math.floor(Math.random() * 20) + 1, min: 1, max: 10000, round: true }) })
-        var nopunctuation = getOption(args, 'nopunctuation', { dft: false, splice: true, n: 0, join: true })
-        var keepcase = getOption(args, 'keepcase', { dft: false, splice: true, n: 0, join: true })
-        var randlerp = getOption(args, 'randlerp', { dft: 0.4, splice: true, n: 1, join: true })
+        var maxLength = getOption(args, 'maxlength', { dft: Math.floor(Math.random() * 280) + 20, splice: true, n: 1, join: true, func: (opt) => parseNumber(opt, { dft: Math.floor(Math.random() * 280) + 20, min: 1, max: 2000, round: true }) })
         var randomsentences = getOption(args, 'randomsentences', { dft: false, splice: true, n: 0, join: true })
 
         var saidMessage = args.join(' ').substring((args[0] || '').length + 1)
@@ -35,28 +26,33 @@ module.exports = {
         if (saidMessage) {
             messages.push(saidMessage)
         }
+
         await msg.channel.sendTyping().catch(() => { })
-        var markovChain = markovChainGenerator(messages)
-        var markov = markovMe(markovChain, saidMessage, { wordNumber, nopunctuation, keepcase, randlerp })
+
+        var [markovString] = genAi(messages, {
+            maxLength: maxLength,
+            begin: saidMessage
+        })
+
         if (!msg.nosend) await msg.reply({
-            content: markov,
+            content: markovString,
             allowedMentions: fetchPingPerms(msg)
         }).catch(async () => {
             var currentcount = vars.filecount
             vars.filecount++
             var filepath = `temp/${config.database}/file${currentcount}`
             fs.mkdirSync(`${filepath}`)
-            fs.writeFileSync(`${filepath}/markov.txt`, markov)
+            fs.writeFileSync(`${filepath}/markov.txt`, markovString)
             await msg.reply({
                 files: [new Discord.AttachmentBuilder(`${filepath}/markov.txt`)]
             }).catch(() => { })
             fs.rmSync(`${filepath}`, { force: true, recursive: true })
         })
-        return markov
+        return markovString
     },
     help: {
-        name: 'markov [message] [-words <wordNumber>] [-nopunctuation] [-keepcase] [-randlerp <number (from 0 to 1)>] [-randomsentences]',
-        value: 'the Poopy Markov includes last messages. TOGLE'
+        name: 'markov/genai [begin] [-maxlength <charNumber (1 to 2000)>] [-randomsentences]',
+        value: 'the Poopy Markov includes last messages. TOGGLE the Message reading with p:messages to Function. this use GenAi Discord Bot Algorithm......'
     },
     cooldown: 2500,
     type: 'Text'

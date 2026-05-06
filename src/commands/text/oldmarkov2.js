@@ -1,6 +1,6 @@
 module.exports = {
-    name: ['markov2'],
-    args: [{"name":"minlength","required":false,"specifarg":true,"orig":"[-minlength <charNumber>]"},{"name":"randomsentences","required":false,"specifarg":true,"orig":"[-randomsentences]"}],
+    name: ['oldmarkov2'],
+    args: [{ "name": "minlength", "required": false, "specifarg": true, "orig": "[-minlength <charNumber>]" }, { "name": "randomsentences", "required": false, "specifarg": true, "orig": "[-randomsentences]" }],
     execute: async function (msg, args) {
         let poopy = this
         let { getOption, parseNumber, markov, fetchPingPerms } = poopy.functions
@@ -39,8 +39,8 @@ module.exports = {
         return markovString
     },
     help: {
-        name: 'markov2 [-minlength <charNumber>] [-randomsentences]',
-        value: 'the Poopy Markov includes last messages. this use different algorith.'
+        name: 'oldmarkov2 [-minlength <charNumber>] [-randomsentences]',
+        value: 'the Poopy Markov includes last messages. This is The OLD logic TWO... this use different algorith.'
     },
     cooldown: 2500,
     type: 'Text'

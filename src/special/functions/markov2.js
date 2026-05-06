@@ -17,5 +17,5 @@ module.exports = {
 
         return markov(messages)
     },
-    cmdconnected: 'markov2'
+    cmdconnected: 'oldmarkov2'
 }

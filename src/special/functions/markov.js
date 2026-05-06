@@ -22,5 +22,5 @@ module.exports = {
 
         return markov
     },
-    cmdconnected: 'markov'
+    cmdconnected: 'oldmarkov'
 }
