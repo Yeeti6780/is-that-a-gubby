@@ -53,8 +53,15 @@ module.exports = {
             data.guildData[msg.guild.id].members[member.id].impostor = false
         }
 
+        var hasChangingPerms = msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageWebhooks) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id) || opts.isBot
+
+        if (!hasChangingPerms && member.id != msg.author.id) {
+            await msg.reply('You need to have the manage webhooks/messages permission to execute that!').catch(() => { })
+            return
+        }
+
         if (data.guildData[msg.guild.id].members[member.id].impostor === false) {
-            if (msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageWebhooks) || msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id) || opts.isBot) {
+            if (hasChangingPerms) {
                 data.guildData[msg.guild.id].members[member.id].impostor = true
                 if (!msg.nosend) await msg.reply({
                     content: member.displayName.replace(/\@/g, '@‌') + ' is now the Impostor.',
