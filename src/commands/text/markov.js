@@ -17,7 +17,7 @@ module.exports = {
         let { fs, Discord } = poopy.modules
 
         var minLength = getOption(args, 'minlength', { dft: 1, splice: true, n: 1, join: true, func: (opt) => parseNumber(opt, { dft: 1, min: 1, max: 10000, round: true }) })
-        var maxLength = getOption(args, 'maxlength', { dft: Math.floor(Math.random() * 290) + 10, splice: true, n: 1, join: true, func: (opt) => parseNumber(opt, { dft: Math.floor(Math.random() * 290) + 10, min: 1, max: 10000, round: true }) })
+        var maxLength = getOption(args, 'maxlength', { dft: Math.max(Math.floor(Math.random() * 290) + 10, minLength), splice: true, n: 1, join: true, func: (opt) => parseNumber(opt, { dft: Math.max(Math.floor(Math.random() * 290) + 10, minLength), min: 1, max: 10000, round: true }) })
         var randomsentences = getOption(args, 'randomsentences', { dft: false, splice: true, n: 0, join: true })
 
         var saidMessage = args.join(' ').substring((args[0] || '').length + 1)

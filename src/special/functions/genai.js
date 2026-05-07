@@ -11,7 +11,7 @@ module.exports = {
         var word = matches[1]
         var [begin, minLength, maxLength] = splitKeyFunc(word, { args: 2 })
         minLength = parseNumber(minLength, { dft: 1, min: 1, max: 10000, round: true })
-        maxLength = parseNumber(maxLength, { dft: Math.floor(Math.random() * 290) + 10, min: 1, max: 10000, round: true })
+        maxLength = parseNumber(maxLength, { dft: Math.max(Math.floor(Math.random() * 290) + 10, minLength), min: 1, max: 10000, round: true })
 
         var messages = tempdata[msg.guild.id].messages.map(m => m.content)
         if (messages.length <= 0) {
