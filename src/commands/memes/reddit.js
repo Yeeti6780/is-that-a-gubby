@@ -47,12 +47,13 @@ module.exports = {
             var filename = `input.png`
 
             var reddittop = await Jimp.read(`assets/image/reddittop.png`)
+            var redditbottom = await Jimp.read(`assets/image/redditbottom.png`)
             var ibm = await Jimp.loadFont(`assets/fonts/IBMPlexSans/IBMPlexSans.fnt`)
             await reddittop.print(ibm, 18, 315, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 364, 66)
             await reddittop.writeAsync(`${filepath}/top.png`)
 
-            await execPromise(`ffmpeg -i ${filepath}/${filename} -filter_complex "[0:v]scale=${reddittop.bitmap.width}:-1[out]" -map "[out]" -preset ${findpreset(args)} ${filepath}/scaled.png`)
-            await execPromise(`ffmpeg -i ${filepath}/top.png -i ${filepath}/scaled.png -i assets/image/redditbottom.png -i assets/image/redditbg.png -filter_complex "vstack=inputs=3[transparent];[3:v][transparent]scale=rw:rh[bg];[bg][transparent]overlay=x=0:y=0:format=auto[out]" -map "[out]" -preset ${findpreset(args)} ${filepath}/output.png`)
+            await execPromise(`ffmpeg -i ${filepath}/top.png -i ${filepath}/${filename} -i assets/image/redditbottom.png -filter_complex "[1:v]scale=${reddittop.bitmap.width}:-1[scaled];[0:v][scaled][2:v]vstack=inputs=3[out]" -map "[out]" -preset ${findpreset(args)} ${filepath}/reddit.png`)
+            await execPromise(`ffmpeg -i ${filepath}/reddit.png -i assets/image/redditbg.png -filter_complex "[1:v][0:v]scale=rw:rh[bg];[bg][0:v]overlay=x=0:y=0:format=auto[out]" -map "[out]" -preset ${findpreset(args)} ${filepath}/output.png`)
             return await sendFile(msg, filepath, `output.png`)
         } else if (type.mime.startsWith('video')) {
             var filepath = await downloadFile(currenturl, `input.mp4`, {
@@ -68,32 +69,33 @@ module.exports = {
 
             var fps = fileinfo.info.fps
 
-            await execPromise(`ffmpeg -r ${fps.includes('0/0') ? '50' : fps} -i ${filepath}/${filename} -map 0:a? -filter_complex "[0:v]scale=${reddittop.bitmap.width}:-1,scale=ceil(iw/2)*2:ceil(ih/2)*2[out]" -map "[out]" -preset ${findpreset(args)} -c:v libx264 -pix_fmt yuv420p ${filepath}/scaled.mp4`)
-            var scale = await execPromise(`ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 ${filepath}/scaled.mp4`)
+            await execPromise(`ffmpeg -r ${fps.includes('0/0') ? '50' : fps} -i ${filepath}/top.png -r ${fps.includes('0/0') ? '50' : fps} -i ${filepath}/${filename} -r ${fps.includes('0/0') ? '50' : fps} -i assets/image/redditbottom.png -map 1:a? -filter_complex "[1:v]scale=${reddittop.bitmap.width}:-1[scaled];[0:v][scaled][2:v]vstack=inputs=3,scale=ceil(iw/2)*2:ceil(ih/2)*2[out]" -map "[out]" -preset ${findpreset(args)} -c:v libx264 -pix_fmt yuv420p ${filepath}/reddit.mp4`)
+            var scale = await execPromise(`ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 ${filepath}/reddit.mp4`)
             scale = scale.replace(/\n|\r/g, '').split('x')
             var width = Number(scale[0])
             var height = Number(scale[1])
 
-            await execPromise(`ffmpeg -r ${fps.includes('0/0') ? '50' : fps} -i ${filepath}/top.png -r ${fps.includes('0/0') ? '50' : fps} -i ${filepath}/scaled.mp4 -r ${fps.includes('0/0') ? '50' : fps} -i assets/image/redditbottom.png -i assets/image/redditbg.png -map 1:a? -filter_complex "vstack=inputs=3[transparent];[3:v][transparent]scale=rw:rh[bg];[bg][transparent]overlay=x=0:y=0:format=auto[oout];[oout]scale=ceil(iw/2)*2:ceil(ih/2)*2[out]" -map "[out]" -preset ${findpreset(args)} -aspect ${width}:${reddittop.bitmap.height + height + redditbottom.bitmap.height} -c:v libx264 -pix_fmt yuv420p ${filepath}/output.mp4`)
+            await execPromise(`ffmpeg -r ${fps.includes('0/0') ? '50' : fps} -i ${filepath}/reddit.mp4 -r ${fps.includes('0/0') ? '50' : fps} -i assets/image/redditbg.png -map 0:a? -filter_complex "[1:v][0:v]scale=rw:rh[bg];[bg][0:v]overlay=x=0:y=0:format=auto,scale=ceil(iw/2)*2:ceil(ih/2)*2[out]" -map "[out]" -preset ${findpreset(args)} -aspect ${width}:${height} -c:v libx264 -pix_fmt yuv420p ${filepath}/output.mp4`)
             return await sendFile(msg, filepath, `output.mp4`)
         } else if (type.mime.startsWith('image') && vars.gifFormats.find(f => f === type.ext)) {
             var filepath = await downloadFile(currenturl, `input.gif`)
             var filename = `input.gif`
 
             var reddittop = await Jimp.read(`assets/image/reddittop.png`)
+            var redditbottom = await Jimp.read(`assets/image/redditbottom.png`)
             var ibm = await Jimp.loadFont(`assets/fonts/IBMPlexSans/IBMPlexSans.fnt`)
             await reddittop.print(ibm, 18, 315, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 364, 66)
             await reddittop.writeAsync(`${filepath}/top.png`)
 
             var fps = fileinfo.info.fps
 
-            await execPromise(`ffmpeg -r ${fps.includes('0/0') ? '50' : fps} -i ${filepath}/${filename} -filter_complex "[0:v]scale=${reddittop.bitmap.width}:-1,split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} -gifflags -offsetting ${filepath}/scaled.gif`)
-            var scale = await execPromise(`ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 ${filepath}/scaled.gif`)
+            await execPromise(`ffmpeg -r ${fps.includes('0/0') ? '50' : fps} -i ${filepath}/top.png -r ${fps.includes('0/0') ? '50' : fps} -i ${filepath}/${filename} -r ${fps.includes('0/0') ? '50' : fps} -i assets/image/redditbottom.png -filter_complex "[1:v]scale=${reddittop.bitmap.width}:-1[scaled];[0:v][scaled][2:v]vstack=inputs=3,split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} -gifflags -offsetting ${filepath}/reddit.gif`)
+            var scale = await execPromise(`ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 ${filepath}/reddit.gif`)
             scale = scale.replace(/\n|\r/g, '').split('x')
             var width = Number(scale[0])
             var height = Number(scale[1])
 
-            await execPromise(`ffmpeg -r ${fps.includes('0/0') ? '50' : fps} -i ${filepath}/top.png -r ${fps.includes('0/0') ? '50' : fps} -i ${filepath}/scaled.gif -r ${fps.includes('0/0') ? '50' : fps} -i assets/image/redditbottom.png -i assets/image/redditbg.png -filter_complex "vstack=inputs=3[transparent];[3:v][transparent]scale=rw:rh[bg];[bg][transparent]overlay=x=0:y=0:format=auto[oout];[oout]split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} -aspect ${width}:${reddittop.bitmap.height + height + redditbottom.bitmap.height} -gifflags -offsetting ${filepath}/output.gif`)
+            await execPromise(`ffmpeg -r ${fps.includes('0/0') ? '50' : fps} -i ${filepath}/reddit.gif -r ${fps.includes('0/0') ? '50' : fps} -i assets/image/redditbg.png -filter_complex "[1:v][0:v]scale=rw:rh[bg];[bg][0:v]overlay=x=0:y=0:format=auto,split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} -aspect ${width}:${height} -gifflags -offsetting ${filepath}/output.gif`)
             return await sendFile(msg, filepath, `output.gif`)
         } else {
             await msg.reply({

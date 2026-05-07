@@ -6,10 +6,11 @@ module.exports = {
         let tempdata = poopy.tempdata
         let json = poopy.json
         let arrays = poopy.arrays
-        let { workerTask, splitKeyFunc, parseNumber } = poopy.functions
+        let { workerTask, splitKeyFunc, parseNumber, genAi } = poopy.functions
 
         var word = matches[1]
         var [begin, maxLength] = splitKeyFunc(word, { args: 2 })
+        maxLength = parseNumber(maxLength, { dft: Math.floor(Math.random() * 290) + 10, min: 1, max: 2000, round: true })
 
         var messages = tempdata[msg.guild.id].messages.map(m => m.content)
         if (messages.length <= 0) {
@@ -19,10 +20,26 @@ module.exports = {
             messages.push(begin)
         }
 
-        return await workerTask("genai", messages, {
-            begin: begin,
-            maxLength: parseNumber(maxLength ?? '', { dft: Math.floor(Math.random() * 295) + 5, min: 1, max: 2000, round: true })
+        if (!tempdata[msg.guild.id].lastMessageModelBuild) {
+            tempdata[msg.guild.id].lastMessageModelBuild = 0
+        }
+
+        var currentTime = Date.now()
+        if (currentTime - tempdata[msg.guild.id].lastMessageModelBuild >= 60_000 * 60) {
+            tempdata[msg.guild.id].lastMessageModelBuild = currentTime
+            tempdata[msg.guild.id].messageModel = workerTask("genai-model", messages)
+        }
+    
+        if (tempdata[msg.guild.id].messageModel instanceof Promise) {
+            tempdata[msg.guild.id].messageModel = await tempdata[msg.guild.id].messageModel
+        }
+
+        var [markovString] = genAi.generateFromModel(tempdata[msg.guild.id].messageModel, {
+            maxLength: maxLength,
+            begin: saidMessage
         })
+
+        return markovString
     },
     cmdconnected: 'genai'
 }

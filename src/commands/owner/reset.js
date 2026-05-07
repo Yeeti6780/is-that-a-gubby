@@ -12,7 +12,7 @@ module.exports = {
             return
         }
 
-        var confirm = msg.nosend || await yesno(msg.channel, 'are you sure about retarding me', msg.member, undefined, msg).catch(() => { })
+        var confirm = msg.nosend || await yesno(msg.channel, 'are you sure about lobotomizing me', msg.member, undefined, msg).catch(() => { })
         if (!confirm) return
 
         if (!msg.nosend) await msg.reply('The chorizo slice').catch(() => { })

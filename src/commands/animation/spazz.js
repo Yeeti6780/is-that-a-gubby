@@ -45,7 +45,7 @@ module.exports = {
             var filename = `input.${fileinfo.shortext}`
             var width = fileinfo.info.width
             var height = fileinfo.info.height
-            await execPromise(`ffmpeg ${!(vars.gifFormats.find(f => f === type.ext)) ? `-r 50 -stream_loop -1 -t 2 ` : ''}-i ${filepath}/${filename} ${!(vars.gifFormats.find(f => f === type.ext)) ? `-r 50 -stream_loop -1 -t 2 ` : ''}-i assets/image/transparent.png -filter_complex "[1:v][0:v]scale=${args.find(arg => arg === '-rescale') ? `w=rw+${radius}:h=rh+${radius}` : 'rw:rh'}[transparent];[transparent][0:v]overlay=x=(W-w)/2+${radius / 2}-random(t*(random(0)*${seed}))*${radius}:y=(H-h)/2+${radius / 2}-random(t*(random(0)*${seed}))*${radius}:format=auto,scale='min(1000,iw)':min'(400,ih)':force_original_aspect_ratio=decrease,split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -aspect ${width}:${height} -preset ${findpreset(args)} -gifflags -offsetting ${filepath}/output.gif`)
+            await execPromise(`ffmpeg ${!(vars.gifFormats.find(f => f === type.ext)) ? `-r 50 -stream_loop -1 -t 2 ` : ''}-i ${filepath}/${filename} ${!(vars.gifFormats.find(f => f === type.ext)) ? `-r 50 -stream_loop -1 -t 2 ` : ''}-i assets/image/transparent.png -filter_complex "[1:v][0:v]scale=${args.find(arg => arg === '-rescale') ? `w=rw+${radius}:h=rh+${radius}` : 'rw:rh'}[transparent];[transparent][0:v]overlay=x=(W-w)/2-${radius / 2}-random(t*(random(0)*${seed}))*${radius}:y=(H-h)/2-${radius / 2}-random(t*(random(0)*${seed}))*${radius}:format=auto,scale='min(1000,iw)':min'(400,ih)':force_original_aspect_ratio=decrease,split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -aspect ${width}:${height} -preset ${findpreset(args)} -gifflags -offsetting ${filepath}/output.gif`)
             return await sendFile(msg, filepath, `output.gif`)
         } else if (type.mime.startsWith('video')) {
             var filepath = await downloadFile(currenturl, `input.mp4`, {
@@ -53,7 +53,7 @@ module.exports = {
             var filename = `input.${fileinfo.shortext}`
             var width = fileinfo.info.width
             var height = fileinfo.info.height
-            await execPromise(`ffmpeg -i ${filepath}/${filename} -i assets/image/transparent.png -filter_complex "[1:v][0:v]scale=${args.find(arg => arg === '-rescale') ? `w=rw+${radius}:h=rh+${radius}` : 'rw:rh'}[transparent];[transparent][0:v]overlay=x=(W-w)/2+${radius / 2}-random(t*(random(0)*${seed}))*${radius}:y=(H-h)/2+${radius / 2}-random(t*(random(0)*${seed}))*${radius}:format=auto[out]" -map "[out]" -map 0:a? -c:v libx264 -pix_fmt yuv420p -aspect ${width}:${height} -preset ${findpreset(args)} ${filepath}/output.mp4`)
+            await execPromise(`ffmpeg -i ${filepath}/${filename} -i assets/image/transparent.png -filter_complex "[1:v][0:v]scale=${args.find(arg => arg === '-rescale') ? `w=rw+${radius}:h=rh+${radius}` : 'rw:rh'}[transparent];[transparent][0:v]overlay=x=(W-w)/2-${radius / 2}-random(t*(random(0)*${seed}))*${radius}:y=(H-h)/2-${radius / 2}-random(t*(random(0)*${seed}))*${radius}:format=auto[out]" -map "[out]" -map 0:a? -c:v libx264 -pix_fmt yuv420p -aspect ${width}:${height} -preset ${findpreset(args)} ${filepath}/output.mp4`)
             return await sendFile(msg, filepath, `output.mp4`)
         } else {
             await msg.reply({

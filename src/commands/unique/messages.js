@@ -115,7 +115,7 @@ module.exports = {
         let { fs, Discord, DiscordTypes, CryptoJS } = poopy.modules
         let data = poopy.data
         let tempdata = poopy.tempdata
-        let { similarity, yesno, fetchPingPerms, resolveUser, cleanContentPreserveEmojis } = poopy.functions
+        let { similarity, yesno, fetchPingPerms, resolveUser, cleanContentPreserveEmojis, workerTask } = poopy.functions
         let bot = poopy.bot
 
         var options = {
@@ -285,15 +285,47 @@ module.exports = {
                     var confirm = msg.nosend || await yesno(msg.channel, 'are you sure about this', msg.member, undefined, msg).catch(() => { })
 
                     if (confirm) {
+                        var size = data.guildData[msg.guild.id].messages.length
+                        if (size <= 0) {
+                            await msg.reply('theres nothing here dude').catch(() => { })
+                            return
+                        }
+
                         data.guildData[msg.guild.id].messages = []
                         tempdata[msg.guild.id].messages = []
 
-                        if (!msg.nosend) await msg.reply(`✅ All the messages from the database have been cleared.`).catch(() => { })
-                        return `✅ All the messages from the database have been cleared.`
+                        if (!msg.nosend) await msg.reply(`✅ All **${size}** messages from the server's database have been cleared.`).catch(() => { })
+                        return `✅ All **${size}** messages from the server's database have been cleared.`
                     }
                 } else {
                     await msg.reply('You need the manage server permission to execute that!').catch(() => { })
                 };
+            },
+
+            refresh: async (msg) => {
+                var confirm = msg.nosend || await yesno(msg.channel, 'are you sure about this', msg.member, undefined, msg).catch(() => { })
+
+                if (confirm) {
+                    if (!tempdata[msg.guild.id].lastMessageModelBuild) {
+                        tempdata[msg.guild.id].lastMessageModelBuild = 0
+                    }
+            
+                    var currentTime = Date.now()
+                    if (currentTime - tempdata[msg.guild.id].lastMessageModelBuild < 60_000) {
+                        await msg.reply('the last refresh was done seconds ago calm down').catch(() => { })
+                        return
+                    }
+
+                    tempdata[msg.guild.id].lastMessageModelBuild = currentTime
+                    tempdata[msg.guild.id].messageModel = workerTask("genai-model", tempdata[msg.guild.id].messages.map(m => m.content))
+                
+                    if (tempdata[msg.guild.id].messageModel instanceof Promise) {
+                        tempdata[msg.guild.id].messageModel = await tempdata[msg.guild.id].messageModel
+                    }
+
+                    if (!msg.nosend) await msg.reply(`✅ The cached message model has been refreshed.`).catch(() => { })
+                    return `✅ The cached message model has been refreshed.`
+                }
             },
 
             read: async (msg) => {
@@ -347,7 +379,16 @@ module.exports = {
         }
 
         if (!args[1]) {
-            var instruction = "**list** - Sends a text file with a list of all messages that exist within the guild's message database.\n\n**search** <query> - Searches for every message in the server that matches the query.\n\n**random** - Sends a random message from the database to the channel.\n\n**member** <id> - Sends a random message from that member to the channel.\n\n**add** <message> - Adds a new permanent message to the guild's database, if it is not duplicated.\n\n**delete** <message> - Deletes the message, if it exists.\n\n**clear** (manage server only) - Clears ALL the messages from the database.\n\n**read** [channel] (moderator only) - Toggles whether the bot can read the messages from the channel or not.\n\n**readall** (manage server only) - Toggles whether the bot can read the messages from all channels or not."
+            var instruction = "**list** - Sends a text file with a list of all messages that exist within the guild's message database.\n\n"
+                + "**search** <query> - Searches for every message in the server that matches the query.\n\n"
+                + "**random** - Sends a random message from the database to the channel.\n\n"
+                + "**member** <id> - Sends a random message from that member to the channel.\n\n"
+                + "**add** <message> - Adds a new permanent message to the guild's database, if it is not duplicated.\n\n"
+                + "**refresh** - Force refreshes the cached message model to include recently sent messages in commands like \`markov/genai\`. (this is done automatically every hour)\n\n"
+                + "**delete** <message> - Deletes the message, if it exists.\n\n"
+                + "**clear** (manage server only) - Clears ALL the messages from the database.\n\n"
+                + "**read** [channel] (moderator only) - Toggles whether the bot can read the messages from the channel or not.\n\n"
+                + "**readall** (manage server only) - Toggles whether the bot can read the messages from all channels or not."
             if (!msg.nosend) {
                 if (config.textEmbeds) msg.reply(instruction).catch(() => { })
                 else msg.reply({

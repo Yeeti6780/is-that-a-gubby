@@ -4,9 +4,15 @@ const { action, args } = workerData
 
 async function main() {
     switch (action) {
-        case "genai": {
+        case "genai-generate": {
             const genAi = require("./genai")
-            const result = genAi(...args)
+            const result = genAi.generateFromModel(...args)
+            return parentPort.postMessage(result)
+        }
+    
+        case "genai-model": {
+            const genAi = require("./genai")
+            const result = genAi.buildModel(...args)
             return parentPort.postMessage(result)
         }
     

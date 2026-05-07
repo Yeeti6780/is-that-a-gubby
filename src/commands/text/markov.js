@@ -7,7 +7,7 @@ module.exports = {
     ],
     execute: async function (msg, args) {
         let poopy = this
-        let { getOption, parseNumber, workerTask, fetchPingPerms } = poopy.functions
+        let { getOption, parseNumber, workerTask, genAi, fetchPingPerms } = poopy.functions
         let tempdata = poopy.tempdata
         let json = poopy.json
         let arrays = poopy.arrays
@@ -15,7 +15,7 @@ module.exports = {
         let config = poopy.config
         let { fs, Discord } = poopy.modules
 
-        var maxLength = getOption(args, 'maxlength', { dft: Math.floor(Math.random() * 295) + 5, splice: true, n: 1, join: true, func: (opt) => parseNumber(opt, { dft: Math.floor(Math.random() * 295) + 5, min: 1, max: 2000, round: true }) })
+        var maxLength = getOption(args, 'maxlength', { dft: Math.floor(Math.random() * 290) + 10, splice: true, n: 1, join: true, func: (opt) => parseNumber(opt, { dft: Math.floor(Math.random() * 290) + 10, min: 1, max: 2000, round: true }) })
         var randomsentences = getOption(args, 'randomsentences', { dft: false, splice: true, n: 0, join: true })
 
         var saidMessage = args.join(' ').substring((args[0] || '').length + 1)
@@ -29,7 +29,21 @@ module.exports = {
 
         await msg.channel.sendTyping().catch(() => { })
 
-        var [markovString] = await workerTask("genai", messages, {
+        if (!tempdata[msg.guild.id].lastMessageModelBuild) {
+            tempdata[msg.guild.id].lastMessageModelBuild = 0
+        }
+
+        var currentTime = Date.now()
+        if (currentTime - tempdata[msg.guild.id].lastMessageModelBuild >= 60_000 * 60) {
+            tempdata[msg.guild.id].lastMessageModelBuild = currentTime
+            tempdata[msg.guild.id].messageModel = workerTask("genai-model", messages)
+        }
+    
+        if (tempdata[msg.guild.id].messageModel instanceof Promise) {
+            tempdata[msg.guild.id].messageModel = await tempdata[msg.guild.id].messageModel
+        }
+
+        var [markovString] = genAi.generateFromModel(tempdata[msg.guild.id].messageModel, {
             maxLength: maxLength,
             begin: saidMessage
         })

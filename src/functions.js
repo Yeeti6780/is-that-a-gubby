@@ -894,9 +894,9 @@ functions.gatherData = async function (msg) {
         )
     }
     
-    tempdata[msg.guild.id].messages = await tempdata[msg.guild.id].messages
-
-    if (tempdata[msg.guild.id].messages instanceof Promise) await tempdata[msg.guild.id].messages
+    if (tempdata[msg.guild.id].messages instanceof Promise) {
+        tempdata[msg.guild.id].messages = await tempdata[msg.guild.id].messages
+    }
 
     if (!tempdata[msg.guild.id][msg.channel.id]) {
         tempdata[msg.guild.id][msg.channel.id] = {}
@@ -3243,10 +3243,8 @@ functions.createCollector = function ({
 functions.cleanContentPreserveEmojis = function (str, channel) {
     return str.replaceAll(
         /<(?:(?<type>@[!&]?|#)|(?:\/(?<commandName>[-_\p{L}\p{N}\p{sc=Deva}\p{sc=Thai} ]+):))(?<id>\d{17,19})>/gu,
-        (match, type, commandName, emojiName, id) => {
+        (match, type, commandName, id) => {
             if (commandName) return `/${commandName}`
-
-            if (emojiName) return `:${emojiName}:`
 
             switch (type) {
                 case '@':
