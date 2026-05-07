@@ -547,6 +547,24 @@ functions.markovMe = function (markovChain, text = '', options = {}) {
     return result
 }
 
+functions.updateGenAiModel = async function (msg, {
+    sample, forceRefresh = false
+} = {}) {
+    let poopy = this
+    let tempdata = poopy.tempdata
+    let { genAi, workerTask } = poopy.functions
+
+    if (!tempdata[msg.guild.id].messageModel || forceRefresh) {
+        tempdata[msg.guild.id].messageModel = workerTask("genai-model", tempdata[msg.guild.id].messages.map(m => m.content))
+    }
+
+    if (tempdata[msg.guild.id].messageModel instanceof Promise) {
+        tempdata[msg.guild.id].messageModel = await tempdata[msg.guild.id].messageModel
+    }
+
+    if (sample) genAi.trainSample(sample, tempdata[msg.guild.id].messageModel)
+}
+
 functions.findpreset = function (args) {
     var presets = [
         'ultrafast',
@@ -893,7 +911,7 @@ functions.gatherData = async function (msg) {
             data.guildData[msg.guild.id].messages
         )
     }
-    
+
     if (tempdata[msg.guild.id].messages instanceof Promise) {
         tempdata[msg.guild.id].messages = await tempdata[msg.guild.id].messages
     }

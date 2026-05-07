@@ -115,7 +115,7 @@ module.exports = {
         let { fs, Discord, DiscordTypes, CryptoJS } = poopy.modules
         let data = poopy.data
         let tempdata = poopy.tempdata
-        let { similarity, yesno, fetchPingPerms, resolveUser, cleanContentPreserveEmojis, workerTask } = poopy.functions
+        let { similarity, yesno, fetchPingPerms, resolveUser, cleanContentPreserveEmojis, workerTask, updateGenAiModel } = poopy.functions
         let bot = poopy.bot
 
         var options = {
@@ -251,6 +251,10 @@ module.exports = {
                         timestamp: Number.MAX_SAFE_INTEGER // genius
                     })
 
+                    updateGenAiModel(msg, {
+                        sample: cleanMessage
+                    })
+
                     if (!msg.nosend) await msg.reply({
                         content: `✅ Added ${cleanMessage}`,
                         allowedMentions: fetchPingPerms(msg)
@@ -272,6 +276,10 @@ module.exports = {
                 if (findMessage > -1) {
                     data.guildData[msg.guild.id].messages.splice(findMessage, 1)
                     tempdata[msg.guild.id].messages.splice(findMessage, 1)
+
+                    updateGenAiModel(msg, {
+                        forceRefresh: true
+                    })
 
                     if (!msg.nosend) await msg.reply(`✅ Removed.`).catch(() => { })
                     return `✅ Removed.`
@@ -300,32 +308,6 @@ module.exports = {
                 } else {
                     await msg.reply('You need the manage server permission to execute that!').catch(() => { })
                 };
-            },
-
-            refresh: async (msg) => {
-                var confirm = msg.nosend || await yesno(msg.channel, 'are you sure about this', msg.member, undefined, msg).catch(() => { })
-
-                if (confirm) {
-                    if (!tempdata[msg.guild.id].lastMessageModelBuild) {
-                        tempdata[msg.guild.id].lastMessageModelBuild = 0
-                    }
-            
-                    var currentTime = Date.now()
-                    if (currentTime - tempdata[msg.guild.id].lastMessageModelBuild < 60_000) {
-                        await msg.reply('the last refresh was done seconds ago calm down').catch(() => { })
-                        return
-                    }
-
-                    tempdata[msg.guild.id].lastMessageModelBuild = currentTime
-                    tempdata[msg.guild.id].messageModel = workerTask("genai-model", tempdata[msg.guild.id].messages.map(m => m.content))
-                
-                    if (tempdata[msg.guild.id].messageModel instanceof Promise) {
-                        tempdata[msg.guild.id].messageModel = await tempdata[msg.guild.id].messageModel
-                    }
-
-                    if (!msg.nosend) await msg.reply(`✅ The cached message model has been refreshed.`).catch(() => { })
-                    return `✅ The cached message model has been refreshed.`
-                }
             },
 
             read: async (msg) => {
@@ -384,7 +366,6 @@ module.exports = {
                 + "**random** - Sends a random message from the database to the channel.\n\n"
                 + "**member** <id> - Sends a random message from that member to the channel.\n\n"
                 + "**add** <message> - Adds a new permanent message to the guild's database, if it is not duplicated.\n\n"
-                + "**refresh** - Force refreshes the cached message model to include recently sent messages in commands like \`markov/genai\`. (this is done automatically every hour)\n\n"
                 + "**delete** <message> - Deletes the message, if it exists.\n\n"
                 + "**clear** (manage server only) - Clears ALL the messages from the database.\n\n"
                 + "**read** [channel] (moderator only) - Toggles whether the bot can read the messages from the channel or not.\n\n"
@@ -417,7 +398,7 @@ module.exports = {
     },
     help: {
         name: 'messages <option>',
-        value: "Allows you to see or manage the server's message database. Used by the `_message` keyword and has a 10k messages limit. They're auto-deleted after 30 days to abide with Discord's TOS, unless added manually. Use the command alone for more info."
+        value: "Allows you to see or manage the server's message database. Used by the `_message` keyword. They're auto-deleted after 30 days to abide with Discord's TOS, unless added manually. Use the command alone for more info."
     },
     cooldown: 2500,
     raw: true,

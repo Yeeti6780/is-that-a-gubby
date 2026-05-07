@@ -89,7 +89,7 @@ class Poopy {
         let { Discord, DiscordTypes, Collection, fs, CryptoJS } = modules
         let { envsExist, configFlagsEnabled, refreshDiscordURLs, getUploadLimit,
             chunkArray, chunkObject, requireJSON, findCommand, fetchPingPerms,
-            dmSupport, sleep, gatherData, deleteMsgData, infoPost, sendWebhook,
+            dmSupport, sleep, gatherData, deleteMsgData, infoPost, sendWebhook, updateGenAiModel,
             getKeywordsFor, getUrls, randomChoice, similarity, yesno, chat, autoModContent,
             regexClean, getOption, getTotalHivemindStatus, cleanContentPreserveEmojis } = functions
 
@@ -1018,7 +1018,6 @@ class Poopy {
                 var cleanMessage = cleanContentPreserveEmojis(origcontent, msg.channel).replace(/\@/g, '@‌')
 
                 if (
-                    !(cleanMessage.includes(prefix.toLowerCase())) &&
                     !(tempdata[msg.guild.id].messages.some(message => message.content.toLowerCase() === cleanMessage.toLowerCase()))
                 ) {
                     data.guildData[msg.guild.id].messages.unshift({
@@ -1033,6 +1032,10 @@ class Poopy {
                         author: msg.author.id,
                         content: cleanMessage,
                         timestamp: Date.now()
+                    })
+
+                    updateGenAiModel(msg, {
+                        sample: cleanMessage
                     })
                 }
             }

@@ -1,5 +1,5 @@
 module.exports = {
-    helpf: '(begin | maxLength)',
+    helpf: '(begin | minLength | maxLength)',
     desc: 'The markov chain generated AND THE Last Messages. uses genai algorithm!',
     func: async function (matches, msg) {
         let poopy = this
@@ -9,8 +9,9 @@ module.exports = {
         let { workerTask, splitKeyFunc, parseNumber, genAi } = poopy.functions
 
         var word = matches[1]
-        var [begin, maxLength] = splitKeyFunc(word, { args: 2 })
-        maxLength = parseNumber(maxLength, { dft: Math.floor(Math.random() * 290) + 10, min: 1, max: 2000, round: true })
+        var [begin, minLength, maxLength] = splitKeyFunc(word, { args: 2 })
+        maxLength = parseNumber(maxLength, { dft: 300, min: 1, max: 10000, round: true })
+        minLength = parseNumber(minLength, { dft: 1, min: 1, max: maxLength, round: true })
 
         var messages = tempdata[msg.guild.id].messages.map(m => m.content)
         if (messages.length <= 0) {
@@ -20,13 +21,7 @@ module.exports = {
             messages.push(begin)
         }
 
-        if (!tempdata[msg.guild.id].lastMessageModelBuild) {
-            tempdata[msg.guild.id].lastMessageModelBuild = 0
-        }
-
-        var currentTime = Date.now()
-        if (currentTime - tempdata[msg.guild.id].lastMessageModelBuild >= 60_000 * 60) {
-            tempdata[msg.guild.id].lastMessageModelBuild = currentTime
+        if (!tempdata[msg.guild.id].messageModel) {
             tempdata[msg.guild.id].messageModel = workerTask("genai-model", messages)
         }
     

@@ -453,7 +453,6 @@ vars.tempdataTemplate = {
     guildId: {
         automodRules: undefined,
         messages: [],
-        lastMessageModelBuild: 0,
         webhookMembers: {},
 
         channelId: {
