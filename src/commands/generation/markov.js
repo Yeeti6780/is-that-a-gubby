@@ -47,7 +47,7 @@ module.exports = {
 
         if (!msg.nosend) await msg.reply({
             content: markovString,
-            allowedMentions: fetchPingPerms(msg)
+            allowedMentions: { parse: [] }
         }).catch(async () => {
             var currentcount = vars.filecount
             vars.filecount++
@@ -66,5 +66,5 @@ module.exports = {
         value: 'the Poopy Markov includes last messages. TOGGLE the Message reading with p:messages to Function. this use GenAi Discord Bot Algorithm......'
     },
     cooldown: 2500,
-    type: 'Text'
+    type: 'Generation'
 }

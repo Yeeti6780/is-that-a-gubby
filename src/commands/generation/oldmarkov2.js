@@ -24,7 +24,7 @@ module.exports = {
 
         if (!msg.nosend) await msg.reply({
             content: markovString,
-            allowedMentions: fetchPingPerms(msg)
+            allowedMentions: { parse: [] }
         }).catch(async () => {
             var currentcount = vars.filecount
             vars.filecount++
@@ -43,5 +43,5 @@ module.exports = {
         value: 'the Poopy Markov includes last messages. This is The OLD logic TWO... this use different algorith.'
     },
     cooldown: 2500,
-    type: 'Text'
+    type: 'Generation'
 }

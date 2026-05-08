@@ -40,7 +40,7 @@ module.exports = {
         var markov = markovMe(markovChain, saidMessage, { wordNumber, nopunctuation, keepcase, randlerp })
         if (!msg.nosend) await msg.reply({
             content: markov,
-            allowedMentions: fetchPingPerms(msg)
+            allowedMentions: { parse: [] }
         }).catch(async () => {
             var currentcount = vars.filecount
             vars.filecount++
@@ -59,5 +59,5 @@ module.exports = {
         value: 'the Poopy Markov includes last messages. This is The OLD logic ONE... TOGGLE the Message reading with p:messages to Function.'
     },
     cooldown: 2500,
-    type: 'Text'
+    type: 'Generation'
 }
