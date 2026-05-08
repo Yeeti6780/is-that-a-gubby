@@ -14,7 +14,7 @@ module.exports = {
         let { axios } = poopy.modules
         let { fetchPingPerms } = poopy.functions
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
 
         var saidMessage = args.slice(1).join(' ')
         var language = args[1]

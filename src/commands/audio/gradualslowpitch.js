@@ -10,10 +10,10 @@ module.exports = {
         let { fs } = poopy.modules
         let vars = poopy.vars
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && args[2] === undefined) {
             await msg.reply('What is the file?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var currenturl = lastUrl(msg, 0)
@@ -25,7 +25,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -70,7 +70,7 @@ module.exports = {
                 var gradualinfo = await validateFileFromPath(`${filepath}/gradual.mp4`, 'very true').catch(() => { })
                 if (!gradualinfo) {
                     await msg.reply('Error while processing initial effect.').catch(() => { })
-                    await msg.channel.sendTyping().catch(() => { })
+                    msg.channel.sendTyping().catch(() => { })
                     fs.rmSync(`${filepath}`, { force: true, recursive: true })
                     return
                 }
@@ -83,7 +83,7 @@ module.exports = {
                     content: `File has no audio stream, maybe you should just use \`gradualslowdown\` for that.`,
                     allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
-                await msg.channel.sendTyping().catch(() => { })
+                msg.channel.sendTyping().catch(() => { })
             }
         } else if (type.mime.startsWith('audio')) {
             var filepath = await downloadFile(currenturl, `input.mp3`, {
@@ -111,14 +111,14 @@ module.exports = {
                 content: `Maybe you should just use \`gradualslowdown\` for that.`,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         } else {
             await msg.reply({
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

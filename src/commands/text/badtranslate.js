@@ -24,11 +24,11 @@ module.exports = {
         let { getOption, fetchPingPerms } = poopy.functions
         let { axios } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         var details = getOption(args, 'details', { n: 0, splice: true, dft: false })
         if (args[1] === undefined) {
             await msg.reply('What is the text to translate?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         }
 

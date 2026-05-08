@@ -9,7 +9,7 @@ module.exports = {
         let { fs, Discord } = poopy.modules
         let { fetchPingPerms } = poopy.functions
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         var wordNumber = Math.floor(Math.random() * 40) + 1
         var wordsSpecified = false
         var noextrawords = false

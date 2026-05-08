@@ -10,10 +10,10 @@ module.exports = {
         let vars = poopy.vars
         let { Jimp } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && args[1] === undefined) {
             await msg.reply('What is the file?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var saidMessage = args.slice(1).join(' ')
@@ -33,7 +33,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -48,7 +48,7 @@ module.exports = {
             var transparent = await Jimp.read(`assets/image/transparent.png`)
             var novecento = await Jimp.loadFont(`assets/fonts/Novecento/Novecento.fnt`)
             transparent.resize(101, 28)
-            await transparent.print(novecento, 0, 0, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 101, 28)
+            await Jimp.print(transparent, novecento, 0, 0, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 101, 28)
             await transparent.writeAsync(`${filepath}/caption.png`)
 
             await execPromise(`ffmpeg -i ${filepath}/${filename} -vf "scale=66:66" -preset ${findpreset(args)} -c:v libx264 -pix_fmt yuv420p ${filepath}/scaled.mp4`)
@@ -62,7 +62,7 @@ module.exports = {
             var transparent = await Jimp.read(`assets/image/transparent.png`)
             var novecento = await Jimp.loadFont(`assets/fonts/Novecento/Novecento.fnt`)
             transparent.resize(101, 28)
-            await transparent.print(novecento, 0, 0, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 101, 28)
+            await Jimp.print(transparent, novecento, 0, 0, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 101, 28)
             await transparent.writeAsync(`${filepath}/caption.png`)
 
             await execPromise(`ffmpeg -i ${filepath}/${filename} -vf "scale=66:66" -preset ${findpreset(args)} ${filepath}/scaled.png`)
@@ -76,7 +76,7 @@ module.exports = {
             var transparent = await Jimp.read(`assets/image/transparent.png`)
             var novecento = await Jimp.loadFont(`assets/fonts/Novecento/Novecento.fnt`)
             transparent.resize(101, 28)
-            await transparent.print(novecento, 0, 0, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 101, 28)
+            await Jimp.print(transparent, novecento, 0, 0, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 101, 28)
             await transparent.writeAsync(`${filepath}/caption.png`)
 
             await execPromise(`ffmpeg -i ${filepath}/${filename} -filter_complex "[0:v]scale=66:66,split[gnout][gpout];[gpout]palettegen=reserve_transparent=1[palette];[gnout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -preset ${findpreset(args)} -gifflags -offsetting ${filepath}/scaled.gif`)
@@ -87,7 +87,7 @@ module.exports = {
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

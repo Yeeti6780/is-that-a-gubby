@@ -23,7 +23,7 @@ module.exports = {
             deviceScaleFactor: 0.7
         })
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
 
         let blacklisted = ['porn', 'xvideos', 'gay', 'xxx', 'e621', 'rule34'];
         let ipBlacklisted = ['ipify', 'iplogger']

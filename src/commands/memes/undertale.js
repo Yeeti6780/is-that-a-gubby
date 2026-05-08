@@ -32,7 +32,7 @@ module.exports = {
         } = poopy.functions
         let { Discord } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         var saidMessage = args.slice(1).join(' ').replace(/’/g, '\'')
         vars.symbolreplacements.forEach(symbolReplacement => {
             symbolReplacement.target.forEach(target => {
@@ -122,7 +122,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -184,7 +184,7 @@ module.exports = {
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

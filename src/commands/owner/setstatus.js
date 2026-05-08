@@ -34,7 +34,7 @@ module.exports = {
 
             if (args[1] === 'Playing' || args[1] === 'Listening' || args[1] === 'Watching' || args[1] === 'Streaming' || args[1] === 'Competing') {
                 var saidMessage = args.slice(2).join(' ')
-                await msg.channel.sendTyping().catch(() => { })
+                msg.channel.sendTyping().catch(() => { })
                 infoPost(`Status changed to ${args[1].toLowerCase() + ' ' + ((args[1] === "Competing" && 'in ') || (args[1] === "Listening" && 'to ') || '') + saidMessage}`)
                 bot.user.setPresence({
                     status: 'online',

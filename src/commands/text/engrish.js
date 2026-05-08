@@ -5,11 +5,11 @@ module.exports = {
     let poopy = this
     let { lingo, fetchPingPerms } = poopy.functions
 
-    await msg.channel.sendTyping().catch(() => { })
+    msg.channel.sendTyping().catch(() => { })
     var saidMessage = args.slice(1).join(' ')
     if (args[1] === undefined) {
       await msg.reply('What is the message?!').catch(() => { })
-      await msg.channel.sendTyping().catch(() => { })
+      msg.channel.sendTyping().catch(() => { })
       return;
     };
 

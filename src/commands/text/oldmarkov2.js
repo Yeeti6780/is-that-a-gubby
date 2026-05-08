@@ -18,7 +18,7 @@ module.exports = {
         if (messages.length <= 0 || randomsentences) {
             messages = json.sentenceJSON.data.map(s => s.sentence)
         }
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
 
         var markovString = markov(messages, minlength)
 

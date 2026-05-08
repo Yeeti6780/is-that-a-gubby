@@ -29,7 +29,7 @@ module.exports = {
             messages.push(saidMessage)
         }
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
 
         if (!tempdata[msg.guild.id].messageModel) {
             tempdata[msg.guild.id].messageModel = workerTask("genai-model", messages)

@@ -8,10 +8,10 @@ module.exports = {
     let { fs } = poopy.modules
     let { execPromise, sendFile } = poopy.functions
 
-    await msg.channel.sendTyping().catch(() => { })
+    msg.channel.sendTyping().catch(() => { })
     if (args.length < 6) {
       await msg.reply('Where are all the required arguments?!').catch(() => { })
-      await msg.channel.sendTyping().catch(() => { })
+      msg.channel.sendTyping().catch(() => { })
       return;
     }
 

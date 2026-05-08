@@ -5,7 +5,7 @@ module.exports = {
         let poopy = this
         let tempdata = poopy.tempdata
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (!msg.nosend) await msg.reply('Let\'s see...').catch(() => { })
         var fartRating = Math.floor(Math.random() * 101)
         if (!tempdata[msg.author.id].fartRate) {

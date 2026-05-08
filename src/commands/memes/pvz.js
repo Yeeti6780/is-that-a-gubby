@@ -10,10 +10,10 @@ module.exports = {
         let vars = poopy.vars
         let { Jimp } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && vars.validUrl.test(args[args.length - 1]) === false) {
             await msg.reply('What is the file?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var saidMessage = args.slice(1).join(' ').replace(/’/g, '\'')
@@ -36,7 +36,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -52,8 +52,8 @@ module.exports = {
             var pvz = await Jimp.read(`assets/image/pvz.png`)
             var dwarven = await Jimp.loadFont('assets/fonts/Dwarven/Dwarven.fnt')
             var brianne = await Jimp.loadFont('assets/fonts/Brianne/Brianne.fnt')
-            await pvz.print(dwarven, 155, 186, { text: plantname, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 189, 27)
-            await pvz.print(brianne, 166, 223, { text: plantdescription, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 166, 66)
+            await Jimp.print(pvz, dwarven, 155, 186, { text: plantname, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 189, 27)
+            await Jimp.print(pvz, brianne, 166, 223, { text: plantdescription, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 166, 66)
             await pvz.writeAsync(`${filepath}/pvz.png`)
 
             var width = fileinfo.info.width
@@ -72,8 +72,8 @@ module.exports = {
             var pvz = await Jimp.read(`assets/image/pvz.png`)
             var dwarven = await Jimp.loadFont('assets/fonts/Dwarven/Dwarven.fnt')
             var brianne = await Jimp.loadFont('assets/fonts/Brianne/Brianne.fnt')
-            await pvz.print(dwarven, 155, 186, { text: plantname, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 189, 27)
-            await pvz.print(brianne, 166, 223, { text: plantdescription, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 166, 66)
+            await Jimp.print(pvz, dwarven, 155, 186, { text: plantname, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 189, 27)
+            await Jimp.print(pvz, brianne, 166, 223, { text: plantdescription, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 166, 66)
             await pvz.writeAsync(`${filepath}/pvz.png`)
 
             var width = fileinfo.info.width
@@ -90,8 +90,8 @@ module.exports = {
             var pvz = await Jimp.read(`assets/image/pvz.png`)
             var dwarven = await Jimp.loadFont('assets/fonts/Dwarven/Dwarven.fnt')
             var brianne = await Jimp.loadFont('assets/fonts/Brianne/Brianne.fnt')
-            await pvz.print(dwarven, 155, 186, { text: plantname, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 189, 27)
-            await pvz.print(brianne, 166, 223, { text: plantdescription, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 166, 66)
+            await Jimp.print(pvz, dwarven, 155, 186, { text: plantname, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 189, 27)
+            await Jimp.print(pvz, brianne, 166, 223, { text: plantdescription, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 166, 66)
             await pvz.writeAsync(`${filepath}/pvz.png`)
 
             var width = fileinfo.info.width
@@ -106,7 +106,7 @@ module.exports = {
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

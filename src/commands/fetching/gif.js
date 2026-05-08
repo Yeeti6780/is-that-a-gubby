@@ -7,7 +7,7 @@ module.exports = {
         let { navigateEmbed, addLastUrl } = poopy.functions
         let config = poopy.config
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (args[1] === undefined) {
             await msg.reply('What do I search for?!').catch(() => { })
             return;

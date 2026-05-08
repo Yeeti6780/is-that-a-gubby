@@ -20,11 +20,11 @@ module.exports = {
         let config = poopy.config
         let { execPromise, sendFile, cleanContentPreserveEmojis } = poopy.functions
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         var fonts = fs.readdirSync('assets/fonts')
         if (!args[1]) {
             await msg.reply(`No font specified. A valid list of fonts is ${fonts.join(', ')}`).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         }
 
@@ -142,7 +142,7 @@ module.exports = {
         var width = textwidth + padding.left + padding.right
         var height = textheight + padding.top + padding.bottom
         transparent.resize(width, height)
-        await transparent.print(loadedfont, padding.left, padding.top, { text: text, alignmentX: originx, alignmentY: originy }, textwidth, textheight)
+        await Jimp.print(transparent, loadedfont, padding.left, padding.top, { text: text, alignmentX: originx, alignmentY: originy }, textwidth, textheight)
         if (args.find(arg => arg === '-resetcolor')) {
             transparent.color([
                 {

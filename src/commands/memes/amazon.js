@@ -10,10 +10,10 @@ module.exports = {
         let vars = poopy.vars
         let { Jimp } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && vars.validUrl.test(args[args.length - 1]) === false) {
             await msg.reply('What is the file?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var saidMessage = args.slice(1).join(' ')
@@ -47,7 +47,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -69,9 +69,9 @@ module.exports = {
             ystars.crop(0, 0, ystars.bitmap.width * (numberrating / 5), ystars.bitmap.height)
             wstars.composite(ystars, 0, 0)
             amazon.composite(wstars, 16, 299)
-            await amazon.print(amazonemlink, 14, 219, { text: name, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 209, 49)
-            await amazon.print(amazonembig, 22, 275, { text: price1, alignmentX: Jimp.HORIZONTAL_ALIGN_RIGHT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 36, 18)
-            await amazon.print(amazonemsmall, 60, 275, { text: price2, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 20, 12)
+            await Jimp.print(amazon, amazonemlink, 14, 219, { text: name, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 209, 49)
+            await Jimp.print(amazon, amazonembig, 22, 275, { text: price1, alignmentX: Jimp.HORIZONTAL_ALIGN_RIGHT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 36, 18)
+            await Jimp.print(amazon, amazonemsmall, 60, 275, { text: price2, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 20, 12)
             await amazon.writeAsync(`${filepath}/amazon.png`)
 
             var width = fileinfo.info.width
@@ -96,9 +96,9 @@ module.exports = {
             ystars.crop(0, 0, ystars.bitmap.width * (numberrating / 5), ystars.bitmap.height)
             wstars.composite(ystars, 0, 0)
             amazon.composite(wstars, 16, 299)
-            await amazon.print(amazonemlink, 14, 219, { text: name, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 209, 49)
-            await amazon.print(amazonembig, 22, 275, { text: price1, alignmentX: Jimp.HORIZONTAL_ALIGN_RIGHT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 36, 18)
-            await amazon.print(amazonemsmall, 60, 275, { text: price2, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 20, 12)
+            await Jimp.print(amazon, amazonemlink, 14, 219, { text: name, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 209, 49)
+            await Jimp.print(amazon, amazonembig, 22, 275, { text: price1, alignmentX: Jimp.HORIZONTAL_ALIGN_RIGHT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 36, 18)
+            await Jimp.print(amazon, amazonemsmall, 60, 275, { text: price2, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 20, 12)
             await amazon.writeAsync(`${filepath}/amazon.png`)
 
             var width = fileinfo.info.width
@@ -121,9 +121,9 @@ module.exports = {
             ystars.crop(0, 0, ystars.bitmap.width * (numberrating / 5), ystars.bitmap.height)
             wstars.composite(ystars, 0, 0)
             amazon.composite(wstars, 16, 299)
-            await amazon.print(amazonemlink, 14, 219, { text: name, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 209, 49)
-            await amazon.print(amazonembig, 22, 275, { text: price1, alignmentX: Jimp.HORIZONTAL_ALIGN_RIGHT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 36, 18)
-            await amazon.print(amazonemsmall, 60, 275, { text: price2, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 20, 12)
+            await Jimp.print(amazon, amazonemlink, 14, 219, { text: name, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 209, 49)
+            await Jimp.print(amazon, amazonembig, 22, 275, { text: price1, alignmentX: Jimp.HORIZONTAL_ALIGN_RIGHT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 36, 18)
+            await Jimp.print(amazon, amazonemsmall, 60, 275, { text: price2, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 20, 12)
             await amazon.writeAsync(`${filepath}/amazon.png`)
 
             var width = fileinfo.info.width
@@ -138,7 +138,7 @@ module.exports = {
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

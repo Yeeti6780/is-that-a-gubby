@@ -447,7 +447,7 @@ class Poopy {
 
             if (msg.channel.type == Discord.ChannelType.DM && msg.type !== DiscordTypes.InteractionType.ApplicationCommand && !origcontent.toLowerCase().includes(prefix.toLowerCase())) {
                 if (msg.author.bot || msg.author.id == bot.user.id) return
-                await msg.channel.sendTyping().catch(() => { })
+                msg.channel.sendTyping().catch(() => { })
                 await sleep(Math.floor(Math.random() * 500) + 500)
                 await msg.channel.send(arrays.dmPhrases[Math.floor(Math.random() * arrays.dmPhrases.length)]
                     .replace(/{mention}/g, msg.author.toString())).catch(() => { })
@@ -933,7 +933,7 @@ class Poopy {
                                                     content: err.stack,
                                                     allowedMentions: fetchPingPerms(msg)
                                                 }).catch(() => { })
-                                                await msg.channel.sendTyping().catch(() => { })
+                                                msg.channel.sendTyping().catch(() => { })
                                             } catch (_) { }
                                         })
                                         data.botData.filecount = vars.filecount
@@ -1136,7 +1136,7 @@ class Poopy {
                             content: err.stack,
                             allowedMentions: fetchPingPerms(msg)
                         }).catch(() => { })
-                        await msg.channel.sendTyping().catch(() => { })
+                        msg.channel.sendTyping().catch(() => { })
                     })
                 } else if (words.includes('lore')) {
                     await msg.reply({

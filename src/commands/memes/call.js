@@ -10,10 +10,10 @@ module.exports = {
         let vars = poopy.vars
         let { Jimp } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && vars.validUrl.test(args[args.length - 1]) === false) {
             await msg.reply('What is the file?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var saidMessage = args.slice(1).join(' ')
@@ -33,7 +33,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -48,7 +48,7 @@ module.exports = {
 
             var call = await Jimp.read(`assets/image/call.png`)
             var helvetica = await Jimp.loadFont('assets/fonts/HelveticaLight/HelveticaLight.fnt')
-            await call.print(helvetica, 20, 59, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 333, 155)
+            await Jimp.print(call, helvetica, 20, 59, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 333, 155)
             await call.writeAsync(`${filepath}/call.png`)
 
             var width = fileinfo.info.width
@@ -70,7 +70,7 @@ module.exports = {
 
             var call = await Jimp.read(`assets/image/call.png`)
             var helvetica = await Jimp.loadFont('assets/fonts/HelveticaLight/HelveticaLight.fnt')
-            await call.print(helvetica, 20, 59, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 333, 155)
+            await Jimp.print(call, helvetica, 20, 59, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 333, 155)
             await call.writeAsync(`${filepath}/call.png`)
 
             var width = fileinfo.info.width
@@ -90,7 +90,7 @@ module.exports = {
 
             var call = await Jimp.read(`assets/image/call.png`)
             var helvetica = await Jimp.loadFont('assets/fonts/HelveticaLight/HelveticaLight.fnt')
-            await call.print(helvetica, 20, 59, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 333, 155)
+            await Jimp.print(call, helvetica, 20, 59, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 333, 155)
             await call.writeAsync(`${filepath}/call.png`)
 
             var width = fileinfo.info.width
@@ -109,7 +109,7 @@ module.exports = {
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

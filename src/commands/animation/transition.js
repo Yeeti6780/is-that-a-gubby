@@ -75,10 +75,10 @@ module.exports = {
         } = poopy.functions
         let vars = poopy.vars
 
-        await msg.channel.sendTyping().catch(() => {})
+        msg.channel.sendTyping().catch(() => {})
         if (lastUrl(msg, 1) === undefined && args[2] === undefined) {
             await msg.reply('What are the files?!').catch(() => {})
-            await msg.channel.sendTyping().catch(() => {})
+            msg.channel.sendTyping().catch(() => {})
             return;
         };
         var transitions = [
@@ -149,7 +149,7 @@ module.exports = {
 
             if (unsupported.find(t => t === arg.toLowerCase())) {
                 await msg.reply('Sorry, but that transition isn\'t supported...').catch(() => {})
-                await msg.channel.sendTyping().catch(() => {})
+                msg.channel.sendTyping().catch(() => {})
                 return
             }
             if (arg.toLowerCase() === 'random') {
@@ -171,7 +171,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => {})
-            await msg.channel.sendTyping().catch(() => {})
+            msg.channel.sendTyping().catch(() => {})
             return;
         })
         if (!fileinfo) return
@@ -186,7 +186,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => {})
-            await msg.channel.sendTyping().catch(() => {})
+            msg.channel.sendTyping().catch(() => {})
             return;
         })
         if (!fileinfo2) return
@@ -200,7 +200,7 @@ module.exports = {
                     content: error,
                     allowedMentions: fetchPingPerms(msg)
                 }).catch(() => {})
-                await msg.channel.sendTyping().catch(() => {})
+                msg.channel.sendTyping().catch(() => {})
                 return
             }
         }
@@ -211,7 +211,7 @@ module.exports = {
                     content: 'Unsupported file types.',
                     allowedMentions: fetchPingPerms(msg)
                 }).catch(() => {})
-                await msg.channel.sendTyping().catch(() => {})
+                msg.channel.sendTyping().catch(() => {})
                 return
             }
         }

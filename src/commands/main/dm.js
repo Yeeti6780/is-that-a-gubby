@@ -46,7 +46,7 @@ module.exports = {
         let config = poopy.config
         let tempdata = poopy.tempdata
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (args[1] === undefined) {
             await msg.reply('Who do I DM?!').catch(() => { })
             return;

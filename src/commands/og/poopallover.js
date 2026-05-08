@@ -6,7 +6,7 @@ module.exports = {
         let { Discord } = poopy.modules
         let { fetchPingPerms } = poopy.functions
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         var saidMessage = args.slice(1).join(' ')
         var attachments = []
         msg.attachments.forEach(attachment => {
@@ -14,7 +14,7 @@ module.exports = {
         });
         if (args[1] === undefined && attachments.length <= 0) {
             await msg.reply('What/who is the subject?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         if (!msg.nosend) await msg.reply({

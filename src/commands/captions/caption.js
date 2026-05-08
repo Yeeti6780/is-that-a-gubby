@@ -1,6 +1,6 @@
 module.exports = {
     name: ['meme3', 'caption'],
-    args: [{"name":"text","required":false,"specifarg":false,"orig":"\"{text}\""},{"name":"file","required":false,"specifarg":false,"orig":"{file}"},{"name":"size","required":false,"specifarg":true,"orig":"[-size <multiplier (from 0.5 to 5)>]"}],
+    args: [{ "name": "text", "required": false, "specifarg": false, "orig": "\"{text}\"" }, { "name": "file", "required": false, "specifarg": false, "orig": "{file}" }, { "name": "size", "required": false, "specifarg": true, "orig": "[-size <multiplier (from 0.5 to 5)>]" }],
     execute: async function (msg, args) {
         let poopy = this
         let {
@@ -9,16 +9,16 @@ module.exports = {
         } = poopy.functions
         let vars = poopy.vars
         let { Jimp } = poopy.modules
-        
-        if (Math.random()*1000 > 998) {
+
+        if (Math.random() * 1000 > 998 && !msg.nosend) {
             await msg.reply("No.").catch(() => { })
             return
         }
-        
-        await msg.channel.sendTyping().catch(() => { })
+
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && vars.validUrl.test(args[args.length - 1]) === false) {
             await msg.reply('What is the file?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var size = 1
@@ -46,7 +46,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -55,7 +55,8 @@ module.exports = {
 
         if (type.mime.startsWith('image') && !(vars.gifFormats.find(f => f === type.ext))) {
             var filepath = await downloadFile(currenturl, `input.png`, {
-                fileinfo            })
+                fileinfo
+            })
             var filename = `input.png`
 
             var width = fileinfo.info.width
@@ -67,7 +68,7 @@ module.exports = {
             white.resize(Math.round(2000 / size), Jimp.AUTO)
             var textheight = Jimp.measureTextHeight(futura, text, white.bitmap.width - Math.round(160 / size))
             white.resize(Math.round(2000 / size), textheight + Math.round(160 / size))
-            await white.print(futura, Math.round(80 / size), Math.round(80 / size), { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, white.bitmap.width - Math.round(160 / size), white.bitmap.height - Math.round(160 / size))
+            await Jimp.print(white, futura, Math.round(80 / size), Math.round(80 / size), { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, white.bitmap.width - Math.round(160 / size), white.bitmap.height - Math.round(160 / size))
             white.resize(width, Jimp.AUTO)
             await white.writeAsync(`${filepath}/caption.png`)
 
@@ -76,7 +77,8 @@ module.exports = {
             return await sendFile(msg, filepath, `output.png`)
         } else if (type.mime.startsWith('video')) {
             var filepath = await downloadFile(currenturl, `input.mp4`, {
-                fileinfo            })
+                fileinfo
+            })
             var filename = `input.mp4`
 
             var width = fileinfo.info.width
@@ -89,7 +91,7 @@ module.exports = {
             white.resize(Math.round(2000 / size), Jimp.AUTO)
             var textheight = Jimp.measureTextHeight(futura, text, white.bitmap.width - Math.round(160 / size))
             white.resize(Math.round(2000 / size), textheight + Math.round(160 / size))
-            await white.print(futura, Math.round(80 / size), Math.round(80 / size), { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, white.bitmap.width - Math.round(160 / size), white.bitmap.height - Math.round(160 / size))
+            await Jimp.print(white, futura, Math.round(80 / size), Math.round(80 / size), { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, white.bitmap.width - Math.round(160 / size), white.bitmap.height - Math.round(160 / size))
             white.resize(width, Jimp.AUTO)
             await white.writeAsync(`${filepath}/caption.png`)
 
@@ -98,7 +100,8 @@ module.exports = {
             return await sendFile(msg, filepath, `output.mp4`)
         } else if (type.mime.startsWith('image') && vars.gifFormats.find(f => f === type.ext)) {
             var filepath = await downloadFile(currenturl, `input.gif`, {
-                fileinfo            })
+                fileinfo
+            })
             var filename = `input.gif`
 
             var width = fileinfo.info.width
@@ -111,7 +114,7 @@ module.exports = {
             white.resize(Math.round(2000 / size), Jimp.AUTO)
             var textheight = Jimp.measureTextHeight(futura, text, white.bitmap.width - Math.round(160 / size))
             white.resize(Math.round(2000 / size), textheight + Math.round(160 / size))
-            await white.print(futura, Math.round(80 / size), Math.round(80 / size), { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, white.bitmap.width - Math.round(160 / size), white.bitmap.height - Math.round(160 / size))
+            await Jimp.print(white, futura, Math.round(80 / size), Math.round(80 / size), { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, white.bitmap.width - Math.round(160 / size), white.bitmap.height - Math.round(160 / size))
             white.resize(width, Jimp.AUTO)
             await white.writeAsync(`${filepath}/caption.png`)
 
@@ -123,7 +126,7 @@ module.exports = {
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

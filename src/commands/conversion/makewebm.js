@@ -11,10 +11,10 @@ module.exports = {
         let config = poopy.config
         let { fs, Jimp } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (args[1] === undefined && msg.attachments.size <= 0 && !(lastUrls(msg).length)) {
             await msg.reply('What are the frames?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
 
@@ -44,7 +44,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-                await msg.channel.sendTyping().catch(() => { })
+                msg.channel.sendTyping().catch(() => { })
                 return
             })
 
@@ -114,7 +114,7 @@ module.exports = {
                 content: lasturlserror,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
 
@@ -135,7 +135,7 @@ module.exports = {
                         content: error,
                         allowedMentions: fetchPingPerms(msg)
                     }).catch(() => { })
-                    await msg.channel.sendTyping().catch(() => { })
+                    msg.channel.sendTyping().catch(() => { })
                     return
                 }
                 var filetype = fileinfo.type
@@ -145,7 +145,7 @@ module.exports = {
                         content: error,
                         allowedMentions: fetchPingPerms(msg)
                     }).catch(() => { })
-                    await msg.channel.sendTyping().catch(() => { })
+                    msg.channel.sendTyping().catch(() => { })
                     return
                 }
                 filetypes[i] = filetype

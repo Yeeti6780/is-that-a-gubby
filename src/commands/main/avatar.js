@@ -37,7 +37,7 @@ module.exports = {
         let { Discord } = poopy.modules
         let { fetchPingPerms, getOption, resolveUser } = poopy.functions
 
-        await msg.channel.sendTyping().catch(() => {})
+        msg.channel.sendTyping().catch(() => {})
 
         var global = getOption(args, 'global', { n: 0, splice: true, dft: false })
 

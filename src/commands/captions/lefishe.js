@@ -10,10 +10,10 @@ module.exports = {
         let vars = poopy.vars
         let { Jimp } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && vars.validUrl.test(args[args.length - 1]) === false) {
             await msg.reply('What is the file?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var saidMessage = args.slice(1).join(' ')
@@ -36,7 +36,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -53,7 +53,7 @@ module.exports = {
             var brushscript = await Jimp.loadFont('assets/fonts/BrushScript/BrushScript.fnt')
             transparent.resize(width, height)
             transparent.resize(500, Jimp.AUTO)
-            await transparent.print(brushscript, 50, 50, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_RIGHT, alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM }, transparent.bitmap.width - 100, transparent.bitmap.height - 100)
+            await Jimp.print(transparent, brushscript, 50, 50, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_RIGHT, alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM }, transparent.bitmap.width - 100, transparent.bitmap.height - 100)
             transparent.resize(width, height)
             await transparent.writeAsync(`${filepath}/caption.png`)
 
@@ -69,7 +69,7 @@ module.exports = {
             var brushscript = await Jimp.loadFont('assets/fonts/BrushScript/BrushScript.fnt')
             transparent.resize(width, height)
             transparent.resize(500, Jimp.AUTO)
-            await transparent.print(brushscript, 50, 50, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_RIGHT, alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM }, transparent.bitmap.width - 100, transparent.bitmap.height - 100)
+            await Jimp.print(transparent, brushscript, 50, 50, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_RIGHT, alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM }, transparent.bitmap.width - 100, transparent.bitmap.height - 100)
             transparent.resize(width, height)
             await transparent.writeAsync(`${filepath}/caption.png`)
 
@@ -85,7 +85,7 @@ module.exports = {
             var brushscript = await Jimp.loadFont('assets/fonts/BrushScript/BrushScript.fnt')
             transparent.resize(width, height)
             transparent.resize(500, Jimp.AUTO)
-            await transparent.print(brushscript, 50, 50, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_RIGHT, alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM }, transparent.bitmap.width - 100, transparent.bitmap.height - 100)
+            await Jimp.print(transparent, brushscript, 50, 50, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_RIGHT, alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM }, transparent.bitmap.width - 100, transparent.bitmap.height - 100)
             transparent.resize(width, height)
             await transparent.writeAsync(`${filepath}/caption.png`)
 
@@ -96,7 +96,7 @@ module.exports = {
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

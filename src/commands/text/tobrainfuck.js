@@ -8,11 +8,11 @@ module.exports = {
         let config = poopy.config
         let { fs, Discord } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         var saidMessage = args.slice(1).join(' ')
         if (args[1] === undefined) {
             await msg.reply('What is the message to convert?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var tobf = tobrainfuck(saidMessage)

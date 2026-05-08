@@ -6,7 +6,7 @@ module.exports = {
         let arrays = poopy.arrays
         let { fetchPingPerms } = poopy.functions
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         var poop = arrays.poopPhrases[Math.floor(Math.random() * arrays.poopPhrases.length)]
             .replace(/{fart}/g, Math.floor(Math.random() * 291) + 10)
             .replace(/{seconds}/g, Math.floor((Math.random() * 59) + 2))

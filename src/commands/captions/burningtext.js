@@ -21,7 +21,7 @@ module.exports = {
         } = poopy.functions
         let { axios } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
 
         var id = 4
         var idIndex = args.indexOf('-id')
@@ -65,7 +65,7 @@ module.exports = {
         var saidMessage = args.slice(1).join(' ')
         if (args[1] === undefined) {
             await msg.reply('What is the text?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
 
@@ -101,7 +101,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         })
 

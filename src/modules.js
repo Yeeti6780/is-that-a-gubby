@@ -15,15 +15,13 @@ modules.xml2json = require('xml2js').parseStringPromise
 modules.util = require('util')
 modules.cron = require('cron')
 modules.CryptoJS = require('crypto-js')
-if (modules.fs.existsSync('node_modules/@jimp/plugin-print'))
-    modules.fs.rmSync('node_modules/@jimp/plugin-print', {
-        force: true, recursive: true
-    })
-if (!modules.fs.existsSync('node_modules/@jimp/plugin-print'))
-    modules.fs.copySync('lib/plugin-print', 'node_modules/@jimp/plugin-print', {
-        recursive: true
-    })
 modules.Jimp = require('jimp')
+for (var [name, func] of Object.entries(require('../lib/jimpPrint/measureText'))) {
+    modules.Jimp[name] = func
+}
+for (var [name, func] of Object.entries(require('../lib/jimpPrint/printText'))) {
+    modules.Jimp[name] = func
+}
 modules.catbox = require('catbox.moe')
 modules.gis = require('./gis')
 modules.mathjs = require('mathjs')

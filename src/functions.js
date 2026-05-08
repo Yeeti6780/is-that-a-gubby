@@ -4,7 +4,7 @@ let functions = {}
 
 functions.spawn = require('child_process').spawn
 functions.exec = require('child_process').exec
-functions.getEmojis = require('@jimp/plugin-print/emojis')
+functions.getEmojis = require('../lib/jimpPrint/getEmojis')
 functions.lingo = require('./lingo')
 functions.gibberish = require('./gibberish')
 functions.markov = require('./markov')
@@ -4956,7 +4956,7 @@ functions.battle = async function (msg, subject, action, damage, chance) {
     } = poopy.functions
     let { Discord } = poopy.modules
 
-    await msg.channel.sendTyping().catch(() => { })
+    msg.channel.sendTyping().catch(() => { })
     var attachment = msg.attachments.first()?.url
     var sticker = msg.stickers[0]?.url
 

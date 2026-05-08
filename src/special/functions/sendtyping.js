@@ -4,7 +4,7 @@ module.exports = {
   func: async function (_, msg) {
     let poopy = this
 
-    await msg.channel.sendTyping().catch(() => { })
+    msg.channel.sendTyping().catch(() => { })
     return ''
   },
   attemptvalue: 2

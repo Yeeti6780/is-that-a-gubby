@@ -28,7 +28,7 @@ module.exports = {
         let { getLevel, dataGather, fetchPingPerms,
             getShieldById, formatNumberWithPreset, resolveUser } = poopy.functions
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
 
         var userQuery = args.slice(1).join(' ')
 

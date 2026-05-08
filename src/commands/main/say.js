@@ -7,7 +7,7 @@ module.exports = {
         let { Discord, DiscordTypes } = poopy.modules
         let { fetchPingPerms } = poopy.functions
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         var del = (
             msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageMessages) ||
             msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
