@@ -39,19 +39,33 @@ function generateText(model, minLength = 1, maxLength = 2000, keySize = 1, begin
 
     while (true) {
         const key = currentKey.join("|");
-        if (!model.has(key)) break;
+        let possibilities = model.get(key);
 
-        const possibilities = model.get(key);
-        if (!possibilities.length) break;
+        if (!possibilities || !possibilities.length) {
+            if (result.length >= minLength) break;
+
+            currentKey = Array(keySize).fill(START);
+            possibilities = model.get(currentKey.join("|"));
+
+            if (!possibilities || !possibilities.length) break;
+        }
 
         let nextWord = sample(possibilities);
 
         if (nextWord === END && result.length < minLength) {
-            const filtered = possibilities.filter(w => w !== END);
+            currentKey = Array(keySize).fill(START);
+            possibilities = model.get(currentKey.join("|"));
 
-            if (!filtered.length) break;
+            if (!possibilities || !possibilities.length) break;
 
-            nextWord = sample(filtered);
+            nextWord = sample(possibilities);
+
+            let safety = 10;
+            while (nextWord === END && safety-- > 0) {
+                nextWord = sample(possibilities);
+            }
+
+            if (nextWord === END) break;
         }
 
         if (nextWord === END) break;
