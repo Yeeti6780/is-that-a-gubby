@@ -141,7 +141,7 @@ module.exports = {
                 }
 
                 var saidMessage = args.slice(1).join(' ')
-                var cleanMessage = cleanContentPreserveEmojis(saidMessage, msg.channel).replace(/\@/g, '@‌')
+                var cleanMessage = saidMessage // cleanContentPreserveEmojis(saidMessage, msg.channel).replace(/\@/g, '@‌')
                 var results = []
 
                 tempdata[msg.guild.id].messages.forEach(message => {
@@ -222,7 +222,7 @@ module.exports = {
                 }
 
                 var saidMessage = args.slice(1).join(' ')
-                var cleanMessage = cleanContentPreserveEmojis(saidMessage, msg.channel).replace(/\@/g, '@‌')
+                var cleanMessage = saidMessage // cleanContentPreserveEmojis(saidMessage, msg.channel).replace(/\@/g, '@‌')
 
                 var send = true
 
@@ -264,7 +264,7 @@ module.exports = {
                 }
 
                 var saidMessage = args.slice(1).join(' ')
-                var cleanMessage = cleanContentPreserveEmojis(saidMessage, msg.channel).replace(/\@/g, '@‌')
+                var cleanMessage = saidMessage // cleanContentPreserveEmojis(saidMessage, msg.channel).replace(/\@/g, '@‌')
                 var findMessage = tempdata[msg.guild.id].messages.findIndex(message => message.content.toLowerCase() === cleanMessage.toLowerCase())
 
                 if (findMessage > -1) {

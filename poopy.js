@@ -1015,7 +1015,7 @@ class Poopy {
                     id => id == msg.channel?.id || id == msg.channel?.parent?.id || id == msg.channel?.parent?.parent?.id
                 )
             ) {
-                var cleanMessage = cleanContentPreserveEmojis(origcontent, msg.channel).replace(/\@/g, '@‌')
+                var cleanMessage = msg.content // cleanContentPreserveEmojis(origcontent, msg.channel).replace(/\@/g, '@‌')
 
                 data.guildData[msg.guild.id].messages.unshift({
                     id: msg.id,
@@ -1213,7 +1213,7 @@ class Poopy {
                     var findMessage = messages[messageIndex]
                     var findTmpMessage = tmpMessages[messageIndex]
 
-                    var cleanMessage = cleanContentPreserveEmojis(msg.content, msg.channel).replace(/\@/g, '@‌')
+                    var cleanMessage = msg.content // cleanContentPreserveEmojis(msg.content, msg.channel).replace(/\@/g, '@‌')
 
                     if (
                         !(cleanMessage.match(vars.badFilter) || cleanMessage.match(vars.scamFilter) || cleanMessage.includes(prefix.toLowerCase())) &&
