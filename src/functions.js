@@ -4350,7 +4350,7 @@ functions.createCronJob = async function (cronData) {
     let bot = poopy.bot
     let tempdata = poopy.tempdata
     let { cron, DummyMessage } = poopy.modules
-    let { sleep, getKeywordsFor, fetchPingPerms } = poopy.functions
+    let { sleep, getKeywordsFor, fetchPingPerms, gatherData, deleteMsgData } = poopy.functions
 
     const timerId = cronData.id
 
@@ -4395,6 +4395,10 @@ functions.createCronJob = async function (cronData) {
                 poopy, guild, channel, member
             }, phrase)
 
+            var dataError = false
+            await gatherData(dummyMessage).catch((err) => dataError = err)
+            if (dataError) return console.log(dummyMessage)
+
             const evaluatedPhrase = await getKeywordsFor(phrase, dummyMessage, true, { resetAttempts: true }).catch(() => { }) ?? phrase
 
             cronMessage = await channel.send({
@@ -4403,6 +4407,8 @@ functions.createCronJob = async function (cronData) {
             }).catch((err) => {
                 if (!err.message.includes("discord.com")) abort = true
             })
+
+            deleteMsgData(dummyMessage)
 
             if (cronMessage || abort) break
 

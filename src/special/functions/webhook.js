@@ -102,11 +102,11 @@ module.exports = {
         }
 
         if (keepAttachments) {
-            var attachments = msg.attachments
+            var attachments = (msg.attachments ?? [])
                 .filter(attachment => attachment.size <= getUploadLimit(msg))
                 .map(attachment => new Discord.AttachmentBuilder(attachment.url, attachment.name))
-            var embeds = msg.embeds.filter(embed => embed.data.type === 'rich')
-            var stickers = msg.stickers
+            var embeds = (msg.embeds ?? []).filter(embed => embed.data.type === 'rich')
+            var stickers = (msg.stickers ?? [])
                 .filter(sticker => sticker.format != 3)
                 .map(sticker => new Discord.AttachmentBuilder(`${sticker.url.replace("cdn.discordapp.com", "media.discordapp.net")}?size=160`))
 

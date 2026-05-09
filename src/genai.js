@@ -93,13 +93,11 @@ function trainSample(sample, model, keySize = 1) {
         .filter(Boolean)
         .map(wordProcess);
 
-    if (!words.length) {
-        return () => { };
-    }
+    const operations = [];
+
+    if (!words.length) return operations;
 
     const window = Array(keySize).fill(START);
-
-    const operations = [];
 
     for (let i = 0; i <= words.length; i++) {
         const next = i === words.length ? END : words[i];

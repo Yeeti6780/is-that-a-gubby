@@ -1896,8 +1896,6 @@ class Poopy {
             writable: false
         })
 
-        for (let cronData of data.botData.crons) createCronJob(cronData).catch(() => { })
-
         for (let starboard of data.botData.starboards) {
             tempdata[starboard.guildId] ??= {}
             tempdata[starboard.guildId][starboard.channelId] ??= {}
@@ -1962,6 +1960,8 @@ class Poopy {
 
             bot.on('error', (err) => console.log(err))
         }
+
+        for (let cronData of data.botData.crons) createCronJob(cronData).catch(() => { })
 
         vars.started = true
     }
