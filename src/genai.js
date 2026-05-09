@@ -93,11 +93,10 @@ function trainSample(sample, model, keySize = 1) {
         .filter(Boolean)
         .map(wordProcess);
 
-    const operations = [];
-
-    if (!words.length) return operations;
+    if (!words.length) return;
 
     const window = Array(keySize).fill(START);
+    const operations = [];
 
     for (let i = 0; i <= words.length; i++) {
         const next = i === words.length ? END : words[i];
@@ -129,7 +128,7 @@ function trainSample(sample, model, keySize = 1) {
         window[keySize - 1] = next;
     }
 
-    return operations;
+    // return operations;
 }
 
 function undoTrainSample(operations, model) {
@@ -158,10 +157,7 @@ function buildModel(samples, keySize = 1) {
     }
 
     for (const sample of samples) {
-        model.undo.push({
-            sample,
-            operations: trainSample(sample, model, keySize)
-        })
+        trainSample(sample, model, keySize)
     }
 
     return model;
