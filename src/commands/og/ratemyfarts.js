@@ -23,7 +23,7 @@ module.exports = {
         if (!msg.nosend) await msg.reply(fartrate).catch(() => { })
         return fartrate
     },
-    help: { name: 'ratemyfarts', value: 'Poopy rates your farts.' },
+    help: { name: 'ratemyfarts', value: 'The bot rates your farts.' },
     cooldown: 2500,
     type: 'OG'
 }

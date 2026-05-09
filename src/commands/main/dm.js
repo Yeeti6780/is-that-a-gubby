@@ -180,7 +180,7 @@ module.exports = {
     },
     help: {
         name: 'dm <user> <message>',
-        value: 'Allows Poopy to DM an user the message inside the command, this can be disabled with p:toggledms.'
+        value: 'Allows the bot to DM an user the message inside the command, this can be disabled with p:toggledms.'
     },
     type: 'Main'
 }

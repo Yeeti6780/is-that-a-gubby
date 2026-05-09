@@ -622,7 +622,10 @@ functions.configFlagsEnabled = function (reqConfigs = []) {
 
 functions.fetchPingPerms = function (msg) {
     let poopy = this
+    let data = poopy.data
     let { DiscordTypes } = poopy.modules
+    
+    const allowedGroups = data.userData[msg.author?.id]?.allowedMentions ?? []
 
     const hasPingPerms = (
         msg.member?.permissions?.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
@@ -635,9 +638,9 @@ functions.fetchPingPerms = function (msg) {
     if (!userPings.includes(msg.author.id)) userPings.push(msg.author.id)
 
     return {
-        parse: [],
-        roles: rolePings,
-        users: userPings,
+        parse: hasPingPerms ? allowedGroups : [],
+        roles: hasPingPerms && (allowedGroups.includes("roles") || allowedGroups.includes("everyone")) ? undefined : rolePings,
+        users: hasPingPerms && (allowedGroups.includes("users") || allowedGroups.includes("everyone")) ? undefined : userPings,
         repliedUser: true
     }
 }
@@ -4331,7 +4334,7 @@ functions.createCronJob = async function (cronData) {
     let bot = poopy.bot
     let tempdata = poopy.tempdata
     let { cron, DummyMessage } = poopy.modules
-    let { sleep, getKeywordsFor } = poopy.functions
+    let { sleep, getKeywordsFor, fetchPingPerms } = poopy.functions
 
     const timerId = cronData.id
 
@@ -4363,6 +4366,7 @@ functions.createCronJob = async function (cronData) {
 
     const cronTime = cronData.cron
     const phrase = cronData.phrase
+    const allowAnyPings = cronData.allowAnyPings
 
     const execute = async () => {
         if (!channel?.send) return
@@ -4377,7 +4381,10 @@ functions.createCronJob = async function (cronData) {
 
             const evaluatedPhrase = await getKeywordsFor(phrase, dummyMessage, true, { resetAttempts: true }).catch(() => { }) ?? phrase
 
-            cronMessage = await channel.send(evaluatedPhrase).catch((err) => {
+            cronMessage = await channel.send({
+                content: evaluatedPhrase,
+                allowedMentions: !allowAnyPings ? fetchPingPerms(dummyMessage) : undefined
+            }).catch((err) => {
                 if (!err.message.includes("discord.com")) abort = true
             })
 

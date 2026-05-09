@@ -63,7 +63,7 @@ module.exports = {
     },
     help: {
         name: 'setstatus/ss <type (Streaming, Watching, Playing, Listening or Competing)> <statusMessage> [-permanent]',
-        value: 'Allows Poopy to have a custom status.\n' +
+        value: 'Allows the bot to have a custom status.\n' +
             'Example usage: p:setstatus Streaming you, idiot. -permanent'
     },
     cooldown: 2500,

@@ -150,7 +150,7 @@ module.exports = {
             var idiot = await bot.users.fetch("464438783866175489").catch(() => { })
 
             var thankEmbed = {
-                "title": `Poopy Help`,
+                "title": `Bot Help`,
                 "description": "**hey there, umm.. thank you so much for using this silly bot!**\n\n" +
 
                     "it really means a lot to me considering the fact it's a project that exists since late 2020... " +
@@ -171,7 +171,7 @@ module.exports = {
                 }
             }
 
-            if (config.textEmbeds) await msg.author.send(`**Poopy Help**\n\n${thankEmbed.description}`).catch(() => { })
+            if (config.textEmbeds) await msg.author.send(`**Bot Help**\n\n${thankEmbed.description}`).catch(() => { })
             else await msg.author.send({
                 embeds: [thankEmbed]
             }).catch(() => { })

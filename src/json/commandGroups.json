@@ -253,7 +253,7 @@
             "removefromjson",
             "updatefromjson"
         ],
-        "description": "Exclusive to some people for editing the JSONs used by Poopy."
+        "description": "Exclusive to some people for editing the JSONs used by the bot."
     },
     {
         "name": "memes",
@@ -368,13 +368,14 @@
         "cmds": [
             "chaincommands",
             "keyexecution",
+            "restrictchannels",
             "setprefix",
             "togglecmds",
-            "restrictchannels",
             "toggledms",
+            "togglepings",
             "webhookattachments"
         ],
-        "description": "Manage a server's Poopy settings, or your own Poopy settings."
+        "description": "Manage a server's bot settings, or your own bot settings."
     },
     {
         "name": "size",

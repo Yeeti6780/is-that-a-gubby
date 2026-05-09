@@ -20,6 +20,6 @@ module.exports = {
 
         process.exit()
     },
-    help: { name: 'reset/restart/reboot', value: 'Resets Poopy.' },
+    help: { name: 'reset/restart/reboot', value: 'Resets the bot.' },
     type: 'Owner'
 }

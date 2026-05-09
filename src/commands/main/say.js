@@ -63,7 +63,7 @@ module.exports = {
     },
     help: {
         name: 'say/talk/speak <message> [-nodelete] [-tts]',
-        value: 'Poopy says the message after the command.'
+        value: 'The bot says the message after the command.'
     },
     cooldown: 2500,
     ephemeral: true,

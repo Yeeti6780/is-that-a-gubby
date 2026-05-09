@@ -37,8 +37,8 @@ module.exports = {
     },
     help: {
         name: 'setprefix <prefix> (moderator only)',
-        value: "Set Poopy's prefix to anything you want.\n" +
-            'Pro Tip: mentioning Poopy with "reset prefix" will reset it to his default prefix.'
+        value: "Set the bot's prefix to anything you want.\n" +
+            'Pro Tip: mentioning the bot with "reset prefix" will reset it to his default prefix.'
     },
     cooldown: 5000,
     perms: ['Administrator', 'ManageMessages'],

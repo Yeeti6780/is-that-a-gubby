@@ -117,7 +117,7 @@ module.exports = {
     },
     help: {
         name: 'cleverbot/respond {message} [-continuous] [-clear]',
-        value: "Poopy responds to your message(s) with Cleverbot's AI. Try it yourself at https://www.cleverbot.com/"
+        value: "The bot responds to your message(s) with Cleverbot's AI. Try it yourself at https://www.cleverbot.com/"
     },
     type: 'Generation'
 }

@@ -56,7 +56,7 @@ module.exports = {
     },
     help: {
         name: 'oldmarkov [message] [-words <wordNumber>] [-nopunctuation] [-keepcase] [-randlerp <number (from 0 to 1)>] [-randomsentences]',
-        value: 'the Poopy Markov includes last messages. This is The OLD logic ONE... TOGGLE the Message reading with p:messages to Function.'
+        value: 'the Bot Markov includes last messages. This is The OLD logic ONE... TOGGLE the Message reading with p:messages to Function.'
     },
     cooldown: 2500,
     type: 'Generation'

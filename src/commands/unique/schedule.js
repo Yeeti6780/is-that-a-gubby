@@ -59,6 +59,12 @@ module.exports = {
             "required": true,
             "specifarg": false,
             "orig": "<phrase>"
+        },
+        {
+            "name": "allowpings",
+            "required": false,
+            "specifarg": true,
+            "orig": "[-allowpings]"
         }],
         "description": "Adds a new scheduled timer with the specified phrase and cron syntax."
     },
@@ -109,7 +115,7 @@ module.exports = {
         var config = poopy.config
         var vars = poopy.vars
         var bot = poopy.bot
-        var { chunkArray, navigateEmbed, generateId, fetchPingPerms, createCronJob } = poopy.functions
+        var { chunkArray, navigateEmbed, generateId, fetchPingPerms, getOption, createCronJob } = poopy.functions
         var { Discord, DiscordTypes, cron } = poopy.modules
 
         var options = {
@@ -241,6 +247,8 @@ module.exports = {
                         args.splice(1, 1)
                     }
 
+                    var allowAnyPings = !!getOption(args, 'allowpings', { dft: false, splice: true, n: 0, join: true })
+                    
                     var saidMessage = args.slice(1).join(' ').replace(/’/g, '\'')
                     vars.symbolreplacements.forEach(symbolReplacement => {
                         symbolReplacement.target.forEach(target => {
@@ -279,7 +287,8 @@ module.exports = {
                         channelId: channel.id,
                         userId: msg.author.id,
                         cron: cronTime,
-                        phrase
+                        phrase,
+                        allowAnyPings
                     }
 
                     var job = await createCronJob(newTimer).catch(() => { })
@@ -439,9 +448,10 @@ module.exports = {
                 "\n" +
                 "Learn more at http://crontab.org/"
 
+            // hai total
             var instruction = "**list** - Gets a list of timers set up in the server.\n" +
                 "**info** <timerId> - Displays the info of the timer that has been set up with the respective ID.\n" +
-                "**add** [channel] \"<cron>\" <phrase> (moderator only) - Sets up a new scheduled timer with the specified phrase and cron syntax. Cron syntax overview is listed below.\n" +
+                "**add** [channel] \"<cron>\" <phrase> [-allowpings] (moderator only) - Sets up a new scheduled timer with the specified phrase and cron syntax. Cron syntax overview is listed below.\n" +
                 "**edit** <timerId> \"[cron]\" <phrase> (moderator only) - Edits the scheduled timer with the specified ID, if it exists.\n" +
                 "**delete** <timerId> (moderator only) - Deletes the timer from the server, if it exists."
             if (!msg.nosend) {

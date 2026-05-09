@@ -115,7 +115,7 @@ module.exports = {
     },
     help: {
         name: 'call/phonecall "[name]" {file}',
-        value: 'Poopy is calling.'
+        value: 'The bot is calling.'
     },
     cooldown: 2500,
     type: 'Memes'

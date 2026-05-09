@@ -117,7 +117,7 @@ module.exports = {
     },
     help: {
         name: 'arabottify [message] [-words <wordNumber>] [-noextrawords] [-nopunctuation]',
-        value: 'message. a Scramble BLACK. message. Scramble Poopy Extra words... included\n' +
+        value: 'message. a Scramble BLACK. message. Scramble Bot Extra words... included\n' +
             'Example usage: p:arabottify -words 1 -nopunctuation'
     },
     cooldown: 2500,

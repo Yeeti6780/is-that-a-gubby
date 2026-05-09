@@ -90,7 +90,7 @@ module.exports = {
     },
     help: {
         name: 'randomcmd [args] [-cmdtype <commandType>]',
-        value: 'Executes a completely random Poopy command.\n' +
+        value: 'Executes a completely random bot command.\n' +
             'Example usage: p:randomcmd -cmdtype Local'
     },
     cooldown: 2500,

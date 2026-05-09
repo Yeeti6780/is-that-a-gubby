@@ -14,7 +14,7 @@ module.exports = {
   },
   help: {
     name: 'invite',
-    value: "Sends Poopy's invite and Discord server links."
+    value: "Sends the bot's invite and other links."
   },
   cooldown: 2500,
   type: 'Main'

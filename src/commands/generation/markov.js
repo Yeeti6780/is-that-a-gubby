@@ -63,7 +63,7 @@ module.exports = {
     },
     help: {
         name: 'markov/genai [begin] [-minlength <charNumber (1 to 10000)>] [-maxlength <charNumber (1 to 10000)>] [-randomsentences]',
-        value: 'the Poopy Markov includes last messages. TOGGLE the Message reading with p:messages to Function. this use GenAi Discord Bot Algorithm......'
+        value: 'the Bot Markov includes last messages. TOGGLE the Message reading with p:messages to Function. this use GenAi Discord Bot Algorithm......'
     },
     cooldown: 2500,
     type: 'Generation'

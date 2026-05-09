@@ -17,6 +17,6 @@ module.exports = {
         }).catch(() => { })
         return poop
     },
-    help: { name: 'poop', value: 'Poopy says a random funny.' },
+    help: { name: 'poop', value: 'The bot says a random funny.' },
     type: 'OG'
 }

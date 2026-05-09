@@ -15,7 +15,7 @@ module.exports = {
     },
     help: {
         name: 'webhookattachments/toggleattachments',
-        value: "Disables/enables Poopy's ability to attach files to webhooks, resulting in faster sending speeds."
+        value: "Disables/enables the bot's ability to attach files to webhooks, resulting in faster sending speeds."
     },
     cooldown: 2500,
     type: 'Settings'

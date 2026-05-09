@@ -44,7 +44,7 @@ module.exports = {
     },
     help: {
         name: 'keyexecution/keyexec <mode (Message, Command or None)> (moderator only)',
-        value: "Set Poopy's mode of executing keywords, by message, command, or none."
+        value: "Set the bot's mode of executing keywords, by message, command, or none."
     },
     cooldown: 5000,
     perms: ['Administrator', 'ManageMessages'],

@@ -40,7 +40,7 @@ module.exports = {
     },
     help: {
         name: 'oldmarkov2 [-minlength <charNumber>] [-randomsentences]',
-        value: 'the Poopy Markov includes last messages. This is The OLD logic TWO... this use different algorith.'
+        value: 'the Bot Markov includes last messages. This is The OLD logic TWO... this use different algorith.'
     },
     cooldown: 2500,
     type: 'Generation'
