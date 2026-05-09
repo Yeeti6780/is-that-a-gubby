@@ -573,10 +573,7 @@ functions.updateGenAiModel = async function (msg, {
                 genAi.undoTrainSample(findUndo.operations, tempdata[msg.guild.id].messageModel)
             }
         } else {
-            tempdata[msg.guild.id].messageModel.undo.push({
-                sample,
-                operations: genAi.trainSample(sample, tempdata[msg.guild.id].messageModel)
-            })
+            genAi.trainSample(sample, tempdata[msg.guild.id].messageModel)
         }
     }
 }
