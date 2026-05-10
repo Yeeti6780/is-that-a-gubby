@@ -52,7 +52,7 @@ module.exports = {
     },
     help: {
         name: 'battler/battlebricks/tbb [type (friendly or enemy)] (manage webhooks/messages permission only)',
-        value: "I'm Battler, and I'm always battling!"
+        value: "I'm Battler, and I'm always battling! Many of the unofficial renders were made by GamerVenata!"
     },
     cooldown: 2500,
     perms: [
