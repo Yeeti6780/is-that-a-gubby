@@ -139,6 +139,17 @@ for (var Discord of modules.Discord) {
             }
         }
 
+        if (
+            typeof payload == "string" ?
+            !(payload.trim()) : (
+            !((payload.content ?? "").trim()) &&
+            !payload.files?.length &&
+            !payload.attachments?.length &&
+            !payload.embeds?.length &&
+            !payload.stickers?.length &&
+            !payload.components?.length
+        )) return
+
         if (vars.currentIpAddress) {
             switch (typeof payload) {
                 case 'string':
@@ -217,6 +228,17 @@ for (var Discord of modules.Discord) {
                     break;
             }
         }
+
+        if (
+            typeof payload == "string" ?
+            !(payload.trim()) : (
+            !((payload.content ?? "").trim()) &&
+            !payload.files?.length &&
+            !payload.attachments?.length &&
+            !payload.embeds?.length &&
+            !payload.stickers?.length &&
+            !payload.components?.length
+        )) return
 
         if (vars.currentIpAddress) {
             switch (typeof payload) {
@@ -306,6 +328,17 @@ for (var Discord of modules.Discord) {
                         break;
                 }
             }
+
+            if (
+                typeof payload == "string" ?
+                !(payload.trim()) : (
+                !((payload.content ?? "").trim()) &&
+                !payload.files?.length &&
+                !payload.attachments?.length &&
+                !payload.embeds?.length &&
+                !payload.stickers?.length &&
+                !payload.components?.length
+            )) return
 
             if (vars.currentIpAddress) {
                 switch (typeof payload) {
