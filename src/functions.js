@@ -5694,7 +5694,7 @@ functions.uploadToFileHost = async function (filepath, filename) {
     let lastResponse = "Unable to upload to a file hosting service."
 
     for (const upload of uploadHosts) {
-        const uploadLink = await upload(link).catch(() => { })
+        const uploadLink = await upload().catch(() => { })
         if (uploadLink) {
             if (vars.validUrl.test(uploadLink)) return uploadLink
             lastResponse = uploadLink
@@ -5713,7 +5713,7 @@ functions.sendFile = async function (msg, filepath, filename, extraOptions) {
     let {
         validateFileFromPath, execPromise, infoPost,
         rateLimit, addLastUrl, generateId, fetchPingPerms,
-        getUploadLimit
+        getUploadLimit, uploadToFileHost
     } = poopy.functions
     let { fs, Discord } = poopy.modules
 
