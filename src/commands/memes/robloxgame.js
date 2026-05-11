@@ -1,6 +1,6 @@
 module.exports = {
     name: ['robloxgame', 'rgame'],
-    args: [{ "name": "name", "required": false, "specifarg": false, "orig": "\"{name}\"" }, { "name": "likeRatio", "required": false, "specifarg": false, "orig": "\"[likeRatio]\"" }, { "name": "playerCount", "required": false, "specifarg": false, "orig": "\"[playerCount]\"" }, { "name": "file", "required": false, "specifarg": false, "orig": "{file}" }],
+    args: [{ name: "name", required: false, specifarg: false, orig: "\"{name}\"" }, { name: "likeRatio", required: false, specifarg: false, orig: "\"[likeRatio]\"" }, { name: "playerCount", required: false, specifarg: false, orig: "\"[playerCount]\"" }, { name: "file", required: false, specifarg: false, orig: "{file}" }],
     execute: async function (msg, args) {
         let poopy = this
         let {
@@ -10,10 +10,10 @@ module.exports = {
         let vars = poopy.vars
         let { Jimp } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && vars.validUrl.test(args[args.length - 1]) === false) {
             await msg.reply('What is the file?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var saidMessage = args.slice(1).join(' ')
@@ -44,7 +44,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -60,9 +60,9 @@ module.exports = {
             var game = await Jimp.read(`assets/image/game.png`)
             var gothamed = await Jimp.loadFont('assets/fonts/GothamMedium/GothamMedium.fnt')
             var gothasm = await Jimp.loadFont('assets/fonts/GothamSmall/GothamSmall.fnt')
-            await game.print(gothamed, 5, 165, { text: name, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 150, 35)
-            await game.print(gothasm, 22, 211, { text: likepercentage, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 138, 17)
-            await game.print(gothasm, 79, 211, { text: playercount, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 81, 17)
+            await Jimp.print(game, gothamed, 5, 165, { text: name, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 150, 35)
+            await Jimp.print(game, gothasm, 22, 211, { text: likepercentage, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 138, 17)
+            await Jimp.print(game, gothasm, 79, 211, { text: playercount, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 81, 17)
             await game.writeAsync(`${filepath}/game.png`)
 
             var width = fileinfo.info.width
@@ -81,9 +81,9 @@ module.exports = {
             var game = await Jimp.read(`assets/image/game.png`)
             var gothamed = await Jimp.loadFont('assets/fonts/GothamMedium/GothamMedium.fnt')
             var gothasm = await Jimp.loadFont('assets/fonts/GothamSmall/GothamSmall.fnt')
-            await game.print(gothamed, 5, 165, { text: name, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 150, 35)
-            await game.print(gothasm, 22, 211, { text: likepercentage, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 138, 17)
-            await game.print(gothasm, 79, 211, { text: playercount, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 81, 17)
+            await Jimp.print(game, gothamed, 5, 165, { text: name, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 150, 35)
+            await Jimp.print(game, gothasm, 22, 211, { text: likepercentage, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 138, 17)
+            await Jimp.print(game, gothasm, 79, 211, { text: playercount, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 81, 17)
             await game.writeAsync(`${filepath}/game.png`)
 
             var width = fileinfo.info.width
@@ -100,9 +100,9 @@ module.exports = {
             var game = await Jimp.read(`assets/image/game.png`)
             var gothamed = await Jimp.loadFont('assets/fonts/GothamMedium/GothamMedium.fnt')
             var gothasm = await Jimp.loadFont('assets/fonts/GothamSmall/GothamSmall.fnt')
-            await game.print(gothamed, 5, 165, { text: name, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 150, 35)
-            await game.print(gothasm, 22, 211, { text: likepercentage, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 138, 17)
-            await game.print(gothasm, 79, 211, { text: playercount, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 81, 17)
+            await Jimp.print(game, gothamed, 5, 165, { text: name, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 150, 35)
+            await Jimp.print(game, gothasm, 22, 211, { text: likepercentage, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 138, 17)
+            await Jimp.print(game, gothasm, 79, 211, { text: playercount, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 81, 17)
             await game.writeAsync(`${filepath}/game.png`)
 
             var width = fileinfo.info.width
@@ -117,7 +117,7 @@ module.exports = {
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

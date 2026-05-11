@@ -1,14 +1,14 @@
 module.exports = {
     name: ['addtojson'],
     args: [{
-        "name": "json", "required": true, "specifarg": false, "orig": "<json (funnygif, poop, dmphrases, shitting, eightball)>", "autocomplete": [
+        name: "json", required: true, specifarg: false, orig: "<json (funnygif, poop, dmphrases, shitting, eightball)>", autocomplete: [
             'funnygif',
             'poop',
             'dmphrases',
             'shitting',
             'eightball'
         ]
-    }, { "name": "value", "required": true, "specifarg": false, "orig": "<value>" }],
+    }, { name: "value", required: true, specifarg: false, orig: "<value>" }],
     execute: async function (msg, args) {
         let poopy = this
         let config = poopy.config

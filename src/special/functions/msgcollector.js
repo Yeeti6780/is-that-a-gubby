@@ -92,7 +92,7 @@ module.exports = {
 
                     collected.push(content)
 
-                    await channel.send({
+                    if (collect.trim()) await channel.send({
                         content: collect,
                         allowedMentions: fetchPingPerms(msg)
                     }).catch(() => { })
@@ -117,7 +117,7 @@ module.exports = {
 
                         var finishphrasek = await getKeywordsFor(finishphrase, msg, isBot, valOpts).catch(() => { }) ?? ''
 
-                        await channel.send({
+                        if (finishphrasek.trim()) await channel.send({
                             content: finishphrasek,
                             allowedMentions: fetchPingPerms(msg)
                         }).catch(() => { })

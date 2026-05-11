@@ -2,19 +2,19 @@ module.exports = {
     name: ['chat', 'ask'],
     args: [
         {
-            "name": "message", "required": true, "specifarg": false, "orig": "<message>"
+            name: "message", required: true, specifarg: false, orig: "<message>"
         },
         {
-            "name": "temperature", "required": false, "specifarg": true, "orig": "[-temperature <number (from 0 to 1)>]"
+            name: "temperature", required: false, specifarg: true, orig: "[-temperature <number (from 0 to 1)>]"
         },
         {
-            "name": "instruct", "required": false, "specifarg": true, "orig": "[-instruct <prompt>]"
+            name: "instruct", required: false, specifarg: true, orig: "[-instruct <prompt>]"
         },
         {
-            "name": "imagesearch", "required": false, "specifarg": true, "orig": "[-imagesearch]"
+            name: "imagesearch", required: false, specifarg: true, orig: "[-imagesearch]"
         },
         {
-            "name": "clear", "required": false, "specifarg": true, "orig": "[-clear]"
+            name: "clear", required: false, specifarg: true, orig: "[-clear]"
         }
     ],
     execute: async function (msg, args) {
@@ -24,7 +24,7 @@ module.exports = {
         let vars = poopy.vars
         let config = poopy.config
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
 
         var temperature = getOption(args, 'temperature', { dft: 1, splice: true, n: 1, join: true, func: (opt) => parseNumber(opt, { dft: 1, min: 0, max: 1, round: false }) })
         var instruct = getOption(args, 'instruct', { dft: vars.chatInstruct, splice: true, n: Infinity, join: true, stopMatch: ["-clear", "-temperature"] })
@@ -34,7 +34,7 @@ module.exports = {
         var saidMessage = args.slice(1).join(' ')
         if (args[1] === undefined) {
             await msg.reply('What is the message to send?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
 

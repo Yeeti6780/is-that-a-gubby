@@ -6,14 +6,14 @@ module.exports = {
 
     var vowels = ['a', 'e', 'i', 'o', 'u']
     var consonants = []
-    for (i = 97; i <= 122; i++) {
+    for (var i = 97; i <= 122; i++) {
       var char = String.fromCharCode(i)
       if (!vowels.find(letter => letter == char)) {
         consonants.push(char)
       }
     }
     var word = ''
-    for (i = 0; i < Math.floor(Math.random() * 3) + 2; i++) {
+    for (var i = 0; i < Math.floor(Math.random() * 3) + 2; i++) {
       word += consonants[Math.floor(Math.random() * consonants.length)] + vowels[Math.floor(Math.random() * vowels.length)]
     }
     if (!msg.nosend) await msg.reply(word).catch(() => { })

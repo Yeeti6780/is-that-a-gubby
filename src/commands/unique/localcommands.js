@@ -4,86 +4,86 @@ module.exports = {
         'servercommands',
         'servercmds'],
     args: [{
-        "name": "option",
-        "required": true,
-        "specifarg": false,
-        "orig": "<option>"
+        name: "option",
+        required: true,
+        specifarg: false,
+        orig: "<option>"
     }],
     subcommands: [{
-        "name": "list",
-        "args": [],
-        "description": "Gets a list of local commands."
+        name: "list",
+        args: [],
+        description: "Gets a list of local commands."
     },
     {
-        "name": "phrase",
-        "args": [{
-            "name": "command",
-            "required": true,
-            "specifarg": false,
-            "orig": "<command>",
-            "autocomplete": function (interaction) {
+        name: "phrase",
+        args: [{
+            name: "command",
+            required: true,
+            specifarg: false,
+            orig: "<command>",
+            autocomplete: function (interaction) {
                 let poopy = this
                 return poopy.data.guildData[interaction.guild.id].localcmds.map(cmd => cmd.name)
             }
         }],
-        "description": "Displays the phrase of a specific command."
+        description: "Displays the phrase of a specific command."
     },
     {
-        "name": "execute",
-        "args": [{
-            "name": "command",
-            "required": true,
-            "specifarg": false,
-            "orig": "<command>",
-            "autocomplete": function (interaction) {
+        name: "execute",
+        args: [{
+            name: "command",
+            required: true,
+            specifarg: false,
+            orig: "<command>",
+            autocomplete: function (interaction) {
                 let poopy = this
                 return poopy.data.guildData[interaction.guild.id].localcmds.map(cmd => cmd.name)
             }
         },
         {
-            "name": "args",
-            "required": false,
-            "specifarg": false,
-            "orig": "[args]"
+            name: "args",
+            required: false,
+            specifarg: false,
+            orig: "[args]"
         }],
-        "description": "Execute a specific command."
+        description: "Execute a specific command."
     },
     {
-        "name": "add",
-        "args": [{
-            "name": "command",
-            "required": true,
-            "specifarg": false,
-            "orig": "<command>"
+        name: "add",
+        args: [{
+            name: "command",
+            required: true,
+            specifarg: false,
+            orig: "<command>"
         },
         {
-            "name": "phrase",
-            "required": true,
-            "specifarg": false,
-            "orig": "<phrase>"
+            name: "phrase",
+            required: true,
+            specifarg: false,
+            orig: "<phrase>"
         },
         {
-            "name": "description",
-            "required": false,
-            "specifarg": true,
-            "orig": "{-description <text>}"
+            name: "description",
+            required: false,
+            specifarg: true,
+            orig: "{-description <text>}"
         },
         {
-            "name": "syntax",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-syntax <text>]"
+            name: "syntax",
+            required: false,
+            specifarg: true,
+            orig: "[-syntax <text>]"
         }],
-        "description": "Adds a new local command, if the name is available for use."
+        description: "Adds a new local command, if the name is available for use."
     },
     {
-        "name": "import",
-        "args": [{
-            "name": "id",
-            "required": true,
-            "specifarg": false,
-            "orig": "<id>",
-            "autocomplete": function () {
+        name: "import",
+        args: [{
+            name: "id",
+            required: true,
+            specifarg: false,
+            orig: "<id>",
+            autocomplete: function () {
                 let poopy = this
                 return poopy.globaldata.commandTemplates.map(cmd => {
                     return { name: `${cmd.name} (${cmd.id})`, value: cmd.id }
@@ -91,58 +91,58 @@ module.exports = {
             }
         },
         {
-            "name": "name",
-            "required": false,
-            "specifarg": false,
-            "orig": "[name]"
+            name: "name",
+            required: false,
+            specifarg: false,
+            orig: "[name]"
         }],
-        "description": "Imports a new local command from Poopy's command template database (`commandtemplates` command) by ID."
+        description: "Imports a new local command from the bot's command template database (`commandtemplates` command) by ID."
     },
     {
-        "name": "edit",
-        "args": [{
-            "name": "command",
-            "required": true,
-            "specifarg": false,
-            "orig": "<command>",
-            "autocomplete": function (interaction) {
+        name: "edit",
+        args: [{
+            name: "command",
+            required: true,
+            specifarg: false,
+            orig: "<command>",
+            autocomplete: function (interaction) {
                 let poopy = this
                 return poopy.data.guildData[interaction.guild.id].localcmds.map(cmd => cmd.name)
             }
         },
         {
-            "name": "phrase",
-            "required": true,
-            "specifarg": false,
-            "orig": "<phrase>"
+            name: "phrase",
+            required: true,
+            specifarg: false,
+            orig: "<phrase>"
         },
         {
-            "name": "description",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-description <text>]"
+            name: "description",
+            required: false,
+            specifarg: true,
+            orig: "[-description <text>]"
         },
         {
-            "name": "syntax",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-syntax <text>]"
+            name: "syntax",
+            required: false,
+            specifarg: true,
+            orig: "[-syntax <text>]"
         }],
-        "description": "Edits the local command, if it exists."
+        description: "Edits the local command, if it exists."
     },
     {
-        "name": "delete",
-        "args": [{
-            "name": "command",
-            "required": true,
-            "specifarg": false,
-            "orig": "<command>",
-            "autocomplete": function (interaction) {
+        name: "delete",
+        args: [{
+            name: "command",
+            required: true,
+            specifarg: false,
+            orig: "<command>",
+            autocomplete: function (interaction) {
                 let poopy = this
                 return poopy.data.guildData[interaction.guild.id].localcmds.map(cmd => cmd.name)
             }
         }],
-        "description": "Deletes the local command, if it exists."
+        description: "Deletes the local command, if it exists."
     }],
     execute: async function (msg, args, opts) {
         let poopy = this
@@ -153,6 +153,11 @@ module.exports = {
         let { DiscordTypes } = poopy.modules
         let globaldata = poopy.globaldata
         let commands = poopy.commands
+
+        if (opts.sourceMsg && msg.author.id != opts.sourceMsg.author.id) {
+            await msg.reply("bro").catch(() => { })
+            return
+        }
 
         var options = {
             list: async (msg) => {
@@ -167,14 +172,14 @@ module.exports = {
                         if (config.textEmbeds) await msg.reply('None.').catch(() => { })
                         else await msg.reply({
                             embeds: [{
-                                "title": `List of local commands for ${msg.guild.name}`,
-                                "description": 'None.',
-                                "color": 0x472604,
-                                "footer": {
-                                    "icon_url": bot.user.displayAvatarURL({
+                                title: `List of local commands for ${msg.guild.name}`,
+                                description: 'None.',
+                                color: 0x472604,
+                                footer: {
+                                    icon_url: bot.user.displayAvatarURL({
                                         dynamic: true, size: 1024, extension: 'png'
                                     }),
-                                    "text": bot.user.displayName
+                                    text: bot.user.displayName
                                 },
                             }]
                         }).catch(() => { })
@@ -188,14 +193,14 @@ module.exports = {
                     msg.channel, async (page) => {
                         if (config.textEmbeds) return `${localCmds[page - 1].join('\n')}\n\nPage ${page}/${localCmds.length}`
                         else return {
-                            "title": `List of local commands for ${msg.guild.name}`,
-                            "description": localCmds[page - 1].join('\n'),
-                            "color": 0x472604,
-                            "footer": {
-                                "icon_url": bot.user.displayAvatarURL({
+                            title: `List of local commands for ${msg.guild.name}`,
+                            description: localCmds[page - 1].join('\n'),
+                            color: 0x472604,
+                            footer: {
+                                icon_url: bot.user.displayAvatarURL({
                                     dynamic: true, size: 1024, extension: 'png'
                                 }),
-                                "text": `Page ${page}/${localCmds.length}`
+                                text: `Page ${page}/${localCmds.length}`
                             },
                         }
                     },
@@ -457,19 +462,19 @@ module.exports = {
         }
 
         if (!args[1]) {
-            var instruction = "**list** - Gets a list of local commands.\n**phrase** <command> - Displays the phrase of a specific command.\n**execute** <command> [args] - Execute a specific command.\n**add** <command> <phrase> {-description <text>} [-syntax <text>] (moderator only) - Adds a new local command, if the name is available for use.\n**import** <id> [name] (moderator only) - Imports a new local command from Poopy's command template database (`commandtemplates` command) by ID.\n**edit** <command> <phrase> [-description <text>] [-syntax <text>] (moderator only) - Edits the local command, if it exists.\n**delete** <command> (moderator only) - Deletes the local command, if it exists."
+            var instruction = "**list** - Gets a list of local commands.\n**phrase** <command> - Displays the phrase of a specific command.\n**execute** <command> [args] - Execute a specific command.\n**add** <command> <phrase> {-description <text>} [-syntax <text>] (moderator only) - Adds a new local command, if the name is available for use.\n**import** <id> [name] (moderator only) - Imports a new local command from the bot's command template database (`commandtemplates` command) by ID.\n**edit** <command> <phrase> [-description <text>] [-syntax <text>] (moderator only) - Edits the local command, if it exists.\n**delete** <command> (moderator only) - Deletes the local command, if it exists."
             if (!msg.nosend) {
                 if (config.textEmbeds) msg.reply(instruction).catch(() => { })
                 else msg.reply({
                     embeds: [{
-                        "title": "Available Options",
-                        "description": instruction,
-                        "color": 0x472604,
-                        "footer": {
-                            "icon_url": bot.user.displayAvatarURL({
+                        title: "Available Options",
+                        description: instruction,
+                        color: 0x472604,
+                        footer: {
+                            icon_url: bot.user.displayAvatarURL({
                                 dynamic: true, size: 1024, extension: 'png'
                             }),
-                            "text": bot.user.displayName
+                            text: bot.user.displayName
                         },
                     }]
                 }).catch(() => { })

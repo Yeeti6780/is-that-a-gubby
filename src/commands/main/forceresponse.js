@@ -1,9 +1,9 @@
 module.exports = {
     name: ['forceresponse'],
     args: [
-        { "name": "message", "required": true, "specifarg": false, "orig": "<message<_msg>>" },
-        { "name": "persist", "required": false, "specifarg": true, "orig": "[-persist]" },
-        { "name": "repliesonly", "required": false, "specifarg": true, "orig": "[-repliesonly]" }
+        { name: "message", required: true, specifarg: false, orig: "<message<_msg>>" },
+        { name: "persist", required: false, specifarg: true, orig: "[-persist]" },
+        { name: "repliesonly", required: false, specifarg: true, orig: "[-repliesonly]" }
     ],
     execute: async function (msg, args) {
         let poopy = this

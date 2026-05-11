@@ -1,13 +1,13 @@
 module.exports = {
     name: ['gif', 'tenor'],
-    args: [{"name":"query","required":true,"specifarg":false,"orig":"<query>"},{"name":"page","required":false,"specifarg":true,"orig":"[-page <number>]"}],
+    args: [{name: "query",required: true,specifarg: false,orig: "<query>"},{name: "page",required: false,specifarg: true,orig: "[-page <number>]"}],
     execute: async function (msg, args) {
         let poopy = this
         let { axios, DiscordTypes } = poopy.modules
         let { navigateEmbed, addLastUrl } = poopy.functions
         let config = poopy.config
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (args[1] === undefined) {
             await msg.reply('What do I search for?!').catch(() => { })
             return;
@@ -51,18 +51,18 @@ module.exports = {
 
             if (config.textEmbeds) return `${urls[page - 1]}\n\nGIF ${page}/${urls.length}`
             else return {
-                "title": "Tenor GIF Search Results For " + search,
-                "description": "Use the arrows to navigate.",
-                "color": 0x472604,
-                "footer": {
-                    "text": "GIF " + page + "/" + urls.length
+                title: "Tenor GIF Search Results For " + search,
+                description: "Use the arrows to navigate.",
+                color: 0x472604,
+                footer: {
+                    text: "GIF " + page + "/" + urls.length
                 },
-                "image": {
-                    "url": urls[page - 1]
+                image: {
+                    url: urls[page - 1]
                 },
-                "author": {
-                    "name": msg.author.tag,
-                    "icon_url": msg.author.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' })
+                author: {
+                    name: msg.author.tag,
+                    icon_url: msg.author.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' })
                 }
             }
         }, urls.length, msg.member, [

@@ -18,8 +18,8 @@ module.exports = {
         if (!msg.nosend) await msg.reply('The salami lid').catch(() => { })
         await poopy.destroy(true)
         
-        throw new Error("Poopy has been successfully destroyed. Absolutely phenomenal!")
+        throw new Error("The bot has been successfully destroyed. Absolutely phenomenal!")
     },
-    help: { name: 'destroy/shutdown/die', value: 'Causes Poopy to shutdown.' },
+    help: { name: 'destroy/shutdown/die', value: 'Causes the bot to shutdown.' },
     type: 'Owner'
 }

@@ -1,6 +1,6 @@
 module.exports = {
   name: ['shutup', 'shut', 'stfu', 'sybau'],
-  args: [{"name":"duration","required":false,"specifarg":false,"orig":"[duration (max 600 (10 minutes))]"}],
+  args: [{name: "duration",required: false,specifarg: false,orig: "[duration (max 600 (10 minutes))]"}],
   execute: async function (msg, args) {
     let poopy = this
     let config = poopy.config

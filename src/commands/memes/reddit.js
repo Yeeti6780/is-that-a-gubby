@@ -1,6 +1,6 @@
 module.exports = {
     name: ['reddit'],
-    args: [{ "name": "name", "required": false, "specifarg": false, "orig": "{name}" }, { "name": "file", "required": false, "specifarg": false, "orig": "{file}" }],
+    args: [{ name: "name", required: false, specifarg: false, orig: "{name}" }, { name: "file", required: false, specifarg: false, orig: "{file}" }],
     execute: async function (msg, args) {
         let poopy = this
         let {
@@ -10,10 +10,10 @@ module.exports = {
         let vars = poopy.vars
         let { Jimp } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && args[1] === undefined) {
             await msg.reply('What is the file?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var saidMessage = args.slice(1).join(' ')
@@ -33,7 +33,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -49,7 +49,7 @@ module.exports = {
             var reddittop = await Jimp.read(`assets/image/reddittop.png`)
             var redditbottom = await Jimp.read(`assets/image/redditbottom.png`)
             var ibm = await Jimp.loadFont(`assets/fonts/IBMPlexSans/IBMPlexSans.fnt`)
-            await reddittop.print(ibm, 18, 315, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 364, 66)
+            await Jimp.print(reddittop, ibm, 18, 315, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 364, 66)
             await reddittop.writeAsync(`${filepath}/top.png`)
 
             await execPromise(`ffmpeg -i ${filepath}/top.png -i ${filepath}/${filename} -i assets/image/redditbottom.png -filter_complex "[1:v]scale=${reddittop.bitmap.width}:-1[scaled];[0:v][scaled][2:v]vstack=inputs=3[out]" -map "[out]" -preset ${findpreset(args)} ${filepath}/reddit.png`)
@@ -64,7 +64,7 @@ module.exports = {
             var reddittop = await Jimp.read(`assets/image/reddittop.png`)
             var redditbottom = await Jimp.read(`assets/image/redditbottom.png`)
             var ibm = await Jimp.loadFont(`assets/fonts/IBMPlexSans/IBMPlexSans.fnt`)
-            await reddittop.print(ibm, 18, 315, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 364, 66)
+            await Jimp.print(reddittop, ibm, 18, 315, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 364, 66)
             await reddittop.writeAsync(`${filepath}/top.png`)
 
             var fps = fileinfo.info.fps
@@ -84,7 +84,7 @@ module.exports = {
             var reddittop = await Jimp.read(`assets/image/reddittop.png`)
             var redditbottom = await Jimp.read(`assets/image/redditbottom.png`)
             var ibm = await Jimp.loadFont(`assets/fonts/IBMPlexSans/IBMPlexSans.fnt`)
-            await reddittop.print(ibm, 18, 315, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 364, 66)
+            await Jimp.print(reddittop, ibm, 18, 315, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, 364, 66)
             await reddittop.writeAsync(`${filepath}/top.png`)
 
             var fps = fileinfo.info.fps
@@ -102,7 +102,7 @@ module.exports = {
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

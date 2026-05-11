@@ -1,6 +1,6 @@
 module.exports = {
     name: ['canyoufind', 'find'],
-    args: [{"name":"background","required":false,"specifarg":false,"orig":"{background}"},{"name":"toFind","required":false,"specifarg":false,"orig":"{toFind}"},{"name":"size","required":false,"specifarg":true,"orig":"[-size <pixels>]"}],
+    args: [{name: "background",required: false,specifarg: false,orig: "{background}"},{name: "toFind",required: false,specifarg: false,orig: "{toFind}"},{name: "size",required: false,specifarg: true,orig: "[-size <pixels>]"}],
     execute: async function (msg, args) {
         let poopy = this
         let { lastUrl, getUrls, validateFile, fetchPingPerms, sendFile } = poopy.functions
@@ -8,10 +8,10 @@ module.exports = {
         let config = poopy.config
         let { fs, Jimp } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 1) === undefined && args[2] === undefined) {
             await msg.reply('What are the files?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var size = 150
@@ -38,7 +38,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
         if (!fileinfo) return
@@ -53,7 +53,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
         if (!fileinfo2) return
@@ -66,7 +66,7 @@ module.exports = {
                     content: error,
                     allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
-                await msg.channel.sendTyping().catch(() => { })
+                msg.channel.sendTyping().catch(() => { })
                 return
             }
         }
@@ -77,7 +77,7 @@ module.exports = {
                     content: 'Unsupported file types.',
                     allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
-                await msg.channel.sendTyping().catch(() => { })
+                msg.channel.sendTyping().catch(() => { })
                 return
             }
         }

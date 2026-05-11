@@ -1,7 +1,7 @@
 module.exports = {
     name: ['burningtext', 'flamingtext', 'cooltext'],
-    args: [{ "name": "prompt", "required": true, "specifarg": false, "orig": "<prompt>" }, { "name": "fontsize", "required": false, "specifarg": true, "orig": "[-fontsize <pixels>]" }, {
-        "name": "origin", "required": false, "specifarg": true, "orig": "[-origin <x (left/center/right)> <y (top/middle/bottom)>]", "autocomplete": [
+    args: [{ name: "prompt", required: true, specifarg: false, orig: "<prompt>" }, { name: "fontsize", required: false, specifarg: true, orig: "[-fontsize <pixels>]" }, {
+        name: "origin", required: false, specifarg: true, orig: "[-origin <x (left/center/right)> <y (top/middle/bottom)>]", autocomplete: [
             'left top',
             'center top',
             'right top',
@@ -12,7 +12,7 @@ module.exports = {
             'center bottom',
             'right bottom',
         ]
-    }, { "name": "id", "required": false, "specifarg": true, "orig": "[-id <number (default 4)>]" }],
+    }, { name: "id", required: false, specifarg: true, orig: "[-id <number (default 4)>]" }],
     execute: async function (msg, args) {
         let poopy = this
         let {
@@ -21,7 +21,7 @@ module.exports = {
         } = poopy.functions
         let { axios } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
 
         var id = 4
         var idIndex = args.indexOf('-id')
@@ -65,7 +65,7 @@ module.exports = {
         var saidMessage = args.slice(1).join(' ')
         if (args[1] === undefined) {
             await msg.reply('What is the text?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
 
@@ -101,7 +101,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         })
 

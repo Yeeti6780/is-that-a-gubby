@@ -1,6 +1,6 @@
 module.exports = {
     name: ['eval', 'execute'],
-    args: [{ "name": "code", "required": false, "specifarg": false, "orig": "{code}" }],
+    args: [{ name: "code", required: false, specifarg: false, orig: "{code}" }],
     execute: async function (msg, args, opts) {
         let poopy = this
         let config = poopy.config
@@ -8,7 +8,7 @@ module.exports = {
         let { axios, util } = poopy.modules
         let { fetchPingPerms } = poopy.functions
 
-        var ownerid = (config.ownerids.find(id => opts.sourceMsg ? (id == opts.sourceMsg.author.id) : (id == msg.author.id)));
+        var ownerid = (config.ownerids.find(id => opts.sourceMsg ? (id == opts.sourceMsg.author.id) : (id == msg.author.id)))
         if (ownerid === undefined && !opts.ownermode) {
             await msg.reply('Owner only!').catch(() => { })
             return

@@ -1,6 +1,6 @@
 module.exports = {
     name: ['screenshot', 'savesite'],
-    args: [{ "name": "site", "required": true, "specifarg": false, "orig": "<site>" }],
+    args: [{ name: "site", required: true, specifarg: false, orig: "<site>" }],
     execute: async function (msg, args) {
         let poopy = this;
         let vars = poopy.vars;
@@ -23,7 +23,7 @@ module.exports = {
             deviceScaleFactor: 0.7
         })
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
 
         let blacklisted = ['porn', 'xvideos', 'gay', 'xxx', 'e621', 'rule34'];
         let ipBlacklisted = ['ipify', 'iplogger']

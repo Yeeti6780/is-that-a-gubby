@@ -1,12 +1,12 @@
 module.exports = {
     name: ['setstatus', 'ss'],
-    args: [{ "name": "type", "required": true, "specifarg": false, "orig": "<type (Streaming, Watching, Playing, Listening or Competing)>", "autocomplete": [
+    args: [{ name: "type", required: true, specifarg: false, orig: "<type (Streaming, Watching, Playing, Listening or Competing)>", autocomplete: [
         'Playing',
         'Listening',
         'Watching',
         'Streaming',
         'Competing'
-    ] }, { "name": "statusMessage", "required": true, "specifarg": false, "orig": "<statusMessage>" }, { "name": "permanent", "required": false, "specifarg": true, "orig": "[-permanent]" }],
+    ] }, { name: "statusMessage", required: true, specifarg: false, orig: "<statusMessage>" }, { name: "permanent", required: false, specifarg: true, orig: "[-permanent]" }],
     execute: async function (msg, args, opts) {
         let poopy = this
         let config = poopy.config
@@ -34,7 +34,7 @@ module.exports = {
 
             if (args[1] === 'Playing' || args[1] === 'Listening' || args[1] === 'Watching' || args[1] === 'Streaming' || args[1] === 'Competing') {
                 var saidMessage = args.slice(2).join(' ')
-                await msg.channel.sendTyping().catch(() => { })
+                msg.channel.sendTyping().catch(() => { })
                 infoPost(`Status changed to ${args[1].toLowerCase() + ' ' + ((args[1] === "Competing" && 'in ') || (args[1] === "Listening" && 'to ') || '') + saidMessage}`)
                 bot.user.setPresence({
                     status: 'online',
@@ -63,7 +63,7 @@ module.exports = {
     },
     help: {
         name: 'setstatus/ss <type (Streaming, Watching, Playing, Listening or Competing)> <statusMessage> [-permanent]',
-        value: 'Allows Poopy to have a custom status.\n' +
+        value: 'Allows the bot to have a custom status.\n' +
             'Example usage: p:setstatus Streaming you, idiot. -permanent'
     },
     cooldown: 2500,

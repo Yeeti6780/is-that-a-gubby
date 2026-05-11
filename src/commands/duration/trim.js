@@ -1,6 +1,6 @@
 module.exports = {
     name: ['trim', 'cut'],
-    args: [{"name":"start","required":false,"specifarg":true,"orig":"[-start <timestamp (you can use hh:mm:ss)>]"},{"name":"end","required":false,"specifarg":true,"orig":"[-end <timestamp (you can use hh:mm:ss)>]"},{"name":"file","required":false,"specifarg":false,"orig":"{file}"}],
+    args: [{name: "start",required: false,specifarg: true,orig: "[-start <timestamp (you can use hh:mm:ss)>]"},{name: "end",required: false,specifarg: true,orig: "[-end <timestamp (you can use hh:mm:ss)>]"},{name: "file",required: false,specifarg: false,orig: "{file}"}],
     execute: async function (msg, args) {
         let poopy = this
         let {
@@ -9,10 +9,10 @@ module.exports = {
         } = poopy.functions
         let vars = poopy.vars
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && args[2] === undefined) {
             await msg.reply('What is the file?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         if (!args.includes('-start') && !args.includes('-end')) {
@@ -25,7 +25,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -163,7 +163,7 @@ module.exports = {
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

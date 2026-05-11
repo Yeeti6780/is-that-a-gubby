@@ -2,11 +2,11 @@ module.exports = {
     name: ['shop'],
     args: [
         {
-            "name": "type",
-            "required": false,
-            "specifarg": false,
-            "orig": "<type (upgrades, buffs, items or shields)>",
-            "autocomplete": ['upgrades', 'buffs', 'items', 'shields']
+            name: "type",
+            required: false,
+            specifarg: false,
+            orig: "<type (upgrades, buffs, items or shields)>",
+            autocomplete: ['upgrades', 'buffs', 'items', 'shields']
         }
     ],
     execute: async function (msg, args) {

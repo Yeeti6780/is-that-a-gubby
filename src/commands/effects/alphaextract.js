@@ -1,6 +1,6 @@
 module.exports = {
     name: ['alphaextract', 'createmask'],
-    args: [{"name":"file","required":false,"specifarg":false,"orig":"{file}"}],
+    args: [{name: "file",required: false,specifarg: false,orig: "{file}"}],
     execute: async function (msg, args) {
         let poopy = this
         let {
@@ -10,10 +10,10 @@ module.exports = {
         let { DiscordTypes } = poopy.modules
         let vars = poopy.vars
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && args[1] === undefined) {
             await msg.reply('What is the file?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var currenturl = lastUrl(msg, 0) || args[1]
@@ -22,7 +22,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -43,14 +43,14 @@ module.exports = {
             return await sendFile(msg, filepath, `output.gif`)
         } else if (type.mime.startsWith('video')) {
             await msg.reply(`videos have no alpha channel + cry about it + stay mad + get real + L + mald seethe cope harder + don't care + didn't ask + hoes mad + basic + skill issue + ratio + you fell off + the audacity + triggered + any askers + redpilled + get a life + ok and? + cringe + touch grass + donowalled + not based + your're a (insert stereotype) + not funny didn't laugh + you're* + grammar issue + go outside + get good + reported + ad hominem + GG! + ur mom`).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         } else {
             await msg.reply({
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

@@ -1,39 +1,39 @@
 module.exports = {
     name: ['messages'],
     args: [{
-        "name": "option",
-        "required": true,
-        "specifarg": false,
-        "orig": "<option>"
+        name: "option",
+        required: true,
+        specifarg: false,
+        orig: "<option>"
     }],
     subcommands: [{
-        "name": "list",
-        "args": [],
-        "description": "Sends a text file with a list of all messages that exist within the guild's message database."
+        name: "list",
+        args: [],
+        description: "Sends a text file with a list of all messages that exist within the guild's message database."
     },
     {
-        "name": "search",
-        "args": [{
-            "name": "query",
-            "required": true,
-            "specifarg": false,
-            "orig": "<query>"
+        name: "search",
+        args: [{
+            name: "query",
+            required: true,
+            specifarg: false,
+            orig: "<query>"
         }],
-        "description": "Searches for every message in the server that matches the query."
+        description: "Searches for every message in the server that matches the query."
     },
     {
-        "name": "random",
-        "args": [],
-        "description": "Sends a random message from the database to the channel."
+        name: "random",
+        args: [],
+        description: "Sends a random message from the database to the channel."
     },
     {
-        "name": "member",
-        "args": [{
-            "name": "id",
-            "required": true,
-            "specifarg": false,
-            "orig": "<id>",
-            "autocomplete": async function (interaction) {
+        name: "member",
+        args: [{
+            name: "id",
+            required: true,
+            specifarg: false,
+            orig: "<id>",
+            autocomplete: async function (interaction) {
                 let poopy = this
                 let { data, config } = poopy
                 let { dataGather } = poopy.functions
@@ -50,45 +50,45 @@ module.exports = {
                 })
             }
         }],
-        "description": "Sends a random message from that member to the channel."
+        description: "Sends a random message from that member to the channel."
     },
     {
-        "name": "add",
-        "args": [{
-            "name": "message",
-            "required": true,
-            "specifarg": false,
-            "orig": "<message>"
+        name: "add",
+        args: [{
+            name: "message",
+            required: true,
+            specifarg: false,
+            orig: "<message>"
         }],
-        "description": "Adds a new permanent message to the guild's database, if it is not duplicated."
+        description: "Adds a new permanent message to the guild's database, if it is not duplicated."
     },
     {
-        "name": "delete",
-        "args": [{
-            "name": "message",
-            "required": true,
-            "specifarg": false,
-            "orig": "<message>",
-            "autocomplete": function (interaction) {
+        name: "delete",
+        args: [{
+            name: "message",
+            required: true,
+            specifarg: false,
+            orig: "<message>",
+            autocomplete: function (interaction) {
                 let poopy = this
                 return poopy.tempdata[interaction.guild.id].messages.map(msg => msg.content)
             }
         }],
-        "description": "Deletes the message, if it exists."
+        description: "Deletes the message, if it exists."
     },
     {
-        "name": "clear",
-        "args": [],
-        "description": "Clears ALL the messages from the database."
+        name: "clear",
+        args: [],
+        description: "Clears ALL the messages from the database."
     },
     {
-        "name": "read",
-        "args": [{
-            "name": "channel",
-            "required": false,
-            "specifarg": false,
-            "orig": "[channel]",
-            "autocomplete": function (interaction) {
+        name: "read",
+        args: [{
+            name: "channel",
+            required: false,
+            specifarg: false,
+            orig: "[channel]",
+            autocomplete: function (interaction) {
                 let poopy = this
                 let { Discord } = poopy.modules
 
@@ -101,22 +101,27 @@ module.exports = {
                     .map(c => ({ name: c.name, value: c.id }))
             }
         }],
-        "description": "Toggles whether the bot can read the messages from the channel or not."
+        description: "Toggles whether the bot can read the messages from the channel or not."
     },
     {
-        "name": "readall",
-        "args": [],
-        "description": "Toggles whether the bot can read the messages from all channels or not."
+        name: "readall",
+        args: [],
+        description: "Toggles whether the bot can read the messages from all channels or not."
     }],
-    execute: async function (msg, args) {
+    execute: async function (msg, args, opts) {
         let poopy = this
         let vars = poopy.vars
         let config = poopy.config
         let { fs, Discord, DiscordTypes, CryptoJS } = poopy.modules
         let data = poopy.data
         let tempdata = poopy.tempdata
-        let { similarity, yesno, fetchPingPerms, resolveUser, cleanContentPreserveEmojis, workerTask } = poopy.functions
+        let { similarity, yesno, fetchPingPerms, resolveUser, cleanContentPreserveEmojis, workerTask, updateGenAiModel } = poopy.functions
         let bot = poopy.bot
+
+        if (opts.sourceMsg && msg.author.id != opts.sourceMsg.author.id) {
+            await msg.reply("bro").catch(() => { })
+            return
+        }
 
         var options = {
             list: async (msg) => {
@@ -141,7 +146,7 @@ module.exports = {
                 }
 
                 var saidMessage = args.slice(1).join(' ')
-                var cleanMessage = cleanContentPreserveEmojis(saidMessage, msg.channel).replace(/\@/g, '@‌')
+                var cleanMessage = saidMessage // cleanContentPreserveEmojis(saidMessage, msg.channel).replace(/\@/g, '@‌')
                 var results = []
 
                 tempdata[msg.guild.id].messages.forEach(message => {
@@ -222,41 +227,45 @@ module.exports = {
                 }
 
                 var saidMessage = args.slice(1).join(' ')
-                var cleanMessage = cleanContentPreserveEmojis(saidMessage, msg.channel).replace(/\@/g, '@‌')
+                var cleanMessage = saidMessage // cleanContentPreserveEmojis(saidMessage, msg.channel).replace(/\@/g, '@‌')
                 var findMessage = tempdata[msg.guild.id].messages.find(message => message.content.toLowerCase() === cleanMessage.toLowerCase())
 
                 if (findMessage) {
                     await msg.reply(`That message already exists.`).catch(() => { })
                     return
-                } else {
-                    var send = true
-
-                    if (cleanMessage.match(/nigg|fagg|https?\:\/\/.*(rule34|e621|pornhub|hentaihaven|xxx|iplogger|discord\.gg\/[\d\w]+\/?$|discord\.gift)/ig)) {
-                        send = msg.nosend || await yesno(msg.channel, 'That message looks nasty, are you sure about this?', msg.member.id, undefined, msg).catch(() => { })
-                    }
-
-                    if (!send) return
-
-                    data.guildData[msg.guild.id].messages.unshift({
-                        id: null,
-                        author: msg.author.id,
-                        content: CryptoJS.AES.encrypt(cleanMessage, process.env.AUTH_TOKEN).toString(),
-                        timestamp: Number.MAX_SAFE_INTEGER // genius
-                    })
-
-                    tempdata[msg.guild.id].messages.unshift({
-                        id: null,
-                        author: msg.author.id,
-                        content: cleanMessage,
-                        timestamp: Number.MAX_SAFE_INTEGER // genius
-                    })
-
-                    if (!msg.nosend) await msg.reply({
-                        content: `✅ Added ${cleanMessage}`,
-                        allowedMentions: fetchPingPerms(msg)
-                    }).catch(() => { })
-                    return `✅ Added ${cleanMessage}`
                 }
+
+                var send = true
+
+                if (cleanMessage.match(/nigg|fagg|https?\:\/\/.*(rule34|e621|pornhub|hentaihaven|xxx|iplogger|discord\.gg\/[\d\w]+\/?$|discord\.gift)/ig)) {
+                    send = msg.nosend || await yesno(msg.channel, 'That message looks nasty, are you sure about this?', msg.member.id, undefined, msg).catch(() => { })
+                }
+
+                if (!send) return
+
+                data.guildData[msg.guild.id].messages.unshift({
+                    id: null,
+                    author: msg.author.id,
+                    content: CryptoJS.AES.encrypt(cleanMessage, process.env.AUTH_TOKEN).toString(),
+                    timestamp: Number.MAX_SAFE_INTEGER // genius
+                })
+
+                tempdata[msg.guild.id].messages.unshift({
+                    id: null,
+                    author: msg.author.id,
+                    content: cleanMessage,
+                    timestamp: Number.MAX_SAFE_INTEGER // genius
+                })
+
+                updateGenAiModel(msg, {
+                    sample: cleanMessage
+                })
+
+                if (!msg.nosend) await msg.reply({
+                    content: `✅ Added ${cleanMessage}`,
+                    allowedMentions: fetchPingPerms(msg)
+                }).catch(() => { })
+                return `✅ Added ${cleanMessage}`
             },
 
             delete: async (msg, args) => {
@@ -266,10 +275,15 @@ module.exports = {
                 }
 
                 var saidMessage = args.slice(1).join(' ')
-                var cleanMessage = cleanContentPreserveEmojis(saidMessage, msg.channel).replace(/\@/g, '@‌')
+                var cleanMessage = saidMessage // cleanContentPreserveEmojis(saidMessage, msg.channel).replace(/\@/g, '@‌')
                 var findMessage = tempdata[msg.guild.id].messages.findIndex(message => message.content.toLowerCase() === cleanMessage.toLowerCase())
 
                 if (findMessage > -1) {
+                    await updateGenAiModel(msg, {
+                        sample: cleanMessage,
+                        remove: true
+                    })
+
                     data.guildData[msg.guild.id].messages.splice(findMessage, 1)
                     tempdata[msg.guild.id].messages.splice(findMessage, 1)
 
@@ -291,8 +305,14 @@ module.exports = {
                             return
                         }
 
+                        const modelWorker = tempdata[msg.guild.id].messageModel
+
                         data.guildData[msg.guild.id].messages = []
                         tempdata[msg.guild.id].messages = []
+                        if (modelWorker) {
+                            modelWorker.destroy()
+                            delete tempdata[msg.guild.id].messageModel
+                        }
 
                         if (!msg.nosend) await msg.reply(`✅ All **${size}** messages from the server's database have been cleared.`).catch(() => { })
                         return `✅ All **${size}** messages from the server's database have been cleared.`
@@ -300,32 +320,6 @@ module.exports = {
                 } else {
                     await msg.reply('You need the manage server permission to execute that!').catch(() => { })
                 };
-            },
-
-            refresh: async (msg) => {
-                var confirm = msg.nosend || await yesno(msg.channel, 'are you sure about this', msg.member, undefined, msg).catch(() => { })
-
-                if (confirm) {
-                    if (!tempdata[msg.guild.id].lastMessageModelBuild) {
-                        tempdata[msg.guild.id].lastMessageModelBuild = 0
-                    }
-            
-                    var currentTime = Date.now()
-                    if (currentTime - tempdata[msg.guild.id].lastMessageModelBuild < 60_000) {
-                        await msg.reply('the last refresh was done seconds ago calm down').catch(() => { })
-                        return
-                    }
-
-                    tempdata[msg.guild.id].lastMessageModelBuild = currentTime
-                    tempdata[msg.guild.id].messageModel = workerTask("genai-model", tempdata[msg.guild.id].messages.map(m => m.content))
-                
-                    if (tempdata[msg.guild.id].messageModel instanceof Promise) {
-                        tempdata[msg.guild.id].messageModel = await tempdata[msg.guild.id].messageModel
-                    }
-
-                    if (!msg.nosend) await msg.reply(`✅ The cached message model has been refreshed.`).catch(() => { })
-                    return `✅ The cached message model has been refreshed.`
-                }
             },
 
             read: async (msg) => {
@@ -384,7 +378,6 @@ module.exports = {
                 + "**random** - Sends a random message from the database to the channel.\n\n"
                 + "**member** <id> - Sends a random message from that member to the channel.\n\n"
                 + "**add** <message> - Adds a new permanent message to the guild's database, if it is not duplicated.\n\n"
-                + "**refresh** - Force refreshes the cached message model to include recently sent messages in commands like \`markov/genai\`. (this is done automatically every hour)\n\n"
                 + "**delete** <message> - Deletes the message, if it exists.\n\n"
                 + "**clear** (manage server only) - Clears ALL the messages from the database.\n\n"
                 + "**read** [channel] (moderator only) - Toggles whether the bot can read the messages from the channel or not.\n\n"
@@ -393,14 +386,14 @@ module.exports = {
                 if (config.textEmbeds) msg.reply(instruction).catch(() => { })
                 else msg.reply({
                     embeds: [{
-                        "title": "Available Options",
-                        "description": instruction,
-                        "color": 0x472604,
-                        "footer": {
-                            "icon_url": bot.user.displayAvatarURL({
+                        title: "Available Options",
+                        description: instruction,
+                        color: 0x472604,
+                        footer: {
+                            icon_url: bot.user.displayAvatarURL({
                                 dynamic: true, size: 1024, extension: 'png'
                             }),
-                            "text": bot.user.displayName
+                            text: bot.user.displayName
                         },
                     }]
                 }).catch(() => { })
@@ -417,7 +410,7 @@ module.exports = {
     },
     help: {
         name: 'messages <option>',
-        value: "Allows you to see or manage the server's message database. Used by the `_message` keyword and has a 10k messages limit. They're auto-deleted after 30 days to abide with Discord's TOS, unless added manually. Use the command alone for more info."
+        value: "Allows you to see or manage the server's message database. Used by the `_message` keyword. They're auto-deleted after 30 days to abide with Discord's TOS, unless added manually. Use the command alone for more info."
     },
     cooldown: 2500,
     raw: true,

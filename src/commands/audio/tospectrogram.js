@@ -1,6 +1,6 @@
 module.exports = {
     name: ['tospectrogram', 'spectrogramimage'],
-    args: [{"name":"file","required":false,"specifarg":false,"orig":"{file}"},{"name":"duration","required":false,"specifarg":true,"orig":"[-duration <seconds (from 1 to 20)>]"},{"name":"frequency","required":false,"specifarg":true,"orig":"[-frequency <hz (from 20 to 40000)>]"},{"name":"density","required":false,"specifarg":true,"orig":"[-density <number (from 1 to 10)>]"}],
+    args: [{name: "file",required: false,specifarg: false,orig: "{file}"},{name: "duration",required: false,specifarg: true,orig: "[-duration <seconds (from 1 to 20)>]"},{name: "frequency",required: false,specifarg: true,orig: "[-frequency <hz (from 20 to 40000)>]"},{name: "density",required: false,specifarg: true,orig: "[-density <number (from 1 to 10)>]"}],
     execute: async function (msg, args) {
         let poopy = this
         let { lastUrl, validateFile, workerTask, sendFile, fetchPingPerms } = poopy.functions
@@ -8,10 +8,10 @@ module.exports = {
         let config = poopy.config
         let { fs } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0, true) === undefined && args[2] === undefined) {
             await msg.reply('What is the file?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var duration = 6
@@ -35,7 +35,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -62,7 +62,7 @@ module.exports = {
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

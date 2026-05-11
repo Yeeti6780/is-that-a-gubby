@@ -1,12 +1,12 @@
 module.exports = {
     name: ['oldmarkov'],
     args: [
-        { "name": "message", "required": false, "specifarg": false, "orig": "[message]" },
-        { "name": "words", "required": false, "specifarg": true, "orig": "[-words <wordNumber>]" },
-        { "name": "nopunctuation", "required": false, "specifarg": true, "orig": "[-nopunctuation]" },
-        { "name": "keepcase", "required": false, "specifarg": true, "orig": "[-keepcase]" },
-        { "name": "randlerp", "required": false, "specifarg": true, "orig": "[-randlerp <number (from 0 to 1)>]" },
-        { "name": "randomsentences", "required": false, "specifarg": true, "orig": "[-randomsentences]" }
+        { name: "message", required: false, specifarg: false, orig: "[message]" },
+        { name: "words", required: false, specifarg: true, orig: "[-words <wordNumber>]" },
+        { name: "nopunctuation", required: false, specifarg: true, orig: "[-nopunctuation]" },
+        { name: "keepcase", required: false, specifarg: true, orig: "[-keepcase]" },
+        { name: "randlerp", required: false, specifarg: true, orig: "[-randlerp <number (from 0 to 1)>]" },
+        { name: "randomsentences", required: false, specifarg: true, orig: "[-randomsentences]" }
     ],
     execute: async function (msg, args) {
         let poopy = this
@@ -35,12 +35,12 @@ module.exports = {
         if (saidMessage) {
             messages.push(saidMessage)
         }
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         var markovChain = markovChainGenerator(messages)
         var markov = markovMe(markovChain, saidMessage, { wordNumber, nopunctuation, keepcase, randlerp })
         if (!msg.nosend) await msg.reply({
             content: markov,
-            allowedMentions: fetchPingPerms(msg)
+            allowedMentions: { parse: [] }
         }).catch(async () => {
             var currentcount = vars.filecount
             vars.filecount++
@@ -56,8 +56,8 @@ module.exports = {
     },
     help: {
         name: 'oldmarkov [message] [-words <wordNumber>] [-nopunctuation] [-keepcase] [-randlerp <number (from 0 to 1)>] [-randomsentences]',
-        value: 'the Poopy Markov includes last messages. This is The OLD logic ONE... TOGGLE the Message reading with p:messages to Function.'
+        value: 'the Bot Markov includes last messages. This is The OLD logic ONE... TOGGLE the Message reading with p:messages to Function.'
     },
     cooldown: 2500,
-    type: 'Text'
+    type: 'Generation'
 }

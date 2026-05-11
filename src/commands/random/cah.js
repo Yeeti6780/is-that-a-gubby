@@ -1,6 +1,6 @@
 module.exports = {
   name: ['cah', 'cardsagainsthumanity'],
-  args: [{ "name": "picks", "required": false, "specifarg": false, "orig": "[pick1 | pick2 | pick3]" }],
+  args: [{ name: "picks", required: false, specifarg: false, orig: "[pick1 | pick2 | pick3]" }],
   execute: async function (msg, args) {
     let poopy = this
     let json = poopy.json

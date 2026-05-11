@@ -3,10 +3,10 @@ let globalId = 1
 module.exports = {
     name: ['alerthost'],
     args: [{
-        "name": "text",
-        "required": true,
-        "specifarg": false,
-        "orig": "<text>",
+        name: "text",
+        required: true,
+        specifarg: false,
+        orig: "<text>",
     }],
     execute: async function (msg, args) {
         let poopy = this

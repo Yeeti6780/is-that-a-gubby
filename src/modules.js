@@ -15,15 +15,13 @@ modules.xml2json = require('xml2js').parseStringPromise
 modules.util = require('util')
 modules.cron = require('cron')
 modules.CryptoJS = require('crypto-js')
-if (modules.fs.existsSync('node_modules/@jimp/plugin-print'))
-    modules.fs.rmSync('node_modules/@jimp/plugin-print', {
-        force: true, recursive: true
-    })
-if (!modules.fs.existsSync('node_modules/@jimp/plugin-print'))
-    modules.fs.copySync('lib/plugin-print', 'node_modules/@jimp/plugin-print', {
-        recursive: true
-    })
 modules.Jimp = require('jimp')
+for (var [name, func] of Object.entries(require('../lib/jimpPrint/measureText'))) {
+    modules.Jimp[name] = func
+}
+for (var [name, func] of Object.entries(require('../lib/jimpPrint/printText'))) {
+    modules.Jimp[name] = func
+}
 modules.catbox = require('catbox.moe')
 modules.gis = require('./gis')
 modules.mathjs = require('mathjs')
@@ -36,6 +34,7 @@ modules.Worker = require('worker_threads').Worker
 modules.Collection = require('@discordjs/collection').Collection
 modules.Rainmaze = require('../lib/rainmaze/Rainmaze')
 modules.DummyMessage = require('./dummyMessage')
+modules.GenAIWorker = require('./genAIWorker')
 modules.DMGuild = class DMGuild {
     constructor(msg) {
         let members = new modules.Collection([[msg.client.user.id, msg.client.user]].concat(
@@ -141,6 +140,17 @@ for (var Discord of modules.Discord) {
             }
         }
 
+        //if (
+        //    typeof payload == "string" ?
+        //    !(payload.trim()) : (
+        //    !((payload.content ?? "").trim()) &&
+        //    !payload.files?.length &&
+        //    !payload.attachments?.length &&
+        //    !payload.embeds?.length &&
+        //    !payload.stickers?.length &&
+        //    !payload.components?.length
+        //)) throw "Can't send empty message"
+
         if (vars.currentIpAddress) {
             switch (typeof payload) {
                 case 'string':
@@ -219,6 +229,17 @@ for (var Discord of modules.Discord) {
                     break;
             }
         }
+
+        //if (
+        //    typeof payload == "string" ?
+        //    !(payload.trim()) : (
+        //    !((payload.content ?? "").trim()) &&
+        //    !payload.files?.length &&
+        //    !payload.attachments?.length &&
+        //    !payload.embeds?.length &&
+        //    !payload.stickers?.length &&
+        //    !payload.components?.length
+        //)) throw "Can't send empty message"
 
         if (vars.currentIpAddress) {
             switch (typeof payload) {
@@ -308,6 +329,17 @@ for (var Discord of modules.Discord) {
                         break;
                 }
             }
+
+            //if (
+            //    typeof payload == "string" ?
+            //    !(payload.trim()) : (
+            //    !((payload.content ?? "").trim()) &&
+            //    !payload.files?.length &&
+            //    !payload.attachments?.length &&
+            //    !payload.embeds?.length &&
+            //    !payload.stickers?.length &&
+            //    !payload.components?.length
+            //)) throw "Can't send empty message"
 
             if (vars.currentIpAddress) {
                 switch (typeof payload) {

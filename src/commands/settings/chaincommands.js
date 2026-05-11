@@ -1,11 +1,16 @@
 module.exports = {
   name: ['chaincommands'],
   args: [],
-  execute: async function (msg) {
+  execute: async function (msg, _, opts) {
     let poopy = this
     let config = poopy.config
     let data = poopy.data
     let { DiscordTypes } = poopy.modules
+
+    if (opts.sourceMsg && msg.author.id != opts.sourceMsg.author.id) {
+      await msg.reply("bro").catch(() => { })
+      return
+    }
 
     if (msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id)) {
       data.guildData[msg.guild.id].chaincommands = !data.guildData[msg.guild.id].chaincommands

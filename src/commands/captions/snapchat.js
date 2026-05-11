@@ -1,6 +1,6 @@
 module.exports = {
     name: ['snapchat'],
-    args: [{"name":"text","required":false,"specifarg":false,"orig":"\"{text}\""},{"name":"file","required":false,"specifarg":false,"orig":"{file}"},{"name":"size","required":false,"specifarg":true,"orig":"[-size <multiplier (from 0.5 to 5)>]"}],
+    args: [{name: "text",required: false,specifarg: false,orig: "\"{text}\""},{name: "file",required: false,specifarg: false,orig: "{file}"},{name: "size",required: false,specifarg: true,orig: "[-size <multiplier (from 0.5 to 5)>]"}],
     execute: async function (msg, args) {
         let poopy = this
         let {
@@ -10,10 +10,10 @@ module.exports = {
         let vars = poopy.vars
         let { Jimp } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && vars.validUrl.test(args[args.length - 1]) === false) {
             await msg.reply('What is the file?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var size = 1
@@ -41,7 +41,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -60,7 +60,7 @@ module.exports = {
             snapchat.resize(Jimp.AUTO, Math.round(2000 / size))
             var textheight = Jimp.measureTextHeight(helvetica, text, snapchat.bitmap.width - Math.round(100 / size))
             snapchat.resize(snapchat.bitmap.width, textheight + Math.round(100 / size))
-            await snapchat.print(helvetica, Math.round(50 / size), Math.round(50 / size), { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, snapchat.bitmap.width - Math.round(100 / size), snapchat.bitmap.height - Math.round(100 / size))
+            await Jimp.print(snapchat, helvetica, Math.round(50 / size), Math.round(50 / size), { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, snapchat.bitmap.width - Math.round(100 / size), snapchat.bitmap.height - Math.round(100 / size))
             snapchat.resize(width, Jimp.AUTO)
             await snapchat.writeAsync(`${filepath}/caption.png`)
 
@@ -78,7 +78,7 @@ module.exports = {
             snapchat.resize(Jimp.AUTO, Math.round(2000 / size))
             var textheight = Jimp.measureTextHeight(helvetica, text, snapchat.bitmap.width - Math.round(100 / size))
             snapchat.resize(snapchat.bitmap.width, textheight + Math.round(100 / size))
-            await snapchat.print(helvetica, Math.round(50 / size), Math.round(50 / size), { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, snapchat.bitmap.width - Math.round(100 / size), snapchat.bitmap.height - Math.round(100 / size))
+            await Jimp.print(snapchat, helvetica, Math.round(50 / size), Math.round(50 / size), { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, snapchat.bitmap.width - Math.round(100 / size), snapchat.bitmap.height - Math.round(100 / size))
             snapchat.resize(width, Jimp.AUTO)
             await snapchat.writeAsync(`${filepath}/caption.png`)
 
@@ -96,7 +96,7 @@ module.exports = {
             snapchat.resize(Jimp.AUTO, Math.round(2000 / size))
             var textheight = Jimp.measureTextHeight(helvetica, text, snapchat.bitmap.width - Math.round(100 / size))
             snapchat.resize(snapchat.bitmap.width, textheight + Math.round(100 / size))
-            await snapchat.print(helvetica, Math.round(50 / size), Math.round(50 / size), { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, snapchat.bitmap.width - Math.round(100 / size), snapchat.bitmap.height - Math.round(100 / size))
+            await Jimp.print(snapchat, helvetica, Math.round(50 / size), Math.round(50 / size), { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, snapchat.bitmap.width - Math.round(100 / size), snapchat.bitmap.height - Math.round(100 / size))
             snapchat.resize(width, Jimp.AUTO)
             await snapchat.writeAsync(`${filepath}/caption.png`)
 
@@ -107,7 +107,7 @@ module.exports = {
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

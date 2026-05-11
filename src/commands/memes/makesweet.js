@@ -1,7 +1,7 @@
 module.exports = {
     name: ['makesweet', 'heartlocket'],
-    args: [{ "name": "textes", "required": false, "specifarg": false, "orig": "\"{text1}\"..." }, { "name": "files", "required": false, "specifarg": false, "orig": "{file1}..." }, { "name": "textfirst", "required": false, "specifarg": true, "orig": "[-textfirst]" }, {
-        "name": "template", "required": false, "specifarg": true, "orig": "[-template <name>]", "autocomplete": [
+    args: [{ name: "textes", required: false, specifarg: false, orig: "\"{text1}\"..." }, { name: "files", required: false, specifarg: false, orig: "{file1}..." }, { name: "textfirst", required: false, specifarg: true, orig: "[-textfirst]" }, {
+        name: "template", required: false, specifarg: true, orig: "[-template <name>]", autocomplete: [
             'billboard-cityscape',
             'circuit-board',
             'flag',
@@ -17,7 +17,7 @@ module.exports = {
         let config = poopy.config
         let { fs, FormData, axios } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
 
         var templates = {
             'billboard-cityscape': 1,
@@ -54,7 +54,7 @@ module.exports = {
 
         if (textes.length <= 0 && fetched.length <= 0) {
             await msg.reply('What are the arguments?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
 
@@ -68,7 +68,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-                await msg.channel.sendTyping().catch(() => { })
+                msg.channel.sendTyping().catch(() => { })
                 return
             })
 

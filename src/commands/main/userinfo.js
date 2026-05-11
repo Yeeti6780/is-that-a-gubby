@@ -1,8 +1,8 @@
 module.exports = {
     name: ['userinfo', 'whois'],
     args: [{
-        "name": "user", "required": true, "specifarg": false, "orig": "<user>",
-        "autocomplete": async function (interaction) {
+        name: "user", required: true, specifarg: false, orig: "<user>",
+        autocomplete: async function (interaction) {
             let poopy = this
             let { data, config } = poopy
             let { dataGather } = poopy.functions

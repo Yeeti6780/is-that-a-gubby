@@ -1,6 +1,6 @@
 module.exports = {
     name: ['oldmarkov2'],
-    args: [{ "name": "minlength", "required": false, "specifarg": true, "orig": "[-minlength <charNumber>]" }, { "name": "randomsentences", "required": false, "specifarg": true, "orig": "[-randomsentences]" }],
+    args: [{ name: "minlength", required: false, specifarg: true, orig: "[-minlength <charNumber>]" }, { name: "randomsentences", required: false, specifarg: true, orig: "[-randomsentences]" }],
     execute: async function (msg, args) {
         let poopy = this
         let { getOption, parseNumber, markov, fetchPingPerms } = poopy.functions
@@ -18,13 +18,13 @@ module.exports = {
         if (messages.length <= 0 || randomsentences) {
             messages = json.sentenceJSON.data.map(s => s.sentence)
         }
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
 
         var markovString = markov(messages, minlength)
 
         if (!msg.nosend) await msg.reply({
             content: markovString,
-            allowedMentions: fetchPingPerms(msg)
+            allowedMentions: { parse: [] }
         }).catch(async () => {
             var currentcount = vars.filecount
             vars.filecount++
@@ -40,8 +40,8 @@ module.exports = {
     },
     help: {
         name: 'oldmarkov2 [-minlength <charNumber>] [-randomsentences]',
-        value: 'the Poopy Markov includes last messages. This is The OLD logic TWO... this use different algorith.'
+        value: 'the Bot Markov includes last messages. This is The OLD logic TWO... this use different algorith.'
     },
     cooldown: 2500,
-    type: 'Text'
+    type: 'Generation'
 }

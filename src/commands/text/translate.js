@@ -1,16 +1,16 @@
 module.exports = {
     name: ['translate', 'tr'],
-    args: [{ "name": "message", "required": true, "specifarg": false, "orig": "<message>" }, {
-        "name": "source", "required": false, "specifarg": true, "orig": "[-source <language>]",
-        "autocomplete": function () {
+    args: [{ name: "message", required: true, specifarg: false, orig: "<message>" }, {
+        name: "source", required: false, specifarg: true, orig: "[-source <language>]",
+        autocomplete: function () {
             let poopy = this
             return Object.entries(poopy.vars.languages).map(language => {
                 return { name: language[1], value: language[0] }
             })
         }
     }, {
-        "name": "target", "required": false, "specifarg": true, "orig": "[-target <language>]",
-        "autocomplete": function () {
+        name: "target", required: false, specifarg: true, orig: "[-target <language>]",
+        autocomplete: function () {
             let poopy = this
             return Object.entries(poopy.vars.languages).map(language => {
                 return { name: language[1], value: language[0] }
@@ -23,10 +23,10 @@ module.exports = {
         let { axios } = poopy.modules
         let { fetchPingPerms } = poopy.functions
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (args[1] === undefined) {
             await msg.reply(`What is the text to translate?! A list of supported languages are:\n${Object.values(vars.languages).map(language => `\`${language}\``).join(', ')}`).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         }
 

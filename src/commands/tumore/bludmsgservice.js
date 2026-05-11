@@ -1,10 +1,10 @@
 module.exports = {
     name: ['bludmsgservice', 'bludmessageservice'],
     args: [
-        { "name": "topic", "required": true, "specifarg": false, "orig": "<topic>" },
-        { "name": "inquery", "required": true, "specifarg": false, "orig": "{inquery}" },
+        { name: "topic", required: true, specifarg: false, orig: "<topic>" },
+        { name: "inquery", required: true, specifarg: false, orig: "{inquery}" },
     ],
-    execute: async function (msg, args) {
+    execute: async function (msg, args, opts) {
         let poopy = this
         let config = poopy.config
         let { axios } = poopy.modules
@@ -12,6 +12,11 @@ module.exports = {
 
         if (!config.tumoreTesters.includes(msg.author.id)) {
             await msg.reply('Hey, you can\'t use this command! How unfortunate.').catch(() => { })
+            return
+        }
+
+        if (opts.sourceMsg && msg.author.id != opts.sourceMsg.author.id) {
+            await msg.reply("bro").catch(() => { })
             return
         }
 

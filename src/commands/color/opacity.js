@@ -1,6 +1,6 @@
 module.exports = {
     name: ['opacity'],
-    args: [{ "name": "alpha", "required": false, "specifarg": false, "orig": "{alpha (from 0 to 255)}" }, { "name": "image", "required": true, "specifarg": false, "orig": "<image>" }],
+    args: [{ name: "alpha", required: false, specifarg: false, orig: "{alpha (from 0 to 255)}" }, { name: "image", required: true, specifarg: false, orig: "<image>" }],
     execute: async function (msg, args) {
         let poopy = this
         let {
@@ -10,10 +10,10 @@ module.exports = {
         let { DiscordTypes } = poopy.modules
         let vars = poopy.vars
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && args[2] === undefined) {
             await msg.reply('What is the file?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var currenturl = lastUrl(msg, 0)
@@ -23,7 +23,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -39,14 +39,14 @@ module.exports = {
             return await sendFile(msg, filepath, `output.png`)
         } else if (type.mime.startsWith('video') || type.mime.startsWith('image') && vars.gifFormats.find(f => f === type.ext)) {
             await msg.reply(`you can go to montenegro`).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         } else {
             await msg.reply({
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

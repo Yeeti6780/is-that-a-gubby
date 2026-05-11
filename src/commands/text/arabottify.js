@@ -1,6 +1,6 @@
 module.exports = {
     name: ['arabottify'],
-    args: [{"name":"message","required":false,"specifarg":false,"orig":"[message]"},{"name":"words","required":false,"specifarg":true,"orig":"[-words <wordNumber>]"},{"name":"noextrawords","required":false,"specifarg":true,"orig":"[-noextrawords]"},{"name":"nopunctuation","required":false,"specifarg":true,"orig":"[-nopunctuation]"}],
+    args: [{name: "message",required: false,specifarg: false,orig: "[message]"},{name: "words",required: false,specifarg: true,orig: "[-words <wordNumber>]"},{name: "noextrawords",required: false,specifarg: true,orig: "[-noextrawords]"},{name: "nopunctuation",required: false,specifarg: true,orig: "[-nopunctuation]"}],
     execute: async function (msg, args) {
         let poopy = this
         let vars = poopy.vars
@@ -9,7 +9,7 @@ module.exports = {
         let { fs, Discord } = poopy.modules
         let { fetchPingPerms } = poopy.functions
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         var wordNumber = Math.floor(Math.random() * 40) + 1
         var wordsSpecified = false
         var noextrawords = false
@@ -117,7 +117,7 @@ module.exports = {
     },
     help: {
         name: 'arabottify [message] [-words <wordNumber>] [-noextrawords] [-nopunctuation]',
-        value: 'message. a Scramble BLACK. message. Scramble Poopy Extra words... included\n' +
+        value: 'message. a Scramble BLACK. message. Scramble Bot Extra words... included\n' +
             'Example usage: p:arabottify -words 1 -nopunctuation'
     },
     cooldown: 2500,

@@ -1,6 +1,6 @@
 module.exports = {
     name: ['iceberg'],
-    args: [{"name":"stage1words","required":false,"specifarg":true,"orig":"{-stage<stagenumber>words <word1 | word2 | ...>}"},{"name":"stage1image","required":false,"specifarg":true,"orig":"{-stage<stagenumber>image <image>}"},{"name":"stage2words","required":false,"specifarg":true,"orig":"{-stage<stagenumber>words <word1 | word2 | ...>}"},{"name":"stage2image","required":false,"specifarg":true,"orig":"{-stage<stagenumber>image <image>}"},{"name":"stage3words","required":false,"specifarg":true,"orig":"{-stage<stagenumber>words <word1 | word2 | ...>}"},{"name":"stage3image","required":false,"specifarg":true,"orig":"{-stage<stagenumber>image <image>}"},{"name":"stage4words","required":false,"specifarg":true,"orig":"{-stage<stagenumber>words <word1 | word2 | ...>}"},{"name":"stage4image","required":false,"specifarg":true,"orig":"{-stage<stagenumber>image <image>}"},{"name":"stage5words","required":false,"specifarg":true,"orig":"{-stage<stagenumber>words <word1 | word2 | ...>}"},{"name":"stage5image","required":false,"specifarg":true,"orig":"{-stage<stagenumber>image <image>}"},{"name":"stage6words","required":false,"specifarg":true,"orig":"{-stage<stagenumber>words <word1 | word2 | ...>}"},{"name":"stage6image","required":false,"specifarg":true,"orig":"{-stage<stagenumber>image <image>}"},{"name":"stage7words","required":false,"specifarg":true,"orig":"{-stage<stagenumber>words <word1 | word2 | ...>}"},{"name":"stage7image","required":false,"specifarg":true,"orig":"{-stage<stagenumber>image <image>}"},{"name":"stage8words","required":false,"specifarg":true,"orig":"{-stage<stagenumber>words <word1 | word2 | ...>}"},{"name":"stage8image","required":false,"specifarg":true,"orig":"{-stage<stagenumber>image <image>}"},{"name":"stage9words","required":false,"specifarg":true,"orig":"{-stage<stagenumber>words <word1 | word2 | ...>}"},{"name":"stage9image","required":false,"specifarg":true,"orig":"{-stage<stagenumber>image <image>}"},{"name":"stage10words","required":false,"specifarg":true,"orig":"{-stage<stagenumber>words <word1 | word2 | ...>}"},{"name":"stage10image","required":false,"specifarg":true,"orig":"{-stage<stagenumber>image <image>}"},{"name":"stages","required":false,"specifarg":true,"orig":"[-stages <stagenumber (from 1 to 10)>]"}],
+    args: [{name: "stage1words",required: false,specifarg: true,orig: "{-stage<stagenumber>words <word1 | word2 | ...>}"},{name: "stage1image",required: false,specifarg: true,orig: "{-stage<stagenumber>image <image>}"},{name: "stage2words",required: false,specifarg: true,orig: "{-stage<stagenumber>words <word1 | word2 | ...>}"},{name: "stage2image",required: false,specifarg: true,orig: "{-stage<stagenumber>image <image>}"},{name: "stage3words",required: false,specifarg: true,orig: "{-stage<stagenumber>words <word1 | word2 | ...>}"},{name: "stage3image",required: false,specifarg: true,orig: "{-stage<stagenumber>image <image>}"},{name: "stage4words",required: false,specifarg: true,orig: "{-stage<stagenumber>words <word1 | word2 | ...>}"},{name: "stage4image",required: false,specifarg: true,orig: "{-stage<stagenumber>image <image>}"},{name: "stage5words",required: false,specifarg: true,orig: "{-stage<stagenumber>words <word1 | word2 | ...>}"},{name: "stage5image",required: false,specifarg: true,orig: "{-stage<stagenumber>image <image>}"},{name: "stage6words",required: false,specifarg: true,orig: "{-stage<stagenumber>words <word1 | word2 | ...>}"},{name: "stage6image",required: false,specifarg: true,orig: "{-stage<stagenumber>image <image>}"},{name: "stage7words",required: false,specifarg: true,orig: "{-stage<stagenumber>words <word1 | word2 | ...>}"},{name: "stage7image",required: false,specifarg: true,orig: "{-stage<stagenumber>image <image>}"},{name: "stage8words",required: false,specifarg: true,orig: "{-stage<stagenumber>words <word1 | word2 | ...>}"},{name: "stage8image",required: false,specifarg: true,orig: "{-stage<stagenumber>image <image>}"},{name: "stage9words",required: false,specifarg: true,orig: "{-stage<stagenumber>words <word1 | word2 | ...>}"},{name: "stage9image",required: false,specifarg: true,orig: "{-stage<stagenumber>image <image>}"},{name: "stage10words",required: false,specifarg: true,orig: "{-stage<stagenumber>words <word1 | word2 | ...>}"},{name: "stage10image",required: false,specifarg: true,orig: "{-stage<stagenumber>image <image>}"},{name: "stages",required: false,specifarg: true,orig: "[-stages <stagenumber (from 1 to 10)>]"}],
     noargchange: true,
     execute: async function (msg, args) {
         let poopy = this
@@ -12,10 +12,10 @@ module.exports = {
         let config = poopy.config
         let { fs, Jimp, Discord } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && args[1] === undefined) {
             await msg.reply('What are the files?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var saidMessage = args.slice(1).join(' ')
@@ -123,7 +123,7 @@ module.exports = {
                 content: lasturlserror,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
 
@@ -144,7 +144,7 @@ module.exports = {
                         content: error,
                         allowedMentions: fetchPingPerms(msg)
                     }).catch(() => { })
-                    await msg.channel.sendTyping().catch(() => { })
+                    msg.channel.sendTyping().catch(() => { })
                     return
                 }
                 var filetype = fileinfo.type
@@ -154,7 +154,7 @@ module.exports = {
                         content: error,
                         allowedMentions: fetchPingPerms(msg)
                     }).catch(() => { })
-                    await msg.channel.sendTyping().catch(() => { })
+                    msg.channel.sendTyping().catch(() => { })
                     return
                 }
                 filetypes[stage] = filetype
@@ -197,7 +197,7 @@ module.exports = {
             var text = wordsS.join('')
             var dimensions = stagewrdsdimensions[i]
 
-            await iceberg.print(arialr, dimensions[0], dimensions[1], { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, dimensions[2], dimensions[3])
+            await Jimp.print(iceberg, arialr, dimensions[0], dimensions[1], { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, dimensions[2], dimensions[3])
         }
 
         iceberg.crop(0, 0, iceberg.bitmap.width, stagewrdsdimensions['stage' + stages][1] + stagewrdsdimensions['stage' + stages][3])

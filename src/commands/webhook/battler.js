@@ -1,11 +1,11 @@
 module.exports = {
     name: ['battler', 'battlebricks', 'tbb'],
     args: [{
-        "name": "type",
-        "required": false,
-        "specifarg": false,
-        "orig": "[type]",
-        "autocomplete": function () {
+        name: "type",
+        required: false,
+        specifarg: false,
+        orig: "[type]",
+        autocomplete: function () {
             return [
                 { name: "Friendlies", value: "friendly" },
                 { name: "Enemies", value: "enemy" }
@@ -52,7 +52,7 @@ module.exports = {
     },
     help: {
         name: 'battler/battlebricks/tbb [type (friendly or enemy)] (manage webhooks/messages permission only)',
-        value: "I'm Battler, and I'm always battling!"
+        value: "I'm Battler, and I'm always battling! Many of the unofficial renders were made by GamerVenata!"
     },
     cooldown: 2500,
     perms: [

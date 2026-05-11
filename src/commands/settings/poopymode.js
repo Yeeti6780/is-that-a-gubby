@@ -1,12 +1,17 @@
 module.exports = {
   name: ['poopymode', 'hivemindmode'],
-  args: [{ "name": "state", "required": false, "specifarg": false, "orig": "[state]" }],
-  execute: async function (msg, args) {
+  args: [{ name: "state", required: false, specifarg: false, orig: "[state]" }],
+  execute: async function (msg, args, opts) {
     let poopy = this
     let config = poopy.config
     let data = poopy.data
     let { getTotalHivemindStatus } = poopy.functions
     let { DiscordTypes } = poopy.modules
+
+    if (opts.sourceMsg && msg.author.id != opts.sourceMsg.author.id) {
+      await msg.reply("bro").catch(() => { })
+      return
+    }
 
     var hivemindState = data.guildData[msg.guild.id].poopymode
     var hivemindStatus = await getTotalHivemindStatus()

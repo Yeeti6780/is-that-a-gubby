@@ -1,6 +1,6 @@
 module.exports = {
     name: ['stuff'],
-    args: [{"name":"text","required":false,"specifarg":false,"orig":"\"{text}\""},{"name":"file","required":false,"specifarg":false,"orig":"{file}"}],
+    args: [{name: "text",required: false,specifarg: false,orig: "\"{text}\""},{name: "file",required: false,specifarg: false,orig: "{file}"}],
     execute: async function (msg, args) {
         let poopy = this
         let {
@@ -10,10 +10,10 @@ module.exports = {
         let vars = poopy.vars
         let { Jimp } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && vars.validUrl.test(args[args.length - 1]) === false) {
             await msg.reply('What is the file?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var saidMessage = args.slice(1).join(' ').replace(/’/g, '\'')
@@ -36,7 +36,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -58,7 +58,7 @@ module.exports = {
                 white.resize(stuff.bitmap.width, textheight + 120)
                 white.composite(stuff, 0, white.bitmap.height - stuff.bitmap.height)
             }
-            await caption.print(tnr, 60, 60, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 643, caption.bitmap.height - 120)
+            await Jimp.print(caption, tnr, 60, 60, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 643, caption.bitmap.height - 120)
             caption.resize(width, Jimp.AUTO)
             await caption.writeAsync(`${filepath}/stuff.png`)
 
@@ -82,7 +82,7 @@ module.exports = {
                 white.resize(stuff.bitmap.width, textheight + 120)
                 white.composite(stuff, 0, white.bitmap.height - stuff.bitmap.height)
             }
-            await caption.print(tnr, 60, 60, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 643, caption.bitmap.height - 120)
+            await Jimp.print(caption, tnr, 60, 60, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 643, caption.bitmap.height - 120)
             caption.resize(width, Jimp.AUTO)
             await caption.writeAsync(`${filepath}/stuff.png`)
 
@@ -106,7 +106,7 @@ module.exports = {
                 white.resize(stuff.bitmap.width, textheight + 120)
                 white.composite(stuff, 0, white.bitmap.height - stuff.bitmap.height)
             }
-            await caption.print(tnr, 60, 60, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 643, caption.bitmap.height - 120)
+            await Jimp.print(caption, tnr, 60, 60, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 643, caption.bitmap.height - 120)
             caption.resize(width, Jimp.AUTO)
             await caption.writeAsync(`${filepath}/stuff.png`)
 
@@ -117,7 +117,7 @@ module.exports = {
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

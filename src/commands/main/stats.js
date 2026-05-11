@@ -144,7 +144,7 @@ module.exports = {
         }
         return `${statsEmbed.fields.map(p => `**${p.name}**: ${p.value}`).join('\n')}\n\nv${pkg.version}`
     },
-    help: { name: 'stats/botstats', value: "Shows Poopy's stats." },
+    help: { name: 'stats/botstats', value: "Shows the bot's stats." },
     cooldown: 2500,
     type: 'Main'
 }

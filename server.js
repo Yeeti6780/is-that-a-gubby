@@ -68,7 +68,11 @@ async function start() {
             if (data.guildData[msg.guild.id].keyexec == undefined) data.guildData[msg.guild.id].keyexec = 2
 
             var err
-            await callbacks.messageCallback(msg).catch((e) => err = e.message)
+            await Promise.all(
+                callbacks.messageCallbacks.map(
+                    callback => callback(msg).catch((e) => err = e.message)
+               )
+            ).catch((e) => err = e.message)
             if (!messages.length) messages.push(req.body.restype == 'json' ? new DummyMessage.API({ req, res, poopy, messages }, err ?? 'No output.') : err ?? 'No output.')
 
             switch (req.body.restype) {

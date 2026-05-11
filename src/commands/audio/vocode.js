@@ -1,6 +1,6 @@
 module.exports = {
     name: ['vocode', 'autotune'],
-    args: [{"name":"carrier","required":false,"specifarg":false,"orig":"{carrier}"},{"name":"modulator","required":false,"specifarg":false,"orig":"{modulator}"},{"name":"bandcount","required":false,"specifarg":true,"orig":"[-bandcount <value (max 512)>]"}],
+    args: [{name: "carrier",required: false,specifarg: false,orig: "{carrier}"},{name: "modulator",required: false,specifarg: false,orig: "{modulator}"},{name: "bandcount",required: false,specifarg: true,orig: "[-bandcount <value (max 512)>]"}],
     execute: async function (msg, args) {
         let poopy = this
         let {
@@ -9,10 +9,10 @@ module.exports = {
         } = poopy.functions
         let { fs } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 1) === undefined && args[2] === undefined) {
             await msg.reply('What are the files?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
 
@@ -37,7 +37,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
         if (!fileinfo) return
@@ -52,7 +52,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
         if (!fileinfo2) return
@@ -65,7 +65,7 @@ module.exports = {
                     content: error,
                     allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
-                await msg.channel.sendTyping().catch(() => { })
+                msg.channel.sendTyping().catch(() => { })
                 return
             }
         }
@@ -76,7 +76,7 @@ module.exports = {
                     content: 'Unsupported file types.',
                     allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
-                await msg.channel.sendTyping().catch(() => { })
+                msg.channel.sendTyping().catch(() => { })
                 return
             }
         }
@@ -108,7 +108,7 @@ module.exports = {
             return await sendFile(msg, filepath, `output.mp4`)
         } else {
             await msg.reply('No audio stream detected.').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             fs.rmSync(`${filepath}`, { force: true, recursive: true })
         }
     },

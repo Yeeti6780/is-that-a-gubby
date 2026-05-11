@@ -1,8 +1,8 @@
 module.exports = {
     name: ['punch'],
     args: [{
-        "name": "subject", "required": true, "specifarg": false, "orig": "<subject>",
-        "autocomplete": async function (interaction) {
+        name: "subject", required: true, specifarg: false, orig: "<subject>",
+        autocomplete: async function (interaction) {
             let poopy = this
             let { data, config } = poopy
             let { dataGather } = poopy.functions

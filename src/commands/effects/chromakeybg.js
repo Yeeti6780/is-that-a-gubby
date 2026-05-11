@@ -1,6 +1,6 @@
 module.exports = {
     name: ['chromakeybg', 'chromabg'],
-    args: [{"name":"file","required":false,"specifarg":false,"orig":"{file}"},{"name":"color","required":false,"specifarg":true,"orig":"[-color <r> <g> <b>]"},{"name":"similarity","required":false,"specifarg":true,"orig":"[-similarity <number (from 0 to 100)>]"},{"name":"blend","required":false,"specifarg":true,"orig":"[-blend <number (from 0 to 100)>]"}],
+    args: [{name: "file",required: false,specifarg: false,orig: "{file}"},{name: "color",required: false,specifarg: true,orig: "[-color <r> <g> <b>]"},{name: "similarity",required: false,specifarg: true,orig: "[-similarity <number (from 0 to 100)>]"},{name: "blend",required: false,specifarg: true,orig: "[-blend <number (from 0 to 100)>]"}],
     execute: async function (msg, args) {
         let poopy = this
         let {
@@ -10,10 +10,10 @@ module.exports = {
         let { DiscordTypes } = poopy.modules
         let vars = poopy.vars
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && args[1] === undefined) {
             await msg.reply('What is the file?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var rgb = {
@@ -47,7 +47,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -77,7 +77,7 @@ module.exports = {
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

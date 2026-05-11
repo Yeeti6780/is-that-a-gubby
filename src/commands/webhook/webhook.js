@@ -4,11 +4,11 @@ module.exports = {
         'customwebhook'],
     args: [
         {
-            "name": "user",
-            "required": false,
-            "specifarg": false,
-            "orig": "[user]",
-            "autocomplete": async function (interaction) {
+            name: "user",
+            required: false,
+            specifarg: false,
+            orig: "[user]",
+            autocomplete: async function (interaction) {
                 let poopy = this
                 let { data, config } = poopy
                 let { dataGather } = poopy.functions
@@ -26,22 +26,22 @@ module.exports = {
             }
         },
         {
-            "name": "text",
-            "required": false,
-            "specifarg": false,
-            "orig": "\"{text}\""
+            name: "text",
+            required: false,
+            specifarg: false,
+            orig: "\"{text}\""
         },
         {
-            "name": "image",
-            "required": false,
-            "specifarg": false,
-            "orig": "{image}"
+            name: "image",
+            required: false,
+            specifarg: false,
+            orig: "{image}"
         },
         {
-            "name": "channelonly",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-channelonly]"
+            name: "channelonly",
+            required: false,
+            specifarg: true,
+            orig: "[-channelonly]"
         }
     ],
     execute: async function (msg, args, opts) {

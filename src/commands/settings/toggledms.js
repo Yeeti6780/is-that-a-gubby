@@ -1,10 +1,36 @@
 module.exports = {
     name: ['toggledms', 'tdms'],
-    args: [],
-    execute: async function (msg, args) {
+    args: [{
+        name: "user",
+        required: false,
+        specifarg: false,
+        orig: "[user]",
+        autocomplete: async function (interaction) {
+            let poopy = this
+            let { data, config } = poopy
+            let { dataGather } = poopy.functions
+
+            if (!data.guildData[interaction.guild.id]) {
+                data.guildData[interaction.guild.id] = !config.testing && process.env.MONGODB_URL && await dataGather.guildData(config.database, interaction.guild.id).catch((e) => console.log(e)) || {}
+            }
+
+            var memberData = data.guildData[interaction.guild.id].allMembers ?? {}
+            var memberKeys = Object.keys(memberData).sort((a, b) => memberData[b].messages - memberData[a].messages)
+
+            return memberKeys.map(id => {
+                return { name: memberData[id].username, value: id }
+            })
+        }
+    }],
+    execute: async function (msg, args, opts) {
         let poopy = this
         let data = poopy.data
         let { fetchPingPerms, resolveUser } = poopy.functions
+
+        if (opts.sourceMsg && msg.author.id != opts.sourceMsg.author.id) {
+            await msg.reply("bro").catch(() => { })
+            return
+        }
 
         var userQuery = args.slice(1).join(" ").trim()
 
@@ -43,7 +69,7 @@ module.exports = {
     },
     help: {
         name: 'toggledms/tdms [user]',
-        value: "Toggles Poopy's ability to send you DMs through the `dm` command for individual users or globally."
+        value: "Toggles the bot's ability to send you DMs through the `dm` command for individual users or globally."
     },
     cooldown: 2500,
     type: 'Settings'

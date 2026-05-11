@@ -1,6 +1,6 @@
 module.exports = {
     helpf: '(id | phrase) (manage messages only)',
-    desc: 'Edits a message sent by Poopy.',
+    desc: 'Edits a message sent by the bot.',
     func: async function (matches, msg, isBot) {
         let poopy = this
         let { splitKeyFunc, fetchPingPerms } = poopy.functions

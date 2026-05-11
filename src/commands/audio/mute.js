@@ -1,6 +1,6 @@
 module.exports = {
     name: ['mute', 'silence', 'removeaudio', 'removemusic'],
-    args: [{"name":"video","required":true,"specifarg":false,"orig":"<video>"}],
+    args: [{name: "video",required: true,specifarg: false,orig: "<video>"}],
     execute: async function (msg, args) {
         let poopy = this
         let {
@@ -10,10 +10,10 @@ module.exports = {
         let { DiscordTypes } = poopy.modules
         let { fs } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && args[1] === undefined) {
             await msg.reply('What is the file?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var currenturl = lastUrl(msg, 0) || args[1]
@@ -22,7 +22,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -40,7 +40,7 @@ module.exports = {
                 return await sendFile(msg, filepath, `output.mp4`)
             } else {
                 await msg.reply('That has no audio already...').catch(() => { })
-                await msg.channel.sendTyping().catch(() => { })
+                msg.channel.sendTyping().catch(() => { })
                 fs.rmSync(`${filepath}`, { force: true, recursive: true })
             }
         } else {
@@ -48,7 +48,7 @@ module.exports = {
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

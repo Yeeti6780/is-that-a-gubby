@@ -89,7 +89,7 @@ class Poopy {
         let { Discord, DiscordTypes, Collection, fs, CryptoJS } = modules
         let { envsExist, configFlagsEnabled, refreshDiscordURLs, getUploadLimit,
             chunkArray, chunkObject, requireJSON, findCommand, fetchPingPerms,
-            dmSupport, sleep, gatherData, deleteMsgData, infoPost, sendWebhook,
+            dmSupport, sleep, gatherData, deleteMsgData, infoPost, sendWebhook, updateGenAiModel,
             getKeywordsFor, getUrls, randomChoice, similarity, yesno, chat, autoModContent,
             regexClean, getOption, getTotalHivemindStatus, cleanContentPreserveEmojis } = functions
 
@@ -430,7 +430,7 @@ class Poopy {
 
         vars.shelpCmds = vars.sections
 
-        callbacks.messageCallback = async msg => {
+        callbacks.messageCallbacks = [async (msg) => {
             dmSupport(msg)
 
             var origcontent = msg.content
@@ -447,7 +447,7 @@ class Poopy {
 
             if (msg.channel.type == Discord.ChannelType.DM && msg.type !== DiscordTypes.InteractionType.ApplicationCommand && !origcontent.toLowerCase().includes(prefix.toLowerCase())) {
                 if (msg.author.bot || msg.author.id == bot.user.id) return
-                await msg.channel.sendTyping().catch(() => { })
+                msg.channel.sendTyping().catch(() => { })
                 await sleep(Math.floor(Math.random() * 500) + 500)
                 await msg.channel.send(arrays.dmPhrases[Math.floor(Math.random() * arrays.dmPhrases.length)]
                     .replace(/{mention}/g, msg.author.toString())).catch(() => { })
@@ -933,7 +933,7 @@ class Poopy {
                                                     content: err.stack,
                                                     allowedMentions: fetchPingPerms(msg)
                                                 }).catch(() => { })
-                                                await msg.channel.sendTyping().catch(() => { })
+                                                msg.channel.sendTyping().catch(() => { })
                                             } catch (_) { }
                                         })
                                         data.botData.filecount = vars.filecount
@@ -1015,10 +1015,9 @@ class Poopy {
                     id => id == msg.channel?.id || id == msg.channel?.parent?.id || id == msg.channel?.parent?.parent?.id
                 )
             ) {
-                var cleanMessage = cleanContentPreserveEmojis(origcontent, msg.channel).replace(/\@/g, '@‌')
+                var cleanMessage = msg.content // cleanContentPreserveEmojis(origcontent, msg.channel).replace(/\@/g, '@‌')
 
                 if (
-                    !(cleanMessage.includes(prefix.toLowerCase())) &&
                     !(tempdata[msg.guild.id].messages.some(message => message.content.toLowerCase() === cleanMessage.toLowerCase()))
                 ) {
                     data.guildData[msg.guild.id].messages.unshift({
@@ -1033,6 +1032,10 @@ class Poopy {
                         author: msg.author.id,
                         content: cleanMessage,
                         timestamp: Date.now()
+                    })
+
+                    updateGenAiModel(msg, {
+                        sample: cleanMessage
                     })
                 }
             }
@@ -1137,7 +1140,7 @@ class Poopy {
                             content: err.stack,
                             allowedMentions: fetchPingPerms(msg)
                         }).catch(() => { })
-                        await msg.channel.sendTyping().catch(() => { })
+                        msg.channel.sendTyping().catch(() => { })
                     })
                 } else if (words.includes('lore')) {
                     await msg.reply({
@@ -1200,9 +1203,9 @@ class Poopy {
                     }).catch(() => { })
                 }
             }
-        }
+        }]
 
-        callbacks.messageEditCallback = async (msg) => {
+        callbacks.messageEditCallbacks = [async (oldMsg, msg) => {
             var messages = data.guildData[msg.guild?.id]?.messages
             var tmpMessages = tempdata[msg.guild?.id]?.messages
 
@@ -1214,29 +1217,45 @@ class Poopy {
                     var findMessage = messages[messageIndex]
                     var findTmpMessage = tmpMessages[messageIndex]
 
-                    var cleanMessage = cleanContentPreserveEmojis(msg.content, msg.channel).replace(/\@/g, '@‌')
+                    var oldCleanMessage = oldMsg.content // cleanContentPreserveEmojis(oldMsg.content, oldMsg.channel).replace(/\@/g, '@‌')
+                    var cleanMessage = msg.content // cleanContentPreserveEmojis(msg.content, msg.channel).replace(/\@/g, '@‌')
+
+                    await updateGenAiModel(oldMsg, {
+                        sample: oldCleanMessage,
+                        remove: true
+                    })
 
                     if (
-                        !(cleanMessage.match(vars.badFilter) || cleanMessage.match(vars.scamFilter) || cleanMessage.includes(prefix.toLowerCase())) &&
                         !(tmpMessages.find(message => message.content.toLowerCase() === cleanMessage.toLowerCase()))
                     ) {
                         findMessage.content = CryptoJS.AES.encrypt(cleanMessage, process.env.AUTH_TOKEN).toString()
                         findTmpMessage.content = cleanMessage
+
+                        updateGenAiModel(msg, {
+                            sample: cleanMessage
+                        })
                     } else {
                         messages.splice(messageIndex, 1)
                         tmpMessages.splice(messageIndex, 1)
                     }
                 }
             }
-        }
+        }]
 
-        callbacks.messageDeleteCallback = async (msg) => {
+        callbacks.messageDeleteCallbacks = [async (msg) => {
             var messages = data.guildData[msg.guild?.id]?.messages
             var tmpMessages = tempdata[msg.guild?.id]?.messages
 
             if (messages && tmpMessages) {
                 var messageIndex = messages.findIndex(m => m.id == msg.id)
                 if (messageIndex > -1) {
+                    var cleanMessage = msg.content // cleanContentPreserveEmojis(msg.content, msg.channel).replace(/\@/g, '@‌')
+
+                    await updateGenAiModel(msg, {
+                        sample: cleanMessage,
+                        remove: true
+                    })
+
                     messages.splice(messageIndex, 1)
                     tmpMessages.splice(messageIndex, 1)
                 }
@@ -1259,9 +1278,9 @@ class Poopy {
 
                 starboardMsg.delete().catch(() => { })
             }
-        }
+        }]
 
-        callbacks.guildCallback = async guild => {
+        callbacks.guildCallbacks = [async guild => {
             infoPost(`Joined a new server (${bot.guilds.cache.size} in total)`)
 
             var channel = guild.systemChannel || guild.channels.cache.find(c => c.type === Discord.ChannelType.GuildText && (c.name == 'general' || c.name == 'main' || c.name == 'chat'))
@@ -1330,13 +1349,13 @@ class Poopy {
 
                 data.guildData[guild.id].joins++
             }
-        }
+        }]
 
-        callbacks.guildDeleteCallback = async () => {
+        callbacks.guildDeleteCallbacks = [async () => {
             infoPost(`Left a server (${bot.guilds.cache.size} in total)`)
-        }
+        }]
 
-        callbacks.reactionCallback = async (reaction, user) => {
+        callbacks.reactionCallbacks = [async (reaction, user) => {
             const msg = await reaction.message.fetch(false).catch(() => { }) ?? reaction.message
             const emoji = reaction.emoji.toString()
 
@@ -1496,9 +1515,9 @@ class Poopy {
                     }).catch(() => { })
                 }
             }
-        }
+        }]
 
-        callbacks.interactionCallback = async (interaction) => {
+        callbacks.interactionCallbacks = [async (interaction) => {
             dmSupport(interaction)
 
             var interactionFunctions = [
@@ -1753,8 +1772,12 @@ class Poopy {
                         interaction.createReactionCollector =
                             interaction.createMessageComponentCollector = () => new FakeCollector()
 
-                        await callbacks.messageCallback(interaction).catch(() => { })
-
+                        await Promise.all(
+                            callbacks.messageCallbacks.map(
+                                callback => callback(interaction).catch(() => { })
+                            )
+                        ).catch(() => { })
+                        
                         await sleep(1000)
                         if (!interaction.replied) interaction.deleteReply().catch(() => { })
                         else await callbacks.messageCallback(interaction.replied).catch(() => { })
@@ -1764,7 +1787,7 @@ class Poopy {
 
             var interactionFunction = interactionFunctions.find(interaction => interaction.type)
             if (interactionFunction) await interactionFunction.execute().catch(() => { })
-        }
+        }]
     }
 
     async start(TOKEN) {
@@ -1877,8 +1900,6 @@ class Poopy {
             writable: false
         })
 
-        for (let cronData of data.botData.crons) createCronJob(cronData).catch(() => { })
-
         for (let starboard of data.botData.starboards) {
             tempdata[starboard.guildId] ??= {}
             tempdata[starboard.guildId][starboard.channelId] ??= {}
@@ -1928,21 +1949,26 @@ class Poopy {
         }
 
         if (!config.apiMode) {
-            bot.on('messageCreate', (msg) => callbacks.messageCallback(msg).catch((e) => console.log(e)))
-            bot.on('messageUpdate', (_, msg) => callbacks.messageEditCallback(msg).catch((e) => console.log(e)))
-            bot.on('messageDelete', (msg) => callbacks.messageDeleteCallback(msg).catch((e) => console.log(e)))
-            bot.on('messageDeleteBulk', (messages) => messages.forEach((msg) => callbacks.messageDeleteCallback(msg).catch((e) => console.log(e))))
-            bot.on('guildCreate', (guild) => callbacks.guildCallback(guild).catch((e) => console.log(e)))
-            bot.on('guildDelete', (guild) => callbacks.guildDeleteCallback(guild).catch((e) => console.log(e)))
-            bot.on('messageReactionAdd', (reaction, user) => callbacks.reactionCallback(reaction, user).catch((e) => console.log(e)))
-            bot.on('messageReactionRemove', (reaction, user) => callbacks.reactionCallback(reaction, user).catch((e) => console.log(e)))
-            bot.on('messageReactionRemoveAll', (_, reactions) => reactions.forEach((reaction) => callbacks.reactionCallback(reaction).catch((e) => console.log(e))))
-            bot.on('messageReactionRemoveEmoji', (reaction) => callbacks.reactionCallback(reaction).catch((e) => console.log(e)))
-            bot.on('guildDelete', (guild) => callbacks.guildDeleteCallback(guild).catch((e) => console.log(e)))
-            bot.on('interactionCreate', (interaction) => callbacks.interactionCallback(interaction).catch((e) => console.log(e)))
+            bot.on('messageCreate', (msg) => callbacks.messageCallbacks.forEach(callback => callback(msg).catch((e) => console.log(e))))
+            
+            bot.on('messageUpdate', (oldMsg, msg) => callbacks.messageEditCallbacks.forEach(callback => callback(oldMsg, msg).catch((e) => console.log(e))))
+            bot.on('messageDelete', (msg) => callbacks.messageDeleteCallbacks.forEach(callback => callback(msg).catch((e) => console.log(e))))
+            bot.on('messageDeleteBulk', (messages) => messages.forEach((msg) => callbacks.messageDeleteCallbacks.forEach(callback => callback(msg).catch((e) => console.log(e)))))
+            
+            bot.on('guildCreate', (guild) => callbacks.guildCallbacks.forEach(callback => callback(guild).catch((e) => console.log(e))))
+            bot.on('guildDelete', (guild) => callbacks.guildDeleteCallbacks.forEach(callback => callback(guild).catch((e) => console.log(e))))
+            
+            bot.on('messageReactionAdd', (reaction, user) => callbacks.reactionCallbacks.forEach(callback => callback(reaction, user).catch((e) => console.log(e))))
+            bot.on('messageReactionRemove', (reaction, user) => callbacks.reactionCallbacks.forEach(callback => callback(reaction, user).catch((e) => console.log(e))))
+            bot.on('messageReactionRemoveAll', (_, reactions) => reactions.forEach((reaction) => callbacks.reactionCallbacks.forEach(callback => callback(reaction).catch((e) => console.log(e)))))
+            bot.on('messageReactionRemoveEmoji', (reaction) => callbacks.reactionCallbacks.forEach(callback => callback(reaction).catch((e) => console.log(e))))
+            
+            bot.on('interactionCreate', (interaction) => callbacks.interactionCallbacks.forEach(callback => callback(interaction).catch((e) => console.log(e))))
 
             bot.on('error', (err) => console.log(err))
         }
+
+        for (let cronData of data.botData.crons) createCronJob(cronData).catch(() => { })
 
         vars.started = true
     }
@@ -1961,7 +1987,7 @@ class Poopy {
         if (vars.hivemindStatusInterval !== undefined) {
             clearInterval(vars.hivemindStatusInterval)
         }
-        
+
         vars.started = false
         delete activeBots[config.database]
         bot.destroy()

@@ -1,7 +1,7 @@
 module.exports = {
     name: ['updatefromjson'],
     args: [{
-        "name": "json", "required": true, "specifarg": false, "orig": "<json (funnygif, poop, dmphrases, shitting, eightball)>", "autocomplete": [
+        name: "json", required: true, specifarg: false, orig: "<json (funnygif, poop, dmphrases, shitting, eightball)>", autocomplete: [
             'funnygif',
             'poop',
             'dmphrases',

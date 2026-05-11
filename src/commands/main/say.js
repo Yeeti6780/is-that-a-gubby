@@ -1,13 +1,13 @@
 module.exports = {
     name: ['say', 'talk', 'speak'],
-    args: [{ "name": "message", "required": true, "specifarg": false, "orig": "<message>" }, { "name": "nodelete", "required": false, "specifarg": true, "orig": "[-nodelete]" }, { "name": "tts", "required": false, "specifarg": true, "orig": "[-tts]" }],
+    args: [{ name: "message", required: true, specifarg: false, orig: "<message>" }, { name: "nodelete", required: false, specifarg: true, orig: "[-nodelete]" }, { name: "tts", required: false, specifarg: true, orig: "[-tts]" }],
     execute: async function (msg, args) {
         let poopy = this
         let config = poopy.config
         let { Discord, DiscordTypes } = poopy.modules
         let { fetchPingPerms } = poopy.functions
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         var del = (
             msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageMessages) ||
             msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
@@ -63,7 +63,7 @@ module.exports = {
     },
     help: {
         name: 'say/talk/speak <message> [-nodelete] [-tts]',
-        value: 'Poopy says the message after the command.'
+        value: 'The bot says the message after the command.'
     },
     cooldown: 2500,
     ephemeral: true,

@@ -1,15 +1,15 @@
 module.exports = {
   name: ['brainfuck', 'bf'],
-  args: [{ "name": "code", "required": true, "specifarg": false, "orig": "<code>" }],
+  args: [{ name: "code", required: true, specifarg: false, orig: "<code>" }],
   execute: async function (msg, args) {
     let poopy = this
     let { brainfuck, fetchPingPerms } = poopy.functions
 
-    await msg.channel.sendTyping().catch(() => { })
+    msg.channel.sendTyping().catch(() => { })
     var saidMessage = args.slice(1).join(' ')
     if (args[1] === undefined) {
       await msg.reply('What is the code to compile?!').catch(() => { })
-      await msg.channel.sendTyping().catch(() => { })
+      msg.channel.sendTyping().catch(() => { })
       return;
     };
     var compiled = await brainfuck(saidMessage)

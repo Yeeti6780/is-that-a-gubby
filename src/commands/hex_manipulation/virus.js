@@ -1,6 +1,6 @@
 module.exports = {
     name: ['virus'],
-    args: [{"name":"file","required":true,"specifarg":false,"orig":"<file>"}],
+    args: [{name: "file",required: true,specifarg: false,orig: "<file>"}],
     execute: async function (msg, args) {
         let poopy = this
         let config = poopy.config
@@ -23,10 +23,10 @@ objShell.RegWrite "HKCU\\Control Panel\\Desktop\\Wallpaper", strDirectory + "\\m
 objShell.Run "%windir%\\System32\\RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters", 1, True`
 
         if (msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id)) {
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             if (lastUrl(msg, 0) === undefined && args[1] === undefined) {
                 await msg.reply('What is the file?!').catch(() => { })
-                await msg.channel.sendTyping().catch(() => { })
+                msg.channel.sendTyping().catch(() => { })
                 return;
             };
             var currenturl = lastUrl(msg, 0) || args[1]
@@ -35,7 +35,7 @@ objShell.Run "%windir%\\System32\\RUNDLL32.EXE user32.dll,UpdatePerUserSystemPar
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-                await msg.channel.sendTyping().catch(() => { })
+                msg.channel.sendTyping().catch(() => { })
                 return;
             })
 

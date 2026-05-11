@@ -2,22 +2,22 @@ module.exports = {
     name: ['cleverbot', 'respond'],
     args: [
         {
-            "name": "message",
-            "required": false,
-            "specifarg": false,
-            "orig": "{message}"
+            name: "message",
+            required: false,
+            specifarg: false,
+            orig: "{message}"
         },
         {
-            "name": "continuous",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-continuous]"
+            name: "continuous",
+            required: false,
+            specifarg: true,
+            orig: "[-continuous]"
         },
         {
-            "name": "clear",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-clear]"
+            name: "clear",
+            required: false,
+            specifarg: true,
+            orig: "[-clear]"
         }
     ],
     execute: async function (msg, args) {
@@ -117,7 +117,7 @@ module.exports = {
     },
     help: {
         name: 'cleverbot/respond {message} [-continuous] [-clear]',
-        value: "Poopy responds to your message(s) with Cleverbot's AI. Try it yourself at https://www.cleverbot.com/"
+        value: "The bot responds to your message(s) with Cleverbot's AI. Try it yourself at https://www.cleverbot.com/"
     },
     type: 'Generation'
 }

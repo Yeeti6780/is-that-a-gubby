@@ -1,6 +1,6 @@
 module.exports = {
     name: ['spam', 'flood'],
-    args: [{ "name": "times", "required": true, "specifarg": false, "orig": "<times>" }, { "name": "message", "required": true, "specifarg": false, "orig": "<message>" }, { "name": "nodelete", "required": false, "specifarg": true, "orig": "[-nodelete]" }, { "name": "tts", "required": false, "specifarg": true, "orig": "[-tts]" }],
+    args: [{ name: "times", required: true, specifarg: false, orig: "<times>" }, { name: "message", required: true, specifarg: false, orig: "<message>" }, { name: "nodelete", required: false, specifarg: true, orig: "[-nodelete]" }, { name: "tts", required: false, specifarg: true, orig: "[-tts]" }],
     execute: async function (msg, args) {
         let poopy = this
         let config = poopy.config
@@ -9,7 +9,7 @@ module.exports = {
         let { fetchPingPerms } = poopy.functions
         let tempdata = poopy.tempdata
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id)) {
             if (args[1] === undefined && args[2] === undefined) {
                 await msg.reply('How much do I spam?!').catch(() => { })

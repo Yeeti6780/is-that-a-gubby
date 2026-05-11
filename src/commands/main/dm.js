@@ -2,11 +2,11 @@ module.exports = {
     name: ['dm'],
     args: [
         {
-            "name": "user",
-            "required": true,
-            "specifarg": false,
-            "orig": "<user>",
-            "autocomplete": async function (interaction) {
+            name: "user",
+            required: true,
+            specifarg: false,
+            orig: "<user>",
+            autocomplete: async function (interaction) {
                 let poopy = this
                 let { data, config } = poopy
                 let { dataGather } = poopy.functions
@@ -24,16 +24,16 @@ module.exports = {
             }
         },
         {
-            "name": "message",
-            "required": true,
-            "specifarg": false,
-            "orig": "<message>"
+            name: "message",
+            required: true,
+            specifarg: false,
+            orig: "<message>"
         },
         //{
-        //    "name": "anonymous",
-        //    "required": false,
-        //    "specifarg": true,
-        //    "orig": "[-anonymous]"
+        //    name: "anonymous",
+        //    required: false,
+        //    specifarg: true,
+        //    orig: "[-anonymous]"
         //}
     ],
     execute: async function (msg, args, opts) {
@@ -46,7 +46,7 @@ module.exports = {
         let config = poopy.config
         let tempdata = poopy.tempdata
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (args[1] === undefined) {
             await msg.reply('Who do I DM?!').catch(() => { })
             return;
@@ -180,7 +180,7 @@ module.exports = {
     },
     help: {
         name: 'dm <user> <message>',
-        value: 'Allows Poopy to DM an user the message inside the command, this can be disabled with p:toggledms.'
+        value: 'Allows the bot to DM an user the message inside the command, this can be disabled with p:toggledms.'
     },
     type: 'Main'
 }

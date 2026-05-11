@@ -2,6 +2,7 @@ const axios = require('axios')
 const fs = require('fs-extra')
 
 var vars = require('./vars')
+var getEmojis = require('../lib/jimpPrint/getEmojis')
 
 var dataGotten = {}
 var dataGetting = {}
@@ -196,7 +197,7 @@ var dataGetters = {
             doopleyJSON: 'doopley',
             eggphraseJSON: 'eggphrases',
             autoModJSON: 'automodFilter',
-            emojiJSON: require('@jimp/plugin-print/emojis')
+            emojiJSON: getEmojis
         }
 
         for (var k in jsonList) {

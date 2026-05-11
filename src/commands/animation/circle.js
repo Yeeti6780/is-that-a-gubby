@@ -1,6 +1,6 @@
 module.exports = {
     name: ['circle'],
-    args: [{"name":"file","required":false,"specifarg":false,"orig":"{file}"},{"name":"width","required":false,"specifarg":true,"orig":"[-width <pixels>]"},{"name":"height","required":false,"specifarg":true,"orig":"[-height <pixels>]"},{"name":"owidth","required":false,"specifarg":true,"orig":"[-owidth <pixels>]"},{"name":"oheight","required":false,"specifarg":true,"orig":"[-oheight <pixels>]"},{"name":"duration","required":false,"specifarg":true,"orig":"[-duration <seconds (max 10)>]"}],
+    args: [{name: "file",required: false,specifarg: false,orig: "{file}"},{name: "width",required: false,specifarg: true,orig: "[-width <pixels>]"},{name: "height",required: false,specifarg: true,orig: "[-height <pixels>]"},{name: "owidth",required: false,specifarg: true,orig: "[-owidth <pixels>]"},{name: "oheight",required: false,specifarg: true,orig: "[-oheight <pixels>]"},{name: "duration",required: false,specifarg: true,orig: "[-duration <seconds (max 10)>]"}],
     execute: async function (msg, args) {
         let poopy = this
         let {
@@ -9,10 +9,10 @@ module.exports = {
         } = poopy.functions
         let { DiscordTypes } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && args[1] === undefined) {
             await msg.reply('What is the file?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var duration = 2
@@ -46,7 +46,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -64,7 +64,7 @@ module.exports = {
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

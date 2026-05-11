@@ -1,11 +1,11 @@
 module.exports = {
     name: ['rename', 'nickname'],
     args: [{
-        "name": "user",
-        "required": false,
-        "specifarg": false,
-        "orig": "[user]",
-        "autocomplete": async function (interaction) {
+        name: "user",
+        required: false,
+        specifarg: false,
+        orig: "[user]",
+        autocomplete: async function (interaction) {
             let poopy = this
             let { data, config } = poopy
             let { dataGather } = poopy.functions
@@ -23,10 +23,10 @@ module.exports = {
         }
     },
     {
-        "name": "name",
-        "required": true,
-        "specifarg": false,
-        "orig": "\"<name>\""
+        name: "name",
+        required: true,
+        specifarg: false,
+        orig: "\"<name>\""
     }],
     execute: async function (msg, args) {
         let poopy = this

@@ -1,12 +1,12 @@
 module.exports = {
   name: ['fetchurls', 'geturls'],
-  args: [{"name":"message","required":true,"specifarg":false,"orig":"<message>"}],
+  args: [{name: "message",required: true,specifarg: false,orig: "<message>"}],
   execute: async function (msg, args) {
     let poopy = this
     let { Discord } = poopy.modules
     let { getUrls, fetchPingPerms } = poopy.functions
 
-    await msg.channel.sendTyping().catch(() => { })
+    msg.channel.sendTyping().catch(() => { })
     var attachments = []
     msg.attachments.forEach(attachment => {
       attachments.push(new Discord.AttachmentBuilder(attachment.url))

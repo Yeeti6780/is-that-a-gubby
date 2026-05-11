@@ -1,7 +1,7 @@
 module.exports = {
     name: ['bludfraud', 'bluddistrust'],
-    args: [{ "name": "userId", "required": true, "specifarg": false, "orig": "<userId>" }],
-    execute: async function (msg, args) {
+    args: [{ name: "userId", required: true, specifarg: false, orig: "<userId>" }],
+    execute: async function (msg, args, opts) {
         let poopy = this
         let config = poopy.config
         let { axios } = poopy.modules
@@ -9,6 +9,11 @@ module.exports = {
 
         if (!config.tumoreTesters.includes(msg.author.id)) {
             await msg.reply('Hey, you can\'t use this command! How unfortunate.').catch(() => { })
+            return
+        }
+
+        if (opts.sourceMsg && msg.author.id != opts.sourceMsg.author.id) {
+            await msg.reply("bro").catch(() => { })
             return
         }
 

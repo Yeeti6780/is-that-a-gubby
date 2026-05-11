@@ -207,7 +207,7 @@ vars.categories = {
     'Generation': 'Generate things from an AI or not.',
     'Hex Manipulation': 'Manipulate the file\'s Hex Code to make it shorter, longer, etc.',
     'Inside Joke': 'if you know you know',
-    'JSON Gang': 'Exclusive to some people for editing the JSONs used by Poopy.',
+    'JSON Gang': 'Exclusive to some people for editing the JSONs used by the bot.',
     'Main': 'Poopy\'s main commands.',
     'Memes': 'Integrate an input in many different meme formats.',
     'Mirroring': 'Flip or mirror a file in different axes.',
@@ -216,10 +216,10 @@ vars.categories = {
     'Overlaying': 'For stacking or overlaying a file on top of another.',
     'Random': 'Send a random value from a collection of values.',
     'Resizing': 'Scale a file in some way.',
-    'Settings': 'Manage a server\'s Poopy settings, or your own Poopy settings.',
+    'Settings': 'Manage a server\'s bot settings, or your own bot settings.',
     'Text': 'Commands that serve text as output.',
     'Tumore': 'The Blud obby... is too hard.',
-    'Unique': 'Commands that resemble unique features to Poopy, keywords for example.',
+    'Unique': 'Commands that resemble unique features to the bot, keywords for example.',
     'Webhook': 'Webhook commands.'
 }
 
@@ -369,6 +369,7 @@ vars.dataTemplate = {
             dms: undefined,
             dmsReceived: {},
             dmsBlocked: [],
+            allowedMentions: [],
             tokens: {},
 
             death: 0,
@@ -443,6 +444,7 @@ vars.globaldataTemplate = {
 }
 
 vars.tempdataTemplate = {
+    validatedFiles: {},
     discordUrls: {},
     collectors: [],
     crons: [],
@@ -453,7 +455,6 @@ vars.tempdataTemplate = {
     guildId: {
         automodRules: undefined,
         messages: [],
-        lastMessageModelBuild: 0,
         webhookMembers: {},
 
         channelId: {

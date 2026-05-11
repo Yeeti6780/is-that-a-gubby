@@ -3,17 +3,17 @@ module.exports = {
         'wackyscale',
         'wackyresize'],
     args: [{
-        "name": "video",
-        "required": true,
-        "specifarg": false,
-        "orig": "<video>"
+        name: "video",
+        required: true,
+        specifarg: false,
+        orig: "<video>"
     },
         {
-            "name": "mode",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-mode <value (bounce, shutter, sporadic, bounce+shutter)>]",
-            "autocomplete": [
+            name: "mode",
+            required: false,
+            specifarg: true,
+            orig: "[-mode <value (bounce, shutter, sporadic, bounce+shutter)>]",
+            autocomplete: [
                 'bounce',
                 'shutter',
                 'sporadic',
@@ -21,16 +21,16 @@ module.exports = {
             ]
         },
         {
-            "name": "delta",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-delta <number (default 2)>]"
+            name: "delta",
+            required: false,
+            specifarg: true,
+            orig: "[-delta <number (default 2)>]"
         },
         {
-            "name": "bps",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-bps <number (default 1.9)>]"
+            name: "bps",
+            required: false,
+            specifarg: true,
+            orig: "[-bps <number (default 1.9)>]"
         }],
     execute: async function (msg, args) {
         let poopy = this
@@ -40,10 +40,10 @@ module.exports = {
         } = poopy.functions
         let vars = poopy.vars
 
-        await msg.channel.sendTyping().catch(() => {})
+        msg.channel.sendTyping().catch(() => {})
         if (lastUrl(msg, 0) === undefined && args[1] === undefined) {
             await msg.reply('What is the file?!').catch(() => {})
-            await msg.channel.sendTyping().catch(() => {})
+            msg.channel.sendTyping().catch(() => {})
             return;
         };
         var currenturl = lastUrl(msg, 0) || args[1]
@@ -81,7 +81,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => {})
-            await msg.channel.sendTyping().catch(() => {})
+            msg.channel.sendTyping().catch(() => {})
             return;
         })
 
@@ -104,7 +104,7 @@ module.exports = {
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => {})
-            await msg.channel.sendTyping().catch(() => {})
+            msg.channel.sendTyping().catch(() => {})
             return
         }
     },

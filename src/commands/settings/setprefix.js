@@ -1,12 +1,17 @@
 module.exports = {
     name: ['setprefix'],
-    args: [{ "name": "prefix", "required": true, "specifarg": false, "orig": "<prefix>" }],
-    execute: async function (msg, args) {
+    args: [{ name: "prefix", required: true, specifarg: false, orig: "<prefix>" }],
+    execute: async function (msg, args, opts) {
         let poopy = this
         let config = poopy.config
         let data = poopy.data
         let { DiscordTypes } = poopy.modules
         let { fetchPingPerms } = poopy.functions
+
+        if (opts.sourceMsg && msg.author.id != opts.sourceMsg.author.id) {
+            await msg.reply("bro").catch(() => { })
+            return
+        }
 
         if (msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id)) {
             if (args[1] === undefined) {
@@ -37,8 +42,8 @@ module.exports = {
     },
     help: {
         name: 'setprefix <prefix> (moderator only)',
-        value: "Set Poopy's prefix to anything you want.\n" +
-            'Pro Tip: mentioning Poopy with "reset prefix" will reset it to his default prefix.'
+        value: "Set the bot's prefix to anything you want.\n" +
+            'Pro Tip: mentioning the bot with "reset prefix" will reset it to his default prefix.'
     },
     cooldown: 5000,
     perms: ['Administrator', 'ManageMessages'],

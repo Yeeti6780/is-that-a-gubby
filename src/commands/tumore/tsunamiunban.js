@@ -1,10 +1,10 @@
 module.exports = {
     name: ['tsunamiunban'],
     args: [
-        { "name": "userId", "required": true, "specifarg": false, "orig": "<userId>" },
-        { "name": "reason", "required": false, "specifarg": false, "orig": "\"[reason]\"" },
+        { name: "userId", required: true, specifarg: false, orig: "<userId>" },
+        { name: "reason", required: false, specifarg: false, orig: "\"[reason]\"" },
     ],
-    execute: async function (msg, args) {
+    execute: async function (msg, args, opts) {
         let poopy = this
         let config = poopy.config
         let vars = poopy.vars
@@ -13,6 +13,11 @@ module.exports = {
 
         if (!config.tumoreTesters.includes(msg.author.id)) {
             await msg.reply('Hey, you can\'t use this command! How unfortunate.').catch(() => { })
+            return
+        }
+
+        if (opts.sourceMsg && msg.author.id != opts.sourceMsg.author.id) {
+            await msg.reply("bro").catch(() => { })
             return
         }
 

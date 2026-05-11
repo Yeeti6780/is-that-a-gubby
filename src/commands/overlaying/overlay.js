@@ -1,10 +1,10 @@
 module.exports = {
     name: ['overlay'],
     args: [
-        { "name": "file", "required": false, "specifarg": false, "orig": "{file}" },
-        { "name": "file2", "required": false, "specifarg": false, "orig": "{file2}" }, {
-            "name": "origin", "required": false, "specifarg": true, "orig": "[-origin <x (left/center/right)> <y (top/middle/bottom)>]",
-            "autocomplete": [
+        { name: "file", required: false, specifarg: false, orig: "{file}" },
+        { name: "file2", required: false, specifarg: false, orig: "{file2}" }, {
+            name: "origin", required: false, specifarg: true, orig: "[-origin <x (left/center/right)> <y (top/middle/bottom)>]",
+            autocomplete: [
                 'left top',
                 'center top',
                 'right top',
@@ -15,12 +15,12 @@ module.exports = {
                 'center bottom',
                 'right bottom',
             ]
-        }, { "name": "offsetpos", "required": false, "specifarg": true, "orig": "[-offsetpos <x> <y>]" },
-        { "name": "width", "required": false, "specifarg": true, "orig": "[-width/height <pixels or percentage>]" },
-        { "name": "height", "required": false, "specifarg": true, "orig": "[-width/height <pixels or percentage>]" },
-        { "name": "keepaspectratio", "required": false, "specifarg": true, "orig": "[-keepaspectratio <mode (increase or decrease)>]", "autocomplete": ['increase', 'decrease'] },
-        { "name": "start", "required": false, "specifarg": true, "orig": "[-start/end <timestamp (you can use hh:mm:ss)>]" },
-        { "name": "end", "required": false, "specifarg": true, "orig": "[-start/end <timestamp (you can use hh:mm:ss)>]" }
+        }, { name: "offsetpos", required: false, specifarg: true, orig: "[-offsetpos <x> <y>]" },
+        { name: "width", required: false, specifarg: true, orig: "[-width/height <pixels or percentage>]" },
+        { name: "height", required: false, specifarg: true, orig: "[-width/height <pixels or percentage>]" },
+        { name: "keepaspectratio", required: false, specifarg: true, orig: "[-keepaspectratio <mode (increase or decrease)>]", autocomplete: ['increase', 'decrease'] },
+        { name: "start", required: false, specifarg: true, orig: "[-start/end <timestamp (you can use hh:mm:ss)>]" },
+        { name: "end", required: false, specifarg: true, orig: "[-start/end <timestamp (you can use hh:mm:ss)>]" }
     ],
     execute: async function (msg, args) {
         let poopy = this
@@ -31,10 +31,10 @@ module.exports = {
         let { DiscordTypes } = poopy.modules
         let vars = poopy.vars
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 1) === undefined && args[2] === undefined) {
             await msg.reply('What are the files?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         }
         var keepaspectratio
@@ -90,7 +90,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
         if (!fileinfo) return
@@ -105,7 +105,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
         if (!fileinfo2) return
@@ -118,7 +118,7 @@ module.exports = {
                     content: error,
                     allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
-                await msg.channel.sendTyping().catch(() => { })
+                msg.channel.sendTyping().catch(() => { })
                 return
             }
         }
@@ -129,7 +129,7 @@ module.exports = {
                     content: 'Unsupported file types.',
                     allowedMentions: fetchPingPerms(msg)
                 }).catch(() => { })
-                await msg.channel.sendTyping().catch(() => { })
+                msg.channel.sendTyping().catch(() => { })
                 return
             }
         }

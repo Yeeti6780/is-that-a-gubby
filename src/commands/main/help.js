@@ -1,7 +1,7 @@
 module.exports = {
     name: ['help', 'commands', 'cmds'],
     args: [{
-        "name": "command", "required": false, "specifarg": false, "orig": "[command]", "autocomplete": function (interaction) {
+        name: "command", required: false, specifarg: false, orig: "[command]", autocomplete: function (interaction) {
             let poopy = this
 
             var cmds = poopy.commands.map(cmd => {
@@ -14,7 +14,7 @@ module.exports = {
             return cmds.concat(lcmds)
         }
     }, {
-        "name": "page", "required": false, "specifarg": false, "orig": "[-page]"
+        name: "page", required: false, specifarg: false, orig: "[-page]"
     }],
     execute: async function (msg, args) {
         let poopy = this
@@ -64,16 +64,16 @@ module.exports = {
                         title: cmd.help.name,
                         fields: [
                             {
-                                "name": "Description",
-                                "value": cmd.help.value || 'No description.'
+                                name: "Description",
+                                value: cmd.help.value || 'No description.'
                             },
                             {
-                                "name": "Cooldown",
-                                "value": cmd.cooldown ? `${cmd.cooldown / 1000} seconds` : 'None'
+                                name: "Cooldown",
+                                value: cmd.cooldown ? `${cmd.cooldown / 1000} seconds` : 'None'
                             },
                             {
-                                "name": "Type",
-                                "value": cmd.type
+                                name: "Type",
+                                value: cmd.type
                             },
                         ]
                     }
@@ -82,13 +82,13 @@ module.exports = {
                 if (!msg.nosend) await navigateEmbed(msg.channel, async (page) => {
                     if (config.textEmbeds) return `\`${fCmds[page - 1].help.name}\`\n\n**Description:** ${fCmds[page - 1].help.value || 'No description.'}\n**Cooldown:** ${fCmds[page - 1].cooldown ? `${fCmds[page - 1].cooldown / 1000} seconds` : 'None'}\n**Type:** ${fCmds[page - 1].type}\n\nCommand ${page}/${findCmds.length}`
                     else return {
-                        "title": findCmds[page - 1].title,
-                        "color": 0x472604,
-                        "footer": {
-                            "icon_url": bot.user.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' }),
-                            "text": `Command ${page}/${findCmds.length}`
+                        title: findCmds[page - 1].title,
+                        color: 0x472604,
+                        footer: {
+                            icon_url: bot.user.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' }),
+                            text: `Command ${page}/${findCmds.length}`
                         },
-                        "fields": findCmds[page - 1].fields,
+                        fields: findCmds[page - 1].fields,
                     }
                 }, findCmds.length, msg.member, undefined, page, undefined, undefined, undefined, msg)
                 return `\`${fCmds[page - 1].help.name}\`\n\n**Description:** ${fCmds[page - 1].help.value || 'No description.'}\n**Cooldown:** ${fCmds[page - 1].cooldown ? `${fCmds[page - 1].cooldown / 1000} seconds` : 'None'}\n**Type:** ${fCmds[page - 1].type}\n\nCommand 1/${findCmds.length}`
@@ -97,11 +97,11 @@ module.exports = {
                 else msg.reply({
                     embeds: [
                         {
-                            "description": "No commands match your search.",
-                            "color": 0x472604,
-                            "footer": {
-                                "icon_url": bot.user.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' }),
-                                "text": bot.user.displayName
+                            description: "No commands match your search.",
+                            color: 0x472604,
+                            footer: {
+                                icon_url: bot.user.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' }),
+                                text: bot.user.displayName
                             },
                         }
                     ]
@@ -159,8 +159,8 @@ module.exports = {
             var idiot = await bot.users.fetch("464438783866175489").catch(() => { })
 
             var thankEmbed = {
-                "title": `Poopy Help`,
-                "description": "**hey there, umm.. thank you so much for using this silly bot!**\n\n" +
+                title: `Bot Help`,
+                description: "**hey there, umm.. thank you so much for using this silly bot!**\n\n" +
 
                     "it really means a lot to me considering the fact it's a project that exists since late 2020... " +
                     "somehow, even with its VERY outdated code, it still manages to bring joy by making stupid gifs and videos...\n\n" +
@@ -173,14 +173,14 @@ module.exports = {
                     `- **donate:** <https://ko-fi.com/raleighed> (this helps poopy stay alive)\n\n` +
 
                     `-# (...will poopy truly live forever this time?)`,
-                "color": 0x472604,
-                "footer": {
-                    "icon_url": (idiot ?? bot.user).displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' }),
-                    "text": `from this idiot, ${(idiot ?? bot.user).displayName}`
+                color: 0x472604,
+                footer: {
+                    icon_url: (idiot ?? bot.user).displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' }),
+                    text: `from this idiot, ${(idiot ?? bot.user).displayName}`
                 }
             }
 
-            if (config.textEmbeds) await msg.author.send(`**Poopy Help**\n\n${thankEmbed.description}`).catch(() => { })
+            if (config.textEmbeds) await msg.author.send(`**Bot Help**\n\n${thankEmbed.description}`).catch(() => { })
             else await msg.author.send({
                 embeds: [thankEmbed]
             }).catch(() => { })
@@ -191,15 +191,15 @@ module.exports = {
         await navigateEmbed(dmChannel, async (page) => {
             var helpEmbedText = `**${vars.shelpCmds[page - 1].type} Commands**\n\n` + argumentHelp + vars.shelpCmds[page - 1].commands.map(k => `\`${k.name}\`\n> ${k.value}`).join('\n') + `\n\nPage ${page}/${vars.shelpCmds.length}`
             var helpEmbed = {
-                "title": `${vars.shelpCmds[page - 1].type} Commands`,
-                "description": argumentHelp,
-                "color": 0x472604,
-                "footer": {
-                    "icon_url": bot.user.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' }),
-                    "text": `Page ${page}/${vars.shelpCmds.length}`
+                title: `${vars.shelpCmds[page - 1].type} Commands`,
+                description: argumentHelp,
+                color: 0x472604,
+                footer: {
+                    icon_url: bot.user.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' }),
+                    text: `Page ${page}/${vars.shelpCmds.length}`
                 },
-                "fields": vars.shelpCmds[page - 1].commands,
-                "menuText": vars.shelpCmds[page - 1].type
+                fields: vars.shelpCmds[page - 1].commands,
+                menuText: vars.shelpCmds[page - 1].type
             }
 
             if (helped) {
@@ -250,13 +250,13 @@ module.exports = {
         } : undefined, true).then(async () => {
             if (jsonid !== undefined) {
                 var jsoncmdEmbed = {
-                    "title": "JSON Gang Commands",
-                    "color": 0x472604,
-                    "footer": {
-                        "icon_url": bot.user.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' }),
-                        "text": bot.user.displayName
+                    title: "JSON Gang Commands",
+                    color: 0x472604,
+                    footer: {
+                        icon_url: bot.user.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' }),
+                        text: bot.user.displayName
                     },
-                    "fields": vars.jsonCmds
+                    fields: vars.jsonCmds
                 };
                 if (config.textEmbeds) await msg.author.send(`**JSON Gang Commands**\n\n${vars.jsonCmds.map(k => `\`${k.name}\`\n> ${k.value}`).join('\n')}`).catch(() => { })
                 else await msg.author.send({
@@ -265,13 +265,13 @@ module.exports = {
             }
             if (tumoreid !== undefined) {
                 var tumorecmdEmbed = {
-                    "title": "Tumore Commands",
-                    "color": 0x472604,
-                    "footer": {
-                        "icon_url": bot.user.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' }),
-                        "text": bot.user.displayName
+                    title: "Tumore Commands",
+                    color: 0x472604,
+                    footer: {
+                        icon_url: bot.user.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' }),
+                        text: bot.user.displayName
                     },
-                    "fields": vars.tumoreCmds
+                    fields: vars.tumoreCmds
                 };
                 if (config.textEmbeds) await msg.author.send(`**Tumore Commands**\n\n${vars.tumoreCmds.map(k => `\`${k.name}\`\n> ${k.value}`).join('\n')}`).catch(() => { })
                 else await msg.author.send({
@@ -280,13 +280,13 @@ module.exports = {
             }
             if (ownerid !== undefined) {
                 var devcmdEmbed = {
-                    "title": "Owner Commands",
-                    "color": 0x472604,
-                    "footer": {
-                        "icon_url": bot.user.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' }),
-                        "text": bot.user.displayName
+                    title: "Owner Commands",
+                    color: 0x472604,
+                    footer: {
+                        icon_url: bot.user.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' }),
+                        text: bot.user.displayName
                     },
-                    "fields": vars.devCmds
+                    fields: vars.devCmds
                 };
                 if (config.textEmbeds) await msg.author.send(`**Owner Commands**\n\n${vars.devCmds.map(k => `\`${k.name}\`\n> ${k.value}`).join('\n')}`).catch(() => { })
                 else await msg.author.send({

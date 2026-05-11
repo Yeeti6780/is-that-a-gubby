@@ -1,6 +1,6 @@
 module.exports = {
     name: ['yall', 'twitterartist'],
-    args: [{"name":"text","required":false,"specifarg":false,"orig":"\"[text]\""},{"name":"file","required":false,"specifarg":false,"orig":"{file}"}],
+    args: [{name: "text",required: false,specifarg: false,orig: "\"[text]\""},{name: "file",required: false,specifarg: false,orig: "{file}"}],
     execute: async function (msg, args) {
         let poopy = this
         let {
@@ -10,10 +10,10 @@ module.exports = {
         let vars = poopy.vars
         let { Jimp } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && vars.validUrl.test(args[args.length - 1]) === false) {
             await msg.reply('What is the file?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var saidMessage = args.slice(1).join(' ')
@@ -33,7 +33,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -47,7 +47,7 @@ module.exports = {
 
             var yall = await Jimp.read(`assets/image/yall.png`)
             var morton = await Jimp.loadFont('assets/fonts/Morton/Morton.fnt')
-            await yall.print(morton, 274, 8, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 202, 77)
+            await Jimp.print(yall, morton, 274, 8, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 202, 77)
             await yall.writeAsync(`${filepath}/yall.png`)
 
             var width = fileinfo.info.width
@@ -64,7 +64,7 @@ module.exports = {
 
             var yall = await Jimp.read(`assets/image/yall.png`)
             var morton = await Jimp.loadFont('assets/fonts/Morton/Morton.fnt')
-            await yall.print(morton, 274, 8, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 202, 77)
+            await Jimp.print(yall, morton, 274, 8, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 202, 77)
             await yall.writeAsync(`${filepath}/yall.png`)
 
             var width = fileinfo.info.width
@@ -80,7 +80,7 @@ module.exports = {
 
             var yall = await Jimp.read(`assets/image/yall.png`)
             var morton = await Jimp.loadFont('assets/fonts/Morton/Morton.fnt')
-            await yall.print(morton, 274, 8, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 202, 77)
+            await Jimp.print(yall, morton, 274, 8, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_LEFT, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, 202, 77)
             await yall.writeAsync(`${filepath}/yall.png`)
 
             var width = fileinfo.info.width
@@ -95,7 +95,7 @@ module.exports = {
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

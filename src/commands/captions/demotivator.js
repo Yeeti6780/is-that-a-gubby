@@ -1,6 +1,6 @@
 module.exports = {
     name: ['meme2', 'demotivator', 'motivator'],
-    args: [{ "name": "topText", "required": false, "specifarg": false, "orig": "\"{topText}\"" }, { "name": "bottomText", "required": false, "specifarg": false, "orig": "\"[bottomText]\"" }, { "name": "file", "required": false, "specifarg": false, "orig": "{file}" }],
+    args: [{ name: "topText", required: false, specifarg: false, orig: "\"{topText}\"" }, { name: "bottomText", required: false, specifarg: false, orig: "\"[bottomText]\"" }, { name: "file", required: false, specifarg: false, orig: "{file}" }],
     execute: async function (msg, args) {
         let poopy = this
         let {
@@ -15,10 +15,10 @@ module.exports = {
             return
         }
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && vars.validUrl.test(args[args.length - 1]) === false) {
             await msg.reply('What is the file?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var saidMessage = args.slice(1).join(' ').replace(/’/g, '\'')
@@ -44,7 +44,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -78,10 +78,10 @@ module.exports = {
             await black.writeAsync(`${filepath}/border.png`)
             var textheight = Jimp.measureTextHeight(tnr, text, 500 - 40)
             textblack.resize(500, textheight)
-            await textblack.print(tnr, 20, 0, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, textblack.bitmap.width - 40, textblack.bitmap.height)
+            await Jimp.print(textblack, tnr, 20, 0, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, textblack.bitmap.width - 40, textblack.bitmap.height)
             var text2height = Jimp.measureTextHeight(arial, text2, 500 - 40)
             text2black.resize(500, text2height + 10)
-            await text2black.print(arial, 20, 5, { text: text2, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, text2black.bitmap.width - 40, text2black.bitmap.height - 10)
+            await Jimp.print(text2black, arial, 20, 5, { text: text2, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, text2black.bitmap.width - 40, text2black.bitmap.height - 10)
             bottomblack.resize(500, 20)
             bgblack.resize(500, textblack.bitmap.height + text2black.bitmap.height + bottomblack.bitmap.height)
             bgblack.composite(textblack, 0, 0)
@@ -119,10 +119,10 @@ module.exports = {
             await black.writeAsync(`${filepath}/border.png`)
             var textheight = Jimp.measureTextHeight(tnr, text, 500 - 40)
             textblack.resize(500, textheight)
-            await textblack.print(tnr, 20, 0, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, textblack.bitmap.width - 40, textblack.bitmap.height)
+            await Jimp.print(textblack, tnr, 20, 0, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, textblack.bitmap.width - 40, textblack.bitmap.height)
             var text2height = Jimp.measureTextHeight(arial, text2, 500 - 40)
             text2black.resize(500, text2height + 10)
-            await text2black.print(arial, 20, 5, { text: text2, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, text2black.bitmap.width - 40, text2black.bitmap.height - 10)
+            await Jimp.print(text2black, arial, 20, 5, { text: text2, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, text2black.bitmap.width - 40, text2black.bitmap.height - 10)
             bottomblack.resize(500, 20)
             bgblack.resize(500, textblack.bitmap.height + text2black.bitmap.height + bottomblack.bitmap.height)
             bgblack.composite(textblack, 0, 0)
@@ -160,10 +160,10 @@ module.exports = {
             await black.writeAsync(`${filepath}/border.png`)
             var textheight = Jimp.measureTextHeight(tnr, text, 500 - 40)
             textblack.resize(500, textheight)
-            await textblack.print(tnr, 20, 0, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, textblack.bitmap.width - 40, textblack.bitmap.height)
+            await Jimp.print(textblack, tnr, 20, 0, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, textblack.bitmap.width - 40, textblack.bitmap.height)
             var text2height = Jimp.measureTextHeight(arial, text2, 500 - 40)
             text2black.resize(500, text2height + 10)
-            await text2black.print(arial, 20, 5, { text: text2, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, text2black.bitmap.width - 40, text2black.bitmap.height - 10)
+            await Jimp.print(text2black, arial, 20, 5, { text: text2, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE }, text2black.bitmap.width - 40, text2black.bitmap.height - 10)
             bottomblack.resize(500, 20)
             bgblack.resize(500, textblack.bitmap.height + text2black.bitmap.height + bottomblack.bitmap.height)
             bgblack.composite(textblack, 0, 0)
@@ -179,7 +179,7 @@ module.exports = {
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

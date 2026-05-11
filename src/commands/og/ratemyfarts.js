@@ -5,7 +5,7 @@ module.exports = {
         let poopy = this
         let tempdata = poopy.tempdata
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (!msg.nosend) await msg.reply('Let\'s see...').catch(() => { })
         var fartRating = Math.floor(Math.random() * 101)
         if (!tempdata[msg.author.id].fartRate) {
@@ -23,7 +23,7 @@ module.exports = {
         if (!msg.nosend) await msg.reply(fartrate).catch(() => { })
         return fartrate
     },
-    help: { name: 'ratemyfarts', value: 'Poopy rates your farts.' },
+    help: { name: 'ratemyfarts', value: 'The bot rates your farts.' },
     cooldown: 2500,
     type: 'OG'
 }

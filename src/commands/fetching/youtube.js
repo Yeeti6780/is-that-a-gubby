@@ -1,13 +1,13 @@
 module.exports = {
     name: ['youtube', 'yt', 'video'],
-    args: [{"name":"query","required":true,"specifarg":false,"orig":"<query>"},{"name":"page","required":false,"specifarg":true,"orig":"[-page <number>]"}],
+    args: [{name: "query",required: true,specifarg: false,orig: "<query>"},{name: "page",required: false,specifarg: true,orig: "[-page <number>]"}],
     execute: async function (msg, args) {
         let poopy = this
         let { unescapeHTML, navigateEmbed, addLastUrl, execPromise } = poopy.functions
         let { axios, DiscordTypes, youtube } = poopy.modules
         let config = poopy.config
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (args[1] === undefined) {
             await msg.reply('What do I search for?!').catch(() => { })
             return;
@@ -65,18 +65,18 @@ module.exports = {
 
             if (config.textEmbeds) return `${urls[page - 1].url}\n\nVideo ${page}/${urls.length}`
             else return {
-                "title": "YouTube Video Search Results For " + search,
-                "description": `**[${urls[page - 1].title}](${urls[page - 1].url})**\n${urls[page - 1].description}`,
-                "color": 0x472604,
-                "footer": {
-                    "text": "Video " + page + "/" + urls.length
+                title: "YouTube Video Search Results For " + search,
+                description: `**[${urls[page - 1].title}](${urls[page - 1].url})**\n${urls[page - 1].description}`,
+                color: 0x472604,
+                footer: {
+                    text: "Video " + page + "/" + urls.length
                 },
-                "image": {
-                    "url": thumbresponse ? (thumbresponse.status >= 200 && thumbresponse.status < 300) ? urls[page - 1].thumb.replace('hqdefault', 'hq720') : urls[page - 1].thumb : urls[page - 1].thumb
+                image: {
+                    url: thumbresponse ? (thumbresponse.status >= 200 && thumbresponse.status < 300) ? urls[page - 1].thumb.replace('hqdefault', 'hq720') : urls[page - 1].thumb : urls[page - 1].thumb
                 },
-                "author": {
-                    "name": msg.author.tag,
-                    "icon_url": msg.author.displayAvatarURL({
+                author: {
+                    name: msg.author.tag,
+                    icon_url: msg.author.displayAvatarURL({
                         dynamic: true, size: 1024, extension: 'png'
                     })
                 }

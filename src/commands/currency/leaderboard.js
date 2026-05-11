@@ -8,7 +8,7 @@ module.exports = {
         let config = poopy.config
         let { chunkArray, toOrdinal, navigateEmbed } = poopy.functions
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
 
         var leaderboard = data.botData.leaderboard
         var leaderIds = Object.keys(leaderboard)

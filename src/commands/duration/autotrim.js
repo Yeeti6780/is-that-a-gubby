@@ -1,6 +1,6 @@
 module.exports = {
     name: ['autotrim', 'autocut'],
-    args: [{ "name": "file", "required": false, "specifarg": false, "orig": "{file}" }, { "name": "threshold", "required": false, "specifarg": true, "orig": "[-threshold <percentage>]" }, { "name": "silenceduration", "required": false, "specifarg": true, "orig": "[-silenceduration <seconds (from 0.1 to 10)>]" }, { "name": "trimmiddle", "required": false, "specifarg": true, "orig": "[-trimmiddle]" }],
+    args: [{ name: "file", required: false, specifarg: false, orig: "{file}" }, { name: "threshold", required: false, specifarg: true, orig: "[-threshold <percentage>]" }, { name: "silenceduration", required: false, specifarg: true, orig: "[-silenceduration <seconds (from 0.1 to 10)>]" }, { name: "trimmiddle", required: false, specifarg: true, orig: "[-trimmiddle]" }],
     execute: async function (msg, args) {
         let poopy = this
         let {
@@ -9,10 +9,10 @@ module.exports = {
         } = poopy.functions
         let { fs } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && args[2] === undefined) {
             await msg.reply('What is the file?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
 
@@ -26,7 +26,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -48,14 +48,14 @@ module.exports = {
 
                 if (silencedetect.length > 100 && trimmiddle) {
                     await msg.reply(`my brother in christ i'm not going to trim that video ${silencedetect.length} times`).catch(() => { })
-                    await msg.channel.sendTyping().catch(() => { })
+                    msg.channel.sendTyping().catch(() => { })
                     fs.rmSync(`${filepath}`, { force: true, recursive: true })
                     return
                 }
 
                 if (silencedetect.length == 1 && silencedetect[0][0] >= duration && silencedetect[0][1] >= duration) {
                     await msg.reply(`Everything is silent.`).catch(() => { })
-                    await msg.channel.sendTyping().catch(() => { })
+                    msg.channel.sendTyping().catch(() => { })
                     fs.rmSync(`${filepath}`, { force: true, recursive: true })
                     return
                 }
@@ -92,7 +92,7 @@ module.exports = {
                 return await sendFile(msg, filepath, `output.mp4`)
             } else {
                 await msg.reply('No audio stream detected.').catch(() => { })
-                await msg.channel.sendTyping().catch(() => { })
+                msg.channel.sendTyping().catch(() => { })
                 fs.rmSync(`${filepath}`, { force: true, recursive: true })
             }
         } else if (type.mime.startsWith('audio')) {
@@ -108,14 +108,14 @@ module.exports = {
 
             if (silencedetect.length > 150 && trimmiddle) {
                 await msg.reply(`my brother in christ i'm not going to trim that audio ${silencedetect.length} times`).catch(() => { })
-                await msg.channel.sendTyping().catch(() => { })
+                msg.channel.sendTyping().catch(() => { })
                 fs.rmSync(`${filepath}`, { force: true, recursive: true })
                 return
             }
 
             if (silencedetect.length == 1 && silencedetect[0][0] >= duration && silencedetect[0][1] >= duration) {
                 await msg.reply(`Everything is silent.`).catch(() => { })
-                await msg.channel.sendTyping().catch(() => { })
+                msg.channel.sendTyping().catch(() => { })
                 fs.rmSync(`${filepath}`, { force: true, recursive: true })
                 return
             }
@@ -151,7 +151,7 @@ module.exports = {
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

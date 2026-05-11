@@ -1,34 +1,34 @@
 module.exports = {
     name: ['badtranslate', 'badtr'],
-    args: [{ "name": "message", "required": true, "specifarg": false, "orig": "<message>" }, {
-        "name": "source", "required": false, "specifarg": true, "orig": "[-source <language>]",
-        "autocomplete": function () {
+    args: [{ name: "message", required: true, specifarg: false, orig: "<message>" }, {
+        name: "source", required: false, specifarg: true, orig: "[-source <language>]",
+        autocomplete: function () {
             let poopy = this
             return Object.entries(poopy.vars.languages).map(language => {
                 return { name: language[1], value: language[0] }
             })
         }
     }, {
-        "name": "target", "required": false, "specifarg": true, "orig": "[-target <language>]",
-        "autocomplete": function () {
+        name: "target", required: false, specifarg: true, orig: "[-target <language>]",
+        autocomplete: function () {
             let poopy = this
             return Object.entries(poopy.vars.languages).map(language => {
                 return { name: language[1], value: language[0] }
             })
         }
-    }, { "name": "languages", "required": false, "specifarg": true, "orig": "[-languages <number (max 50)>]" },
-    { "name": "details", "required": false, "specifarg": true, "orig": "[-details]" }],
+    }, { name: "languages", required: false, specifarg: true, orig: "[-languages <number (max 50)>]" },
+    { name: "details", required: false, specifarg: true, orig: "[-details]" }],
     execute: async function (msg, args) {
         let poopy = this
         let vars = poopy.vars
         let { getOption, fetchPingPerms } = poopy.functions
         let { axios } = poopy.modules
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         var details = getOption(args, 'details', { n: 0, splice: true, dft: false })
         if (args[1] === undefined) {
             await msg.reply('What is the text to translate?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         }
 

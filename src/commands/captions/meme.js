@@ -1,6 +1,6 @@
 module.exports = {
     name: ['meme'],
-    args: [{ "name": "topText", "required": false, "specifarg": false, "orig": "\"{topText}\"" }, { "name": "bottomText", "required": false, "specifarg": false, "orig": "\"[bottomText]\"" }, { "name": "file", "required": false, "specifarg": false, "orig": "{file}" }, { "name": "size", "required": false, "specifarg": true, "orig": "[-size <multiplier (from 0.5 to 5)>]" }],
+    args: [{ name: "topText", required: false, specifarg: false, orig: "\"{topText}\"" }, { name: "bottomText", required: false, specifarg: false, orig: "\"[bottomText]\"" }, { name: "file", required: false, specifarg: false, orig: "{file}" }, { name: "size", required: false, specifarg: true, orig: "[-size <multiplier (from 0.5 to 5)>]" }],
     execute: async function (msg, args) {
         let poopy = this
         let {
@@ -15,10 +15,10 @@ module.exports = {
             return
         }
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && vars.validUrl.test(args[args.length - 1]) === false) {
             await msg.reply('What is the file?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var size = 1
@@ -49,7 +49,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -68,8 +68,8 @@ module.exports = {
             transparent.resize(width, height)
             transparent.resize(Math.round(2000 / size), Jimp.AUTO)
             var transparent2 = transparent.clone()
-            await transparent.print(impact, 20, 20, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, transparent.bitmap.width - 40, transparent.bitmap.height - 40)
-            await transparent2.print(impact, 20, 20, { text: text2, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM }, transparent.bitmap.width - 40, transparent.bitmap.height - 40)
+            await Jimp.print(transparent, impact, 20, 20, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, transparent.bitmap.width - 40, transparent.bitmap.height - 40)
+            await Jimp.print(transparent2, impact, 20, 20, { text: text2, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM }, transparent.bitmap.width - 40, transparent.bitmap.height - 40)
             transparent.resize(width, height)
             transparent2.resize(width, height)
             await transparent.writeAsync(`${filepath}/caption.png`)
@@ -89,8 +89,8 @@ module.exports = {
             transparent.resize(width, height)
             transparent.resize(Math.round(2000 / size), Jimp.AUTO)
             var transparent2 = transparent.clone()
-            await transparent.print(impact, 20, 20, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, transparent.bitmap.width - 40, transparent.bitmap.height - 40)
-            await transparent2.print(impact, 20, 20, { text: text2, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM }, transparent.bitmap.width - 40, transparent.bitmap.height - 40)
+            await Jimp.print(transparent, impact, 20, 20, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, transparent.bitmap.width - 40, transparent.bitmap.height - 40)
+            await Jimp.print(transparent2, impact, 20, 20, { text: text2, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM }, transparent.bitmap.width - 40, transparent.bitmap.height - 40)
             transparent.resize(width, height)
             transparent2.resize(width, height)
             await transparent.writeAsync(`${filepath}/caption.png`)
@@ -110,8 +110,8 @@ module.exports = {
             transparent.resize(width, height)
             transparent.resize(Math.round(2000 / size), Jimp.AUTO)
             var transparent2 = transparent.clone()
-            await transparent.print(impact, 20, 20, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, transparent.bitmap.width - 40, transparent.bitmap.height - 40)
-            await transparent2.print(impact, 20, 20, { text: text2, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM }, transparent.bitmap.width - 40, transparent.bitmap.height - 40)
+            await Jimp.print(transparent, impact, 20, 20, { text: text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_TOP }, transparent.bitmap.width - 40, transparent.bitmap.height - 40)
+            await Jimp.print(transparent2, impact, 20, 20, { text: text2, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM }, transparent.bitmap.width - 40, transparent.bitmap.height - 40)
             transparent.resize(width, height)
             transparent2.resize(width, height)
             await transparent.writeAsync(`${filepath}/caption.png`)
@@ -124,7 +124,7 @@ module.exports = {
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

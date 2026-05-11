@@ -4,7 +4,7 @@ let functions = {}
 
 functions.spawn = require('child_process').spawn
 functions.exec = require('child_process').exec
-functions.getEmojis = require('@jimp/plugin-print/emojis')
+functions.getEmojis = require('../lib/jimpPrint/getEmojis')
 functions.lingo = require('./lingo')
 functions.gibberish = require('./gibberish')
 functions.markov = require('./markov')
@@ -157,23 +157,25 @@ functions.getOption = function (args, name, {
         if (join) option = option.join(' ')
         return n == 0 ? true : isNaN(Number(option)) ? option : Number(option)
     }
-    return dft
+    return (typeof dft == "function" ? dft() : dft)
 }
 
 functions.parseNumber = function (str, {
     dft = undefined, min = -Infinity, max = Infinity, round = false
 } = {}) {
-    if (str === undefined || str === '') return dft
+    if (str === undefined || str === '') return (typeof dft == "function" ? dft() : dft)
     var number = Number(str)
-    return isNaN(number) ? dft : (round ? Math.round(Math.max(Math.min(number, max), min)) : Math.max(Math.min(number, max), min)) ?? dft
+    return isNaN(number) ? (typeof dft == "function" ? dft() : dft)
+        : (round ? Math.round(Math.max(Math.min(number, max), min))
+            : Math.max(Math.min(number, max), min)) ?? (typeof dft == "function" ? dft() : dft)
 }
 
 functions.parseString = function (str, validList, {
     dft = undefined, lower = false, upper = false
 } = {}) {
-    if (str == undefined || str === '') return dft
+    if (str == undefined || str === '') return (typeof dft == "function" ? dft() : dft)
     var query = upper ? str.toUpperCase() : lower ? str.toLowerCase() : str
-    return validList.find(q => q == query) || dft
+    return validList.find(q => q == query) || (typeof dft == "function" ? dft() : dft)
 }
 
 functions.parseKeyword = function (keyword) {
@@ -211,7 +213,11 @@ functions.parseRegExp = function (pattern, flags = "iu") {
             .replace(/\s+/g, "")
     }
 
-    return new RegExp(pattern, Array.from(flags).join(''))
+    try {
+        return new RegExp(pattern, Array.from(flags).join(''))
+    } catch (_) {
+        return /(?!.*)/
+    }
 }
 
 functions.getAllMatches = function (regex, content, group = 0) {
@@ -547,6 +553,31 @@ functions.markovMe = function (markovChain, text = '', options = {}) {
     return result
 }
 
+functions.updateGenAiModel = async function (
+    msg,
+    { sample, remove = false } = {}
+) {
+    let poopy = this;
+    let tempdata = poopy.tempdata;
+    let { GenAIWorker } = poopy.modules;
+
+    if (!tempdata[msg.guild.id].messageModel) {
+        tempdata[msg.guild.id].messageModel = new GenAIWorker(
+            tempdata[msg.guild.id].messages.map(m => m.content)
+        );
+    }
+
+    const modelWorker = tempdata[msg.guild.id].messageModel;
+
+    if (sample) {
+        if (remove) {
+            await modelWorker.undo(sample);
+        } else {
+            await modelWorker.train(sample);
+        }
+    }
+}
+
 functions.findpreset = function (args) {
     var presets = [
         'ultrafast',
@@ -604,7 +635,10 @@ functions.configFlagsEnabled = function (reqConfigs = []) {
 
 functions.fetchPingPerms = function (msg) {
     let poopy = this
+    let data = poopy.data
     let { DiscordTypes } = poopy.modules
+
+    const allowedGroups = data.userData[msg.author?.id]?.allowedMentions ?? []
 
     const hasPingPerms = (
         msg.member?.permissions?.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
@@ -617,9 +651,9 @@ functions.fetchPingPerms = function (msg) {
     if (!userPings.includes(msg.author.id)) userPings.push(msg.author.id)
 
     return {
-        parse: [],
-        roles: rolePings,
-        users: userPings,
+        parse: hasPingPerms ? allowedGroups : [],
+        roles: hasPingPerms && (allowedGroups.includes("roles") || allowedGroups.includes("everyone")) ? undefined : rolePings,
+        users: hasPingPerms && (allowedGroups.includes("users") || allowedGroups.includes("everyone")) ? undefined : userPings,
         repliedUser: true
     }
 }
@@ -735,6 +769,11 @@ functions.execPromise = function (code, opts = {}) {
             procExited = true
             handleExit()
         })
+
+        if (opts.stdin) {
+            proc.stdin.write(opts.stdin)
+            proc.stdin.end()
+        }
     })
 }
 
@@ -2493,14 +2532,14 @@ functions.displayShops = async function (msg, shopType, shopMsg) {
         }
         else {
             shopObject.embeds = [{
-                "title": "Shop Options",
-                "description": instruction,
-                "color": 0x472604,
-                "footer": {
-                    "icon_url": bot.user.displayAvatarURL({
+                title: "Shop Options",
+                description: instruction,
+                color: 0x472604,
+                footer: {
+                    icon_url: bot.user.displayAvatarURL({
                         dynamic: true, size: 1024, extension: 'png'
                     }),
-                    "text": bot.user.displayName
+                    text: bot.user.displayName
                 },
             }]
         }
@@ -4176,10 +4215,10 @@ functions.createLog = async function (type, member, logData) {
 
     const guild = member.guild
 
-    const logChannelID = data.guildData[guild.id]?.logging[type]
+    const logChannelID = data.guildData[guild?.id]?.logging[type]
     if (!logChannelID) return
 
-    const logChannel = guild.channels.cache.get(logChannelID) ?? await guild.channels.fetch(logChannelID).catch(() => { })
+    const logChannel = guild?.channels?.cache?.get(logChannelID) ?? await guild?.channels?.fetch(logChannelID).catch(() => { })
     if (!logChannel) return
 
     const logPayload = {
@@ -4200,7 +4239,7 @@ functions.createLog = async function (type, member, logData) {
 
             if (webhookMsg?.embeds && webhookMsg?.embeds?.some(e => e.data.title == "Webhook message sent")) return
 
-            const attachments = webhookMsg.attachments
+            const attachments = webhookMsg.attachments ?? []
             logPayload.files = attachments.map(a => new Discord.AttachmentBuilder(a.attachment))
 
             const footerAvatar = payload.avatarURL ?? webhookMsg.author.displayAvatarURL({ dynamic: true, size: 1024, extension: "png" }) ?? ""
@@ -4313,7 +4352,7 @@ functions.createCronJob = async function (cronData) {
     let bot = poopy.bot
     let tempdata = poopy.tempdata
     let { cron, DummyMessage } = poopy.modules
-    let { sleep, getKeywordsFor } = poopy.functions
+    let { sleep, getKeywordsFor, fetchPingPerms, gatherData, deleteMsgData } = poopy.functions
 
     const timerId = cronData.id
 
@@ -4345,6 +4384,7 @@ functions.createCronJob = async function (cronData) {
 
     const cronTime = cronData.cron
     const phrase = cronData.phrase
+    const allowAnyPings = cronData.allowAnyPings
 
     const execute = async () => {
         if (!channel?.send) return
@@ -4357,13 +4397,22 @@ functions.createCronJob = async function (cronData) {
                 poopy, guild, channel, member
             }, phrase)
 
+            var dataError = false
+            await gatherData(dummyMessage).catch((err) => dataError = err)
+            if (dataError) return console.log(dummyMessage)
+
             const evaluatedPhrase = await getKeywordsFor(phrase, dummyMessage, true, { resetAttempts: true }).catch(() => { }) ?? phrase
 
-            cronMessage = await channel.send(evaluatedPhrase).catch((err) => {
+            if (evaluatedPhrase.trim()) cronMessage = await channel.send({
+                content: evaluatedPhrase,
+                allowedMentions: !allowAnyPings ? fetchPingPerms(dummyMessage) : undefined
+            }).catch((err) => {
                 if (!err.message.includes("discord.com")) abort = true
             })
 
-            if (cronMessage || abort) break
+            deleteMsgData(dummyMessage)
+
+            if (!evaluatedPhrase.trim() || cronMessage || abort) break
 
             await sleep(5000)
         }
@@ -4938,7 +4987,7 @@ functions.battle = async function (msg, subject, action, damage, chance) {
     } = poopy.functions
     let { Discord } = poopy.modules
 
-    await msg.channel.sendTyping().catch(() => { })
+    msg.channel.sendTyping().catch(() => { })
     var attachment = msg.attachments.first()?.url
     var sticker = msg.stickers[0]?.url
 
@@ -5292,7 +5341,7 @@ functions.battleGif = async function (subject, subjData, member, attacked, died,
     var subjShieldFileName = subjShield && `${subjShield.id}.png`
     var subjShieldImagePath = subjShield && `assets/image/shields/${subjShieldFileName}`
 
-    filepath = await downloadFile(avatar, 'avatar.png')
+    var filepath = await downloadFile(avatar, 'avatar.png')
 
     var spazz = () => `+(random(t+${Math.floor(Math.random() * 1000)})*2-1)*(0.4-mod(t,0.4))*15`
     var bossX = () => `+cos(PI/2*((t+${i + 1}*0.4)/0.4))*10`
@@ -5543,7 +5592,8 @@ functions.downloadFile = async function (url, filename, options) {
     let config = poopy.config
     let vars = poopy.vars
     let tempfiles = poopy.tempfiles
-    let { infoPost, execPromise } = poopy.functions
+    let tempdata = poopy.tempdata
+    let { infoPost, execPromise, cleanFileInfoUrl } = poopy.functions
     let { fs, axios } = poopy.modules
 
     url = url || ' '
@@ -5570,15 +5620,29 @@ functions.downloadFile = async function (url, filename, options) {
         }
     }
 
-    if (!options.buffer && url.startsWith('temp:')) {
-        options.buffer = true
-        url = fs.readFileSync(`tempfiles/${config.database}/${tempfiles[url.substring(5)].name}`)
+    var hasTempFile = false
+
+    if (!options.buffer) {
+        var fileInfoUrl = cleanFileInfoUrl(url)
+        var validatedFile = tempdata.validatedFiles[fileInfoUrl]
+        var fileInfo = validatedFile?.fileInfo
+
+        if (url.startsWith('temp:')) {
+            options.buffer = true
+            url = fs.readFileSync(`tempfiles/${config.database}/${tempfiles[url.substring(5)].name}`)
+        } else if (fileInfo && fs.existsSync(fileInfo.path)) {
+            hasTempFile = true
+            if (!options.fileinfo) options.fileinfo = fileInfo
+            url = fileInfo.path
+        }
     }
 
-    if (options.buffer) {
+    var isSameInfo = !(options.fileinfo) ? true : ((options.fileinfo.shortext === options.fileinfo.type.ext) && (options.fileinfo.shortpixfmt === options.fileinfo.info.pixfmt))
+
+    if (options.buffer || (hasTempFile && isSameInfo)) {
         infoPost(`Downloading file through buffer with name \`${filename}\``)
-        fs.writeFileSync(`${filepath}/${filename}`, url)
-    } else if (((!(options.fileinfo) ? true : ((options.fileinfo.shortext === options.fileinfo.type.ext) && (options.fileinfo.shortpixfmt === options.fileinfo.info.pixfmt))) || options.http) && !(options.ffmpeg)) {
+        fs.writeFileSync(`${filepath}/${filename}`, options.buffer ? url : options.fileinfo.buffer)
+    } else if ((isSameInfo || options.http) && !(options.ffmpeg)) {
         infoPost(`Downloading file through URL with name \`${filename}\``)
         var response = await axios({
             method: 'GET',
@@ -5890,10 +5954,19 @@ functions.getUploadLimit = function (msg) {
     }
 }
 
+functions.cleanFileInfoUrl = function (url) {
+    if (url.match(/https?:\/\/(?:media|cdn)\.discordapp\.(?:net|com)\/attachments/)) {
+        url = url.replace(/\?(?:ex|is|hm)=.+$/, "")
+    }
+
+    return url
+}
+
 functions.validateFileFromPath = async function (path, exception, rejectMessages) {
     let poopy = this
     let config = poopy.config
     let vars = poopy.vars
+    let tempdata = poopy.tempdata
     let { infoPost, execPromise } = poopy.functions
     let { fs, fileType } = poopy.modules
 
@@ -5914,6 +5987,13 @@ functions.validateFileFromPath = async function (path, exception, rejectMessages
         if (!fs.existsSync(path)) {
             reject('File not found.')
             return
+        }
+
+        var revalidationTime = 60_000 * 10
+        var validatedFile = tempdata.validatedFiles[path]
+
+        if (validatedFile && (Date.now() - validatedFile.fetchedTime) < revalidationTime) {
+            return validatedFile.fileInfo
         }
 
         var type = await fileType.fromFile(path).catch(() => { })
@@ -5968,10 +6048,12 @@ functions.validateFileFromPath = async function (path, exception, rejectMessages
         info.size = buffer.length / 1048576
         info.realsize = buffer.length
 
-        var json = await execPromise(`ffprobe -of json -show_streams -show_format ${path}`)
+        var json = await execPromise(`ffprobe -of json -show_streams -show_format "${path}"`)
         if (json) {
             try {
                 var jsoninfo = JSON.parse(json)
+                info.json = jsoninfo
+
                 if (jsoninfo["streams"]) {
                     var videoStream = jsoninfo["streams"].find(stream => stream["codec_type"] === 'video')
                     var audioStream = jsoninfo["streams"].find(stream => stream["codec_type"] === 'audio')
@@ -6014,7 +6096,7 @@ functions.validateFileFromPath = async function (path, exception, rejectMessages
 
         infoPost(`File \`${names[names.length - 1]}\` was successfully validated`)
 
-        resolve({
+        var fileInfo = {
             type: type,
             shorttype: shorttype,
             shortext: shortext,
@@ -6023,7 +6105,14 @@ functions.validateFileFromPath = async function (path, exception, rejectMessages
             info: info,
             path: `data:${type.mime};base64,${buffer.toString('base64')}`,
             buffer: buffer
-        })
+        }
+
+        tempdata.validatedFiles[path] = {
+            fetchedTime: Date.now(),
+            fileInfo
+        }
+
+        resolve(fileInfo)
     })
 }
 
@@ -6032,8 +6121,9 @@ functions.validateFile = async function (url, exception, rejectMessages) {
     let config = poopy.config
     let vars = poopy.vars
     let tempfiles = poopy.tempfiles
-    let { infoPost, execPromise, validateFileFromPath } = poopy.functions
-    let { fileType, axios } = poopy.modules
+    let tempdata = poopy.tempdata
+    let { infoPost, execPromise, validateFileFromPath, generateId, cleanFileInfoUrl } = poopy.functions
+    let { fileType, axios, fs } = poopy.modules
 
     return new Promise(async (resolve, reject) => {
         url = url || ' '
@@ -6065,29 +6155,27 @@ functions.validateFile = async function (url, exception, rejectMessages) {
             return
         }
 
+        var revalidationTime = 60_000 * 10
+        var fileInfoUrl = cleanFileInfoUrl(url)
+        var validatedFile = tempdata.validatedFiles[fileInfoUrl]
+
+        if (validatedFile && (Date.now() - validatedFile.fetchedTime) < revalidationTime) {
+            resolve(validatedFile.fileInfo)
+            return
+        }
+
         var response = await axios({
             method: 'GET',
-            url: url,
+            url,
             responseType: 'stream',
             validateStatus: () => true,
             maxBodyLength: 1024 * 1024 * 200,
             maxContentLength: 1024 * 1024 * 200
-        }).catch((err) => {
+        }).catch(err => {
             reject(err.message)
         })
 
-        var bufferresponse = await axios({
-            method: 'GET',
-            url: url,
-            responseType: 'arraybuffer',
-            validateStatus: () => true,
-            maxBodyLength: 1024 * 1024 * 200,
-            maxContentLength: 1024 * 1024 * 200
-        }).catch(() => { }) ?? { data: '' }
-
-        if (!response) {
-            return
-        }
+        if (!response) return
 
         if (!(response.status >= 200 && response.status < 300)) {
             reject(`${response.status} ${response.statusText}`)
@@ -6095,12 +6183,24 @@ functions.validateFile = async function (url, exception, rejectMessages) {
         }
 
         var headers = response.headers
-        var type = await fileType.fromStream(response.data).catch(() => { })
+
+        var chunks = []
+
+        for await (var chunk of response.data) {
+            chunks.push(chunk)
+        }
+
+        var buffer = Buffer.concat(chunks)
+
+        var type = await fileType.fromBuffer(buffer).catch(() => { })
 
         if (!type) {
-            var contentType = headers['Content-Type'] || headers['content-type']
+            var contentType = headers['content-type'] || headers['Content-Type']
             var mime = contentType.match(/[^;]+/)
-            type = { mime: mime[0], ext: mime[0].split('/')[1] }
+            type = {
+                mime: mime[0],
+                ext: mime[0].split('/')[1]
+            }
         }
 
         var info = {
@@ -6159,14 +6259,20 @@ functions.validateFile = async function (url, exception, rejectMessages) {
             info.size = Number(contentLength) / 1048576
             info.realsize = Number(contentLength)
         } else {
-            info.size = bufferresponse.data.length / 1048576
-            info.realsize = bufferresponse.data.length
+            info.size = buffer.length / 1048576
+            info.realsize = buffer.length
         }
 
-        var json = await execPromise(`ffprobe -of json -show_streams -show_format "${url}"`).catch(() => { })
+        var tempFilePath = `tempfiles/${config.database}/${generateId()}.${type.ext}`
+        fs.writeFileSync(tempFilePath, buffer)
+        setTimeout(() => fs.rmSync(tempFilePath), revalidationTime)
+
+        var json = await execPromise(`ffprobe -of json -show_streams -show_format ${tempFilePath}`).catch(() => { })
         if (json) {
             try {
                 var jsoninfo = JSON.parse(json)
+                info.json = jsoninfo
+
                 if (jsoninfo["streams"]) {
                     var videoStream = jsoninfo["streams"].find(stream => stream["codec_type"] === 'video')
                     var audioStream = jsoninfo["streams"].find(stream => stream["codec_type"] === 'audio')
@@ -6209,16 +6315,23 @@ functions.validateFile = async function (url, exception, rejectMessages) {
 
         infoPost(`File \`${name}\` was successfully validated`)
 
-        resolve({
+        var fileInfo = {
             type: type,
             shorttype: shorttype,
             shortext: shortext,
             shortpixfmt: shortpixfmt,
             name: name,
             info: info,
-            path: url,
-            buffer: bufferresponse.data
-        })
+            path: tempFilePath,
+            buffer: buffer
+        }
+
+        tempdata.validatedFiles[fileInfoUrl] = {
+            fetchedTime: Date.now(),
+            fileInfo
+        }
+
+        resolve(fileInfo)
     })
 }
 
@@ -6919,7 +7032,7 @@ functions.pronouns = async function (user, guild) {
         var pileOfPronouns = new Set()
 
         var pronounElements = pronounsString.split('/')
-        for (pronoun of pronounElements) {
+        for (var pronoun of pronounElements) {
             pronoun = pronoun.trim().toLowerCase().replace(/[^ \/a-zA-Z0-9]/, '')
 
             switch (pronoun) {

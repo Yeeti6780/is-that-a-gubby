@@ -3,11 +3,11 @@ module.exports = {
         'av',
         'pfp'],
     args: [{
-        "name": "user",
-        "required": false,
-        "specifarg": false,
-        "orig": "[user]",
-        "autocomplete": async function (interaction) {
+        name: "user",
+        required: false,
+        specifarg: false,
+        orig: "[user]",
+        autocomplete: async function (interaction) {
             let poopy = this
             let { data, config } = poopy
             let { dataGather } = poopy.functions
@@ -25,10 +25,10 @@ module.exports = {
         }
     },
     {
-        "name": "global",
-        "required": false,
-        "specifarg": true,
-        "orig": "[-global]"
+        name: "global",
+        required: false,
+        specifarg: true,
+        orig: "[-global]"
     }],
     execute: async function (msg, args) {
         let poopy = this
@@ -37,7 +37,7 @@ module.exports = {
         let { Discord } = poopy.modules
         let { fetchPingPerms, getOption, resolveUser } = poopy.functions
 
-        await msg.channel.sendTyping().catch(() => {})
+        msg.channel.sendTyping().catch(() => {})
 
         var global = getOption(args, 'global', { n: 0, splice: true, dft: false })
 

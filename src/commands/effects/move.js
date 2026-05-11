@@ -1,6 +1,6 @@
 module.exports = {
     name: ['move'],
-    args: [{"name":"x","required":true,"specifarg":false,"orig":"<x>"},{"name":"y","required":true,"specifarg":false,"orig":"<y>"},{"name":"file","required":false,"specifarg":false,"orig":"{file}"}],
+    args: [{name: "x",required: true,specifarg: false,orig: "<x>"},{name: "y",required: true,specifarg: false,orig: "<y>"},{name: "file",required: false,specifarg: false,orig: "{file}"}],
     execute: async function (msg, args) {
         let poopy = this
         let {
@@ -10,23 +10,23 @@ module.exports = {
         let { DiscordTypes } = poopy.modules
         let vars = poopy.vars
 
-        await msg.channel.sendTyping().catch(() => { })
+        msg.channel.sendTyping().catch(() => { })
         if (lastUrl(msg, 0) === undefined && args[2] === undefined) {
             await msg.reply('What is the file?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         };
         var currenturl = lastUrl(msg, 0)
         var x = isNaN(Number(args[1])) ? undefined : Number(args[1]) ?? undefined
         if (x === undefined) {
             await msg.reply('What is the X coordinate?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         }
         var y = isNaN(Number(args[2])) ? undefined : Number(args[2]) ?? undefined
         if (y === undefined) {
             await msg.reply('What is the Y coordinate?!').catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         }
         var fileinfo = await validateFile(currenturl, true).catch(async error => {
@@ -34,7 +34,7 @@ module.exports = {
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return;
         })
 
@@ -67,7 +67,7 @@ module.exports = {
                 content: `Unsupported file: \`${currenturl}\``,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
-            await msg.channel.sendTyping().catch(() => { })
+            msg.channel.sendTyping().catch(() => { })
             return
         }
     },

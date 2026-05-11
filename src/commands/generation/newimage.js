@@ -1,6 +1,6 @@
 module.exports = {
   name: ['newimage', 'makeimage'],
-  args: [{"name":"width","required":true,"specifarg":false,"orig":"<width (max 2000)>"},{"name":"height","required":true,"specifarg":false,"orig":"<height (max 2000)>"},{"name":"r","required":true,"specifarg":false,"orig":"<r>"},{"name":"g","required":true,"specifarg":false,"orig":"<g>"},{"name":"b","required":true,"specifarg":false,"orig":"<b>"},{"name":"a","required":false,"specifarg":false,"orig":"[a]"}],
+  args: [{name: "width",required: true,specifarg: false,orig: "<width (max 2000)>"},{name: "height",required: true,specifarg: false,orig: "<height (max 2000)>"},{name: "r",required: true,specifarg: false,orig: "<r>"},{name: "g",required: true,specifarg: false,orig: "<g>"},{name: "b",required: true,specifarg: false,orig: "<b>"},{name: "a",required: false,specifarg: false,orig: "[a]"}],
   execute: async function (msg, args) {
     let poopy = this
     let vars = poopy.vars
@@ -8,10 +8,10 @@ module.exports = {
     let { fs } = poopy.modules
     let { execPromise, sendFile } = poopy.functions
 
-    await msg.channel.sendTyping().catch(() => { })
+    msg.channel.sendTyping().catch(() => { })
     if (args.length < 6) {
       await msg.reply('Where are all the required arguments?!').catch(() => { })
-      await msg.channel.sendTyping().catch(() => { })
+      msg.channel.sendTyping().catch(() => { })
       return;
     }
 
