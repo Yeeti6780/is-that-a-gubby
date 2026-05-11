@@ -5,7 +5,7 @@ module.exports = {
         let poopy = this
         let { splitKeyFunc, validateFile, downloadFile, sendFile } = poopy.functions
         let globaldata = poopy.globaldata
-        let { axios, DiscordTypes } = poopy.modules
+        let { DiscordTypes } = poopy.modules
         let tempdata = poopy.tempdata
         let data = poopy.data
         let config = poopy.config
@@ -16,7 +16,7 @@ module.exports = {
         var name = split[1]
         var message = split[2]
         
-        if (!url || !(await axios.get(url).catch(() => { }))) return word
+        if (!url) return ''
 
         var guildfilter = config.guildfilter
         var channelfilter = config.channelfilter
@@ -82,7 +82,7 @@ module.exports = {
         
         data.guildData[msg.guild.id].members[msg.author.id].coolDown = (data.guildData[msg.guild.id].members[msg.author.id].coolDown || Date.now()) + 2500 / ((msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerId) ? 5 : 1)
 
-        var fileinfo = await validateFile(url, 'very true').catch(() => { })
+        var fileinfo = await validateFile(url, 'very true', { noPathsAllowed: true }).catch(() => { })
         if (!fileinfo) return word
         var filepath = await downloadFile(fileinfo.buffer, fileinfo.name, { buffer: true })
         await sendFile(msg, filepath, fileinfo.name, {

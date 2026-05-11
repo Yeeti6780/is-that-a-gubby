@@ -8,7 +8,7 @@ module.exports = {
     var word = matches[1]
 
     var error
-    var fileinfo = await validateFile(word, 'very true').catch(err => {
+    var fileinfo = await validateFile(word, 'very true', { noPathsAllowed: true }).catch(err => {
       error = err
     })
     if (error) return error

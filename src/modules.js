@@ -6,6 +6,7 @@ modules.DiscordTypes = require('discord-api-types/v10')
 
 modules.fs = require('fs-extra')
 modules.nodefs = require('fs')
+modules.path = require('path')
 modules.archiver = require('archiver')
 modules.fileType = require('file-type')
 modules.axios = require('axios')

@@ -130,7 +130,7 @@ vars.defaultConfig = {
     msgcooldown: 0,
     pingresponselimit: 0,
     pingresponsecooldown: 60000,
-    limits: {
+    limits: { rejectMessages: {
         size: {
             image: 25,
             gif: 25,
@@ -154,7 +154,7 @@ vars.defaultConfig = {
             gif: 1500,
             video: 2500,
             message: `the height of that file exceeds the limit of {param} hahahaha (try to use the shrink command)`
-        }
+        }}
     },
     limitsexcept: {
         size: {

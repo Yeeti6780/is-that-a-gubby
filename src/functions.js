@@ -5666,10 +5666,13 @@ functions.downloadFile = async function (url, filename, options) {
     return filepath
 }
 
-functions.uploadToFileHost = async function (filepath, filename) {
+functions.uploadToFileHost = async function (file) {
     let poopy = this
     let vars = poopy.vars
-    let { axios, FormData, fs } = poopy.modules
+    let { axios, FormData, fs, path } = poopy.modules
+
+    const filepath = path.dirname(file)
+    const filename = path.basename(file)
 
     const uploadHosts = [
         async () => vars.Catbox.upload(`${filepath}/${filename}`),
@@ -5839,7 +5842,7 @@ functions.sendFile = async function (msg, filepath, filename, extraOptions) {
     if (extraOptions.catbox || (tooLarge && !extraOptions.nosend)) {
         if (tooLarge && !extraOptions.catbox && !extraOptions.nosend) await msg.reply(`${extraOptions.nocompress ? "Output file too" : "Still"} large${extraOptions.nocompress ? " to be sent to channel" : ""}, guess I\'m gonna try uploading it to a file hosting service.`).catch(() => { })
         infoPost(`Uploading to a file hosting service`)
-        var fileLink = await uploadToFileHost(filepath, filename).catch(() => { })
+        var fileLink = await uploadToFileHost(`${filepath}/${filename}`).catch(() => { })
 
         if (fileLink) {
             var isUrl = vars.validUrl.test(fileLink)
@@ -5914,7 +5917,7 @@ functions.sendFile = async function (msg, filepath, filename, extraOptions) {
         if (!fileMsg) {
             await msg.reply('There was an error sending the file, so I\'m gonna try uploading it to a file hosting service.').catch(() => { })
             infoPost(`Failed to send file to channel, uploading to a file hosting service`)
-            var fileLink = await uploadToFileHost(filepath, filename).catch(() => { })
+            var fileLink = await uploadToFileHost(`${filepath}/${filename}`).catch(() => { })
 
             if (fileLink) {
                 var isUrl = vars.validUrl.test(fileLink)
@@ -5962,7 +5965,7 @@ functions.cleanFileInfoUrl = function (url) {
     return url
 }
 
-functions.validateFileFromPath = async function (path, exception, rejectMessages) {
+functions.validateFileFromPath = async function (path, exception, opts) {
     let poopy = this
     let config = poopy.config
     let vars = poopy.vars
@@ -6084,7 +6087,7 @@ functions.validateFileFromPath = async function (path, exception, rejectMessages
             for (var paramName in info) {
                 if (limitObject[paramName]) {
                     var param = info[paramName]
-                    var rejectMessage = rejectMessages ? rejectMessages[paramName] : limitObject[paramName].message
+                    var rejectMessage = opts?.rejectMessages ? opts.rejectMessages[paramName] : limitObject[paramName].message
 
                     if (param > limitObject[paramName][shorttype]) {
                         reject(rejectMessage.replace('{param}', limitObject[paramName][shorttype]))
@@ -6116,7 +6119,7 @@ functions.validateFileFromPath = async function (path, exception, rejectMessages
     })
 }
 
-functions.validateFile = async function (url, exception, rejectMessages) {
+functions.validateFile = async function (url, exception, opts) {
     let poopy = this
     let config = poopy.config
     let vars = poopy.vars
@@ -6141,7 +6144,7 @@ functions.validateFile = async function (url, exception, rejectMessages) {
         }
 
         if (url.startsWith('temp:')) {
-            if (tempfiles[url.substring(5)]) await validateFileFromPath(`tempfiles/${config.database}/${tempfiles[url.substring(5)].name}`, exception, rejectMessages)
+            if (tempfiles[url.substring(5)]) await validateFileFromPath(`tempfiles/${config.database}/${tempfiles[url.substring(5)].name}`, exception, opts)
                 .then(res => resolve(res))
                 .catch(res => reject(res))
             else reject('Tempfile unavailable.')
@@ -6149,7 +6152,9 @@ functions.validateFile = async function (url, exception, rejectMessages) {
         }
 
         if (!vars.validUrl.test(url)) {
-            await validateFileFromPath(url, exception, rejectMessages)
+            if (opts?.noPathsAllowed) return reject('Invalid URL.')
+
+            await validateFileFromPath(url, exception, opts)
                 .then(res => resolve(res))
                 .catch(res => reject(res))
             return
@@ -6303,7 +6308,7 @@ functions.validateFile = async function (url, exception, rejectMessages) {
             for (var paramName in info) {
                 if (limitObject[paramName]) {
                     var param = info[paramName]
-                    var rejectMessage = rejectMessages ? rejectMessages[paramName] : limitObject[paramName].message
+                    var rejectMessage = opts?.rejectMessages ? opts?.rejectMessages[paramName] : limitObject[paramName].message
 
                     if (param > limitObject[paramName][shorttype]) {
                         reject(rejectMessage.replace('{param}', limitObject[paramName][shorttype]))

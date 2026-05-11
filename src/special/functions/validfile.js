@@ -11,7 +11,7 @@ module.exports = {
     var exception = split[1] ?? false
 
     var error
-    await validateFile(url, exception).catch(err => {
+    await validateFile(url, exception, { noPathsAllowed: true }).catch(err => {
       error = err
     })
     if (error) return error

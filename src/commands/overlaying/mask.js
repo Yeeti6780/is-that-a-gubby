@@ -72,12 +72,12 @@ module.exports = {
             currenturl2 = c
         }
         var errors = {}
-        var fileinfo = await validateFile(currenturl, false, {
+        var fileinfo = await validateFile(currenturl, false, { rejectMessages: {
             size: `the first file exceeds the size limit of {param} mb hahahaha (try to use the shrink, setfps, trim or crunch commands)`,
             frames: `the frames of the first file exceed the limit of {param} hahahaha (try to use the setfps or the trim commands)`,
             width: `the width of the first file exceeds the limit of {param} hahahaha (try to use the shrink command)`,
             height: `the height of the first file exceeds the limit of {param} hahahaha (try to use the shrink command)`
-        }).catch(async error => {
+        }}).catch(async error => {
             await msg.reply({
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
@@ -87,12 +87,12 @@ module.exports = {
         })
         if (!fileinfo) return
         var filetype = fileinfo.type
-        var fileinfo2 = await validateFile(currenturl2, false, {
+        var fileinfo2 = await validateFile(currenturl2, false, { rejectMessages: {
             size: `the second file exceeds the size limit of {param} mb hahahaha (try to use the shrink, setfps, trim or crunch commands)`,
             frames: `the frames of the second file exceed the limit of {param} hahahaha (try to use the setfps or the trim commands)`,
             width: `the width of the second file exceeds the limit of {param} hahahaha (try to use the shrink command)`,
             height: `the height of the second file exceeds the limit of {param} hahahaha (try to use the shrink command)`
-        }).catch(async error => {
+        }}).catch(async error => {
             await msg.reply({
                 content: error,
                 allowedMentions: fetchPingPerms(msg)
