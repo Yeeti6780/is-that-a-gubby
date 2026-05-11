@@ -1,12 +1,12 @@
 module.exports = {
     name: ['setstatus', 'ss'],
-    args: [{ "name": "type", "required": true, "specifarg": false, "orig": "<type (Streaming, Watching, Playing, Listening or Competing)>", "autocomplete": [
+    args: [{ name: "type", required: true, specifarg: false, orig: "<type (Streaming, Watching, Playing, Listening or Competing)>", autocomplete: [
         'Playing',
         'Listening',
         'Watching',
         'Streaming',
         'Competing'
-    ] }, { "name": "statusMessage", "required": true, "specifarg": false, "orig": "<statusMessage>" }, { "name": "permanent", "required": false, "specifarg": true, "orig": "[-permanent]" }],
+    ] }, { name: "statusMessage", required: true, specifarg: false, orig: "<statusMessage>" }, { name: "permanent", required: false, specifarg: true, orig: "[-permanent]" }],
     execute: async function (msg, args, opts) {
         let poopy = this
         let config = poopy.config

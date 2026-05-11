@@ -1,6 +1,6 @@
 module.exports = {
     name: ['distort', 'earrape', 'bassboost'],
-    args: [{"name":"distort","required":false,"specifarg":false,"orig":"{distort (from 0 to 100)}"},{"name":"file","required":false,"specifarg":false,"orig":"{file}"}],
+    args: [{name: "distort",required: false,specifarg: false,orig: "{distort (from 0 to 100)}"},{name: "file",required: false,specifarg: false,orig: "{file}"}],
     execute: async function (msg, args) {
         let poopy = this
         let {

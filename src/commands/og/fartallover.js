@@ -1,6 +1,6 @@
 module.exports = {
     name: ['fartallover', 'fart'],
-    args: [{ "name": "subject", "required": true, "specifarg": false, "orig": "<subject>" }],
+    args: [{ name: "subject", required: true, specifarg: false, orig: "<subject>" }],
     execute: async function (msg, args) {
         let poopy = this
         let { Discord } = poopy.modules

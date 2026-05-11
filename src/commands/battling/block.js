@@ -1,8 +1,8 @@
 module.exports = {
     name: ['block'],
     args: [{
-        "name": "subject", "required": true, "specifarg": false, "orig": "<subject>",
-        "autocomplete": async function (interaction) {
+        name: "subject", required: true, specifarg: false, orig: "<subject>",
+        autocomplete: async function (interaction) {
             let poopy = this
             let { data, config } = poopy
             let { dataGather } = poopy.functions
@@ -105,14 +105,14 @@ module.exports = {
                 }).catch(() => { })
                 else msg.reply({
                     embeds: [{
-                        "title": "Available Options",
-                        "description": instruction,
-                        "color": 0x472604,
-                        "footer": {
-                            "icon_url": bot.user.displayAvatarURL({
+                        title: "Available Options",
+                        description: instruction,
+                        color: 0x472604,
+                        footer: {
+                            icon_url: bot.user.displayAvatarURL({
                                 dynamic: true, size: 1024, extension: 'png'
                             }),
-                            "text": bot.user.displayName
+                            text: bot.user.displayName
                         },
                     }]
                 }).catch(() => { })

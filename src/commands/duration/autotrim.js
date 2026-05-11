@@ -1,6 +1,6 @@
 module.exports = {
     name: ['autotrim', 'autocut'],
-    args: [{ "name": "file", "required": false, "specifarg": false, "orig": "{file}" }, { "name": "threshold", "required": false, "specifarg": true, "orig": "[-threshold <percentage>]" }, { "name": "silenceduration", "required": false, "specifarg": true, "orig": "[-silenceduration <seconds (from 0.1 to 10)>]" }, { "name": "trimmiddle", "required": false, "specifarg": true, "orig": "[-trimmiddle]" }],
+    args: [{ name: "file", required: false, specifarg: false, orig: "{file}" }, { name: "threshold", required: false, specifarg: true, orig: "[-threshold <percentage>]" }, { name: "silenceduration", required: false, specifarg: true, orig: "[-silenceduration <seconds (from 0.1 to 10)>]" }, { name: "trimmiddle", required: false, specifarg: true, orig: "[-trimmiddle]" }],
     execute: async function (msg, args) {
         let poopy = this
         let {

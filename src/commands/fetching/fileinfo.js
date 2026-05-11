@@ -1,6 +1,6 @@
 module.exports = {
     name: ['fileinfo'],
-    args: [{ "name": "file", "required": false, "specifarg": false, "orig": "{file}" }],
+    args: [{ name: "file", required: false, specifarg: false, orig: "{file}" }],
     execute: async function (msg, args) {
         let poopy = this
         let { lastUrl, validateFile, execPromise, fetchPingPerms } = poopy.functions
@@ -28,7 +28,7 @@ module.exports = {
         if (!fileinfo) return
         var type = fileinfo.type
 
-        var jsoninfo = {}
+        var jsoninfo = fileinfo.info.json
         var formattedSize = prettyBytes(fileinfo.info.realsize)
         var size = `${formattedSize}${formattedSize.endsWith(' B') ? '' : ` (${fileinfo.info.realsize} B)`}`
         var params = [
@@ -37,11 +37,6 @@ module.exports = {
             `**Mime**: ${type.mime}`
         ]
         var paramFunctions
-
-        var json = await execPromise(`ffprobe -of json -show_streams -show_format "${currenturl}"`)
-        if (json) {
-            jsoninfo = JSON.parse(json)
-        }
 
         if (jsoninfo["streams"]) {
             if (type.mime.startsWith('image') && !(vars.gifFormats.find(f => f === type.ext))) {
@@ -303,16 +298,16 @@ module.exports = {
         }
 
         var embed = {
-            "title": fileinfo.name,
-            "description": params.join('\n'),
-            "url": currenturl,
-            "color": 0x472604,
-            "footer": {
-                "icon_url": bot.user.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' }),
-                "text": bot.user.displayName
+            title: fileinfo.name,
+            description: params.join('\n'),
+            url: currenturl,
+            color: 0x472604,
+            footer: {
+                icon_url: bot.user.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' }),
+                text: bot.user.displayName
             },
-            "thumbnail": {
-                "url": currenturl
+            thumbnail: {
+                url: currenturl
             }
         }
 

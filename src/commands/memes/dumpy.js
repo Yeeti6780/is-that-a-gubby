@@ -1,6 +1,6 @@
 module.exports = {
     name: ['dumpy', 'twerkmosaic', 'amongmosaic', 'crewmatemosaic'],
-    args: [{"name":"file","required":false,"specifarg":false,"orig":"{file}"},{"name":"resolution","required":false,"specifarg":true,"orig":"[-resolution <number>]"}],
+    args: [{name: "file",required: false,specifarg: false,orig: "{file}"},{name: "resolution",required: false,specifarg: true,orig: "[-resolution <number>]"}],
     execute: async function (msg, args) {
         let poopy = this
         let {

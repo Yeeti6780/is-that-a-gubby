@@ -1,6 +1,6 @@
 module.exports = {
     name: ['offset'],
-    args: [{"name":"timestamp","required":true,"specifarg":false,"orig":"<timestamp (you can use hh:mm:ss)>"},{"name":"file","required":false,"specifarg":false,"orig":"{file}"}],
+    args: [{name: "timestamp",required: true,specifarg: false,orig: "<timestamp (you can use hh:mm:ss)>"},{name: "file",required: false,specifarg: false,orig: "{file}"}],
     execute: async function (msg, args) {
         let poopy = this
         let {

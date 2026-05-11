@@ -5,31 +5,31 @@ module.exports = {
         'tcommands',
         'togglecommands'],
     args: [{
-        "name": "option",
-        "required": true,
-        "specifarg": false,
-        "orig": "<option>"
+        name: "option",
+        required: true,
+        specifarg: false,
+        orig: "<option>"
     }],
     subcommands: [{
-        "name": "list",
-        "args": [],
-        "description": "Gets a list of disabled commands."
+        name: "list",
+        args: [],
+        description: "Gets a list of disabled commands."
     },
     {
-        "name": "toggle",
-        "args": [{
-            "name": "command",
-            "required": true,
-            "specifarg": false,
-            "orig": "<command>",
-            "autocomplete": function () {
+        name: "toggle",
+        args: [{
+            name: "command",
+            required: true,
+            specifarg: false,
+            orig: "<command>",
+            autocomplete: function () {
                 let poopy = this
                 return poopy.commands.map(cmd => {
                     return { name: cmd.name.join('/'), value: cmd.name[0] }
                 })
             }
         }],
-        "description": "Disables/enables a command, if it exists."
+        description: "Disables/enables a command, if it exists."
     }],
     execute: async function (msg, args, opts) {
         let poopy = this
@@ -135,14 +135,14 @@ module.exports = {
                 }).catch(() => { })
                 else msg.reply({
                     embeds: [{
-                        "title": "Available Options",
-                        "description": instruction,
-                        "color": 0x472604,
-                        "footer": {
-                            "icon_url": bot.user.displayAvatarURL({
+                        title: "Available Options",
+                        description: instruction,
+                        color: 0x472604,
+                        footer: {
+                            icon_url: bot.user.displayAvatarURL({
                                 dynamic: true, size: 1024, extension: 'png'
                             }),
-                            "text": bot.user.displayName
+                            text: bot.user.displayName
                         },
                     }]
                 }).catch(() => { })

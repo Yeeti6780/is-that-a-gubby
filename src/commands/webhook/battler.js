@@ -1,11 +1,11 @@
 module.exports = {
     name: ['battler', 'battlebricks', 'tbb'],
     args: [{
-        "name": "type",
-        "required": false,
-        "specifarg": false,
-        "orig": "[type]",
-        "autocomplete": function () {
+        name: "type",
+        required: false,
+        specifarg: false,
+        orig: "[type]",
+        autocomplete: function () {
             return [
                 { name: "Friendlies", value: "friendly" },
                 { name: "Enemies", value: "enemy" }

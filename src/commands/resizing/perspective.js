@@ -1,6 +1,6 @@
 module.exports = {
     name: ['perspective'],
-    args: [{"name":"file","required":false,"specifarg":false,"orig":"{file}"},{"name":"tl","required":false,"specifarg":true,"orig":"[-tl <x> <y> (pixels or percentage)]"},{"name":"tr","required":false,"specifarg":true,"orig":"[-tr <x> <y> (pixels or percentage)]"},{"name":"bl","required":false,"specifarg":true,"orig":"[-bl <x> <y> (pixels or percentage)]"},{"name":"br","required":false,"specifarg":true,"orig":"[-br <x> <y> (pixels or percentage)]"}],
+    args: [{name: "file",required: false,specifarg: false,orig: "{file}"},{name: "tl",required: false,specifarg: true,orig: "[-tl <x> <y> (pixels or percentage)]"},{name: "tr",required: false,specifarg: true,orig: "[-tr <x> <y> (pixels or percentage)]"},{name: "bl",required: false,specifarg: true,orig: "[-bl <x> <y> (pixels or percentage)]"},{name: "br",required: false,specifarg: true,orig: "[-br <x> <y> (pixels or percentage)]"}],
     execute: async function (msg, args) {
         let poopy = this
         let {

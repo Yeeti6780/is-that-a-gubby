@@ -1,7 +1,7 @@
 module.exports = {
   helpf: '(arrayName | promise1 | promise2 | etc...)',
   desc: `Creates a new global array from the values returned by each promise being executed inside of the function at the same time. If it already exists, it'll be replaced.`,
-  func: function (matches, msg, isBot, string, opts) {
+  func: async function (matches, msg, isBot, string, opts) {
     let poopy = this
     let { splitKeyFunc, regexClean, parseRegExp, getKeywordsFor } = poopy.functions
     let tempdata = poopy.tempdata

@@ -1,8 +1,8 @@
 module.exports = {
     name: ['scale', 'resize'],
-    args: [{ "name": "width", "required": true, "specifarg": false, "orig": "<width>" }, { "name": "height", "required": true, "specifarg": false, "orig": "<height>" }, { "name": "file", "required": false, "specifarg": false, "orig": "{file}" }, {
-        "name": "flags", "required": false, "specifarg": true, "orig": "[-flags <algorithm>]",
-        "autocomplete": [
+    args: [{ name: "width", required: true, specifarg: false, orig: "<width>" }, { name: "height", required: true, specifarg: false, orig: "<height>" }, { name: "file", required: false, specifarg: false, orig: "{file}" }, {
+        name: "flags", required: false, specifarg: true, orig: "[-flags <algorithm>]",
+        autocomplete: [
             'fast_bilinear',
             'bilinear',
             'bicubic',
@@ -20,7 +20,7 @@ module.exports = {
             'full_chroma_inp',
             'bitexact'
         ]
-    }, { "name": "keepaspectratio", "required": false, "specifarg": true, "orig": "[-keepaspectratio <mode (increase or decrease)>]", "autocomplete": ['increase', 'decrease'] }],
+    }, { name: "keepaspectratio", required: false, specifarg: true, orig: "[-keepaspectratio <mode (increase or decrease)>]", autocomplete: ['increase', 'decrease'] }],
     execute: async function (msg, args) {
         let poopy = this
         let {

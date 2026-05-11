@@ -1,6 +1,6 @@
 module.exports = {
     name: ['toapng'],
-    args: [{"name":"file","required":false,"specifarg":false,"orig":"{file}"},{"name":"duration","required":false,"specifarg":true,"orig":"[-duration <seconds (max 60)>]"},{"name":"fps","required":false,"specifarg":true,"orig":"[-fps <fps (max 50)>]"}],
+    args: [{name: "file",required: false,specifarg: false,orig: "{file}"},{name: "duration",required: false,specifarg: true,orig: "[-duration <seconds (max 60)>]"},{name: "fps",required: false,specifarg: true,orig: "[-fps <fps (max 50)>]"}],
     execute: async function (msg, args) {
         let poopy = this
         let {

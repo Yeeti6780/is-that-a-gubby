@@ -1,6 +1,6 @@
 module.exports = {
     name: ['enlongate', 'long'],
-    args: [{"name":"file","required":false,"specifarg":false,"orig":"{file}"}],
+    args: [{name: "file",required: false,specifarg: false,orig: "{file}"}],
     execute: async function (msg, args) {
         let poopy = this
         let { lastUrl, validateFile, downloadFile, sendFile, fetchPingPerms } = poopy.functions

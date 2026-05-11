@@ -1,38 +1,38 @@
 module.exports = {
     name: ['starboards'],
     args: [{
-        "name": "option",
-        "required": true,
-        "specifarg": false,
-        "orig": "<option>"
+        name: "option",
+        required: true,
+        specifarg: false,
+        orig: "<option>"
     }],
     subcommands: [{
-        "name": "list",
-        "args": [],
-        "description": "Gets a list of starboards set up in the server."
+        name: "list",
+        args: [],
+        description: "Gets a list of starboards set up in the server."
     },
     {
-        "name": "info",
-        "args": [{
-            "name": "starboardId",
-            "required": true,
-            "specifarg": false,
-            "orig": "<starboardId>",
+        name: "info",
+        args: [{
+            name: "starboardId",
+            required: true,
+            specifarg: false,
+            orig: "<starboardId>",
             "autocompvare": function (interaction) {
                 var poopy = this
                 return poopy.data.botData.starboards.filter(c => c.guildId == interaction.guild.id).map(c => c.id)
             }
         }],
-        "description": "Displays the info of the starboard that has been set up with the respective ID."
+        description: "Displays the info of the starboard that has been set up with the respective ID."
     },
     {
-        "name": "add",
-        "args": [{
-            "name": "channel",
-            "required": false,
-            "specifarg": false,
-            "orig": "[channel]",
-            "autocomplete": function (interaction) {
+        name: "add",
+        args: [{
+            name: "channel",
+            required: false,
+            specifarg: false,
+            orig: "[channel]",
+            autocomplete: function (interaction) {
                 let poopy = this
                 let { Discord } = poopy.modules
 
@@ -49,64 +49,64 @@ module.exports = {
             }
         },
         {
-            "name": "threshold",
-            "required": false,
-            "specifarg": false,
-            "orig": "{threshold}"
+            name: "threshold",
+            required: false,
+            specifarg: false,
+            orig: "{threshold}"
         },
         {
-            "name": "emoji",
-            "required": false,
-            "specifarg": false,
-            "orig": "{emoji (can also be ANY)}"
+            name: "emoji",
+            required: false,
+            specifarg: false,
+            orig: "{emoji (can also be ANY)}"
         },
         {
-            "name": "keep",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-keep]"
+            name: "keep",
+            required: false,
+            specifarg: true,
+            orig: "[-keep]"
         }],
-        "description": "Adds a new starboard with the specified threshold and emoji."
+        description: "Adds a new starboard with the specified threshold and emoji."
     },
     {
-        "name": "edit",
-        "args": [{
-            "name": "starboardId",
-            "required": true,
-            "specifarg": false,
-            "orig": "<starboardId>",
+        name: "edit",
+        args: [{
+            name: "starboardId",
+            required: true,
+            specifarg: false,
+            orig: "<starboardId>",
             "autocompvare": function (interaction) {
                 var poopy = this
                 return poopy.data.botData.starboards.filter(c => c.guildId == interaction.guild.id).map(c => c.id)
             }
         },
         {
-            "name": "threshold",
-            "required": false,
-            "specifarg": false,
-            "orig": "{threshold}"
+            name: "threshold",
+            required: false,
+            specifarg: false,
+            orig: "{threshold}"
         },
         {
-            "name": "emoji",
-            "required": false,
-            "specifarg": false,
-            "orig": "{emoji (can also be ANY}"
+            name: "emoji",
+            required: false,
+            specifarg: false,
+            orig: "{emoji (can also be ANY}"
         }],
-        "description": "Edits the starboard config with the specified ID."
+        description: "Edits the starboard config with the specified ID."
     },
     {
-        "name": "delete",
-        "args": [{
-            "name": "starboardId",
-            "required": true,
-            "specifarg": false,
-            "orig": "<starboardId>",
+        name: "delete",
+        args: [{
+            name: "starboardId",
+            required: true,
+            specifarg: false,
+            orig: "<starboardId>",
             "autocompvare": function (interaction) {
                 var poopy = this
                 return poopy.data.botData.starboards.filter(c => c.guildId == interaction.guild.id).map(c => c.id)
             }
         }],
-        "description": "Deletes the starboard config from the server."
+        description: "Deletes the starboard config from the server."
     }],
     execute: async function (msg, args, opts) {
         var poopy = this
@@ -138,14 +138,14 @@ module.exports = {
                         if (config.textEmbeds) await msg.reply('No starboards set up for this server.').catch(() => { })
                         else await msg.reply({
                             embeds: [{
-                                "title": `Starboards for ${msg.guild.name}`,
-                                "description": 'No starboards set up for this server.',
-                                "color": 0x472604,
-                                "footer": {
-                                    "icon_url": bot.user.displayAvatarURL({
+                                title: `Starboards for ${msg.guild.name}`,
+                                description: 'No starboards set up for this server.',
+                                color: 0x472604,
+                                footer: {
+                                    icon_url: bot.user.displayAvatarURL({
                                         dynamic: true, size: 1024, extension: 'png'
                                     }),
-                                    "text": bot.user.displayName
+                                    text: bot.user.displayName
                                 },
                             }]
                         }).catch(() => { })
@@ -159,14 +159,14 @@ module.exports = {
                     msg.channel, async (page) => {
                         if (config.textEmbeds) return `${starboards[page - 1].join('\n')}\n\nPage ${page}/${starboards.length}`
                         else return {
-                            "title": `Starboards for ${msg.guild.name}`,
-                            "description": starboards[page - 1].join('\n'),
-                            "color": 0x472604,
-                            "footer": {
-                                "icon_url": bot.user.displayAvatarURL({
+                            title: `Starboards for ${msg.guild.name}`,
+                            description: starboards[page - 1].join('\n'),
+                            color: 0x472604,
+                            footer: {
+                                icon_url: bot.user.displayAvatarURL({
                                     dynamic: true, size: 1024, extension: 'png'
                                 }),
-                                "text": `Page ${page}/${starboards.length}`
+                                text: `Page ${page}/${starboards.length}`
                             },
                         }
                     },
@@ -201,14 +201,14 @@ module.exports = {
                         } else {
                             await msg.reply({
                                 embeds: [{
-                                    "title": `Starboard Info (ID: ${starboard.id})`,
-                                    "description": `**Channel:** <#${starboard.channelId}>\n**Threshold:** ${starboard.threshold}\n**Emoji:** ${starboard.emoji}`,
-                                    "color": 0x472604,
-                                    "footer": {
-                                        "icon_url": bot.user.displayAvatarURL({
+                                    title: `Starboard Info (ID: ${starboard.id})`,
+                                    description: `**Channel:** <#${starboard.channelId}>\n**Threshold:** ${starboard.threshold}\n**Emoji:** ${starboard.emoji}`,
+                                    color: 0x472604,
+                                    footer: {
+                                        icon_url: bot.user.displayAvatarURL({
                                             dynamic: true, size: 1024, extension: 'png'
                                         }),
-                                        "text": bot.user.displayName
+                                        text: bot.user.displayName
                                     },
                                 }],
                                 allowedMentions: fetchPingPerms(msg)
@@ -438,14 +438,14 @@ module.exports = {
                 if (config.textEmbeds) msg.reply(instruction).catch(() => { })
                 else msg.reply({
                     embeds: [{
-                        "title": "Available Options",
-                        "description": instruction,
-                        "color": 0x472604,
-                        "footer": {
-                            "icon_url": bot.user.displayAvatarURL({
+                        title: "Available Options",
+                        description: instruction,
+                        color: 0x472604,
+                        footer: {
+                            icon_url: bot.user.displayAvatarURL({
                                 dynamic: true, size: 1024, extension: 'png'
                             }),
-                            "text": bot.user.displayName
+                            text: bot.user.displayName
                         },
                     }]
                 }).catch(() => { })

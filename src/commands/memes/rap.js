@@ -1,6 +1,6 @@
 module.exports = {
     name: ['rap', 'fnf', 'friday'],
-    args: [{"name":"file","required":false,"specifarg":false,"orig":"{file}"}],
+    args: [{name: "file",required: false,specifarg: false,orig: "{file}"}],
     execute: async function (msg, args) {
         let poopy = this
         let { lastUrl, validateFile, fetchPingPerms, execPromise, sendFile } = poopy.functions

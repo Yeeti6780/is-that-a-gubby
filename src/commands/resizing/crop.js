@@ -1,6 +1,6 @@
 module.exports = {
     name: ['crop'],
-    args: [{"name":"x","required":false,"specifarg":true,"orig":"[-x <pixel>]"},{"name":"y","required":false,"specifarg":true,"orig":"[-y <pixel>]"},{"name":"w","required":false,"specifarg":true,"orig":"[-w <pixels>]"},{"name":"h","required":false,"specifarg":true,"orig":"[-h <pixels>]"},{"name":"file","required":false,"specifarg":false,"orig":"{file}"}],
+    args: [{name: "x",required: false,specifarg: true,orig: "[-x <pixel>]"},{name: "y",required: false,specifarg: true,orig: "[-y <pixel>]"},{name: "w",required: false,specifarg: true,orig: "[-w <pixels>]"},{name: "h",required: false,specifarg: true,orig: "[-h <pixels>]"},{name: "file",required: false,specifarg: false,orig: "{file}"}],
     execute: async function (msg, args) {
         let poopy = this
         let {

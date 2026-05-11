@@ -1,8 +1,8 @@
 module.exports = {
     name: ['tsunamiunban'],
     args: [
-        { "name": "userId", "required": true, "specifarg": false, "orig": "<userId>" },
-        { "name": "reason", "required": false, "specifarg": false, "orig": "\"[reason]\"" },
+        { name: "userId", required: true, specifarg: false, orig: "<userId>" },
+        { name: "reason", required: false, specifarg: false, orig: "\"[reason]\"" },
     ],
     execute: async function (msg, args, opts) {
         let poopy = this

@@ -1,6 +1,6 @@
 module.exports = {
     name: ['vstack'],
-    args: [{"name":"file","required":false,"specifarg":false,"orig":"{file}"},{"name":"stack","required":false,"specifarg":true,"orig":"[-stack <number (from 1 to 10)>]"}],
+    args: [{name: "file",required: false,specifarg: false,orig: "{file}"},{name: "stack",required: false,specifarg: true,orig: "[-stack <number (from 1 to 10)>]"}],
     execute: async function (msg, args) {
         let poopy = this
         let {

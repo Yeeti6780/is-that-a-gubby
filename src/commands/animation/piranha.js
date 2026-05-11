@@ -1,6 +1,6 @@
 module.exports = {
     name: ['piranha', 'appear'],
-    args: [{"name":"file","required":false,"specifarg":false,"orig":"{file}"},{"name":"duration","required":false,"specifarg":true,"orig":"[-duration <seconds (max 20)>]"}],
+    args: [{name: "file",required: false,specifarg: false,orig: "{file}"},{name: "duration",required: false,specifarg: true,orig: "[-duration <seconds (max 20)>]"}],
     execute: async function (msg, args) {
         let poopy = this
         let {

@@ -1,100 +1,100 @@
 module.exports = {
     name: ['cmdtemplates', 'commandtemplates'],
     args: [{
-        "name": "option",
-        "required": true,
-        "specifarg": false,
-        "orig": "<option>"
+        name: "option",
+        required: true,
+        specifarg: false,
+        orig: "<option>"
     }],
     subcommands: [{
-        "name": "list",
-        "args": [],
-        "description": "Sends a navigable embed with a list of all command templates made by the users of the bot."
+        name: "list",
+        args: [],
+        description: "Sends a navigable embed with a list of all command templates made by the users of the bot."
     },
     {
-        "name": "search",
-        "args": [{
-            "name": "query",
-            "required": true,
-            "specifarg": false,
-            "orig": "<query>"
+        name: "search",
+        args: [{
+            name: "query",
+            required: true,
+            specifarg: false,
+            orig: "<query>"
         }],
-        "description": "Searches for every command in the command database that matches the query."
+        description: "Searches for every command in the command database that matches the query."
     },
     {
-        "name": "register",
-        "args": [{
-            "name": "name",
-            "required": true,
-            "specifarg": false,
-            "orig": "<name>"
+        name: "register",
+        args: [{
+            name: "name",
+            required: true,
+            specifarg: false,
+            orig: "<name>"
         },
         {
-            "name": "phrase",
-            "required": true,
-            "specifarg": false,
-            "orig": "<phrase>"
+            name: "phrase",
+            required: true,
+            specifarg: false,
+            orig: "<phrase>"
         },
         {
-            "name": "description",
-            "required": false,
-            "specifarg": true,
-            "orig": "{-description <text>}"
+            name: "description",
+            required: false,
+            specifarg: true,
+            orig: "{-description <text>}"
         },
         {
-            "name": "image",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-image <url>]"
+            name: "image",
+            required: false,
+            specifarg: true,
+            orig: "[-image <url>]"
         },
         {
-            "name": "syntax",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-syntax <text>]"
+            name: "syntax",
+            required: false,
+            specifarg: true,
+            orig: "[-syntax <text>]"
         }],
-        "description": "Registers the command with the respective name, description and syntax (if supplied), it'll then be assigned an ID that can be used to import it via the `localcmds` command."
+        description: "Registers the command with the respective name, description and syntax (if supplied), it'll then be assigned an ID that can be used to import it via the `localcmds` command."
     },
     {
-        "name": "edit",
-        "args": [{
-            "name": "id",
-            "required": true,
-            "specifarg": false,
-            "orig": "<id>"
+        name: "edit",
+        args: [{
+            name: "id",
+            required: true,
+            specifarg: false,
+            orig: "<id>"
         },
         {
-            "name": "name",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-name <text>]"
+            name: "name",
+            required: false,
+            specifarg: true,
+            orig: "[-name <text>]"
         },
         {
-            "name": "phrase",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-phrase <text>]"
+            name: "phrase",
+            required: false,
+            specifarg: true,
+            orig: "[-phrase <text>]"
         },
         {
-            "name": "description",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-description <text>]"
+            name: "description",
+            required: false,
+            specifarg: true,
+            orig: "[-description <text>]"
         },
         {
-            "name": "image",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-image <url>]"
+            name: "image",
+            required: false,
+            specifarg: true,
+            orig: "[-image <url>]"
         },
         {
-            "name": "syntax",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-syntax <text>]"
+            name: "syntax",
+            required: false,
+            specifarg: true,
+            orig: "[-syntax <text>]"
         }],
-        "description": "Allows you to edit the command with the respective ID in the database, if it exists and you made it.",
-        "autocomplete": function (interaction) {
+        description: "Allows you to edit the command with the respective ID in the database, if it exists and you made it.",
+        autocomplete: function (interaction) {
             let poopy = this
             return poopy.globaldata.commandTemplates.filter(cmd => cmd.creator == interaction.user.id).map(cmd => {
                 return { name: `${cmd.name} (${cmd.id})`, value: cmd.id }
@@ -102,15 +102,15 @@ module.exports = {
         }
     },
     {
-        "name": "delete",
-        "args": [{
-            "name": "id",
-            "required": true,
-            "specifarg": false,
-            "orig": "<id>"
+        name: "delete",
+        args: [{
+            name: "id",
+            required: true,
+            specifarg: false,
+            orig: "<id>"
         }],
-        "description": "Permanently deletes the command from the database with the respective ID, if it exists and YOU made it.",
-        "autocomplete": function (interaction) {
+        description: "Permanently deletes the command from the database with the respective ID, if it exists and YOU made it.",
+        autocomplete: function (interaction) {
             let poopy = this
             return poopy.globaldata.commandTemplates.filter(cmd => cmd.creator == interaction.user.id).map(cmd => {
                 return { name: `${cmd.name} (${cmd.id})`, value: cmd.id }
@@ -210,14 +210,14 @@ module.exports = {
                         if (config.textEmbeds) await msg.reply('there is nothing').catch(() => { })
                         else await msg.reply({
                             embeds: [{
-                                "title": `there is nothing`,
-                                "description": 'wow',
-                                "color": 0x472604,
-                                "footer": {
-                                    "icon_url": bot.user.displayAvatarURL({
+                                title: `there is nothing`,
+                                description: 'wow',
+                                color: 0x472604,
+                                footer: {
+                                    icon_url: bot.user.displayAvatarURL({
                                         dynamic: true, size: 1024, extension: 'png'
                                     }),
-                                    "text": bot.user.displayName
+                                    text: bot.user.displayName
                                 },
                             }]
                         }).catch(() => { })
@@ -248,9 +248,9 @@ module.exports = {
                     var date = cmd.date
 
                     var embed = {
-                        "title": `${name}${syntax ? ` ${syntax}` : ''}`,
-                        "color": 0x472604,
-                        "fields": [{
+                        title: `${name}${syntax ? ` ${syntax}` : ''}`,
+                        color: 0x472604,
+                        fields: [{
                             name: "Description",
                             value: description || 'No description available.'
                         },
@@ -262,11 +262,11 @@ module.exports = {
                             name: "Date Updated",
                             value: `<t:${date}>`
                         }],
-                        "footer": {
-                            "icon_url": bot.user.displayAvatarURL({
+                        footer: {
+                            icon_url: bot.user.displayAvatarURL({
                                 dynamic: true, size: 1024, extension: 'png'
                             }),
-                            "text": `Made by ${creator} - Command ${Number(i) + 1}/${dcmdTemplates.length}`
+                            text: `Made by ${creator} - Command ${Number(i) + 1}/${dcmdTemplates.length}`
                         },
                     }
 
@@ -360,14 +360,14 @@ module.exports = {
 
                 var ddcmdTemplates = globaldata.commandTemplates
                 var none = {
-                    "title": `there is nothing`,
-                    "description": 'wow',
-                    "color": 0x472604,
-                    "footer": {
-                        "icon_url": bot.user.displayAvatarURL({
+                    title: `there is nothing`,
+                    description: 'wow',
+                    color: 0x472604,
+                    footer: {
+                        icon_url: bot.user.displayAvatarURL({
                             dynamic: true, size: 1024, extension: 'png'
                         }),
-                        "text": bot.user.displayName
+                        text: bot.user.displayName
                     },
                 }
 
@@ -408,9 +408,9 @@ module.exports = {
                     var date = cmd.date
 
                     var embed = {
-                        "title": `${name}${syntax ? ` ${syntax}` : ''}`,
-                        "color": 0x472604,
-                        "fields": [{
+                        title: `${name}${syntax ? ` ${syntax}` : ''}`,
+                        color: 0x472604,
+                        fields: [{
                             name: "Description",
                             value: description || 'No description available.'
                         },
@@ -422,11 +422,11 @@ module.exports = {
                             name: "Date Updated",
                             value: `<t:${date}>`
                         }],
-                        "footer": {
-                            "icon_url": bot.user.displayAvatarURL({
+                        footer: {
+                            icon_url: bot.user.displayAvatarURL({
                                 dynamic: true, size: 1024, extension: 'png'
                             }),
-                            "text": `Made by ${creator} - Command ${Number(i) + 1}/${dcmdTemplates.length}`
+                            text: `Made by ${creator} - Command ${Number(i) + 1}/${dcmdTemplates.length}`
                         },
                     }
 
@@ -625,14 +625,14 @@ module.exports = {
                 if (config.textEmbeds) msg.reply(instruction).catch(() => { })
                 else msg.reply({
                     embeds: [{
-                        "title": "Available Options",
-                        "description": instruction,
-                        "color": 0x472604,
-                        "footer": {
-                            "icon_url": bot.user.displayAvatarURL({
+                        title: "Available Options",
+                        description: instruction,
+                        color: 0x472604,
+                        footer: {
+                            icon_url: bot.user.displayAvatarURL({
                                 dynamic: true, size: 1024, extension: 'png'
                             }),
-                            "text": bot.user.displayName
+                            text: bot.user.displayName
                         },
                     }]
                 }).catch(() => { })

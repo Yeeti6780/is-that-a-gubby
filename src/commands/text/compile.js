@@ -1,13 +1,13 @@
 module.exports = {
     name: ['compile'],
     args: [{
-        "name": "language", "required": true, "specifarg": false, "orig": "<language>", "autocomplete": function () {
+        name: "language", required: true, specifarg: false, orig: "<language>", autocomplete: function () {
             let poopy = this
             return poopy.vars.codelanguages.map(lang => {
                 return { name: lang.language, value: lang.templates[0] }
             })
         }
-    }, { "name": "code", "required": true, "specifarg": false, "orig": "<code>" }],
+    }, { name: "code", required: true, specifarg: false, orig: "<code>" }],
     execute: async function (msg, args) {
         let poopy = this
         let vars = poopy.vars

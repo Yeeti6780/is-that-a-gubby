@@ -444,6 +444,7 @@ vars.globaldataTemplate = {
 }
 
 vars.tempdataTemplate = {
+    validatedFiles: {},
     discordUrls: {},
     collectors: [],
     crons: [],

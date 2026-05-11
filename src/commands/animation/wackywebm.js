@@ -3,17 +3,17 @@ module.exports = {
         'wackyscale',
         'wackyresize'],
     args: [{
-        "name": "video",
-        "required": true,
-        "specifarg": false,
-        "orig": "<video>"
+        name: "video",
+        required: true,
+        specifarg: false,
+        orig: "<video>"
     },
         {
-            "name": "mode",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-mode <value (bounce, shutter, sporadic, bounce+shutter)>]",
-            "autocomplete": [
+            name: "mode",
+            required: false,
+            specifarg: true,
+            orig: "[-mode <value (bounce, shutter, sporadic, bounce+shutter)>]",
+            autocomplete: [
                 'bounce',
                 'shutter',
                 'sporadic',
@@ -21,16 +21,16 @@ module.exports = {
             ]
         },
         {
-            "name": "delta",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-delta <number (default 2)>]"
+            name: "delta",
+            required: false,
+            specifarg: true,
+            orig: "[-delta <number (default 2)>]"
         },
         {
-            "name": "bps",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-bps <number (default 1.9)>]"
+            name: "bps",
+            required: false,
+            specifarg: true,
+            orig: "[-bps <number (default 1.9)>]"
         }],
     execute: async function (msg, args) {
         let poopy = this

@@ -128,7 +128,7 @@ function trainSample(sample, model, keySize = 1) {
         window[keySize - 1] = next;
     }
 
-    // return operations;
+    return operations;
 }
 
 function undoTrainSample(operations, model) {
@@ -153,11 +153,12 @@ function undoTrainSample(operations, model) {
 function buildModel(samples, keySize = 1) {
     const model = {
         keywords: new Map(),
-        undo: []
+        undo: new Map()
     }
 
     for (const sample of samples) {
-        trainSample(sample, model, keySize)
+        const operations = trainSample(sample, model);
+        if (operations) model.undo.set(sample.toLowerCase(), operations);
     }
 
     return model;

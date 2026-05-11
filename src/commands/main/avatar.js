@@ -3,11 +3,11 @@ module.exports = {
         'av',
         'pfp'],
     args: [{
-        "name": "user",
-        "required": false,
-        "specifarg": false,
-        "orig": "[user]",
-        "autocomplete": async function (interaction) {
+        name: "user",
+        required: false,
+        specifarg: false,
+        orig: "[user]",
+        autocomplete: async function (interaction) {
             let poopy = this
             let { data, config } = poopy
             let { dataGather } = poopy.functions
@@ -25,10 +25,10 @@ module.exports = {
         }
     },
     {
-        "name": "global",
-        "required": false,
-        "specifarg": true,
-        "orig": "[-global]"
+        name: "global",
+        required: false,
+        specifarg: true,
+        orig: "[-global]"
     }],
     execute: async function (msg, args) {
         let poopy = this

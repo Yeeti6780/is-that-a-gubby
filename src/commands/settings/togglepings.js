@@ -2,22 +2,22 @@ module.exports = {
     name: ['togglepings', 'togglementions'],
     args: [
         {
-            "name": "users",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-users]"
+            name: "users",
+            required: false,
+            specifarg: true,
+            orig: "[-users]"
         },
         {
-            "name": "roles",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-roles]"
+            name: "roles",
+            required: false,
+            specifarg: true,
+            orig: "[-roles]"
         },
         {
-            "name": "everyone",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-everyone]"
+            name: "everyone",
+            required: false,
+            specifarg: true,
+            orig: "[-everyone]"
         }
     ],
     execute: async function (msg, args, opts) {

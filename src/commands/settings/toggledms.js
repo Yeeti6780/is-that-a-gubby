@@ -1,11 +1,11 @@
 module.exports = {
     name: ['toggledms', 'tdms'],
     args: [{
-        "name": "user",
-        "required": false,
-        "specifarg": false,
-        "orig": "[user]",
-        "autocomplete": async function (interaction) {
+        name: "user",
+        required: false,
+        specifarg: false,
+        orig: "[user]",
+        autocomplete: async function (interaction) {
             let poopy = this
             let { data, config } = poopy
             let { dataGather } = poopy.functions

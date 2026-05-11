@@ -1,8 +1,8 @@
 module.exports = {
     name: ['pseudocolor'],
-    args: [{ "name": "file", "required": false, "specifarg": false, "orig": "{file}" }, {
-        "name": "preset", "required": false, "specifarg": true, "orig": "[-preset <preset>]",
-        "autocomplete": [
+    args: [{ name: "file", required: false, specifarg: false, orig: "{file}" }, {
+        name: "preset", required: false, specifarg: true, orig: "[-preset <preset>]",
+        autocomplete: [
             'magma',
             'inferno',
             'plasma',

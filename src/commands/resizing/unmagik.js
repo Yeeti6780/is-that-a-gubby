@@ -1,6 +1,6 @@
 module.exports = {
     name: ['unmagik', 'reversemagik', 'awareenlarge', 'liquidenlarge'],
-    args: [{"name":"file","required":false,"specifarg":false,"orig":"{file}"},{"name":"scale","required":false,"specifarg":true,"orig":"[-scale <multiplier (from 1 to 2)>]"}],
+    args: [{name: "file",required: false,specifarg: false,orig: "{file}"},{name: "scale",required: false,specifarg: true,orig: "[-scale <multiplier (from 1 to 2)>]"}],
     execute: async function (msg, args) {
         let poopy = this
         let {

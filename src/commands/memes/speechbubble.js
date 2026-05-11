@@ -1,8 +1,8 @@
 module.exports = {
     name: ['speechbubble', 'speech'],
     args: [
-        { "name": "file", "required": false, "specifarg": false, "orig": "{file}" },
-        { "name": "transparent", "required": false, "specifarg": true, "orig": "[-transparent]" }
+        { name: "file", required: false, specifarg: false, orig: "{file}" },
+        { name: "transparent", required: false, specifarg: true, orig: "[-transparent]" }
     ],
     execute: async function (msg, args) {
         let poopy = this

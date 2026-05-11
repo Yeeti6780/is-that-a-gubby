@@ -1,8 +1,8 @@
 module.exports = {
     name: ['reencode'],
-    args: [{ "name": "file", "required": false, "specifarg": false, "orig": "{file}" }, {
-        "name": "encodingpreset", "required": false, "specifarg": true, "orig": "[-encodingpreset <preset>]",
-        "autocomplete": [
+    args: [{ name: "file", required: false, specifarg: false, orig: "{file}" }, {
+        name: "encodingpreset", required: false, specifarg: true, orig: "[-encodingpreset <preset>]",
+        autocomplete: [
             'ultrafast',
             'superfast',
             'veryfast',

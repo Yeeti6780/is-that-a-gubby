@@ -1,11 +1,11 @@
 module.exports = {
     name: ['transition'],
     args: [{
-        "name": "transition",
-        "required": false,
-        "specifarg": false,
-        "orig": "{transition (default is fade)}",
-        "autocomplete": [
+        name: "transition",
+        required: false,
+        specifarg: false,
+        orig: "{transition (default is fade)}",
+        autocomplete: [
             'fade',
             'wipeleft',
             'wiperight',
@@ -44,28 +44,28 @@ module.exports = {
         ]
     },
         {
-            "name": "file",
-            "required": false,
-            "specifarg": false,
-            "orig": "{file}"
+            name: "file",
+            required: false,
+            specifarg: false,
+            orig: "{file}"
         },
         {
-            "name": "file2",
-            "required": false,
-            "specifarg": false,
-            "orig": "{file2}"
+            name: "file2",
+            required: false,
+            specifarg: false,
+            orig: "{file2}"
         },
         {
-            "name": "duration",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-duration <seconds (max 10)>]"
+            name: "duration",
+            required: false,
+            specifarg: true,
+            orig: "[-duration <seconds (max 10)>]"
         },
         {
-            "name": "waituntilend",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-waituntilend]"
+            name: "waituntilend",
+            required: false,
+            specifarg: true,
+            orig: "[-waituntilend]"
         }],
     execute: async function (msg, args) {
         let poopy = this

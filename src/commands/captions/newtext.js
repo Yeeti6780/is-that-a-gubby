@@ -1,7 +1,7 @@
 module.exports = {
     name: ['newtext', 'newcaption'],
-    args: [{ "name": "font", "required": true, "specifarg": false, "orig": "<font>", "autocomplete": require('fs').readdirSync('assets/fonts') }, { "name": "text", "required": false, "specifarg": false, "orig": "\"{text}\"" }, { "name": "maxwidth", "required": false, "specifarg": true, "orig": "[-maxwidth <pixels>]" }, { "name": "color", "required": false, "specifarg": true, "orig": "[-(color/bgcolor) <r> <g> <b> <a>]" }, { "name": "bgcolor", "required": false, "specifarg": true, "orig": "[-(color/bgcolor) <r> <g> <b> <a>]" }, { "name": "resetcolor", "required": false, "specifarg": true, "orig": "[-resetcolor]" }, { "name": "padding", "required": false, "specifarg": true, "orig": "[-padding <top> <bottom> <left> <right>]" }, {
-        "name": "origin", "required": false, "specifarg": true, "orig": "[-origin <x (left/center/right)> <y (top/middle/bottom)>]", "autocomplete": [
+    args: [{ name: "font", required: true, specifarg: false, orig: "<font>", autocomplete: require('fs').readdirSync('assets/fonts') }, { name: "text", required: false, specifarg: false, orig: "\"{text}\"" }, { name: "maxwidth", required: false, specifarg: true, orig: "[-maxwidth <pixels>]" }, { name: "color", required: false, specifarg: true, orig: "[-(color/bgcolor) <r> <g> <b> <a>]" }, { name: "bgcolor", required: false, specifarg: true, orig: "[-(color/bgcolor) <r> <g> <b> <a>]" }, { name: "resetcolor", required: false, specifarg: true, orig: "[-resetcolor]" }, { name: "padding", required: false, specifarg: true, orig: "[-padding <top> <bottom> <left> <right>]" }, {
+        name: "origin", required: false, specifarg: true, orig: "[-origin <x (left/center/right)> <y (top/middle/bottom)>]", autocomplete: [
             'left top',
             'center top',
             'right top',

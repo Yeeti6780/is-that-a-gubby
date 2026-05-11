@@ -1,8 +1,8 @@
 module.exports = {
     name: ['tsunamimsgservice', 'tsunamimessageservice'],
     args: [
-        { "name": "topic", "required": true, "specifarg": false, "orig": "<topic>" },
-        { "name": "inquery", "required": true, "specifarg": false, "orig": "{inquery}" },
+        { name: "topic", required: true, specifarg: false, orig: "<topic>" },
+        { name: "inquery", required: true, specifarg: false, orig: "{inquery}" },
     ],
     execute: async function (msg, args, opts) {
         let poopy = this

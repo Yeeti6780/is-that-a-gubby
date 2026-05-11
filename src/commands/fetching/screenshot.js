@@ -1,6 +1,6 @@
 module.exports = {
     name: ['screenshot', 'savesite'],
-    args: [{ "name": "site", "required": true, "specifarg": false, "orig": "<site>" }],
+    args: [{ name: "site", required: true, specifarg: false, orig: "<site>" }],
     execute: async function (msg, args) {
         let poopy = this;
         let vars = poopy.vars;

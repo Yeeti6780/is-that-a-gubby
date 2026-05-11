@@ -15,25 +15,82 @@ for (var x = 0; 256 > x; x++) {
 }
 
 function next() {
-    iter = !1;
-    for (var c = 0; 256 > c; c++)
-        for (var a = 1; 40 > a; a++)
-            for (var f = inverse_mod(a, 256) & 255, d = 1; 40 > d; d++)
-                if (1 == gcd(a, d)) {
+    iter = false;
+
+    for (var c = 0; c < 256; c++) {
+        for (var a = 1; a < 40; a++) {
+            for (var d = 1; d < 40; d++) {
+                var f = inverse_mod(a, 256) & 255;
+
+                if (gcd(a, d) == 1) {
+                    var b, e;
+
                     if (a & 1) {
-                        var b = 0;
-                        var e = c * f & 255
-                    } else
-                        for (b = c, e = 0; 256 > e && b; e++) b = b - a & 255;
-                    0 == b && (b = d * e & 255, a + d + 5 < map[c][b].length && (map[c][b] = "[" + minus_map[a] + ">" + plus_map[d] + "<]>"));
-                    if (a & 1) b = 0, e = -c * f & 255;
-                    else
-                        for (b = c, e = 0; 256 > e && b; e++) b = b + a & 255;
-                    0 == b && (b = -d * e & 255, a + d + 5 < map[c][b].length && (map[c][b] = "[" + plus_map[a] + ">" + minus_map[d] + "<]>"))
-                } for (c = 0; 256 > c; c++)
-        for (a = map[c], e = 0; 256 > e; e++)
-            for (f = map[e],
-                d = a[e], b = 0; 256 > b; b++) d.length + f[b].length < a[b].length && (a[b] = d + f[b]);
+                        b = 0;
+                        e = (c * f) & 255;
+                    } else {
+                        b = c;
+
+                        for (e = 0; e < 256 && b; e++) {
+                            b = (b - a) & 255;
+                        }
+                    }
+
+                    if (b == 0) {
+                        b = (d * e) & 255;
+
+                        if (a + d + 5 < map[c][b].length) {
+                            map[c][b] =
+                                "[" +
+                                minus_map[a] +
+                                ">" +
+                                plus_map[d] +
+                                "<]>";
+                        }
+                    }
+
+                    if (a & 1) {
+                        b = 0;
+                        e = (-c * f) & 255;
+                    } else {
+                        b = c;
+
+                        for (e = 0; e < 256 && b; e++) {
+                            b = (b + a) & 255;
+                        }
+                    }
+
+                    if (b == 0) {
+                        b = (-d * e) & 255;
+
+                        if (a + d + 5 < map[c][b].length) {
+                            map[c][b] =
+                                "[" +
+                                plus_map[a] +
+                                ">" +
+                                minus_map[d] +
+                                "<]>";
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    for (c = 0; c < 256; c++) {
+        var rowC = map[c];
+
+        for (e = 0; e < 256; e++) {
+            var rowE = map[e];
+            var current = rowC[e];
+
+            for (b = 0; b < 256; b++) {
+                if (current.length + rowE[b].length < rowC[b].length) {
+                    rowC[b] = current + rowE[b];
+                }
+            }
+        }
+    }
 }
 
 function gcd(c, a) {

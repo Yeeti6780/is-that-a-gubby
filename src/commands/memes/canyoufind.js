@@ -1,6 +1,6 @@
 module.exports = {
     name: ['canyoufind', 'find'],
-    args: [{"name":"background","required":false,"specifarg":false,"orig":"{background}"},{"name":"toFind","required":false,"specifarg":false,"orig":"{toFind}"},{"name":"size","required":false,"specifarg":true,"orig":"[-size <pixels>]"}],
+    args: [{name: "background",required: false,specifarg: false,orig: "{background}"},{name: "toFind",required: false,specifarg: false,orig: "{toFind}"},{name: "size",required: false,specifarg: true,orig: "[-size <pixels>]"}],
     execute: async function (msg, args) {
         let poopy = this
         let { lastUrl, getUrls, validateFile, fetchPingPerms, sendFile } = poopy.functions

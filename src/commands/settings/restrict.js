@@ -4,24 +4,24 @@ module.exports = {
         'restrictchannel'
     ],
     args: [{
-        "name": "option",
-        "required": true,
-        "specifarg": false,
-        "orig": "<option>"
+        name: "option",
+        required: true,
+        specifarg: false,
+        orig: "<option>"
     }],
     subcommands: [{
-        "name": "list",
-        "args": [],
-        "description": "Gets a list of restricted channels."
+        name: "list",
+        args: [],
+        description: "Gets a list of restricted channels."
     },
     {
-        "name": "toggle",
-        "args": [{
-            "name": "channel",
-            "required": false,
-            "specifarg": false,
-            "orig": "[channel]",
-            "autocomplete": function (interaction) {
+        name: "toggle",
+        args: [{
+            name: "channel",
+            required: false,
+            specifarg: false,
+            orig: "[channel]",
+            autocomplete: function (interaction) {
                 let poopy = this
                 let { Discord } = poopy.modules
                 
@@ -31,7 +31,7 @@ module.exports = {
                     .map(c => ({ name: c.name, value: c.id }))
             }
         }],
-        "description": "Restricts/unrestricts bot usage in the channel to moderators only."
+        description: "Restricts/unrestricts bot usage in the channel to moderators only."
     }],
     execute: async function (msg, args, opts) {
         let poopy = this
@@ -122,14 +122,14 @@ module.exports = {
                 }).catch(() => { })
                 else msg.reply({
                     embeds: [{
-                        "title": "Available Options",
-                        "description": instruction,
-                        "color": 0x472604,
-                        "footer": {
-                            "icon_url": bot.user.displayAvatarURL({
+                        title: "Available Options",
+                        description: instruction,
+                        color: 0x472604,
+                        footer: {
+                            icon_url: bot.user.displayAvatarURL({
                                 dynamic: true, size: 1024, extension: 'png'
                             }),
-                            "text": bot.user.displayName
+                            text: bot.user.displayName
                         },
                     }]
                 }).catch(() => { })

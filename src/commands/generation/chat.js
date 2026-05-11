@@ -2,19 +2,19 @@ module.exports = {
     name: ['chat', 'ask'],
     args: [
         {
-            "name": "message", "required": true, "specifarg": false, "orig": "<message>"
+            name: "message", required: true, specifarg: false, orig: "<message>"
         },
         {
-            "name": "temperature", "required": false, "specifarg": true, "orig": "[-temperature <number (from 0 to 1)>]"
+            name: "temperature", required: false, specifarg: true, orig: "[-temperature <number (from 0 to 1)>]"
         },
         {
-            "name": "instruct", "required": false, "specifarg": true, "orig": "[-instruct <prompt>]"
+            name: "instruct", required: false, specifarg: true, orig: "[-instruct <prompt>]"
         },
         {
-            "name": "imagesearch", "required": false, "specifarg": true, "orig": "[-imagesearch]"
+            name: "imagesearch", required: false, specifarg: true, orig: "[-imagesearch]"
         },
         {
-            "name": "clear", "required": false, "specifarg": true, "orig": "[-clear]"
+            name: "clear", required: false, specifarg: true, orig: "[-clear]"
         }
     ],
     execute: async function (msg, args) {

@@ -34,6 +34,7 @@ modules.Worker = require('worker_threads').Worker
 modules.Collection = require('@discordjs/collection').Collection
 modules.Rainmaze = require('../lib/rainmaze/Rainmaze')
 modules.DummyMessage = require('./dummyMessage')
+modules.GenAIWorker = require('./genAIWorker')
 modules.DMGuild = class DMGuild {
     constructor(msg) {
         let members = new modules.Collection([[msg.client.user.id, msg.client.user]].concat(

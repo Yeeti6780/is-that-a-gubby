@@ -1,6 +1,6 @@
 module.exports = {
     name: ['tbbban'],
-    args: [{ "name": "userId", "required": true, "specifarg": false, "orig": "<userId>" }],
+    args: [{ name: "userId", required: true, specifarg: false, orig: "<userId>" }],
     execute: async function (msg, args, opts) {
         let poopy = this
         let config = poopy.config

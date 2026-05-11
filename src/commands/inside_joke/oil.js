@@ -1,7 +1,7 @@
 module.exports = {
     name: ['oil'],
     args: [{
-        "name": "type", "required": false, "specifarg": true, "orig": "[-type <extension (image/video/gif)>]", "autocomplete": [
+        name: "type", required: false, specifarg: true, orig: "[-type <extension (image/video/gif)>]", autocomplete: [
             'image',
             'video',
             'gif'

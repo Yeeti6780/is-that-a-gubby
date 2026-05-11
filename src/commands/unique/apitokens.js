@@ -1,59 +1,59 @@
 module.exports = {
     name: ['apitokens', 'managetokens'],
     args: [{
-        "name": "option",
-        "required": true,
-        "specifarg": false,
-        "orig": "<option>"
+        name: "option",
+        required: true,
+        specifarg: false,
+        orig: "<option>"
     }],
     subcommands: [{
-        "name": "help",
-        "args": [],
-        "description": "Get a list of tokens you can manage, and how to get them."
+        name: "help",
+        args: [],
+        description: "Get a list of tokens you can manage, and how to get them."
     },
     {
-        "name": "list",
-        "args": [{
-            "name": "show",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-show]"
+        name: "list",
+        args: [{
+            name: "show",
+            required: false,
+            specifarg: true,
+            orig: "[-show]"
         }],
-        "description": "Show a list of all your tokens."
+        description: "Show a list of all your tokens."
     },
     {
-        "name": "add",
-        "args": [{
-            "name": "token",
-            "required": true,
-            "specifarg": false,
-            "orig": "<token>",
-            "autocomplete": [
+        name: "add",
+        args: [{
+            name: "token",
+            required: true,
+            specifarg: false,
+            orig: "<token>",
+            autocomplete: [
                 'AI21_KEY',
                 'REMOVEBG_KEY'
             ]
         },
         {
-            "name": "value",
-            "required": true,
-            "specifarg": false,
-            "orig": "<value>"
+            name: "value",
+            required: true,
+            specifarg: false,
+            orig: "<value>"
         }],
-        "description": "Add a new token value to your tokens, multiple can be used."
+        description: "Add a new token value to your tokens, multiple can be used."
     },
     {
-        "name": "reset",
-        "args": [{
-            "name": "token",
-            "required": true,
-            "specifarg": false,
-            "orig": "<token>",
-            "autocomplete": [
+        name: "reset",
+        args: [{
+            name: "token",
+            required: true,
+            specifarg: false,
+            orig: "<token>",
+            autocomplete: [
                 'AI21_KEY',
                 'REMOVEBG_KEY'
             ]
         }],
-        "description": "Removes all of the token's values and resets to the bot's defaults."
+        description: "Removes all of the token's values and resets to the bot's defaults."
     }],
     execute: async function (msg, args, opts) {
         let poopy = this
@@ -97,14 +97,14 @@ module.exports = {
                         })
                         else await dmChannel.send({
                             embeds: [{
-                                "title": 'API Tokens',
-                                "description": "Here, you can manage your own keys and tokens to freely access APIs without having to deal with the bot's quotas and limits! Multiple tokens can be used for each API, they're encrypted when saved.",
-                                "color": 0x472604,
-                                "footer": {
+                                title: 'API Tokens',
+                                description: "Here, you can manage your own keys and tokens to freely access APIs without having to deal with the bot's quotas and limits! Multiple tokens can be used for each API, they're encrypted when saved.",
+                                color: 0x472604,
+                                footer: {
                                     icon_url: bot.user.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' }),
                                     text: bot.user.displayName
                                 },
-                                "fields": Object.keys(tokenList).map(token => {
+                                fields: Object.keys(tokenList).map(token => {
                                     var tokenInfo = tokenList[token]
 
                                     return {
@@ -139,14 +139,14 @@ module.exports = {
                     }).catch(() => { })
                     else await msg.reply({
                         embeds: [{
-                            "title": 'Token Manager',
-                            "description": Object.keys(tokenList).map(token => {
+                            title: 'Token Manager',
+                            description: Object.keys(tokenList).map(token => {
                                 var tokens = data.userData[msg.author.id].tokens[token] ?? []
 
                                 return `\`${token}\` -> ${tokens.length > 0 ? tokens.map(t => decrypt(t, !args.includes('-show'))).join(', ') : 'None.'}`
                             }).join('\n'),
-                            "color": 0x472604,
-                            "footer": {
+                            color: 0x472604,
+                            footer: {
                                 icon_url: bot.user.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' }),
                                 text: bot.user.displayName
                             }
@@ -238,14 +238,14 @@ module.exports = {
                 }).catch(() => { })
                 else msg.reply({
                     embeds: [{
-                        "title": "Available Options",
-                        "description": instruction,
-                        "color": 0x472604,
-                        "footer": {
-                            "icon_url": bot.user.displayAvatarURL({
+                        title: "Available Options",
+                        description: instruction,
+                        color: 0x472604,
+                        footer: {
+                            icon_url: bot.user.displayAvatarURL({
                                 dynamic: true, size: 1024, extension: 'png'
                             }),
-                            "text": bot.user.displayName
+                            text: bot.user.displayName
                         },
                     }]
                 }).catch(() => { })

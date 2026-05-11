@@ -1,6 +1,6 @@
 module.exports = {
     name: ['makewebm'],
-    args: [{"name":"frameurls","required":false,"specifarg":false,"orig":"<frames>"},{"name":"frames","required":false,"specifarg":true,"orig":"[-frames <framenumber (max 50)>]"},{"name":"audio","required":false,"specifarg":true,"orig":"[-audio <audioFile>]"},{"name":"fps","required":false,"specifarg":false,"orig":"{fps (max 60)}"}],
+    args: [{name: "frameurls",required: false,specifarg: false,orig: "<frames>"},{name: "frames",required: false,specifarg: true,orig: "[-frames <framenumber (max 50)>]"},{name: "audio",required: false,specifarg: true,orig: "[-audio <audioFile>]"},{name: "fps",required: false,specifarg: false,orig: "{fps (max 60)}"}],
     execute: async function (msg, args) {
         let poopy = this
         let {

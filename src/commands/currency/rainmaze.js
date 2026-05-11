@@ -1,8 +1,8 @@
 module.exports = {
   name: ['rainmaze', 'tilemaze'],
   args: [
-    { "name": "w", "required": false, "specifarg": false, "orig": "[w (max 27)]" },
-    { "name": "h", "required": false, "specifarg": false, "orig": "[h (max 7)]" }
+    { name: "w", required: false, specifarg: false, orig: "[w (max 27)]" },
+    { name: "h", required: false, specifarg: false, orig: "[h (max 7)]" }
   ],
   execute: async function (msg, args) {
     let poopy = this

@@ -7,6 +7,7 @@ module.exports = {
         let json = poopy.json
         let arrays = poopy.arrays
         let { workerTask, splitKeyFunc, parseNumber, genAi } = poopy.functions
+        let { GenAIWorker } = poopy.modules
 
         var word = matches[1]
 
@@ -28,14 +29,14 @@ module.exports = {
         if (randomLengthPicked && (begin || minLength != 1)) maxLength = Math.max(maxLength, 300, minLength)
 
         if (!tempdata[msg.guild.id].messageModel) {
-            tempdata[msg.guild.id].messageModel = workerTask("genai-model", messages)
-        }
-    
-        if (tempdata[msg.guild.id].messageModel instanceof Promise) {
-            tempdata[msg.guild.id].messageModel = await tempdata[msg.guild.id].messageModel
+            tempdata[msg.guild.id].messageModel = new GenAIWorker(
+                tempdata[msg.guild.id].messages.map(m => m.content)
+            )
         }
 
-        var [markovString] = genAi.generateFromModel(tempdata[msg.guild.id].messageModel, {
+        const modelWorker = tempdata[msg.guild.id].messageModel
+
+        var [markovString] = modelWorker.generate({
             minLength: minLength,
             maxLength: maxLength,
             begin: begin

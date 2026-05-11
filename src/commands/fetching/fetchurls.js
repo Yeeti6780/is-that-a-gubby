@@ -1,6 +1,6 @@
 module.exports = {
   name: ['fetchurls', 'geturls'],
-  args: [{"name":"message","required":true,"specifarg":false,"orig":"<message>"}],
+  args: [{name: "message",required: true,specifarg: false,orig: "<message>"}],
   execute: async function (msg, args) {
     let poopy = this
     let { Discord } = poopy.modules

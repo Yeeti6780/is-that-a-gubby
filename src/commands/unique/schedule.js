@@ -1,38 +1,38 @@
 module.exports = {
     name: ['schedule', 'timer', 'cron'],
     args: [{
-        "name": "option",
-        "required": true,
-        "specifarg": false,
-        "orig": "<option>"
+        name: "option",
+        required: true,
+        specifarg: false,
+        orig: "<option>"
     }],
     subcommands: [{
-        "name": "list",
-        "args": [],
-        "description": "Gets a list of timers set up in the server."
+        name: "list",
+        args: [],
+        description: "Gets a list of timers set up in the server."
     },
     {
-        "name": "info",
-        "args": [{
-            "name": "timerId",
-            "required": true,
-            "specifarg": false,
-            "orig": "<timerId>",
+        name: "info",
+        args: [{
+            name: "timerId",
+            required: true,
+            specifarg: false,
+            orig: "<timerId>",
             "autocompvare": function (interaction) {
                 var poopy = this
                 return poopy.data.botData.crons.filter(c => c.guildId == interaction.guild.id).map(c => c.id)
             }
         }],
-        "description": "Displays the info of the timer that has been set up with the respective ID."
+        description: "Displays the info of the timer that has been set up with the respective ID."
     },
     {
-        "name": "add",
-        "args": [{
-            "name": "channel",
-            "required": false,
-            "specifarg": false,
-            "orig": "[channel]",
-            "autocomplete": function (interaction) {
+        name: "add",
+        args: [{
+            name: "channel",
+            required: false,
+            specifarg: false,
+            orig: "[channel]",
+            autocomplete: function (interaction) {
                 let poopy = this
                 let { Discord } = poopy.modules
 
@@ -49,64 +49,64 @@ module.exports = {
             }
         },
         {
-            "name": "cron",
-            "required": true,
-            "specifarg": false,
-            "orig": "\"<cron>\""
+            name: "cron",
+            required: true,
+            specifarg: false,
+            orig: "\"<cron>\""
         },
         {
-            "name": "phrase",
-            "required": true,
-            "specifarg": false,
-            "orig": "<phrase>"
+            name: "phrase",
+            required: true,
+            specifarg: false,
+            orig: "<phrase>"
         },
         {
-            "name": "allowpings",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-allowpings]"
+            name: "allowpings",
+            required: false,
+            specifarg: true,
+            orig: "[-allowpings]"
         }],
-        "description": "Adds a new scheduled timer with the specified phrase and cron syntax."
+        description: "Adds a new scheduled timer with the specified phrase and cron syntax."
     },
     {
-        "name": "edit",
-        "args": [{
-            "name": "timerId",
-            "required": true,
-            "specifarg": false,
-            "orig": "<timerId>",
+        name: "edit",
+        args: [{
+            name: "timerId",
+            required: true,
+            specifarg: false,
+            orig: "<timerId>",
             "autocompvare": function (interaction) {
                 var poopy = this
                 return poopy.data.botData.crons.filter(c => c.guildId == interaction.guild.id).map(c => c.id)
             }
         },
         {
-            "name": "cron",
-            "required": false,
-            "specifarg": false,
-            "orig": "\"[cron]\""
+            name: "cron",
+            required: false,
+            specifarg: false,
+            orig: "\"[cron]\""
         },
         {
-            "name": "phrase",
-            "required": false,
-            "specifarg": false,
-            "orig": "<phrase>"
+            name: "phrase",
+            required: false,
+            specifarg: false,
+            orig: "<phrase>"
         }],
-        "description": "Edits the scheduled timer with the specified ID."
+        description: "Edits the scheduled timer with the specified ID."
     },
     {
-        "name": "delete",
-        "args": [{
-            "name": "timerId",
-            "required": true,
-            "specifarg": false,
-            "orig": "<timerId>",
+        name: "delete",
+        args: [{
+            name: "timerId",
+            required: true,
+            specifarg: false,
+            orig: "<timerId>",
             "autocompvare": function (interaction) {
                 var poopy = this
                 return poopy.data.botData.crons.filter(c => c.guildId == interaction.guild.id).map(c => c.id)
             }
         }],
-        "description": "Deletes the timer from the server."
+        description: "Deletes the timer from the server."
     }],
     execute: async function (msg, args, opts) {
         var poopy = this
@@ -140,14 +140,14 @@ module.exports = {
                         if (config.textEmbeds) await msg.reply('No timers set up for this server.').catch(() => { })
                         else await msg.reply({
                             embeds: [{
-                                "title": `Scheduled Timers for ${msg.guild.name}`,
-                                "description": 'No timers set up for this server.',
-                                "color": 0x472604,
-                                "footer": {
-                                    "icon_url": bot.user.displayAvatarURL({
+                                title: `Scheduled Timers for ${msg.guild.name}`,
+                                description: 'No timers set up for this server.',
+                                color: 0x472604,
+                                footer: {
+                                    icon_url: bot.user.displayAvatarURL({
                                         dynamic: true, size: 1024, extension: 'png'
                                     }),
-                                    "text": bot.user.displayName
+                                    text: bot.user.displayName
                                 },
                             }]
                         }).catch(() => { })
@@ -161,14 +161,14 @@ module.exports = {
                     msg.channel, async (page) => {
                         if (config.textEmbeds) return `${timers[page - 1].join('\n')}\n\nPage ${page}/${timers.length}`
                         else return {
-                            "title": `Scheduled Timers for ${msg.guild.name}`,
-                            "description": timers[page - 1].join('\n'),
-                            "color": 0x472604,
-                            "footer": {
-                                "icon_url": bot.user.displayAvatarURL({
+                            title: `Scheduled Timers for ${msg.guild.name}`,
+                            description: timers[page - 1].join('\n'),
+                            color: 0x472604,
+                            footer: {
+                                icon_url: bot.user.displayAvatarURL({
                                     dynamic: true, size: 1024, extension: 'png'
                                 }),
-                                "text": `Page ${page}/${timers.length}`
+                                text: `Page ${page}/${timers.length}`
                             },
                         }
                     },
@@ -206,14 +206,14 @@ module.exports = {
                         } else {
                             await msg.reply({
                                 embeds: [{
-                                    "title": `Timer Info (ID: ${timer.id})`,
-                                    "description": `**Channel:** <#${timer.channelId}>\n**Schedule:** \`${timer.cron}\` (Next: <t:${timestamp}:F>)\n**Message:**\n${timer.phrase}`,
-                                    "color": 0x472604,
-                                    "footer": {
-                                        "icon_url": bot.user.displayAvatarURL({
+                                    title: `Timer Info (ID: ${timer.id})`,
+                                    description: `**Channel:** <#${timer.channelId}>\n**Schedule:** \`${timer.cron}\` (Next: <t:${timestamp}:F>)\n**Message:**\n${timer.phrase}`,
+                                    color: 0x472604,
+                                    footer: {
+                                        icon_url: bot.user.displayAvatarURL({
                                             dynamic: true, size: 1024, extension: 'png'
                                         }),
-                                        "text": bot.user.displayName
+                                        text: bot.user.displayName
                                     },
                                 }],
                                 allowedMentions: fetchPingPerms(msg)
@@ -463,25 +463,25 @@ module.exports = {
                 if (config.textEmbeds) msg.reply(instruction + "\n\n" + "**Cron Syntax Overview**\n" + syntaxOverview).catch(() => { })
                 else msg.reply({
                     embeds: [{
-                        "title": "Available Options",
-                        "description": instruction,
-                        "color": 0x472604,
-                        "footer": {
-                            "icon_url": bot.user.displayAvatarURL({
+                        title: "Available Options",
+                        description: instruction,
+                        color: 0x472604,
+                        footer: {
+                            icon_url: bot.user.displayAvatarURL({
                                 dynamic: true, size: 1024, extension: 'png'
                             }),
-                            "text": bot.user.displayName
+                            text: bot.user.displayName
                         },
                     },
                     {
-                        "title": "Cron Syntax Overview",
-                        "description": syntaxOverview,
-                        "color": 0x472604,
-                        "footer": {
-                            "icon_url": bot.user.displayAvatarURL({
+                        title: "Cron Syntax Overview",
+                        description: syntaxOverview,
+                        color: 0x472604,
+                        footer: {
+                            icon_url: bot.user.displayAvatarURL({
                                 dynamic: true, size: 1024, extension: 'png'
                             }),
-                            "text": bot.user.displayName
+                            text: bot.user.displayName
                         },
                     }]
                 }).catch(() => { })

@@ -1,6 +1,6 @@
 module.exports = {
     name: ['dividelength', 'divideduration'],
-    args: [{ "name": "multiplier", "required": false, "specifarg": false, "orig": "[multiplier (from 1 to 6)]" }, { "name": "file", "required": false, "specifarg": false, "orig": "{file}" }],
+    args: [{ name: "multiplier", required: false, specifarg: false, orig: "[multiplier (from 1 to 6)]" }, { name: "file", required: false, specifarg: false, orig: "{file}" }],
     execute: async function (msg, args) {
         let poopy = this
         let { lastUrl, validateFile, downloadFile, sendFile, fetchPingPerms } = poopy.functions

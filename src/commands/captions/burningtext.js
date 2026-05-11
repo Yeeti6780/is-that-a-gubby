@@ -1,7 +1,7 @@
 module.exports = {
     name: ['burningtext', 'flamingtext', 'cooltext'],
-    args: [{ "name": "prompt", "required": true, "specifarg": false, "orig": "<prompt>" }, { "name": "fontsize", "required": false, "specifarg": true, "orig": "[-fontsize <pixels>]" }, {
-        "name": "origin", "required": false, "specifarg": true, "orig": "[-origin <x (left/center/right)> <y (top/middle/bottom)>]", "autocomplete": [
+    args: [{ name: "prompt", required: true, specifarg: false, orig: "<prompt>" }, { name: "fontsize", required: false, specifarg: true, orig: "[-fontsize <pixels>]" }, {
+        name: "origin", required: false, specifarg: true, orig: "[-origin <x (left/center/right)> <y (top/middle/bottom)>]", autocomplete: [
             'left top',
             'center top',
             'right top',
@@ -12,7 +12,7 @@ module.exports = {
             'center bottom',
             'right bottom',
         ]
-    }, { "name": "id", "required": false, "specifarg": true, "orig": "[-id <number (default 4)>]" }],
+    }, { name: "id", required: false, specifarg: true, orig: "[-id <number (default 4)>]" }],
     execute: async function (msg, args) {
         let poopy = this
         let {

@@ -2,22 +2,22 @@ module.exports = {
     name: ['cleverbot', 'respond'],
     args: [
         {
-            "name": "message",
-            "required": false,
-            "specifarg": false,
-            "orig": "{message}"
+            name: "message",
+            required: false,
+            specifarg: false,
+            orig: "{message}"
         },
         {
-            "name": "continuous",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-continuous]"
+            name: "continuous",
+            required: false,
+            specifarg: true,
+            orig: "[-continuous]"
         },
         {
-            "name": "clear",
-            "required": false,
-            "specifarg": true,
-            "orig": "[-clear]"
+            name: "clear",
+            required: false,
+            specifarg: true,
+            orig: "[-clear]"
         }
     ],
     execute: async function (msg, args) {

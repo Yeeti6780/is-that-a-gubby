@@ -1,8 +1,8 @@
 module.exports = {
     name: ['shrink', 'reduce'],
-    args: [{ "name": "multiplier", "required": false, "specifarg": false, "orig": "[multiplier (from 1 to 6)]" }, { "name": "file", "required": false, "specifarg": false, "orig": "{file}" }, {
-        "name": "flags", "required": false, "specifarg": true, "orig": "[-flags <algorithm>]",
-        "autocomplete": [
+    args: [{ name: "multiplier", required: false, specifarg: false, orig: "[multiplier (from 1 to 6)]" }, { name: "file", required: false, specifarg: false, orig: "{file}" }, {
+        name: "flags", required: false, specifarg: true, orig: "[-flags <algorithm>]",
+        autocomplete: [
             'fast_bilinear',
             'bilinear',
             'bicubic',

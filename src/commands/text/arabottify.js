@@ -1,6 +1,6 @@
 module.exports = {
     name: ['arabottify'],
-    args: [{"name":"message","required":false,"specifarg":false,"orig":"[message]"},{"name":"words","required":false,"specifarg":true,"orig":"[-words <wordNumber>]"},{"name":"noextrawords","required":false,"specifarg":true,"orig":"[-noextrawords]"},{"name":"nopunctuation","required":false,"specifarg":true,"orig":"[-nopunctuation]"}],
+    args: [{name: "message",required: false,specifarg: false,orig: "[message]"},{name: "words",required: false,specifarg: true,orig: "[-words <wordNumber>]"},{name: "noextrawords",required: false,specifarg: true,orig: "[-noextrawords]"},{name: "nopunctuation",required: false,specifarg: true,orig: "[-nopunctuation]"}],
     execute: async function (msg, args) {
         let poopy = this
         let vars = poopy.vars

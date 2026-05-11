@@ -1,6 +1,6 @@
 module.exports = {
     name: ['say', 'talk', 'speak'],
-    args: [{ "name": "message", "required": true, "specifarg": false, "orig": "<message>" }, { "name": "nodelete", "required": false, "specifarg": true, "orig": "[-nodelete]" }, { "name": "tts", "required": false, "specifarg": true, "orig": "[-tts]" }],
+    args: [{ name: "message", required: true, specifarg: false, orig: "<message>" }, { name: "nodelete", required: false, specifarg: true, orig: "[-nodelete]" }, { name: "tts", required: false, specifarg: true, orig: "[-tts]" }],
     execute: async function (msg, args) {
         let poopy = this
         let config = poopy.config

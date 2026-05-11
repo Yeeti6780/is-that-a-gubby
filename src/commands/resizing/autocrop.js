@@ -1,6 +1,6 @@
 module.exports = {
     name: ['autocrop'],
-    args: [{ "name": "file", "required": false, "specifarg": false, "orig": "{file}" }, { "name": "limit", "required": false, "specifarg": true, "orig": "[-limit <threshold (from 0 to 255)>]" }, { "name": "round", "required": false, "specifarg": true, "orig": "[-round <divisor>]" }, { "name": "invert", "required": false, "specifarg": true, "orig": "[-invert]" }],
+    args: [{ name: "file", required: false, specifarg: false, orig: "{file}" }, { name: "limit", required: false, specifarg: true, orig: "[-limit <threshold (from 0 to 255)>]" }, { name: "round", required: false, specifarg: true, orig: "[-round <divisor>]" }, { name: "invert", required: false, specifarg: true, orig: "[-invert]" }],
     execute: async function (msg, args) {
         let poopy = this
         let {

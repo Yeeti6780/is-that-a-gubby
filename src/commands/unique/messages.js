@@ -1,39 +1,39 @@
 module.exports = {
     name: ['messages'],
     args: [{
-        "name": "option",
-        "required": true,
-        "specifarg": false,
-        "orig": "<option>"
+        name: "option",
+        required: true,
+        specifarg: false,
+        orig: "<option>"
     }],
     subcommands: [{
-        "name": "list",
-        "args": [],
-        "description": "Sends a text file with a list of all messages that exist within the guild's message database."
+        name: "list",
+        args: [],
+        description: "Sends a text file with a list of all messages that exist within the guild's message database."
     },
     {
-        "name": "search",
-        "args": [{
-            "name": "query",
-            "required": true,
-            "specifarg": false,
-            "orig": "<query>"
+        name: "search",
+        args: [{
+            name: "query",
+            required: true,
+            specifarg: false,
+            orig: "<query>"
         }],
-        "description": "Searches for every message in the server that matches the query."
+        description: "Searches for every message in the server that matches the query."
     },
     {
-        "name": "random",
-        "args": [],
-        "description": "Sends a random message from the database to the channel."
+        name: "random",
+        args: [],
+        description: "Sends a random message from the database to the channel."
     },
     {
-        "name": "member",
-        "args": [{
-            "name": "id",
-            "required": true,
-            "specifarg": false,
-            "orig": "<id>",
-            "autocomplete": async function (interaction) {
+        name: "member",
+        args: [{
+            name: "id",
+            required: true,
+            specifarg: false,
+            orig: "<id>",
+            autocomplete: async function (interaction) {
                 let poopy = this
                 let { data, config } = poopy
                 let { dataGather } = poopy.functions
@@ -50,45 +50,45 @@ module.exports = {
                 })
             }
         }],
-        "description": "Sends a random message from that member to the channel."
+        description: "Sends a random message from that member to the channel."
     },
     {
-        "name": "add",
-        "args": [{
-            "name": "message",
-            "required": true,
-            "specifarg": false,
-            "orig": "<message>"
+        name: "add",
+        args: [{
+            name: "message",
+            required: true,
+            specifarg: false,
+            orig: "<message>"
         }],
-        "description": "Adds a new permanent message to the guild's database, if it is not duplicated."
+        description: "Adds a new permanent message to the guild's database, if it is not duplicated."
     },
     {
-        "name": "delete",
-        "args": [{
-            "name": "message",
-            "required": true,
-            "specifarg": false,
-            "orig": "<message>",
-            "autocomplete": function (interaction) {
+        name: "delete",
+        args: [{
+            name: "message",
+            required: true,
+            specifarg: false,
+            orig: "<message>",
+            autocomplete: function (interaction) {
                 let poopy = this
                 return poopy.tempdata[interaction.guild.id].messages.map(msg => msg.content)
             }
         }],
-        "description": "Deletes the message, if it exists."
+        description: "Deletes the message, if it exists."
     },
     {
-        "name": "clear",
-        "args": [],
-        "description": "Clears ALL the messages from the database."
+        name: "clear",
+        args: [],
+        description: "Clears ALL the messages from the database."
     },
     {
-        "name": "read",
-        "args": [{
-            "name": "channel",
-            "required": false,
-            "specifarg": false,
-            "orig": "[channel]",
-            "autocomplete": function (interaction) {
+        name: "read",
+        args: [{
+            name: "channel",
+            required: false,
+            specifarg: false,
+            orig: "[channel]",
+            autocomplete: function (interaction) {
                 let poopy = this
                 let { Discord } = poopy.modules
 
@@ -101,12 +101,12 @@ module.exports = {
                     .map(c => ({ name: c.name, value: c.id }))
             }
         }],
-        "description": "Toggles whether the bot can read the messages from the channel or not."
+        description: "Toggles whether the bot can read the messages from the channel or not."
     },
     {
-        "name": "readall",
-        "args": [],
-        "description": "Toggles whether the bot can read the messages from all channels or not."
+        name: "readall",
+        args: [],
+        description: "Toggles whether the bot can read the messages from all channels or not."
     }],
     execute: async function (msg, args, opts) {
         let poopy = this
@@ -305,9 +305,14 @@ module.exports = {
                             return
                         }
 
+                        const modelWorker = tempdata[msg.guild.id].messageModel
+
                         data.guildData[msg.guild.id].messages = []
                         tempdata[msg.guild.id].messages = []
-                        delete tempdata[msg.guild.id].messageModel
+                        if (modelWorker) {
+                            modelWorker.destroy()
+                            delete tempdata[msg.guild.id].messageModel
+                        }
 
                         if (!msg.nosend) await msg.reply(`✅ All **${size}** messages from the server's database have been cleared.`).catch(() => { })
                         return `✅ All **${size}** messages from the server's database have been cleared.`
@@ -381,14 +386,14 @@ module.exports = {
                 if (config.textEmbeds) msg.reply(instruction).catch(() => { })
                 else msg.reply({
                     embeds: [{
-                        "title": "Available Options",
-                        "description": instruction,
-                        "color": 0x472604,
-                        "footer": {
-                            "icon_url": bot.user.displayAvatarURL({
+                        title: "Available Options",
+                        description: instruction,
+                        color: 0x472604,
+                        footer: {
+                            icon_url: bot.user.displayAvatarURL({
                                 dynamic: true, size: 1024, extension: 'png'
                             }),
-                            "text": bot.user.displayName
+                            text: bot.user.displayName
                         },
                     }]
                 }).catch(() => { })

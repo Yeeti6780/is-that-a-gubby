@@ -1,6 +1,6 @@
 module.exports = {
   name: ['brainfuck', 'bf'],
-  args: [{ "name": "code", "required": true, "specifarg": false, "orig": "<code>" }],
+  args: [{ name: "code", required: true, specifarg: false, orig: "<code>" }],
   execute: async function (msg, args) {
     let poopy = this
     let { brainfuck, fetchPingPerms } = poopy.functions

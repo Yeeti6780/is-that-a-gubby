@@ -1,10 +1,10 @@
 module.exports = {
     name: ['markov', 'genai'],
     args: [
-        { "name": "begin", "required": false, "specifarg": false, "orig": "[begin]" },
-        { "name": "minlength", "required": false, "specifarg": true, "orig": "[-minlength <charNumber (1 to 10000)>]" },
-        { "name": "maxlength", "required": false, "specifarg": true, "orig": "[-maxlength <charNumber (1 to 10000)>]" },
-        { "name": "randomsentences", "required": false, "specifarg": true, "orig": "[-randomsentences]" }
+        { name: "begin", required: false, specifarg: false, orig: "[begin]" },
+        { name: "minlength", required: false, specifarg: true, orig: "[-minlength <charNumber (1 to 10000)>]" },
+        { name: "maxlength", required: false, specifarg: true, orig: "[-maxlength <charNumber (1 to 10000)>]" },
+        { name: "randomsentences", required: false, specifarg: true, orig: "[-randomsentences]" }
     ],
     execute: async function (msg, args) {
         let poopy = this
@@ -14,7 +14,7 @@ module.exports = {
         let arrays = poopy.arrays
         let vars = poopy.vars
         let config = poopy.config
-        let { fs, Discord } = poopy.modules
+        let { fs, Discord, GenAIWorker } = poopy.modules
 
         var randomLengthPicked = false
         function pickRandomLength() {
@@ -37,14 +37,14 @@ module.exports = {
         msg.channel.sendTyping().catch(() => { })
 
         if (!tempdata[msg.guild.id].messageModel) {
-            tempdata[msg.guild.id].messageModel = workerTask("genai-model", messages)
-        }
-    
-        if (tempdata[msg.guild.id].messageModel instanceof Promise) {
-            tempdata[msg.guild.id].messageModel = await tempdata[msg.guild.id].messageModel
+            tempdata[msg.guild.id].messageModel = new GenAIWorker(
+                tempdata[msg.guild.id].messages.map(m => m.content)
+            )
         }
 
-        var [markovString] = genAi.generateFromModel(tempdata[msg.guild.id].messageModel, {
+        const modelWorker = tempdata[msg.guild.id].messageModel
+
+        var [markovString] = await modelWorker.generate({
             minLength: minLength,
             maxLength: maxLength,
             begin: saidMessage

@@ -1,6 +1,6 @@
 module.exports = {
     name: ['oldmarkov2'],
-    args: [{ "name": "minlength", "required": false, "specifarg": true, "orig": "[-minlength <charNumber>]" }, { "name": "randomsentences", "required": false, "specifarg": true, "orig": "[-randomsentences]" }],
+    args: [{ name: "minlength", required: false, specifarg: true, orig: "[-minlength <charNumber>]" }, { name: "randomsentences", required: false, specifarg: true, orig: "[-randomsentences]" }],
     execute: async function (msg, args) {
         let poopy = this
         let { getOption, parseNumber, markov, fetchPingPerms } = poopy.functions

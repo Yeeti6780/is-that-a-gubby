@@ -1,6 +1,6 @@
 module.exports = {
     name: ['gradualhighpitch', 'gradualincreasepitch'],
-    args: [{"name":"multiplier","required":false,"specifarg":false,"orig":"[multiplier <number (from 1 to 2)>]"},{"name":"file","required":false,"specifarg":false,"orig":"{file}"}],
+    args: [{name: "multiplier",required: false,specifarg: false,orig: "[multiplier <number (from 1 to 2)>]"},{name: "file",required: false,specifarg: false,orig: "{file}"}],
     execute: async function (msg, args) {
         let poopy = this
         let {

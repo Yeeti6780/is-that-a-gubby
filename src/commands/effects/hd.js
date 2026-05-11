@@ -1,8 +1,8 @@
 module.exports = {
     name: ['hd'],
-    args: [{ "name": "file", "required": false, "specifarg": false, "orig": "{file}" }, {
-        "name": "flags", "required": false, "specifarg": true, "orig": "[-flags <algorithm>]",
-        "autocomplete": [
+    args: [{ name: "file", required: false, specifarg: false, orig: "{file}" }, {
+        name: "flags", required: false, specifarg: true, orig: "[-flags <algorithm>]",
+        autocomplete: [
             'fast_bilinear',
             'bilinear',
             'bicubic',

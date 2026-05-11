@@ -1,8 +1,8 @@
 module.exports = {
     name: ['areascale', 'expandscale'],
-    args: [{ "name": "width", "required": true, "specifarg": false, "orig": "<width>" }, { "name": "height", "required": true, "specifarg": false, "orig": "<height>" }, { "name": "file", "required": false, "specifarg": false, "orig": "{file}" }, {
-        "name": "origin", "required": false, "specifarg": true, "orig": "[-origin <x (left/center/right)> <y (top/middle/bottom)>]",
-        "autocomplete": [
+    args: [{ name: "width", required: true, specifarg: false, orig: "<width>" }, { name: "height", required: true, specifarg: false, orig: "<height>" }, { name: "file", required: false, specifarg: false, orig: "{file}" }, {
+        name: "origin", required: false, specifarg: true, orig: "[-origin <x (left/center/right)> <y (top/middle/bottom)>]",
+        autocomplete: [
             'left top',
             'center top',
             'right top',
@@ -13,7 +13,7 @@ module.exports = {
             'center bottom',
             'right bottom',
         ]
-    }, { "name": "keepaspectratio", "required": false, "specifarg": true, "orig": "[-keepaspectratio <mode (increase or decrease)>]", "autocomplete": ['increase', 'decrease'] }],
+    }, { name: "keepaspectratio", required: false, specifarg: true, orig: "[-keepaspectratio <mode (increase or decrease)>]", autocomplete: ['increase', 'decrease'] }],
     execute: async function (msg, args) {
         let poopy = this
         let {

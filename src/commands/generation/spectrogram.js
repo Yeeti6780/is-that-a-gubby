@@ -1,8 +1,8 @@
 module.exports = {
     name: ['spectrogram'],
-    args: [{ "name": "file", "required": false, "specifarg": false, "orig": "{file}" }, {
-        "name": "color", "required": false, "specifarg": true, "orig": "[-color <mode>]",
-        "autocomplete": [
+    args: [{ name: "file", required: false, specifarg: false, orig: "{file}" }, {
+        name: "color", required: false, specifarg: true, orig: "[-color <mode>]",
+        autocomplete: [
             'channel',
             'intensity',
             'rainbow',
@@ -20,7 +20,7 @@ module.exports = {
             'terrain'
         ]
     }, {
-        "name": "scale", "required": false, "specifarg": true, "orig": "[-scale <scale>]", "autocomplete": [
+        name: "scale", required: false, specifarg: true, orig: "[-scale <scale>]", autocomplete: [
             'lin',
             'sqrt',
             'cbrt',
@@ -28,7 +28,7 @@ module.exports = {
             '4thrt',
             '5thrt'
         ]
-    }, { "name": "saturation", "required": false, "specifarg": true, "orig": "[-saturation <number (from -10 to 10)>]" }],
+    }, { name: "saturation", required: false, specifarg: true, orig: "[-saturation <number (from -10 to 10)>]" }],
     execute: async function (msg, args) {
         let poopy = this
         let {
