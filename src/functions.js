@@ -4239,7 +4239,7 @@ functions.createLog = async function (type, member, logData) {
 
             if (webhookMsg?.embeds && webhookMsg?.embeds?.some(e => e.data.title == "Webhook message sent")) return
 
-            const attachments = webhookMsg.attachments
+            const attachments = webhookMsg.attachments ?? []
             logPayload.files = attachments.map(a => new Discord.AttachmentBuilder(a.attachment))
 
             const footerAvatar = payload.avatarURL ?? webhookMsg.author.displayAvatarURL({ dynamic: true, size: 1024, extension: "png" }) ?? ""
