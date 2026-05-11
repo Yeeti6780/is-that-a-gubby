@@ -33,7 +33,7 @@ module.exports = {
             }).catch(() => { })
 
             if (find != -1) return find + chunksRead
-            chunksRead += chunks.length
+            chunksRead += chunk.length
         }
 
         return -1
