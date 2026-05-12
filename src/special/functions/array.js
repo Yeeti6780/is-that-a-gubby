@@ -12,6 +12,5 @@ module.exports = {
     tempdata[msg.author.id][msg.id].arrays[word] = []
 
     return [phrase, true]
-  },
-  attemptvalue: 5
+  }
 }

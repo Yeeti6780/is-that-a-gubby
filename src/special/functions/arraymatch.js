@@ -17,6 +17,5 @@ module.exports = {
     tempdata[msg.author.id][msg.id].arrays[name] = phr.match(regexp)
     return [phrase, true]
   },
-  attemptvalue: 5,
   parentheses: true
 }

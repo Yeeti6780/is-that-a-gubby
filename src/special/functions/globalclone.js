@@ -19,6 +19,5 @@ module.exports = {
     tempdata[msg.guild.id][msg.channel.id].arrays[clone] = [...(array || [])]
 
     return [phrase, true]
-  },
-  attemptvalue: 5
+  }
 }

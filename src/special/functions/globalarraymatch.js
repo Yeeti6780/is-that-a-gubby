@@ -17,6 +17,5 @@ module.exports = {
     tempdata[msg.guild.id][msg.channel.id].arrays[name] = phr.match(regexp)
     return [phrase, true]
   },
-  attemptvalue: 5,
   parentheses: true
 }

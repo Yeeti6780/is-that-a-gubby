@@ -15,6 +15,5 @@ module.exports = {
     var phrase = string.replace(new RegExp(`${regexClean(fullword)}\\s*`, 'i'), '')
     tempdata[msg.guild.id][msg.channel.id].arrays[name] = splitKeyFunc(phr, { separator: separator })
     return [phrase, true]
-  },
-  attemptvalue: 5
+  }
 }
