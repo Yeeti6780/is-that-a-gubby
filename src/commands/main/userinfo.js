@@ -50,7 +50,7 @@ module.exports = {
         if (global) member = member.user ?? member
 
         var avatar = member.displayAvatarURL({ dynamic: true, size: 1024, extension: 'png' })
-        var banner = member.bannerURL({ dynamic: true, size: 1024, extension: 'png' })
+        var banner = member.displayBannerURL({ dynamic: true, size: 1024, extension: 'png' })
 
         var urls = [`[Avatar URL](${avatar})`]
         if (banner) urls.push(`[Banner URL](${banner})`)
