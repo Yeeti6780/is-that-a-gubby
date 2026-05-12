@@ -1,5 +1,5 @@
 module.exports = {
-    name: ['benson'],
+    name: ['fnaf', 'benson'],
     args: [{ name: "name", required: false, specifarg: false, orig: "\"{name}\"" }, { name: "file", required: false, specifarg: false, orig: "{file}" }],
     execute: async function (msg, args) {
         let poopy = this
@@ -101,7 +101,9 @@ module.exports = {
             return
         }
     },
-    help: { name: 'benson "{name}" {file}', value: 'A.I. Level 20' },
+    help: {
+        name: 'fnaf/benson "{name}" {file}', value: 'Five Nights at Freddy\'s! Is this where you want to be?'
+    },
     cooldown: 2500,
     type: 'Memes'
 }
