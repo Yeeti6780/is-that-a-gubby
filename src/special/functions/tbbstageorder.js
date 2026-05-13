@@ -15,16 +15,18 @@ module.exports = {
         var findStage
         var findChapter = chapters.find(
             (stages) => {
-                var findChapterStage = stages.findIndex(
-                    s => s.name.toLowerCase() == stage.toLowerCase().trim()
-                )
-                if (findChapterStage < 0) findChapterStage = stages.findIndex(
-                    s => s.name.toLowerCase().includes(stage.toLowerCase().trim())
-                )
-                
-                if (findChapterStage >= 0) {
-                    findStage = findChapterStage
-                    return true
+                var findChapterMethods = [
+                    s => s.name.toLowerCase() == stage.toLowerCase().trim(),
+                    s => s.name.toLowerCase().includes(stage.toLowerCase().trim()),
+                    s => s.name.toLowerCase().replace(/[^a-z0-9 ]/g, "").includes(stage.toLowerCase().replace(/[^a-z0-9 ]/g, "").trim())
+                ]
+
+                for (var find of findChapterMethods) {
+                    var found = stages.findIndex(find)
+                    if (found > 0) {
+                        findStage = found
+                        return true
+                    }
                 }
 
                 return false
