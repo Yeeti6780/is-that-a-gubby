@@ -7,6 +7,7 @@ module.exports = {
         let { splitKeyFunc, parseNumber } = poopy.functions
 
         var [order, chapter] = splitKeyFunc(matches[1], { args: 2 })
+        if (!order) return ""
 
         var chapters = Object.entries({ ...json.stageJSON.main, ...json.stageJSON.sub })
         var [_, stages] = chapters.find(([ch]) => ch == chapter) ?? []
