@@ -5985,20 +5985,18 @@ functions.validateFileFromPath = async function (path, exception, opts) {
         infoPost(`Validating file from path`)
 
         if ((process.memoryUsage().rss / 1024 / 1024) <= config.memLimit) {
-            reject('No resources available.')
-            return
+            return reject('No resources available.')
         }
 
         if (!fs.existsSync(path)) {
-            reject('File not found.')
-            return
+            return reject('File not found.')
         }
 
         var revalidationTime = 60_000 * 10
         var validatedFile = tempdata.validatedFiles[path]
 
         if (validatedFile && (Date.now() - validatedFile.fetchedTime) < revalidationTime) {
-            return validatedFile.fileInfo
+            return resolve(validatedFile.fileInfo)
         }
 
         var type = await fileType.fromFile(path).catch(() => { })
@@ -6092,8 +6090,7 @@ functions.validateFileFromPath = async function (path, exception, opts) {
                     var rejectMessage = opts?.rejectMessages ? opts.rejectMessages[paramName] : limitObject[paramName].message
 
                     if (param > limitObject[paramName][shorttype]) {
-                        reject(rejectMessage.replace('{param}', limitObject[paramName][shorttype]))
-                        return
+                        return reject(rejectMessage.replace('{param}', limitObject[paramName][shorttype]))
                     }
                 }
             }
@@ -6108,7 +6105,7 @@ functions.validateFileFromPath = async function (path, exception, opts) {
             shortpixfmt: shortpixfmt,
             name: names[names.length - 1],
             info: info,
-            path: `data:${type.mime};base64,${buffer.toString('base64')}`,
+            path: path,
             buffer: buffer
         }
 
@@ -6141,8 +6138,7 @@ functions.validateFile = async function (url, exception, opts) {
         infoPost(`Validating file from URL`)
 
         if ((process.memoryUsage().rss / 1024 / 1024) <= config.memLimit) {
-            reject('No resources available.')
-            return
+            return reject('No resources available.')
         }
 
         if (url.startsWith('temp:')) {
@@ -6156,10 +6152,9 @@ functions.validateFile = async function (url, exception, opts) {
         if (!vars.validUrl.test(url)) {
             if (opts?.noPathsAllowed) return reject('Invalid URL.')
 
-            await validateFileFromPath(url, exception, opts)
+            return await validateFileFromPath(url, exception, opts)
                 .then(res => resolve(res))
                 .catch(res => reject(res))
-            return
         }
 
         var revalidationTime = 60_000 * 10
@@ -6167,8 +6162,7 @@ functions.validateFile = async function (url, exception, opts) {
         var validatedFile = tempdata.validatedFiles[fileInfoUrl]
 
         if (validatedFile && (Date.now() - validatedFile.fetchedTime) < revalidationTime) {
-            resolve(validatedFile.fileInfo)
-            return
+            return resolve(validatedFile.fileInfo)
         }
 
         var response = await axios({
@@ -6185,8 +6179,7 @@ functions.validateFile = async function (url, exception, opts) {
         if (!response) return
 
         if (!(response.status >= 200 && response.status < 300)) {
-            reject(`${response.status} ${response.statusText}`)
-            return
+            return reject(`${response.status} ${response.statusText}`)
         }
 
         var headers = response.headers
@@ -6313,8 +6306,7 @@ functions.validateFile = async function (url, exception, opts) {
                     var rejectMessage = opts?.rejectMessages ? opts?.rejectMessages[paramName] : limitObject[paramName].message
 
                     if (param > limitObject[paramName][shorttype]) {
-                        reject(rejectMessage.replace('{param}', limitObject[paramName][shorttype]))
-                        return
+                        return reject(rejectMessage.replace('{param}', limitObject[paramName][shorttype]))
                     }
                 }
             }
