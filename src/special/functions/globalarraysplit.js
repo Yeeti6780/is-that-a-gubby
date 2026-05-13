@@ -1,9 +1,9 @@
 module.exports = {
   helpf: '(arrayName | separator | phrase)',
   desc: `Creates a new global array by splitting the phrase by the separator. If it already exists, it'll be replaced.`,
-  func: function (matches, msg, _, string) {
+  func: function (matches, msg) {
     let poopy = this
-    let { splitKeyFunc, regexClean } = poopy.functions
+    let { splitKeyFunc } = poopy.functions
     let tempdata = poopy.tempdata
 
     var word = matches[1]
@@ -11,9 +11,7 @@ module.exports = {
     var name = split[0] ?? ''
     var separator = split[1] ?? '|'
     var phr = split[2] ?? ''
-    var fullword = `${matches[0]}(${matches[1]})`
-    var phrase = string.replace(new RegExp(`${regexClean(fullword)}\\s*`, 'i'), '')
     tempdata[msg.guild.id][msg.channel.id].arrays[name] = splitKeyFunc(phr, { separator: separator })
-    return [phrase, true]
+    return ''
   }
 }

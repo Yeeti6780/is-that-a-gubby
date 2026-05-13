@@ -9,9 +9,13 @@ module.exports = {
         var [stage, global] = splitKeyFunc(matches[1], { args: 2 })
 
         var chapters = Object.values({ ...json.stageJSON.main, ...json.stageJSON.sub })
-        if (global) chapters = [[chapters.flat()]]
+        if (global) chapters = [chapters.flat()]
 
         var findChapter = chapters.find(
+            (stages) => stages.some(
+                s => s.name.toLowerCase() == stage.toLowerCase().trim()
+            )
+        ) ?? chapters.find(
             (stages) => stages.some(
                 s => s.name.toLowerCase().includes(stage.toLowerCase().trim())
             )

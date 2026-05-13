@@ -2713,7 +2713,8 @@
         {
             "name": "Mystery II Battler",
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/b/b7/Mystery_II_Battler.png",
-            "alt": "Enigma II Battler"
+            "alt": "Enigma II Battler",
+            "boss": true
         },
         {
             "name": "McDonald Battler",
@@ -2724,7 +2725,8 @@
         {
             "name": "American Fatboy",
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/5/55/American_Fatboy.png",
-            "alt": "Patriot Warhead"
+            "alt": "Patriot Warhead",
+            "boss": true
         },
         {
             "name": "Cyborg Rocket Battle",
@@ -2736,7 +2738,8 @@
         {
             "name": "Enigma II Battler",
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/b/b3/Enigma_II_Battler.png",
-            "normal": "Mystery II Battler"
+            "normal": "Mystery II Battler",
+            "boss": true
         },
         {
             "name": "Grimace Battler",
@@ -2753,7 +2756,8 @@
         {
             "name": "Patriot Warhead",
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/1/15/Patriot_Warhead.png",
-            "normal": "American Fatboy"
+            "normal": "American Fatboy",
+            "boss": true
         },
         {
             "name": "Cyborg Crocket Battle",
