@@ -6,15 +6,6 @@ module.exports = {
     let { Discord } = poopy.modules
     let { getUrls, fetchPingPerms } = poopy.functions
 
-    msg.channel.sendTyping().catch(() => { })
-    var attachments = []
-    msg.attachments.forEach(attachment => {
-      attachments.push(new Discord.AttachmentBuilder(attachment.url))
-    });
-    if (args[1] === undefined && attachments.length <= 0) {
-      await msg.reply('What are the URLs to fetch?!').catch(() => { })
-      return;
-    };
     var urls = await getUrls(msg).catch(() => { }) ?? []
     if (!msg.nosend) await msg.reply({
       allowedMentions: fetchPingPerms(msg),

@@ -1385,8 +1385,8 @@ functions.getKeyFunc = function (string, { extraKeys = {}, extraFuncs = {}, decl
     var pfuncs = Object.keys(pfunclist).sort((a, b) => b.length - a.length)
 
     var keyfiltered = keys.filter((key) => new RegExp(`(?<!\\\\)_?(?<!\\\\)${functions.regexClean(key)}`, 'g').exec(string))
-    var funcfiltered = funcs.filter((func) => new RegExp(`${functions.regexClean(func)}(?!\\\\)_?\\(`, 'g').exec(string))
-    var pfuncfiltered = pfuncs.filter((pfunc) => new RegExp(`${functions.regexClean(pfunc)}(?!\\\\)_?\\(`, 'g').exec(string))
+    var funcfiltered = funcs.filter((func) => new RegExp(`${functions.regexClean(func)}(?<!\\\\)_?\\(`, 'g').exec(string))
+    var pfuncfiltered = pfuncs.filter((pfunc) => new RegExp(`${functions.regexClean(pfunc)}(?<!\\\\)_?\\(`, 'g').exec(string))
     var keyfirstletters = keyfiltered.map(key => key[0]).filter((item, pos, self) => self.indexOf(item) == pos)
 
     if ((keyfiltered.length <= 0 && funcfiltered.length <= 0) || string.length > 1024 * 1024) return false
@@ -1411,28 +1411,30 @@ functions.getKeyFunc = function (string, { extraKeys = {}, extraFuncs = {}, decl
                     var funcmatch = matchLongestFunc(string.substring(0, i), funcfiltered) // get real function
                     var pfuncmatch = matchLongestFunc(string.substring(0, i), parenthesesGoal.length <= 0 ? pfuncfiltered : ['']) // get probable functions (like resettimer())
 
-                    if (funcmatch) {
-                        parindex++ // open parentheses found
-                        lastParenthesesIndex = i // set the index of the last parentheses
-                        if (!rawMatch) {
-                            var func = funclist[funcmatch[0]] || funclist[funcmatch[0].substring(0, funcmatch[0].length - 1)]
-                            if (func) {
-                                if (func.raw) {
-                                    rawParenthesesIndex = i
-                                    rawrequired++
-                                    rawMatch = funcmatch[0]
-                                } // if the function is raw, activate raw setting
+                    if (string[i - 1] !== '\\') {
+                        if (funcmatch) {
+                            parindex++ // open parentheses found
+                            lastParenthesesIndex = i // set the index of the last parentheses
+                            if (!rawMatch) {
+                                var func = funclist[funcmatch[0]] || funclist[funcmatch[0].substring(0, funcmatch[0].length - 1)]
+                                if (func) {
+                                    if (func.raw) {
+                                        rawParenthesesIndex = i
+                                        rawrequired++
+                                        rawMatch = funcmatch[0]
+                                    } // if the function is raw, activate raw setting
 
-                                if (func.parentheses) {
-                                    parenthesesGoal.push(parindex - 1)
-                                } // if the function uses parentheses inside, activate whole parentheses setting
-                            }
-                        } else {
-                            rawrequired++
-                        } // if the function isnt inside a raw one, execute it like normal, else add a requirement for raw parentheses
-                    } else if (pfuncmatch || pfuncmatch == '') {
-                        parindex++ // open parentheses found
-                        potentialindexes.push(parindex)
+                                    if (func.parentheses) {
+                                        parenthesesGoal.push(parindex - 1)
+                                    } // if the function uses parentheses inside, activate whole parentheses setting
+                                }
+                            } else {
+                                rawrequired++
+                            } // if the function isnt inside a raw one, execute it like normal, else add a requirement for raw parentheses
+                        } else if (pfuncmatch || pfuncmatch == '') {
+                            parindex++ // open parentheses found
+                            potentialindexes.push(parindex)
+                        }
                     }
                     break
 
@@ -1544,7 +1546,7 @@ functions.splitKeyFunc = function (string, { extraFuncs = {}, args = Infinity, s
     var pfuncs = Object.keys(pfunclist).sort((a, b) => b.length - a.length)
     var afuncs = funcs.concat(pfuncs).sort((a, b) => b.length - a.length)
 
-    var afuncfiltered = afuncs.filter((afunc) => new RegExp(`${functions.regexClean(afunc)}(?!\\\\)_?\\(`, 'g').exec(string))
+    var afuncfiltered = afuncs.filter((afunc) => new RegExp(`${functions.regexClean(afunc)}(?<!\\\\)_?\\(`, 'g').exec(string))
 
     for (var i in string) {
         var char = string[i]
@@ -1552,9 +1554,9 @@ functions.splitKeyFunc = function (string, { extraFuncs = {}, args = Infinity, s
 
         switch (char) {
             case '(':
-                if (afuncfiltered.length > 0) {
+                if (afuncfiltered.length > 0 && string[i - 1] !== '\\') {
                     var funcmatch = matchLongestFunc(string.substring(0, i), parenthesesGoal.length <= 0 ? afuncfiltered : [''])
-                    if (funcmatch && string[i - 1] !== '\\') {
+                    if (funcmatch) {
                         lastParenthesesIndex = i
                         parenthesesrequired++
                         var func = funclist[funcmatch[0]]
@@ -1576,9 +1578,9 @@ functions.splitKeyFunc = function (string, { extraFuncs = {}, args = Infinity, s
                 break
 
             case ')':
-                if (afuncfiltered.length > 0) {
+                if (afuncfiltered.length > 0 && string[i - 1] !== '\\') {
                     var funcmatch = matchLongestFunc(string.substring(0, lastParenthesesIndex), parenthesesGoal.length <= 0 ? afuncfiltered : [''])
-                    if (funcmatch && string[i - 1] !== '\\') {
+                    if (funcmatch) {
                         if (parenthesesGoal.find(pgoal => parenthesesrequired == pgoal)) {
                             parenthesesGoal.splice(parenthesesGoal.findIndex(pgoal => parenthesesrequired == pgoal), 1)
                         }
