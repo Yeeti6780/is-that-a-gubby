@@ -5671,16 +5671,15 @@ functions.downloadFile = async function (url, filename, options) {
 functions.uploadToFileHost = async function (file) {
     let poopy = this
     let vars = poopy.vars
-    let { axios, FormData, fs, path } = poopy.modules
+    let { axios, fs, path, FormData } = poopy.modules
 
-    const filepath = path.dirname(file)
     const filename = path.basename(file)
 
     const uploadHosts = [
         async () => {
-            const form = new FormData();
+            const form = new FormData()
 
-            form.append('file', fs.readFileSync(`${filepath}/${filename}`), filename)
+            form.append('file', fs.readFileSync(file), filename)
 
             return axios.post(
                 'https://frisk.page/api/files/upload',
@@ -5692,8 +5691,23 @@ functions.uploadToFileHost = async function (file) {
                 }
             ).then((res) => res.data?.file_url)
         },
-        async () => vars.Catbox.upload(`${filepath}/${filename}`),
-        async () => vars.Litterbox.upload(`${filepath}/${filename}`)
+        async () => {
+            const form = new FormData()
+
+            form.append('files[]', fs.readFileSync(file), filename)
+
+            return axios.post(
+                'https://uguu.se/upload.php',
+                form,
+                {
+                    headers: {
+                        ...form.getHeaders()
+                    }
+                }
+            ).then((res) => res.data?.files?.[0]?.url)
+        },
+        async () => vars.Catbox.upload(file),
+        async () => vars.Litterbox.upload(file)
     ]
 
     let lastResponse = "Unable to upload to a file hosting service."
