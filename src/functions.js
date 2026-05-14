@@ -5125,7 +5125,7 @@ functions.battle = async function (msg, subject, action, damage, chance) {
     if (subjUser && subjData) {
         for (var stat in vars.battleStats) {
             var statValue = vars.battleStats[stat]
-            if (userData[stat] === undefined) {
+            if (subjData[stat] === undefined) {
                 subjData[stat] = typeof statValue == "object" ? structuredClone(statValue) : statValue
             }
         }
