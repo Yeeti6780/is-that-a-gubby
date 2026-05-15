@@ -384,7 +384,7 @@ vars.dataTemplate = {
         guildId: {
             prefix: undefined,
 
-            chaincommands: true,
+            chaincommands: false,
             keyexec: 1,
             webhookAttachments: true,
             lastuse: 0,
