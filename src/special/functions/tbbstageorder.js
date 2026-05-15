@@ -18,7 +18,7 @@ module.exports = {
                 var findChapterMethods = [
                     s => s.name.toLowerCase() == stage.toLowerCase().trim(),
                     s => s.name.toLowerCase().includes(stage.toLowerCase().trim()),
-                    s => s.name.toLowerCase().replace(/[^a-z0-9 ]/g, "").includes(stage.toLowerCase().replace(/[^a-z0-9 ]/g, "").trim())
+                    s => s.name.toLowerCase().replace(/[^a-z0-9]/g, "").includes(stage.toLowerCase().replace(/[^a-z0-9]/g, "").trim())
                 ]
 
                 for (var find of findChapterMethods) {
