@@ -1,12 +1,12 @@
 module.exports = {
     helpf: '(name)',
-    desc: "Returns true if a variable is declared.",
+    desc: "Returns true if an extra function is declared.",
     func: async function (matches, msg, _, _, opts) {
         let poopy = this
         let tempdata = poopy.tempdata
 
         var word = matches[1]
-        var isDeclared = tempdata[msg.author.id][msg.id].keyDeclared[`{${word}}`] != undefined
+        var isDeclared = opts.extraFuncs[word] != undefined
         
         return isDeclared ? "true" : ""
     }

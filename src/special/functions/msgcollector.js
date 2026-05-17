@@ -2,6 +2,7 @@ module.exports = {
     helpf: '(collectPhrase<_msg|resettimer()|stop(sendFinishPhrase)|source(...)> | timeout | finishPhrase<_collected>) (manage messages permission only)',
     desc: 'Creates a message collector that collects any messages sent in the channel, within the timeout.\n' +
         '**_msg** - Keyword used when a message is sent\n' +
+        '**_authorid** - Returns the ID of who created the message collector\n' +
         "**resettimer()** - Resets the collector's timer\n" +
         "**stop(sendFinishPhrase)** - Stops the collector from running, sends the finishPhrase if sendFinishPhrase isn't blank.\n" +
         "**source(...)** - Perform a keyword execution using the variables of the user who made the message collector.\n" +
@@ -61,6 +62,11 @@ module.exports = {
                     valOpts.extraKeys._msg = {
                         func: async () => {
                             return content
+                        }
+                    }
+                    valOpts.extraKeys._authorid = {
+                        func: async () => {
+                            return msg.author.id
                         }
                     }
                     valOpts.extraFuncs.resettimer = {

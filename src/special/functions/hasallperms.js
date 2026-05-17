@@ -22,13 +22,15 @@ module.exports = {
         var user = msg.guild.members.cache.get(id) ?? await msg.guild.members.fetch(id).catch(() => { })
             ?? bot.users.cache.get(id) ?? await bot.users.fetch(id).catch(() => { })
 
+        var permsToCheck = msg.channel?.permissionsFor?.(user) ?? user?.permissions
+
         if (user) {
             if (config.ownerids.find(id => id == user?.user?.id ?? id == user?.id)) return 'true'
 
             for (var i in perms) {
                 var perm = perms[i]
 
-                if (user.permissions && !(user.permissions.has(DiscordTypes.PermissionFlagsBits[perm]))) {
+                if (permsToCheck && !(permsToCheck.has(DiscordTypes.PermissionFlagsBits[perm]))) {
                     return ''
                 }
             }
