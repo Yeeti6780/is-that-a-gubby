@@ -17,6 +17,7 @@ module.exports = {
         let data = poopy.data
         let config = poopy.config
         let { DiscordTypes } = poopy.modules
+        let { yesno } = poopy.functions
 
         args[1] = args[1] ?? ' '
 
@@ -30,6 +31,18 @@ module.exports = {
         )) {
             await msg.reply('You need to have the manage webhooks/messages permission to execute that!').catch(() => { })
             return
+        }
+
+        if (!data.userData[msg.author.id].dangerousExecuted.includes("battler") && !msg.nosend && !opts.isBot && !data.guildData[msg.guild.id].ignoreDangerous) {
+            var confirm = await yesno(msg.channel, "# Are you sure?\n"
+                + "okay, so there is a chance you might be executing this command because someone told you to do it "
+                + "and you have no idea what it does, basically it'll turn everyone in the current channel into a webhook "
+                + "of a tbb (the battle bricks) unit depending on the nickname they have, which might be a little disastrous "
+                + "depending on how active this channel is...\n"
+                + "-# (a server admin can disable these confirmation prompts for the current server entirely with `p:ignoredanger`)", msg.member, undefined, msg).catch(() => { })
+            if (!confirm) return
+
+            data.userData[msg.author.id].dangerousExecuted.push("battler")
         }
 
         if (!data.guildData[msg.guild.id].channels[msg.channel.id].battling) {
@@ -61,5 +74,5 @@ module.exports = {
         'ManageWebhooks',
         'ManageGuild'
     ],
-    type: 'Webhook'
+    type: 'Inside Joke'
 }

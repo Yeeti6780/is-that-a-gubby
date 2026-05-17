@@ -368,13 +368,14 @@
         "name": "settings",
         "cmds": [
             "chaincommands",
+            "ignoredanger",
             "keyexecution",
             "restrictchannels",
             "setprefix",
             "togglecmds",
             "toggledms",
             "togglepings",
-            "webhookattachments"
+            "webhookfiles"
         ],
         "description": "Manage a server's bot settings, or your own bot settings."
     },

@@ -370,6 +370,7 @@ vars.dataTemplate = {
             dmsReceived: {},
             dmsBlocked: [],
             allowedMentions: [],
+            dangerousExecuted: [],
             tokens: {},
 
             death: 0,
@@ -387,6 +388,7 @@ vars.dataTemplate = {
             chaincommands: false,
             keyexec: 1,
             webhookAttachments: true,
+            ignoreDangerous: false,
             lastuse: 0,
 
             read: [],
