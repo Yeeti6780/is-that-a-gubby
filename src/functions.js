@@ -14,6 +14,7 @@ functions.dataGather = require('./dataGathering')
 functions.brainfuck = require('./brainfuck')
 functions.tobrainfuck = require('./tobrainfuck')
 functions.generateSayori = require('./sayorimessagegenerator')
+functions.ddgImageSearch = require('./ddgImageSearch')
 functions.braille = require('./braille')
 functions.averageColor = require('./averageColor')
 functions.spectrogram = require('./spectrogram')
@@ -5487,7 +5488,7 @@ functions.enqueue = function (queue, fn, interval = 15000) {
     })
 }
 
-const imgQueries = Object.fromEntries(["google", "startpage"].map(
+const imgQueries = Object.fromEntries(["google", "startpage", "duckduckgo"].map(
     (provider) => [provider, {
         cooldown: false,
         active: false,
@@ -5503,15 +5504,21 @@ const axiosInstance = axios.create({
     }
 })
 
-functions.fetchImages = async function (query, unsafe, provider = "google") {
+functions.fetchImages = async function (query, unsafe) {
     let poopy = this
     let { gis, axios } = poopy.modules
-    let { enqueue } = poopy.functions
+    let { enqueue, ddgImageSearch } = poopy.functions
 
     query = query.toLowerCase().trim()
-    unsafe = false
+    unsafe = false // your choices dont matter
 
-    if (imgQueries[provider].images[query]) return imgQueries[provider].images[query]
+    const failImageResults = [
+        {
+            title: "Poopy Image Search Has Failed",
+            image: "https://i.imgur.com/K5kyI8P.png",
+            url: "https://poopybot.up.railway.app/"
+        }
+    ]
 
     const urlBlacklist = [
         "https://www.tiktok.com/api",
@@ -5521,79 +5528,131 @@ functions.fetchImages = async function (query, unsafe, provider = "google") {
         ".svg"
     ]
 
-    switch (provider) {
-        case "unsplash": {
-            return axios.get("https://api.unsplash.com/search/photos", {
-                params: {
-                    query,
-                    per_page: 100
-                },
-                headers: {
-                    Authorization: `Client-ID ${process.env.UNSPLASH_ACCESS_KEY}`
-                }
-            }).then(res => {
-                const images = res.data.results.map(img => img.urls.regular)
+    async function performImageSearch(provider) {
+        switch (provider) {
+            case "duckduckgo": {
+                if (imgQueries[provider].cooldown) return failImageResults
 
-                imgQueries[provider].images[query] = images
-
-                return images
-            })
-        }
-
-        case "startpage": {
-            if (imgQueries[provider].cooldown) return ["https://i.imgur.com/K5kyI8P.png"]
-
-            return enqueue(imgQueries[provider], () => axiosInstance.get(`https://www.startpage.com/sp/search?lui=english&language=english&query=${encodeURIComponent(query)}&cat=images&qadf=${unsafe ? 'none' : 'heavy'}`).then((res) => {
-                const resJSON = JSON.parse(res.data.match(/React\.createElement\(UIStartpage\.AppSerpImages, (\{"render".+\})\)/)[1])
-
-                const images = resJSON.render.presenter.regions.mainline
-                    .sort((a, b) => b.presented_count - a.presented_count)
-                    .map((query) => query.results.map(
-                        (result) => result.rawImageUrl ?? decodeURIComponent(result.thumbnailUrl.replace("/av/proxy-image?piurl=", ""))
-                    ))
-                    .flat()
-                    .filter(
-                        (result, i, self) => !urlBlacklist.some(url => result.includes(url))
-                            && self.indexOf(result) == i
-                    )
-
-                imgQueries[provider].images[query] = images
-
-                return images
-            }).catch(() => ["https://i.imgur.com/K5kyI8P.png"]), 5000)
-        }
-
-        case "google": {
-            if (imgQueries[provider].cooldown) return ["https://i.imgur.com/K5kyI8P.png"]
-
-            return enqueue(imgQueries[provider], () => new Promise(resolve => {
-                gis({
-                    searchTerm: query,
-                    queryStringAddition: `&safe=${unsafe ? 'images' : 'active'}`
-                }, async function (error, results) {
-                    if (error || !results) {
-                        imgQueries[provider].cooldown = true
-                        resolve(["https://i.imgur.com/K5kyI8P.png"])
-                        setTimeout(() => imgQueries[provider].cooldown = false, 60_000 * 5)
-                        return
-                    }
-
-                    const images = results.map(
-                        result => result.url.replace(/\\u([a-z0-9]){4}/g, (match) => {
-                            return String.fromCharCode(Number('0x' + match.substring(2, match.length)))
-                        })
-                    ).filter(
-                        (result, i, self) => !urlBlacklist.some(url => result.includes(url))
-                            && self.indexOf(result) == i
+                return enqueue(imgQueries[provider], () => ddgImageSearch(query, { safesearch: unsafe ? 'off' : 'on' }).then(results => {
+                    const images = results.filter(
+                        (result, i, self) => !urlBlacklist.some(url => result.image.includes(url))
+                            && self.findIndex(r => result.image == r.image) == i
                     )
 
                     imgQueries[provider].images[query] = images
 
-                    resolve(images)
+                    return images
+                }).catch(() => failImageResults), 5000)
+            }
+
+            case "unsplash": {
+                return axios.get("https://api.unsplash.com/search/photos", {
+                    params: {
+                        query,
+                        per_page: 100
+                    },
+                    headers: {
+                        Authorization: `Client-ID ${process.env.UNSPLASH_ACCESS_KEY}`
+                    }
+                }).then(res => {
+                    const images = res.data.results.map(img => {
+                        const url = img.urls.regular
+
+                        return {
+                            title: "Unsplash Image Result",
+                            image: url, url
+                        }
+                    })
+
+                    imgQueries[provider].images[query] = images
+
+                    return images
                 })
-            }), 15000)
+            }
+
+            case "startpage": {
+                if (imgQueries[provider].cooldown) return failImageResults
+
+                return enqueue(imgQueries[provider], () =>
+                    axiosInstance.get(`https://www.startpage.com/sp/search?lui=english&language=english`
+                        + `&query=${encodeURIComponent(query)}&cat=images&qadf=${unsafe ? 'none' : 'heavy'}`).then((res) => {
+                            const resJSON = JSON.parse(res.data.match(/React\.createElement\(UIStartpage\.AppSerpImages, (\{"render".+\})\)/)[1])
+
+                            const images = resJSON.render.presenter.regions.mainline
+                                .sort((a, b) => b.presented_count - a.presented_count)
+                                .map((query) => query.results.map(
+                                    (result) => {
+                                        const url = result.rawImageUrl ?? decodeURIComponent(result.thumbnailUrl.replace("/av/proxy-image?piurl=", ""))
+
+                                        return {
+                                            title: "Startpage Image Result",
+                                            image: url, url
+                                        }
+                                    }
+                                ))
+                                .flat()
+                                .filter(
+                                    (result, i, self) => !urlBlacklist.some(url => result.image.includes(url))
+                                        && self.findIndex(r => result.image == r.image) == i
+                                )
+
+                            imgQueries[provider].images[query] = images
+
+                            return images
+                        }).catch(() => failImageResults), 5000
+                )
+            }
+
+            case "google": {
+                if (imgQueries[provider].cooldown) return failImageResults
+
+                return enqueue(imgQueries[provider], () => new Promise(resolve => {
+                    gis({
+                        searchTerm: query,
+                        queryStringAddition: `&safe=${unsafe ? 'images' : 'active'}`
+                    }, async function (error, results) {
+                        if (error || !results) {
+                            imgQueries[provider].cooldown = true
+                            resolve(failImageResults)
+                            setTimeout(() => imgQueries[provider].cooldown = false, 60_000 * 5)
+                            return
+                        }
+
+                        const images = results.map(
+                            result => {
+                                const url = result.url.replace(/\\u([a-z0-9]){4}/g, (match) => {
+                                    return String.fromCharCode(Number('0x' + match.substring(2, match.length)))
+                                })
+
+                                return {
+                                    title: "Google Image Result",
+                                    image: url, url
+                                }
+                            }
+                        ).filter(
+                            (result, i, self) => !urlBlacklist.some(url => result.image.includes(url))
+                                && self.findIndex(r => result.image == r.image) == i
+                        )
+
+                        imgQueries[provider].images[query] = images
+
+                        resolve(images)
+                    })
+                }), 15000)
+            }
         }
     }
+
+    let searchResults = failImageResults
+
+    for (const provider of ["duckduckgo", "startpage"]) {
+        if (imgQueries[provider].images[query]) return imgQueries[provider].images[query]
+
+        searchResults = await performImageSearch(provider).catch(() => { }) ?? failImageResults
+        if (searchResults != failImageResults) return searchResults
+    }
+
+    return searchResults
 }
 
 functions.downloadFile = async function (url, filename, options) {

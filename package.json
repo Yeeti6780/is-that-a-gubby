@@ -1,6 +1,6 @@
 {
   "name": "poopy",
-  "version": "1.23.0",
+  "version": "1.23.1",
   "description": "Poopies for you.",
   "main": "server.js",
   "scripts": {
@@ -25,6 +25,7 @@
     "cors": "^2.8.5",
     "cron": "^4.3.3",
     "crypto-js": "^4.1.1",
+    "cuimp": "^1.7.0",
     "discord-api-types": "^0.38.15",
     "discord.js": "^14.22.1",
     "discord.js-selfbot-v13": "^3.7.0",

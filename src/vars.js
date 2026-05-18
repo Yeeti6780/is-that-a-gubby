@@ -285,10 +285,9 @@ vars.chatTools = {
             const images = await fetchImages(query, msg.channel.nsfw).catch(() => { })
             let order = 0
 
-            response.results = images ? images.slice(0, 5).map(url => {
+            response.results = images ? images.slice(0, 5).map(result => {
                 order++
-
-                return `[Image ${order}](${order <= 1 ? `${url}` : `<${url}>`})`
+                return `[Image ${order}](${order <= 1 ? `${result.url}` : `<${result.url}>`})`
             }) : null
 
             return response

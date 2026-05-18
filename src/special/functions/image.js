@@ -16,7 +16,7 @@ module.exports = {
         var page = parseNumber(page, { dft: Math.floor(Math.random() * urls.length), min: -urls.length, max: urls.length - 1, round: true })
         if (page < 0) page += urls.length
 
-        return urls[page]
+        return urls[page].image
     },
     attemptvalue: 10,
     cmdconnected: 'image'

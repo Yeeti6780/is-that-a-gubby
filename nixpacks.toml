@@ -8,7 +8,6 @@ nixPkgs = [
     'ffmpeg-full',
     'imagemagick',
     'gmic',
-    'curl-impersonate',
     'libuuid'
 ]
 aptPkgs = [
@@ -31,6 +30,7 @@ aptPkgs = [
     'libxrandr2',
     'libxss1',
     'libxtst6',
+    'nss-plugin-pem',
     'xdg-utils'
 ]
 

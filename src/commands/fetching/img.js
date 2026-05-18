@@ -22,7 +22,7 @@ module.exports = {
 
         var search = args.slice(1).join(" ");
 
-        var urls = await fetchImages(search, msg.channel.nsfw).catch(() => { })
+        var urls = await fetchImages(search, msg.channel.nsfw).catch((e) => console.log(e))
 
         if (!urls) {
             await msg.reply('Error.').catch(() => { })
@@ -39,18 +39,18 @@ module.exports = {
         if (number < 1) number = 1
 
         if (!msg.nosend) await navigateEmbed(msg.channel, async (page) => {
-            addLastUrl(msg, urls[page - 1])
+            addLastUrl(msg, urls[page - 1].image)
 
-            if (config.textEmbeds) return `${urls[page - 1]}\n\nImage ${page}/${urls.length}`
+            if (config.textEmbeds) return `**[${urls[page - 1].image}](${urls[page - 1].url})**\n\nImage ${page}/${urls.length}`
             else return {
-                title: "Google Image Search Results For " + search,
-                description: "Use the arrows to navigate.",
+                title: "Image Search Results For " + search,
+                description: `**[${urls[page - 1].title}](${urls[page - 1].url})**`,
                 color: 0x472604,
                 footer: {
                     text: "Image " + page + "/" + urls.length
                 },
                 image: {
-                    url: urls[page - 1]
+                    url: urls[page - 1].image
                 },
                 author: {
                     name: msg.author.tag,
@@ -71,11 +71,11 @@ module.exports = {
                 page: false
             }
         ], number, undefined, undefined, undefined, msg)
-        return urls[page - 1]
+        return urls[page - 1].image
     },
     help: {
         name: 'img/image <query> [-page <number>]',
-        value: 'Search for a random image in Google.\nExample usage: p:img Burger -page 5'
+        value: 'Search for a random image in the web using DuckDuckGo.\nExample usage: p:img Burger -page 5'
     },
     cooldown: 2500,
     type: 'Fetching'
