@@ -8,6 +8,7 @@ nixPkgs = [
     'ffmpeg-full',
     'imagemagick',
     'gmic',
+    'curl-impersonate',
     'libuuid'
 ]
 aptPkgs = [
