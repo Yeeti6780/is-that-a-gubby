@@ -136,6 +136,7 @@ async function searchImages(
     );
 
     if (res.status !== 200) {
+        console.log(res);
         throw new Error(`HTTP ${res.status}`);
     }
 
