@@ -10,6 +10,7 @@ modules.path = require('path')
 modules.archiver = require('archiver')
 modules.fileType = require('file-type')
 modules.axios = require('axios')
+modules.cuimp = require('cuimp')
 modules.FormData = require('form-data')
 modules.cheerio = require('cheerio')
 modules.xml2json = require('xml2js').parseStringPromise
@@ -24,7 +25,6 @@ for (var [name, func] of Object.entries(require('../lib/jimpPrint/printText'))) 
     modules.Jimp[name] = func
 }
 modules.catbox = require('catbox.moe')
-modules.gis = require('./gis')
 modules.mathjs = require('mathjs')
 modules.prettyBytes = require('pretty-bytes')
 modules.pluralize = require('pluralize')
@@ -36,6 +36,7 @@ modules.Collection = require('@discordjs/collection').Collection
 modules.Rainmaze = require('../lib/rainmaze/Rainmaze')
 modules.DummyMessage = require('./dummyMessage')
 modules.GenAIWorker = require('./genAIWorker')
+modules.HTTPClientUtils = require('./httpClientUtils')
 modules.DMGuild = class DMGuild {
     constructor(msg) {
         let members = new modules.Collection([[msg.client.user.id, msg.client.user]].concat(

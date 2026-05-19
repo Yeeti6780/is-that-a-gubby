@@ -1852,9 +1852,9 @@ class Poopy {
             if (Object.keys(globaldata).length <= 0 && gdata.globaldata) for (var type in gdata.globaldata) globaldata[type] = gdata.globaldata[type]
         }
 
-        if (!data.botData) data.botData = {}
-        if (!data.guildData) data.guildData = {}
-        if (!data.userData) data.userData = {}
+        data.botData ??= {}
+        data.guildData ??= {}
+        data.userData ??= {}
 
         reconcileDataWithTemplate(data.botData, vars.dataTemplate.botData)
 

@@ -14,7 +14,6 @@ functions.dataGather = require('./dataGathering')
 functions.brainfuck = require('./brainfuck')
 functions.tobrainfuck = require('./tobrainfuck')
 functions.generateSayori = require('./sayorimessagegenerator')
-functions.ddgImageSearch = require('./ddgImageSearch')
 functions.braille = require('./braille')
 functions.averageColor = require('./averageColor')
 functions.spectrogram = require('./spectrogram')
@@ -3333,6 +3332,8 @@ functions.refreshDiscordURLs = async function (urls) {
 
     if (!process.env.DISCORD_REFRESHER_TOKEN) return urls
 
+    let lastRefreshUrl
+
     try {
         const parsedUrls = urls.map(url => {
             try {
@@ -3423,6 +3424,7 @@ functions.refreshDiscordURLs = async function (urls) {
                         const refreshed = response.data.refreshed_urls[i]
                         const urlData = urlDataChunk[i]
 
+                        lastRefreshUrl = refreshed.refreshed
                         const refreshedUrl = new URL(refreshed.refreshed)
                         const refreshedParams = new URLSearchParams(refreshedUrl.search)
                         const expires = new Date(parseInt(refreshedParams.get('ex'), 16) * 1000)
@@ -3440,7 +3442,7 @@ functions.refreshDiscordURLs = async function (urls) {
 
         return refreshedUrlData
     } catch (err) {
-        console.error("refreshDiscordURLs error:", err)
+        console.error("refreshDiscordURLs error:", err, lastRefreshUrl)
         return null
     }
 }
@@ -4453,7 +4455,7 @@ functions.rateLimit = async function (msg) {
     let { infoPost } = poopy.functions
 
     if (!process.env.CLOUDAMQP_URL) return false
-    if (!tempdata[msg.author.id]) tempdata[msg.author.id] = {}
+    tempdata[msg.author.id] ??= {}
 
     tempdata[msg.author.id].rateLimit = (tempdata[msg.author.id].rateLimit ?? 0) + 1
     setTimeout(() => tempdata[msg.author.id].rateLimit -= 1, 90000)
@@ -4966,14 +4968,14 @@ functions.dealDamage = function (damage, subjUser, subjData, subjShield, subjShi
     }
 
     if (otherSubjId) {
-        if (!data.botData.leaderboard[otherSubjId]) data.botData.leaderboard[otherSubjId] = {}
+        data.botData.leaderboard[otherSubjId] ??= {}
 
         data.botData.leaderboard[otherSubjId].tag = otherSubjUser.tag ?? otherSubjUser.user?.tag ?? data.botData.leaderboard[otherSubjId].tag ?? otherSubjUser.id
         data.botData.leaderboard[otherSubjId].bucks = otherSubjData.bucks ?? 20
     }
 
     if (subjId) {
-        if (!data.botData.leaderboard[subjId]) data.botData.leaderboard[subjId] = {}
+        data.botData.leaderboard[subjId] ??= {}
 
         data.botData.leaderboard[subjId].tag = subjUser.tag ?? subjUser.user?.tag ?? data.botData.leaderboard[subjId].tag ?? subjUser.id
         data.botData.leaderboard[subjId].bucks = subjData.bucks ?? 20
@@ -5130,7 +5132,7 @@ functions.battle = async function (msg, subject, action, damage, chance) {
                 subjData[stat] = typeof statValue == "object" ? structuredClone(statValue) : statValue
             }
         }
-        if (!subjData.battleSprites) subjData.battleSprites = {}
+        subjData.battleSprites ??= {}
     }
 
     var subjLastBucks = subjData ? subjData.bucks : 20
@@ -5504,157 +5506,6 @@ const axiosInstance = axios.create({
     }
 })
 
-functions.fetchImages = async function (query, unsafe) {
-    let poopy = this
-    let { gis, axios } = poopy.modules
-    let { enqueue, ddgImageSearch } = poopy.functions
-
-    query = query.toLowerCase().trim()
-    unsafe = false // your choices dont matter
-
-    const failImageResults = [
-        {
-            title: "Poopy Image Search Has Failed",
-            image: "https://i.imgur.com/K5kyI8P.png",
-            url: "https://poopybot.up.railway.app/"
-        }
-    ]
-
-    const urlBlacklist = [
-        "https://www.tiktok.com/api",
-        "https://lookaside.instagram.com/seo",
-        "https://lookaside.fbsbx.com/lookaside/crawler/instagram",
-        "https://lookaside.fbsbx.com/lookaside/crawler/threads",
-        ".svg"
-    ]
-
-    async function performImageSearch(provider) {
-        switch (provider) {
-            case "duckduckgo": {
-                if (imgQueries[provider].cooldown) return failImageResults
-
-                return enqueue(imgQueries[provider], () => ddgImageSearch(query, { safesearch: unsafe ? 'off' : 'on' }).then(results => {
-                    const images = results.filter(
-                        (result, i, self) => !urlBlacklist.some(url => result.image.includes(url))
-                            && self.findIndex(r => result.image == r.image) == i
-                    )
-
-                    imgQueries[provider].images[query] = images
-
-                    return images
-                }).catch(() => failImageResults), 5000)
-            }
-
-            case "unsplash": {
-                return axios.get("https://api.unsplash.com/search/photos", {
-                    params: {
-                        query,
-                        per_page: 100
-                    },
-                    headers: {
-                        Authorization: `Client-ID ${process.env.UNSPLASH_ACCESS_KEY}`
-                    }
-                }).then(res => {
-                    const images = res.data.results.map(img => {
-                        const url = img.urls.regular
-
-                        return {
-                            title: "Unsplash Image Result",
-                            image: url, url
-                        }
-                    })
-
-                    imgQueries[provider].images[query] = images
-
-                    return images
-                })
-            }
-
-            case "startpage": {
-                if (imgQueries[provider].cooldown) return failImageResults
-
-                return enqueue(imgQueries[provider], () =>
-                    axiosInstance.get(`https://www.startpage.com/sp/search?lui=english&language=english`
-                        + `&query=${encodeURIComponent(query)}&cat=images&qadf=${unsafe ? 'none' : 'heavy'}`).then((res) => {
-                            const resJSON = JSON.parse(res.data.match(/React\.createElement\(UIStartpage\.AppSerpImages, (\{"render".+\})\)/)[1])
-
-                            const images = resJSON.render.presenter.regions.mainline
-                                .sort((a, b) => b.presented_count - a.presented_count)
-                                .map((query) => query.results.map(
-                                    (result) => {
-                                        const url = result.rawImageUrl ?? decodeURIComponent(result.thumbnailUrl.replace("/av/proxy-image?piurl=", ""))
-
-                                        return {
-                                            title: "Startpage Image Result",
-                                            image: url, url
-                                        }
-                                    }
-                                ))
-                                .flat()
-                                .filter(
-                                    (result, i, self) => !urlBlacklist.some(url => result.image.includes(url))
-                                        && self.findIndex(r => result.image == r.image) == i
-                                )
-
-                            imgQueries[provider].images[query] = images
-
-                            return images
-                        }).catch(() => failImageResults), 5000
-                )
-            }
-
-            case "google": {
-                if (imgQueries[provider].cooldown) return failImageResults
-
-                return enqueue(imgQueries[provider], () => new Promise(resolve => {
-                    gis({
-                        searchTerm: query,
-                        queryStringAddition: `&safe=${unsafe ? 'images' : 'active'}`
-                    }, async function (error, results) {
-                        if (error || !results) {
-                            imgQueries[provider].cooldown = true
-                            resolve(failImageResults)
-                            setTimeout(() => imgQueries[provider].cooldown = false, 60_000 * 5)
-                            return
-                        }
-
-                        const images = results.map(
-                            result => {
-                                const url = result.url.replace(/\\u([a-z0-9]){4}/g, (match) => {
-                                    return String.fromCharCode(Number('0x' + match.substring(2, match.length)))
-                                })
-
-                                return {
-                                    title: "Google Image Result",
-                                    image: url, url
-                                }
-                            }
-                        ).filter(
-                            (result, i, self) => !urlBlacklist.some(url => result.image.includes(url))
-                                && self.findIndex(r => result.image == r.image) == i
-                        )
-
-                        imgQueries[provider].images[query] = images
-
-                        resolve(images)
-                    })
-                }), 15000)
-            }
-        }
-    }
-
-    let searchResults = failImageResults
-
-    for (const provider of ["duckduckgo", "startpage"]) {
-        if (imgQueries[provider].images[query]) return imgQueries[provider].images[query]
-
-        searchResults = await performImageSearch(provider).catch(() => { }) ?? failImageResults
-        if (searchResults != failImageResults) return searchResults
-    }
-
-    return searchResults
-}
-
 functions.downloadFile = async function (url, filename, options) {
     let poopy = this
     let config = poopy.config
@@ -5798,9 +5649,9 @@ functions.sendFile = async function (msg, filepath, filename, extraOptions) {
     let {
         validateFileFromPath, execPromise, infoPost,
         rateLimit, addLastUrl, generateId, fetchPingPerms,
-        getUploadLimit, uploadToFileHost
+        getUploadLimit
     } = poopy.functions
-    let { fs, Discord } = poopy.modules
+    let { fs, Discord, HTTPClientUtils } = poopy.modules
 
     extraOptions = extraOptions || {}
 
@@ -5924,7 +5775,7 @@ functions.sendFile = async function (msg, filepath, filename, extraOptions) {
     if (extraOptions.catbox || (tooLarge && !extraOptions.nosend)) {
         if (tooLarge && !extraOptions.catbox && !extraOptions.nosend) await msg.reply(`${extraOptions.nocompress ? "Output file too" : "Still"} large${extraOptions.nocompress ? " to be sent to channel" : ""}, guess I\'m gonna try uploading it to a file hosting service.`).catch(() => { })
         infoPost(`Uploading to a file hosting service`)
-        var fileLink = await uploadToFileHost(`${filepath}/${filename}`).catch(() => { })
+        var fileLink = await HTTPClientUtils.uploadToFileHost(`${filepath}/${filename}`).catch(() => { })
 
         if (fileLink) {
             var isUrl = vars.validUrl.test(fileLink)
@@ -5999,7 +5850,7 @@ functions.sendFile = async function (msg, filepath, filename, extraOptions) {
         if (!fileMsg) {
             await msg.reply('There was an error sending the file, so I\'m gonna try uploading it to a file hosting service.').catch(() => { })
             infoPost(`Failed to send file to channel, uploading to a file hosting service`)
-            var fileLink = await uploadToFileHost(`${filepath}/${filename}`).catch(() => { })
+            var fileLink = await HTTPClientUtils.uploadToFileHost(`${filepath}/${filename}`).catch(() => { })
 
             if (fileLink) {
                 var isUrl = vars.validUrl.test(fileLink)

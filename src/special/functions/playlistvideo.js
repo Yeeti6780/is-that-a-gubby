@@ -12,7 +12,7 @@ module.exports = {
         var id = split[0] ?? ''
         var page = split[1] ?? ''
 
-        if (!tempdata.playlistvideos) tempdata.playlistvideos = {}
+        tempdata.playlistvideos ??= {}
 
         var countres = tempdata.playlistvideos[id]?.[0] ?? await youtube.playlistItems.list({
             playlistId: id,

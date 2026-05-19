@@ -56,7 +56,7 @@ module.exports = {
                 userData[stat] = typeof statValue == "object" ? structuredClone(statValue) : statValue
             }
         }
-        if (!userData.battleSprites) userData.battleSprites = {}
+        userData.battleSprites ??= {}
 
         var levelData = getLevel(userData.exp)
         var equippedShield = getShieldById(userData.shieldEquipped)

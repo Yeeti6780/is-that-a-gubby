@@ -3,8 +3,8 @@ module.exports = {
     args: [{name: "query",required: true,specifarg: false,orig: "<query>"},{name: "page",required: false,specifarg: true,orig: "[-page <number>]"}],
     execute: async function (msg, args) {
         let poopy = this
-        let { fetchImages, navigateEmbed, addLastUrl } = poopy.functions
-        let { DiscordTypes } = poopy.modules
+        let { navigateEmbed, addLastUrl } = poopy.functions
+        let { DiscordTypes, HTTPClientUtils } = poopy.modules
         let config = poopy.config
 
         msg.channel.sendTyping().catch(() => { })
@@ -22,7 +22,7 @@ module.exports = {
 
         var search = args.slice(1).join(" ");
 
-        var urls = await fetchImages(search, msg.channel.nsfw).catch((e) => console.log(e))
+        var urls = await HTTPClientUtils.fetchImages(search, { unsafe: msg.channel.nsfw }).catch((e) => console.log(e))
 
         if (!urls) {
             await msg.reply('Error.').catch(() => { })

@@ -1,4 +1,4 @@
-const { catbox, google, fs } = require('./modules')
+const { Catbox, Litterbox } = require('catbox.moe')
 
 let vars = {}
 
@@ -8,8 +8,8 @@ vars.scamFilter = /discord\.(gift|gg)\/[\d\w]+\/?/ig
 vars.cmdRegex = /(?:\w+:(?:"[^"\\]*(?:\\[\S\s][^"\\]*)*"|'[^'\\]*(?:\\[\S\s][^'\\]*)*'|\/[^\/\\]*(?:\\[\S\s][^\/\\]*)*\/[gimy]*))|("[^"\\]*(?:\\[\S\s][^"\\]*)*"|'[^'\\]*(?:\\[\S\s][^'\\]*)*'|\/[^\/\\]*(?:\\[\S\s][^\/\\]*)*\/[gimy]*(?=\s|$)|(?:\\\s|\S)+)/g
 vars.emojiRegex = require('emoji-regex')()
 
-vars.Catbox = new catbox.Catbox()
-vars.Litterbox = new catbox.Litterbox()
+vars.Catbox = new Catbox()
+vars.Litterbox = new Litterbox()
 
 vars.gifFormats = ['gif', 'apng']
 vars.jimpFormats = ['png', 'jpeg', 'jpg', 'gif', 'bmp', 'tiff']
@@ -277,12 +277,12 @@ vars.chatTools = {
             }
         },
         async func(poopy, msg, args) {
-            const { fetchImages } = poopy.functions
+            const { HTTPClientUtils } = poopy.modules
             const { query } = args
 
             const response = { query }
 
-            const images = await fetchImages(query, msg.channel.nsfw).catch(() => { })
+            const images = await HTTPClientUtils.fetchImages(query, { unsafe: msg.channel.nsfw }).catch(() => { })
             let order = 0
 
             response.results = images ? images.slice(0, 5).map(result => {

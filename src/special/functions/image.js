@@ -3,13 +3,14 @@ module.exports = {
     desc: 'Returns a random image out of the search query, if no index is specified.',
     func: async function (matches, msg) {
         let poopy = this
-        let { splitKeyFunc, fetchImages, parseNumber } = poopy.functions
+        let { splitKeyFunc, parseNumber } = poopy.functions
+        let { HTTPClientUtils } = poopy.modules
 
         var word = matches[1]
         var split = splitKeyFunc(word, { args: 2 })
         var query = split[0] ?? ''
         var page = split[1] ?? ''
-        var urls = await fetchImages(query, msg.channel.nsfw).catch(() => { })
+        var urls = await HTTPClientUtils.fetchImages(query, { unsafe: msg.channel.nsfw }).catch(() => { })
 
         if (!urls || !urls.length) return word
 
