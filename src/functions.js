@@ -4611,7 +4611,7 @@ functions.getDeclaredValue = function (msg, obj, value, globalFirst) {
         return tempdata[msg.author.id][msg.id][obj][value] ?? tempdata[msg.guild.id][msg.channel.id][obj][value]
 }
 
-functions.cleanKeywords = async function (string) {
+functions.cleanKeywords = function (string, msg) {
     let poopy = this
     let tempdata = poopy.tempdata
     let { getKeyFunc, infoPost } = poopy.functions

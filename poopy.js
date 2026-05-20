@@ -1015,7 +1015,7 @@ class Poopy {
                     id => id == msg.channel?.id || id == msg.channel?.parent?.id || id == msg.channel?.parent?.parent?.id
                 )
             ) {
-                var cleanMessage = cleanKeywords(msg.content) // cleanContentPreserveEmojis(origcontent, msg.channel).replace(/\@/g, '@‌')
+                var cleanMessage = cleanKeywords(msg.content, msg) // cleanContentPreserveEmojis(origcontent, msg.channel).replace(/\@/g, '@‌')
 
                 if (
                     !(tempdata[msg.guild.id].messages.some(message => message.content.toLowerCase() === cleanMessage.toLowerCase()))
@@ -1217,8 +1217,8 @@ class Poopy {
                     var findMessage = messages[messageIndex]
                     var findTmpMessage = tmpMessages[messageIndex]
 
-                    var oldCleanMessage = cleanKeywords(oldMsg.content) // cleanContentPreserveEmojis(oldMsg.content, oldMsg.channel).replace(/\@/g, '@‌')
-                    var cleanMessage = cleanKeywords(msg.content) // cleanContentPreserveEmojis(msg.content, msg.channel).replace(/\@/g, '@‌')
+                    var oldCleanMessage = cleanKeywords(oldMsg.content, oldMsg) // cleanContentPreserveEmojis(oldMsg.content, oldMsg.channel).replace(/\@/g, '@‌')
+                    var cleanMessage = cleanKeywords(msg.content, msg) // cleanContentPreserveEmojis(msg.content, msg.channel).replace(/\@/g, '@‌')
 
                     await updateGenAiModel(oldMsg, {
                         sample: oldCleanMessage,
@@ -1249,7 +1249,7 @@ class Poopy {
             if (messages && tmpMessages) {
                 var messageIndex = messages.findIndex(m => m.id == msg.id)
                 if (messageIndex > -1) {
-                    var cleanMessage = cleanKeywords(msg.content) // cleanContentPreserveEmojis(msg.content, msg.channel).replace(/\@/g, '@‌')
+                    var cleanMessage = cleanKeywords(msg.content, msg) // cleanContentPreserveEmojis(msg.content, msg.channel).replace(/\@/g, '@‌')
 
                     await updateGenAiModel(msg, {
                         sample: cleanMessage,
