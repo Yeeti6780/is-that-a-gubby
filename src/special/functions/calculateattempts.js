@@ -4,12 +4,12 @@ module.exports = {
     func: async function (matches, msg, isBot, _, opts) {
         let poopy = this
         let tempdata = poopy.tempdata
-        let { getKeywordsFor } = poopy.functions
+        let { parseKeywords } = poopy.functions
 
         var word = matches[1]
         var currentAttempts = tempdata[msg.author.id][msg.id].keyAttempts
 
-        await getKeywordsFor(word, msg, isBot, opts).catch(() => { })
+        await parseKeywords(word, msg, isBot, opts).catch(() => { })
 
         return tempdata[msg.author.id][msg.id].keyAttempts - currentAttempts
     },

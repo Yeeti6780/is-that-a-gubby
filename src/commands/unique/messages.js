@@ -115,7 +115,7 @@ module.exports = {
         let { fs, Discord, DiscordTypes, CryptoJS } = poopy.modules
         let data = poopy.data
         let tempdata = poopy.tempdata
-        let { similarity, yesno, fetchPingPerms, resolveUser, cleanContentPreserveEmojis, workerTask, updateGenAiModel } = poopy.functions
+        let { similarity, yesno, fetchPingPerms, resolveUser, cleanKeywords, updateGenAiModel } = poopy.functions
         let bot = poopy.bot
 
         if (opts.sourceMsg && msg.author.id != opts.sourceMsg.author.id) {
@@ -146,7 +146,7 @@ module.exports = {
                 }
 
                 var saidMessage = args.slice(1).join(' ')
-                var cleanMessage = saidMessage // cleanContentPreserveEmojis(saidMessage, msg.channel).replace(/\@/g, '@‌')
+                var cleanMessage = cleanKeywords(saidMessage) // cleanContentPreserveEmojis(saidMessage, msg.channel).replace(/\@/g, '@‌')
                 var results = []
 
                 tempdata[msg.guild.id].messages.forEach(message => {
@@ -227,7 +227,7 @@ module.exports = {
                 }
 
                 var saidMessage = args.slice(1).join(' ')
-                var cleanMessage = saidMessage // cleanContentPreserveEmojis(saidMessage, msg.channel).replace(/\@/g, '@‌')
+                var cleanMessage = cleanKeywords(saidMessage) // cleanContentPreserveEmojis(saidMessage, msg.channel).replace(/\@/g, '@‌')
                 var findMessage = tempdata[msg.guild.id].messages.find(message => message.content.toLowerCase() === cleanMessage.toLowerCase())
 
                 if (findMessage) {
@@ -275,7 +275,7 @@ module.exports = {
                 }
 
                 var saidMessage = args.slice(1).join(' ')
-                var cleanMessage = saidMessage // cleanContentPreserveEmojis(saidMessage, msg.channel).replace(/\@/g, '@‌')
+                var cleanMessage = cleanKeywords(saidMessage) // cleanContentPreserveEmojis(saidMessage, msg.channel).replace(/\@/g, '@‌')
                 var findMessage = tempdata[msg.guild.id].messages.findIndex(message => message.content.toLowerCase() === cleanMessage.toLowerCase())
 
                 if (findMessage > -1) {
@@ -413,6 +413,5 @@ module.exports = {
         value: "Allows you to see or manage the server's message database. Used by the `_message` keyword. They're auto-deleted after 30 days to abide with Discord's TOS, unless added manually. Use the command alone for more info."
     },
     cooldown: 2500,
-    raw: true,
     type: 'Unique'
 }

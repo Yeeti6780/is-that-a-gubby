@@ -11,7 +11,7 @@ module.exports = {
         let poopy = this
         let commands = poopy.commands
         let data = poopy.data
-        let { getKeywordsFor, fetchPingPerms } = poopy.functions
+        let { parseKeywords, fetchPingPerms } = poopy.functions
         let { DiscordTypes } = poopy.modules
         let vars = poopy.vars
         let tempdata = poopy.tempdata
@@ -21,7 +21,7 @@ module.exports = {
             return {
                 name: [lcmd.name],
                 type: 'Local',
-                execute: async () => await getKeywordsFor(lcmd.phrase, msg, true, { resetAttempts: true, ownermode: lcmd.ownermode }).catch(() => { }) ?? 'error'
+                execute: async () => await parseKeywords(lcmd.phrase, msg, true, { resetAttempts: true, ownermode: lcmd.ownermode }).catch(() => { }) ?? 'error'
             }
         }))
 

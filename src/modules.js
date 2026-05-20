@@ -92,7 +92,7 @@ for (var Discord of modules.Discord) {
         let {
             waitMessageCooldown,
             setMessageCooldown,
-            getKeywordsFor
+            parseKeywords
         } = poopy.functions
 
         await waitMessageCooldown()
@@ -110,7 +110,7 @@ for (var Discord of modules.Discord) {
 
             var content = typeof payload == 'object' ? (payload.content ?? '') : payload
             var msg = forceres.msg
-            var res = await getKeywordsFor(forceres.res, msg, true, {
+            var res = await parseKeywords(forceres.res, msg, true, {
                 resetAttempts: true,
                 extraKeys: {
                     _msg: {
@@ -182,7 +182,7 @@ for (var Discord of modules.Discord) {
         let {
             waitMessageCooldown,
             setMessageCooldown,
-            getKeywordsFor
+            parseKeywords
         } = poopy.functions
 
         await waitMessageCooldown()
@@ -200,7 +200,7 @@ for (var Discord of modules.Discord) {
 
             var content = typeof payload == 'object' ? (payload.content ?? '') : payload
             var msg = message
-            var res = await getKeywordsFor(forceres.res, msg, true, {
+            var res = await parseKeywords(forceres.res, msg, true, {
                 resetAttempts: true,
                 extraKeys: {
                     _msg: {
@@ -282,7 +282,7 @@ for (var Discord of modules.Discord) {
             let {
                 waitMessageCooldown,
                 setMessageCooldown,
-                getKeywordsFor
+                parseKeywords
             } = poopy.functions
 
             await waitMessageCooldown()
@@ -300,7 +300,7 @@ for (var Discord of modules.Discord) {
 
                 var content = typeof payload == 'object' ? (payload.content ?? '') : payload
                 var msg = interaction
-                var res = await getKeywordsFor(forceres.res, msg, true, {
+                var res = await parseKeywords(forceres.res, msg, true, {
                     resetAttempts: true,
                     extraKeys: {
                         _msg: {

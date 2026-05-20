@@ -3,13 +3,13 @@ module.exports = {
   desc: 'Compiles the code in the specified language using Wandbox. Only declared variables and functions can be used here (to prevent confusion with functions in that language)',
   func: async function (matches, msg, isBot, _, opts) {
     let poopy = this
-    let { getKeywordsFor, splitKeyFunc } = poopy.functions
+    let { parseKeywords, splitKeyFunc } = poopy.functions
     let vars = poopy.vars
     let { axios } = poopy.modules
 
     var declopts = { ...opts }
     declopts.declaredOnly = true
-    var word = await getKeywordsFor(matches[1], msg, isBot, declopts).catch(() => { }) ?? ''
+    var word = await parseKeywords(matches[1], msg, isBot, declopts).catch(() => { }) ?? ''
 
     var language
 

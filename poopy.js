@@ -90,8 +90,8 @@ class Poopy {
         let { envsExist, configFlagsEnabled, refreshDiscordURLs, getUploadLimit,
             chunkArray, chunkObject, requireJSON, findCommand, fetchPingPerms,
             dmSupport, sleep, gatherData, deleteMsgData, infoPost, sendWebhook, updateGenAiModel,
-            getKeywordsFor, getUrls, randomChoice, similarity, yesno, chat, autoModContent,
-            regexClean, getOption, getTotalHivemindStatus, cleanContentPreserveEmojis } = functions
+            parseKeywords, getUrls, randomChoice, similarity, yesno, chat, autoModContent,
+            regexClean, getOption, getTotalHivemindStatus, cleanKeywords } = functions
 
         let botConfig = {
             partials: [
@@ -631,7 +631,7 @@ class Poopy {
                         ) &&
                         ((!msg.author.bot && msg.author.id != bot.user.id) || config.allowbotusage)
                     ) {
-                        var change = await getKeywordsFor(cmd, msg, false, { resetAttempts: true }).catch(async err => {
+                        var change = await parseKeywords(cmd, msg, false, { resetAttempts: true }).catch(async err => {
                             await msg.reply({
                                 content: err.stack,
                                 allowedMentions: fetchPingPerms(msg)
@@ -847,7 +847,7 @@ class Poopy {
                                 clearTimeout(t)
                             }, 60000)
                             infoPost(`Command \`${args[0].toLowerCase()}\` used`)
-                            var phrase = await getKeywordsFor(findLocalCmd.phrase, msg, true, { resetAttempts: true, ownermode: findLocalCmd.ownermode }).catch((e) => console.log(e)) ?? 'error'
+                            var phrase = await parseKeywords(findLocalCmd.phrase, msg, true, { resetAttempts: true, ownermode: findLocalCmd.ownermode }).catch((e) => console.log(e)) ?? 'error'
 
                             var increaseCount = !!phrase.trim()
 
@@ -953,7 +953,7 @@ class Poopy {
                                         clearTimeout(t)
                                     }, 60000)
                                     infoPost(`Command \`${similarCmds[0].name}\` used`)
-                                    var phrase = findLocalCmd ? (await getKeywordsFor(findLocalCmd.phrase, msg, true, { resetAttempts: true, ownermode: findLocalCmd.ownermode }).catch((e) => console.log(e)) ?? 'error') : 'error'
+                                    var phrase = findLocalCmd ? (await parseKeywords(findLocalCmd.phrase, msg, true, { resetAttempts: true, ownermode: findLocalCmd.ownermode }).catch((e) => console.log(e)) ?? 'error') : 'error'
 
                                     var increaseCount = !!phrase.trim()
 
@@ -1015,7 +1015,7 @@ class Poopy {
                     id => id == msg.channel?.id || id == msg.channel?.parent?.id || id == msg.channel?.parent?.parent?.id
                 )
             ) {
-                var cleanMessage = msg.content // cleanContentPreserveEmojis(origcontent, msg.channel).replace(/\@/g, '@‌')
+                var cleanMessage = cleanKeywords(msg.content) // cleanContentPreserveEmojis(origcontent, msg.channel).replace(/\@/g, '@‌')
 
                 if (
                     !(tempdata[msg.guild.id].messages.some(message => message.content.toLowerCase() === cleanMessage.toLowerCase()))
@@ -1093,7 +1093,7 @@ class Poopy {
                     if (forceres && forceres.repliesOnly) {
                         delete channelData.forceResponse
 
-                        var res = await getKeywordsFor(forceres.res, msg, true, {
+                        var res = await parseKeywords(forceres.res, msg, true, {
                             resetAttempts: true,
                             extraKeys: {
                                 _msg: {
@@ -1217,8 +1217,8 @@ class Poopy {
                     var findMessage = messages[messageIndex]
                     var findTmpMessage = tmpMessages[messageIndex]
 
-                    var oldCleanMessage = oldMsg.content // cleanContentPreserveEmojis(oldMsg.content, oldMsg.channel).replace(/\@/g, '@‌')
-                    var cleanMessage = msg.content // cleanContentPreserveEmojis(msg.content, msg.channel).replace(/\@/g, '@‌')
+                    var oldCleanMessage = cleanKeywords(oldMsg.content) // cleanContentPreserveEmojis(oldMsg.content, oldMsg.channel).replace(/\@/g, '@‌')
+                    var cleanMessage = cleanKeywords(msg.content) // cleanContentPreserveEmojis(msg.content, msg.channel).replace(/\@/g, '@‌')
 
                     await updateGenAiModel(oldMsg, {
                         sample: oldCleanMessage,
@@ -1249,7 +1249,7 @@ class Poopy {
             if (messages && tmpMessages) {
                 var messageIndex = messages.findIndex(m => m.id == msg.id)
                 if (messageIndex > -1) {
-                    var cleanMessage = msg.content // cleanContentPreserveEmojis(msg.content, msg.channel).replace(/\@/g, '@‌')
+                    var cleanMessage = cleanKeywords(msg.content) // cleanContentPreserveEmojis(msg.content, msg.channel).replace(/\@/g, '@‌')
 
                     await updateGenAiModel(msg, {
                         sample: cleanMessage,

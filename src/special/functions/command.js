@@ -3,7 +3,7 @@ module.exports = {
     desc: 'Allows you to execute any command!',
     func: async function (matches, msg, isBot, _, opts) {
         let poopy = this
-        let { splitKeyFunc, getUrls, infoPost, getKeywordsFor, getOption } = poopy.functions
+        let { splitKeyFunc, getUrls, infoPost, parseKeywords, getOption } = poopy.functions
         let { DiscordTypes } = poopy.modules
         let globaldata = poopy.globaldata
         let commands = poopy.commands
@@ -14,7 +14,7 @@ module.exports = {
 
         var word = matches[1]
         var split = splitKeyFunc(word, { args: 2 })
-        var commandname = (await getKeywordsFor(split[0] ?? '', msg, isBot, opts).catch(() => { }) ?? split[0]).toLowerCase()
+        var commandname = (await parseKeywords(split[0] ?? '', msg, isBot, opts).catch(() => { }) ?? split[0]).toLowerCase()
         var args = split[1] ?? ''
         var command = commands.find(fcmd => fcmd.name.find(fcmdname => fcmdname === commandname))
         var localCommand = data.guildData[msg.guild.id].localcmds.find(cmd => cmd.name === commandname)
@@ -78,7 +78,7 @@ module.exports = {
 
                 var ropts = { ...opts }
                 ropts.declaredOnly = (command || localCommand).raw
-                args = await getKeywordsFor(args, msg, isBot, ropts).catch(() => { }) ?? args
+                args = await parseKeywords(args, msg, isBot, ropts).catch(() => { }) ?? args
                 args = (`${commandname}${args ? ` ${args}` : ''}`).split(' ')
                 delete msg.nosend
                 msg.nosend = getOption(args, 'nosend', { n: 0, splice: true, dft: false })
@@ -141,7 +141,7 @@ module.exports = {
                     infoPost(`Command \`${commandname}\` used`)
                     var oopts = { ...opts }
                     oopts.ownermode = localCommand.ownermode || oopts.ownermode
-                    var phrase = await getKeywordsFor(localCommand.phrase, msg, true, oopts).catch(() => { }) ?? 'error'
+                    var phrase = await parseKeywords(localCommand.phrase, msg, true, oopts).catch(() => { }) ?? 'error'
                     data.botData.filecount = vars.filecount
                     msg.content = content
                     return phrase

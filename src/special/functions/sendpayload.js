@@ -5,7 +5,7 @@ module.exports = {
         let poopy = this
         let tempdata = poopy.tempdata
         let { DiscordTypes } = poopy.modules
-        let { tryJSONparse, getKeywordsFor, fetchPingPerms } = poopy.functions
+        let { tryJSONparse, parseKeywords, fetchPingPerms } = poopy.functions
         let globaldata = poopy.globaldata
         let tempfiles = poopy.tempfiles
         let data = poopy.data
@@ -15,7 +15,7 @@ module.exports = {
         var jopts = { ...opts }
         jopts.declaredOnly = true
 
-        var word = await getKeywordsFor(matches[1], msg, isBot, jopts).catch((e) => console.log(e)) ?? matches[1]
+        var word = await parseKeywords(matches[1], msg, isBot, jopts).catch((e) => console.log(e)) ?? matches[1]
 
         var guildfilter = config.guildfilter
         var channelfilter = config.channelfilter

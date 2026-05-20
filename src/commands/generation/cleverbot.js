@@ -22,7 +22,7 @@ module.exports = {
     ],
     execute: async function (msg, args) {
         let poopy = this
-        let { cleverbot, dmSupport, getKeywordsFor, getOption, fetchPingPerms, deleteMsgData, createCollector } = poopy.functions
+        let { cleverbot, dmSupport, parseKeywords, getOption, fetchPingPerms, deleteMsgData, createCollector } = poopy.functions
         let tempdata = poopy.tempdata
         let bot = poopy.bot
 
@@ -52,18 +52,24 @@ module.exports = {
             }
         } else if (!msg.nosend) {
             if (!continuous && !args[1]) {
-                channel.send('What is the message to respond to?!').catch(() => { })
+                await channel.send('What is the message to respond to?!').catch(() => { })
                 return
             }
-            channel.send('Hello, I will respond to your messages now.').catch(() => { })
+            await channel.send('Hello, I will respond to your messages now.').catch(() => { })
         }
 
         channel.sendTyping().catch(() => { })
 
         if (!msg.nosend && continuous) {
-            if (tempdata[guildid][channelid][authorid].messageCollector) {
-                tempdata[guildid][channelid][authorid].messageCollector.stop()
-                delete tempdata[guildid][channelid][authorid].messageCollector
+            var msgCollectorData = tempdata[guildid][channelid][authorid]?.messageCollectors ?? {}
+            if (msgCollectorData.cleverbot) {
+                msgCollectorData.cleverbot.stop()
+                delete msgCollectorData.cleverbot
+            }
+
+            if (Object.entries(msgCollectorData).length >= 5) {
+                await channel.send('Message collector limit exceeded.').catch(() => { })
+                return
             }
 
             var filter = m => !m.author.bot && m.author.id != bot.user.id && m.author.id === msg.author.id
@@ -72,7 +78,7 @@ module.exports = {
                 type: "message", filter, time: 30000
             })
 
-            tempdata[guildid][channelid][authorid].messageCollector = collector
+            msgCollectorData.cleverbot = collector
 
             collector.on('collect', async m => {
                 try {
@@ -80,7 +86,7 @@ module.exports = {
 
                     if (tempdata[msg.guild.id][msg.channel.id].shutUp) return
 
-                    var content = await getKeywordsFor(m.content ?? '', m, false).catch(() => { }) ?? m.content
+                    var content = await parseKeywords(m.content ?? '', m, false).catch(() => { }) ?? m.content
 
                     collector.resetTimer()
 
@@ -90,6 +96,7 @@ module.exports = {
                             allowedMentions: fetchPingPerms(m)
                         }).catch(() => { })
                     })
+
                     if (resp) {
                         channel.send({
                             content: resp,
@@ -104,7 +111,7 @@ module.exports = {
             collector.on('end', async (_, reason) => {
                 try {
                     if (tempdata[msg.guild.id][msg.channel.id].shutUp) return
-                    delete tempdata[guildid][channelid][authorid].messageCollector
+                    delete msgCollectorData.cleverbot
                     if (reason === 'time') {
                         channel.send({
                             content: 'I\'m running out of time...',

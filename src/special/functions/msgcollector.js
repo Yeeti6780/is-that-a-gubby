@@ -1,5 +1,5 @@
 module.exports = {
-    helpf: '(collectPhrase<_msg|resettimer()|stop(sendFinishPhrase)|source(...)> | timeout | finishPhrase<_collected>) (manage messages permission only)',
+    helpf: '(collectPhrase<_msg|resettimer()|stop(sendFinishPhrase)|source(...)> | timeout | finishPhrase<_collected> | name) (manage messages permission only)',
     desc: 'Creates a message collector that collects any messages sent in the channel, within the timeout.\n' +
         '**_msg** - Keyword used when a message is sent\n' +
         '**_authorid** - Returns the ID of who created the message collector\n' +
@@ -9,7 +9,7 @@ module.exports = {
         '**_collected** - Used when the collector stops running, containing all collected messages.',
     func: async function (matches, msg, isBot, _, opts) {
         let poopy = this
-        let { splitKeyFunc, getKeywordsFor, dmSupport, fetchPingPerms, deleteMsgData, createCollector } = poopy.functions
+        let { splitKeyFunc, parseKeywords, fetchPingPerms, deleteMsgData, createCollector } = poopy.functions
         let { DiscordTypes } = poopy.modules
         let config = poopy.config
         let data = poopy.data
@@ -17,12 +17,14 @@ module.exports = {
         let tempdata = poopy.tempdata
 
         var word = matches[1]
-        var split = splitKeyFunc(word, { args: 3 })
+        var split = splitKeyFunc(word, { args: 4 })
         var collectphrase = split[0] ?? ''
-        split[1] = await getKeywordsFor(split[1] ?? '', msg, isBot, opts).catch(() => { }) || ''
+        split[1] = await parseKeywords(split[1] ?? '', msg, isBot, opts).catch(() => { }) || ''
+        split[3] = await parseKeywords(split[3] ?? '', msg, isBot, opts).catch(() => { }) || ''
         var bypassLimit = config.ownerids.find(id => id == msg.author.id) || isBot || opts.ownermode
         var timeout = isNaN(Number(split[1])) ? 10 : Number(split[1]) <= 1 ? 1 : (!bypassLimit && Number(split[1]) >= 60) ? 60 : Number(split[1]) || 10
         var finishphrase = split[2] ?? ''
+        var name = split[3] ?? 'msgcollector'
         var channel = msg.channel
         var guildid = msg.guild.id
         var channelid = channel.id
@@ -35,9 +37,14 @@ module.exports = {
             msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id) ||
             isBot || msg.author.id == bot.user.id
         ) {
-            if (tempdata[guildid][channelid][authorid].messageCollector) {
-                tempdata[guildid][channelid][authorid].messageCollector.stop()
-                delete tempdata[guildid][channelid][authorid].messageCollector
+            var msgCollectorData = tempdata[guildid][channelid][authorid]?.messageCollectors ?? {}
+            if (msgCollectorData[name]) {
+                msgCollectorData[name].stop()
+                delete msgCollectorData[name]
+            }
+
+            if (Object.entries(msgCollectorData).length >= 5) {
+                return 'Message collector limit exceeded.'
             }
 
             var filter = m => (config.allowbotusage || (data.guildData[msg.guild.id].chaos && !m.webhookId) || !m.author.bot) && m.author.id != bot.user.id
@@ -48,7 +55,7 @@ module.exports = {
                 time: !(bypassLimit && !split[1]) ? timeout * 1000 : undefined
             })
 
-            tempdata[guildid][channelid][authorid].messageCollector = collector
+            msgCollectorData[name] = collector
 
             collector.on('collect', async m => {
                 try {
@@ -85,7 +92,7 @@ module.exports = {
                     valOpts.extraFuncs.source = {
                         func: async (matches) => {
                             var word = matches[1]
-                            var content = await getKeywordsFor(word, msg, true, opts).catch((e) => console.log(e)) ?? word
+                            var content = await parseKeywords(word, msg, true, opts).catch((e) => console.log(e)) ?? word
                             return content
                         },
                         raw: true
@@ -94,7 +101,7 @@ module.exports = {
                     valOpts.ownermode = false
                     valOpts.sourceMsg = msg
 
-                    var collect = await getKeywordsFor(collectphrase, m, true, valOpts).catch((e) => console.log(e)) ?? ''
+                    var collect = await parseKeywords(collectphrase, m, true, valOpts).catch((e) => console.log(e)) ?? ''
 
                     collected.push(content)
 
@@ -110,7 +117,7 @@ module.exports = {
             collector.on('end', async (_, reason) => {
                 try {
                     if (tempdata[msg.guild.id][msg.channel.id].shutUp) return
-                    delete tempdata[guildid][channelid][authorid].messageCollector
+                    delete msgCollectorData[name]
                     if (reason === 'time') {
                         var valOpts = { ...opts }
                         valOpts.extraKeys = { ...valOpts.extraKeys }
@@ -121,7 +128,7 @@ module.exports = {
                             }
                         }
 
-                        var finishphrasek = await getKeywordsFor(finishphrase, msg, isBot, valOpts).catch(() => { }) ?? ''
+                        var finishphrasek = await parseKeywords(finishphrase, msg, isBot, valOpts).catch(() => { }) ?? ''
 
                         if (finishphrasek.trim()) await channel.send({
                             content: finishphrasek,

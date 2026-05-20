@@ -149,7 +149,7 @@ module.exports = {
         let data = poopy.data
         let config = poopy.config
         let bot = poopy.bot
-        let { chunkArray, navigateEmbed, getKeywordsFor, fetchPingPerms } = poopy.functions
+        let { chunkArray, navigateEmbed, parseKeywords, fetchPingPerms } = poopy.functions
         let { DiscordTypes } = poopy.modules
         let globaldata = poopy.globaldata
         let commands = poopy.commands
@@ -254,7 +254,7 @@ module.exports = {
                         ...opts
                     }
                     oopts.ownermode = localCommand.ownermode || oopts.ownermode
-                    var phrase = await getKeywordsFor(localCommand.phrase, msg, true, opts).catch(() => { }) ?? 'error'
+                    var phrase = await parseKeywords(localCommand.phrase, msg, true, opts).catch(() => { }) ?? 'error'
                     if (!msg.nosend) await msg.reply({
                         content: phrase,
                         allowedMentions: fetchPingPerms(msg)

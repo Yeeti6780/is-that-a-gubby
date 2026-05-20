@@ -49,7 +49,7 @@ async function send(payload) {
         let data = msg._data
         let { req, res, poopy, messages } = data
 
-        let { validateFileFromPath, replaceAsync, escapeHTML, getKeywordsFor } = poopy.functions
+        let { validateFileFromPath, replaceAsync, escapeHTML, parseKeywords } = poopy.functions
         let vars = poopy.vars
         let tempdata = poopy.tempdata
 
@@ -72,7 +72,7 @@ async function send(payload) {
 
             var content = typeof payload == 'object' ? (payload.content ?? '') : payload
             var m = msg
-            var r = await getKeywordsFor(forceres.res, m, true, {
+            var r = await parseKeywords(forceres.res, m, true, {
                 resetAttempts: true,
                 extraKeys: {
                     _msg: {

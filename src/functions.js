@@ -4363,7 +4363,7 @@ functions.createCronJob = async function (cronData) {
     let bot = poopy.bot
     let tempdata = poopy.tempdata
     let { cron, DummyMessage } = poopy.modules
-    let { sleep, getKeywordsFor, fetchPingPerms, gatherData, deleteMsgData } = poopy.functions
+    let { sleep, parseKeywords, fetchPingPerms, gatherData, deleteMsgData } = poopy.functions
 
     const timerId = cronData.id
 
@@ -4412,7 +4412,7 @@ functions.createCronJob = async function (cronData) {
             await gatherData(dummyMessage).catch((err) => dataError = err)
             if (dataError) return console.log(dummyMessage)
 
-            const evaluatedPhrase = await getKeywordsFor(phrase, dummyMessage, true, { resetAttempts: true }).catch(() => { }) ?? phrase
+            const evaluatedPhrase = await parseKeywords(phrase, dummyMessage, true, { resetAttempts: true }).catch(() => { }) ?? phrase
 
             if (evaluatedPhrase.trim()) cronMessage = await channel.send({
                 content: evaluatedPhrase,
@@ -4611,7 +4611,49 @@ functions.getDeclaredValue = function (msg, obj, value, globalFirst) {
         return tempdata[msg.author.id][msg.id][obj][value] ?? tempdata[msg.guild.id][msg.channel.id][obj][value]
 }
 
-functions.getKeywordsFor = async function (string, msg, isBot, { extraKeys = {}, extraFuncs = {}, resetAttempts = false, ownermode = false, declaredOnly = false, sourceMsg = undefined } = {}) {
+functions.cleanKeywords = async function (string) {
+    let poopy = this
+    let tempdata = poopy.tempdata
+    let { getKeyFunc, infoPost } = poopy.functions
+
+    var noProgressCount = 0
+    var extraExecKeys, extraExecFuncs, keydata, lastString
+
+    function declareExtraKeys() {
+        extraExecKeys = { ...tempdata[msg.guild.id][msg.channel.id].keyDeclared, ...tempdata[msg.author.id][msg.id].keyDeclared }
+        extraExecFuncs = { ...tempdata[msg.guild.id][msg.channel.id].funcDeclared, ...tempdata[msg.author.id][msg.id].funcDeclared }
+    }
+
+    declareExtraKeys()
+
+    while (
+        (keydata = getKeyFunc(string, {
+            extraKeys: extraExecKeys,
+            extraFuncs: extraExecFuncs
+        }))
+    ) {
+        var keyMatch = keydata.match
+        lastString = string
+
+        string = string.replace(`${
+            Array.isArray(keyMatch) ? `${keyMatch[0]}(${keyMatch[1]})` : keyMatch
+        }`, "")
+
+        declareExtraKeys()
+
+        if (lastString == string) {
+            noProgressCount++
+            if (noProgressCount >= 5) {
+                infoPost("Keyword cleaner made no progress 5 times, aborting to prevent infinite loop")
+                return string
+            }
+        }
+    }
+
+    return string
+}
+
+functions.parseKeywords = async function (string, msg, isBot, { extraKeys = {}, extraFuncs = {}, resetAttempts = false, ownermode = false, declaredOnly = false, sourceMsg = undefined } = {}) {
     let poopy = this
     let config = poopy.config
     let vars = poopy.vars
