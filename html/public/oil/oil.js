@@ -88,9 +88,15 @@ async function main() {
             }
 
             var parsedUrl = new URL(url)
+            var fileName = parsedUrl.pathname.split("/").pop()
 
             var container = document.createElement('div')
+            container.title = fileName
             container.className = 'file-container'
+
+            var titleTip = document.createElement('div')
+            titleTip.className = 'title-tip'
+            titleTip.innerText = fileName
 
             //var copyBtn = document.createElement('button')
             //copyBtn.className = 'copy-btn'
@@ -118,6 +124,7 @@ async function main() {
             }
 
             //container.appendChild(copyBtn)
+            container.appendChild(titleTip)
             document.getElementById('files').appendChild(container)
 
             container.scrollIntoView({ behavior: "smooth", block: "end" })
@@ -194,7 +201,7 @@ async function main() {
         document.querySelectorAll('.file-container').forEach(el => el.remove())
         count = 0
         randomOil = sortArrayRandomly(oil)
-        fileButton.innerHTML = `click <b>here</b> for a file!!!!`
+        fileButton.innerHTML = `click <b>here</b> for a file!!!!${mobile ? '' : ' (or press f)'}`
     })
 }
 

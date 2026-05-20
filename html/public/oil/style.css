@@ -164,6 +164,26 @@ button:active {
     display: inline-block;
 }
 
+.title-tip {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+    border: none;
+    color: white;
+    font-family: 'Ubuntu';
+    font-size: 14px;
+    text-align: center;
+    padding: 5px 8px;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
 .copy-btn {
     position: absolute;
     top: 5px;
@@ -182,7 +202,9 @@ button:active {
 }
 
 .file-container:hover .copy-btn,
-.file-container:focus-within .copy-btn {
+.file-container:focus-within .copy-btn,
+.file-container:hover .title-tip,
+.file-container:focus-within .title-tip {
     opacity: 1;
 }
 
