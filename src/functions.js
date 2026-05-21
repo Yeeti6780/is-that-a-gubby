@@ -4480,8 +4480,7 @@ functions.deleteMsgData = function (msg) {
     let tempdata = poopy.tempdata
 
     if (
-        tempdata[msg.author.id] &&
-        tempdata[msg.author.id][msg.id] &&
+        tempdata?.[msg?.author?.id]?.[msg?.id] &&
         (
             !tempdata[msg.author.id][msg.id].keyExecuting ||
             tempdata[msg.author.id][msg.id].keyExecuting <= 0
@@ -4620,8 +4619,14 @@ functions.cleanKeywords = function (string, msg) {
     var extraExecKeys, extraExecFuncs, keydata, lastString
 
     function declareExtraKeys() {
-        extraExecKeys = { ...tempdata[msg.guild.id][msg.channel.id].keyDeclared, ...tempdata[msg.author.id][msg.id].keyDeclared }
-        extraExecFuncs = { ...tempdata[msg.guild.id][msg.channel.id].funcDeclared, ...tempdata[msg.author.id][msg.id].funcDeclared }
+        extraExecKeys = {
+            ...(tempdata[msg.guild.id]?.[msg.channel.id]?.keyDeclared ?? {}),
+            ...(tempdata[msg.author.id]?.[msg.id]?.keyDeclared ?? {})
+        }
+        extraExecFuncs = {
+            ...(tempdata[msg.guild.id]?.[msg.channel.id]?.funcDeclared ?? {}),
+            ...(tempdata[msg.author.id]?.[msg.id]?.funcDeclared ?? {})
+        }
     }
 
     declareExtraKeys()

@@ -4,6 +4,7 @@ module.exports = {
     func: function (matches, msg) {
         let poopy = this
         let tempdata = poopy.tempdata
+        let { splitKeyFunc } = poopy.functions
 
         var word = matches[1]
         var [noFinishPhrase, name] = splitKeyFunc(word, { args: 2 })
