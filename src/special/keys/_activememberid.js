@@ -27,7 +27,7 @@ function getWeightedMembers(msg) {
       var daysSinceLastActivity = (Date.now() - lastmessage) / (24 * 60 * 60 * 1000)
       var recencyPenalty = Math.pow(0.5, daysSinceLastActivity / 7)
 
-      var messageWeight = Math.pow(roundTo(messages, 50) * highestroleorder / roles * 4, 1.5)
+      var messageWeight = Math.pow(roundTo(Math.min(messages, 2500), 50) * highestroleorder / roles * 4, 1.5)
 
       var botMultiplier = bot ? 0.2 : 1
 
