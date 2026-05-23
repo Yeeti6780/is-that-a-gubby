@@ -79,7 +79,7 @@ module.exports = {
         if (msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageGuild) || msg.channel.permissionsFor(msg.member).has(DiscordTypes.PermissionFlagsBits.ManageMessages) || msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) || msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id) || isBot) {
             var result = await yesno(msg.channel, word, msg.member, [
                 {
-                    emoji: '874406183933444156',
+                    emoji: '1507804009535246418',
                     reactemoji: '❌',
                     customid: 'no',
                     style: DiscordTypes.ButtonStyle.Danger,

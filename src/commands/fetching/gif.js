@@ -67,7 +67,7 @@ module.exports = {
             }
         }, urls.length, msg.member, [
             {
-                emoji: '874406183933444156',
+                emoji: '1507804009535246418',
                 reactemoji: '❌',
                 customid: 'delete',
                 style: DiscordTypes.ButtonStyle.Danger,

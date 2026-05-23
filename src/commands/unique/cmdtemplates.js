@@ -291,7 +291,7 @@ module.exports = {
                     cmdTemplates.length,
                     msg.member,
                     [{
-                        emoji: '939523064658526278',
+                        emoji: '1507804004300750940',
                         reactemoji: '⏬',
                         customid: 'import',
                         style: DiscordTypes.ButtonStyle.Primary,
@@ -451,7 +451,7 @@ module.exports = {
                     cmdTemplates.length,
                     msg.member,
                     [{
-                        emoji: '939523064658526278',
+                        emoji: '1507804004300750940',
                         reactemoji: '⏬',
                         customid: 'import',
                         style: DiscordTypes.ButtonStyle.Primary,

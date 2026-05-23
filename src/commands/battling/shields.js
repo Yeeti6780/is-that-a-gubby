@@ -25,35 +25,35 @@ module.exports = {
 
         var navigationButtonsData = [
             {
-                emoji: '861253229723123762',
+                emoji: '1507804002983608330',
                 reactemoji: '⏮',
                 customid: 'first',
                 style: DiscordTypes.ButtonStyle.Primary,
             },
 
             {
-                emoji: '861253229726793728',
+                emoji: '1507804008235143268',
                 reactemoji: '⬅',
                 customid: 'previous',
                 style: DiscordTypes.ButtonStyle.Primary,
             },
 
             {
-                emoji: '861253229798621205',
+                emoji: '1507804013758906499',
                 reactemoji: '➡',
                 customid: 'next',
                 style: DiscordTypes.ButtonStyle.Primary,
             },
 
             {
-                emoji: '861253229740556308',
+                emoji: '1507804005722493119',
                 reactemoji: '⏭',
                 customid: 'last',
                 style: DiscordTypes.ButtonStyle.Primary,
             },
 
             {
-                emoji: '970292877785727036',
+                emoji: '1507804011179278588',
                 reactemoji: '🔢',
                 customid: 'page',
                 style: DiscordTypes.ButtonStyle.Primary,

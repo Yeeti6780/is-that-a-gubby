@@ -1635,7 +1635,7 @@ functions.yesno = async function (channel, content, who, btdata, reply, keepCont
 
         var buttonsData = btdata ?? [
             {
-                emoji: '874406154619469864',
+                emoji: '1507804015939817662',
                 reactemoji: '✅',
                 customid: 'yes',
                 style: DiscordTypes.ButtonStyle.Success,
@@ -1643,7 +1643,7 @@ functions.yesno = async function (channel, content, who, btdata, reply, keepCont
             },
 
             {
-                emoji: '874406183933444156',
+                emoji: '1507804009535246418',
                 reactemoji: '❌',
                 customid: 'no',
                 style: DiscordTypes.ButtonStyle.Danger,
@@ -1838,7 +1838,7 @@ functions.navigateEmbed = async function (channel, pageFunc, results, who, extra
 
     var buttonsData = [
         {
-            emoji: '861253229726793728',
+            emoji: '1507804008235143268',
             reactemoji: '⬅️',
             customid: 'previous',
             style: DiscordTypes.ButtonStyle.Primary,
@@ -1847,7 +1847,7 @@ functions.navigateEmbed = async function (channel, pageFunc, results, who, extra
         },
 
         {
-            emoji: '861253230070988860',
+            emoji: '1507804012508877002',
             reactemoji: '🔀',
             customid: 'random',
             style: DiscordTypes.ButtonStyle.Primary,
@@ -1856,7 +1856,7 @@ functions.navigateEmbed = async function (channel, pageFunc, results, who, extra
         },
 
         {
-            emoji: '861253229798621205',
+            emoji: '1507804013758906499',
             reactemoji: '➡️',
             customid: 'next',
             style: DiscordTypes.ButtonStyle.Primary,
@@ -1865,7 +1865,7 @@ functions.navigateEmbed = async function (channel, pageFunc, results, who, extra
         },
 
         {
-            emoji: '970292877785727036',
+            emoji: '1507804011179278588',
             reactemoji: '🔢',
             customid: 'page',
             style: DiscordTypes.ButtonStyle.Primary,
@@ -2114,7 +2114,7 @@ functions.rainmaze = async function (channel, who, reply, w = 8, h = 6) {
 
     var buttonsData = config.useReactions ? [
         {
-            emoji: '861253229726793728',
+            emoji: '1507804008235143268',
             reactemoji: '⬅️',
             customid: 'left',
             style: DiscordTypes.ButtonStyle.Primary,
@@ -2122,7 +2122,7 @@ functions.rainmaze = async function (channel, who, reply, w = 8, h = 6) {
         },
 
         {
-            emoji: '1030784553738063882',
+            emoji: '1507804014874595568',
             reactemoji: '⬆️',
             customid: 'up',
             style: DiscordTypes.ButtonStyle.Primary,
@@ -2130,7 +2130,7 @@ functions.rainmaze = async function (channel, who, reply, w = 8, h = 6) {
         },
 
         {
-            emoji: '1030784552081293383',
+            emoji: '1507804001155026995',
             reactemoji: '⬇️',
             customid: 'down',
             style: DiscordTypes.ButtonStyle.Primary,
@@ -2138,7 +2138,7 @@ functions.rainmaze = async function (channel, who, reply, w = 8, h = 6) {
         },
 
         {
-            emoji: '861253229798621205',
+            emoji: '1507804013758906499',
             reactemoji: '➡️',
             customid: 'right',
             style: DiscordTypes.ButtonStyle.Primary,
@@ -2146,14 +2146,14 @@ functions.rainmaze = async function (channel, who, reply, w = 8, h = 6) {
         }
     ] : [
         {
-            emoji: '1030786210555248640',
+            emoji: '1507803999636820018',
             customid: 'null1',
             style: DiscordTypes.ButtonStyle.Secondary,
             control: false
         },
 
         {
-            emoji: '1030784553738063882',
+            emoji: '1507804014874595568',
             reactemoji: '⬆️',
             customid: 'up',
             style: DiscordTypes.ButtonStyle.Primary,
@@ -2161,14 +2161,14 @@ functions.rainmaze = async function (channel, who, reply, w = 8, h = 6) {
         },
 
         {
-            emoji: '1030786210555248640',
+            emoji: '1507803999636820018',
             customid: 'null2',
             style: DiscordTypes.ButtonStyle.Secondary,
             control: false
         },
 
         {
-            emoji: '861253229726793728',
+            emoji: '1507804008235143268',
             reactemoji: '⬅️',
             customid: 'left',
             style: DiscordTypes.ButtonStyle.Primary,
@@ -2176,7 +2176,7 @@ functions.rainmaze = async function (channel, who, reply, w = 8, h = 6) {
         },
 
         {
-            emoji: '1030784552081293383',
+            emoji: '1507804001155026995',
             reactemoji: '⬇️',
             customid: 'down',
             style: DiscordTypes.ButtonStyle.Primary,
@@ -2184,7 +2184,7 @@ functions.rainmaze = async function (channel, who, reply, w = 8, h = 6) {
         },
 
         {
-            emoji: '861253229798621205',
+            emoji: '1507804013758906499',
             reactemoji: '➡️',
             customid: 'right',
             style: DiscordTypes.ButtonStyle.Primary,
@@ -2381,8 +2381,8 @@ functions.votekick = async function (member, channel, voteGoal, action = "timeou
         .setTimestamp()
 
     const buttons = new Discord.ActionRowBuilder().addComponents(
-        new Discord.ButtonBuilder().setCustomId("yes").setEmoji("874406154619469864").setStyle(DiscordTypes.ButtonStyle.Success),
-        new Discord.ButtonBuilder().setCustomId("no").setEmoji("874406183933444156").setStyle(DiscordTypes.ButtonStyle.Danger)
+        new Discord.ButtonBuilder().setCustomId("yes").setEmoji("1507804015939817662").setStyle(DiscordTypes.ButtonStyle.Success),
+        new Discord.ButtonBuilder().setCustomId("no").setEmoji("1507804009535246418").setStyle(DiscordTypes.ButtonStyle.Danger)
     )
 
     const voteMsg = await channel.send({ embeds: [embed], components: [buttons] }).catch(() => { })
@@ -2948,35 +2948,35 @@ functions.displayShieldsShop = async function (channel, who, reply, shopObject, 
 
     var shopNavigationButtonsData = [
         {
-            emoji: '861253229723123762',
+            emoji: '1507804002983608330',
             reactemoji: '⏮',
             customid: 'first',
             style: DiscordTypes.ButtonStyle.Primary,
         },
 
         {
-            emoji: '861253229726793728',
+            emoji: '1507804008235143268',
             reactemoji: '⬅',
             customid: 'previous',
             style: DiscordTypes.ButtonStyle.Primary,
         },
 
         {
-            emoji: '861253229798621205',
+            emoji: '1507804013758906499',
             reactemoji: '➡',
             customid: 'next',
             style: DiscordTypes.ButtonStyle.Primary,
         },
 
         {
-            emoji: '861253229740556308',
+            emoji: '1507804005722493119',
             reactemoji: '⏭',
             customid: 'last',
             style: DiscordTypes.ButtonStyle.Primary,
         },
 
         {
-            emoji: '970292877785727036',
+            emoji: '1507804011179278588',
             reactemoji: '🔢',
             customid: 'page',
             style: DiscordTypes.ButtonStyle.Primary,
