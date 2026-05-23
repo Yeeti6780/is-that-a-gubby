@@ -61,14 +61,14 @@ module.exports = {
         channel.sendTyping().catch(() => { })
 
         if (!msg.nosend && continuous) {
-            var msgCollectorData = tempdata[guildid][channelid][authorid]?.messageCollectors ?? {}
-            if (msgCollectorData.cleverbot) {
-                msgCollectorData.cleverbot.stop()
-                delete msgCollectorData.cleverbot
+            var collectorData = tempdata[guildid][channelid][authorid]?.collectors ?? {}
+            if (collectorData.cleverbot) {
+                collectorData.cleverbot.stop()
+                delete collectorData.cleverbot
             }
 
-            if (Object.entries(msgCollectorData).length >= 5) {
-                await channel.send('Message collector limit exceeded.').catch(() => { })
+            if (Object.entries(collectorData).length >= 5) {
+                await channel.send('Collector limit exceeded.').catch(() => { })
                 return
             }
 
@@ -78,7 +78,7 @@ module.exports = {
                 type: "message", filter, time: 30000
             })
 
-            msgCollectorData.cleverbot = collector
+            collectorData.cleverbot = collector
 
             collector.on('collect', async m => {
                 try {
@@ -111,7 +111,7 @@ module.exports = {
             collector.on('end', async (_, reason) => {
                 try {
                     if (tempdata[msg.guild.id][msg.channel.id].shutUp) return
-                    delete msgCollectorData.cleverbot
+                    delete collectorData.cleverbot
                     if (reason === 'time') {
                         channel.send({
                             content: 'I\'m running out of time...',

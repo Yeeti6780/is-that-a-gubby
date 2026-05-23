@@ -4410,7 +4410,7 @@ functions.createCronJob = async function (cronData) {
 
             var dataError = false
             await gatherData(dummyMessage).catch((err) => dataError = err)
-            if (dataError) return console.log(dummyMessage)
+            if (dataError) return console.log(dataError)
 
             const evaluatedPhrase = await parseKeywords(phrase, dummyMessage, true, { resetAttempts: true }).catch(() => { }) ?? phrase
 
@@ -4479,6 +4479,8 @@ functions.deleteMsgData = function (msg) {
     let poopy = this
     let tempdata = poopy.tempdata
 
+    if (!msg) return
+
     if (
         tempdata?.[msg?.author?.id]?.[msg?.id] &&
         (
@@ -4514,7 +4516,7 @@ functions.dmSupport = function (msg) {
     })
 
     if (!msg.channel) Object.defineProperty(msg, 'channel', {
-        value: bot.user.channels && bot.user.channels.cache.get(msg.channelId) || msg.author,
+        value: (msg.message?.channel) ?? bot.user.channels.cache.get(msg.channelId) ?? msg.author,
         writable: true
     })
     if (msg.channel && !msg.channel.sendTyping) Object.defineProperty(msg.channel, 'sendTyping', {
@@ -4526,8 +4528,8 @@ functions.dmSupport = function (msg) {
         writable: true
     })
 
-    if (!msg.guild && (msg.user || msg.author)) Object.defineProperty(msg, 'guild', {
-        value: new DMGuild(msg),
+    if (!msg.guild) Object.defineProperty(msg, 'guild', {
+        value: (msg.message?.guild) ?? ((msg.user || msg.author) && new DMGuild(msg)),
         writable: true
     })
 
@@ -4575,6 +4577,44 @@ functions.dmSupport = function (msg) {
                 msg.authorizingIntegrationOwners["1"]) :
             false
     )
+}
+
+functions.msgSupport = function (obj, {
+    content = "",
+    attachments = {}
+} = {}) {
+    let poopy = this
+    let { Collection } = poopy.modules
+
+    class FakeCollector {
+        constructor() {
+            this.on = () => { }
+            this.once = () => { }
+            this.resetTimer = () => { }
+            this.stop = () => { }
+        }
+    }
+
+    obj.content ??= content
+    obj.author ??= obj.user
+    obj.bot ??= false
+    obj.attachments ??= new Collection(Object.entries(attachments))
+    obj.stickers ??= new Collection()
+    obj.embeds ??= []
+    obj.mentions ??= {
+        users: new Collection(),
+        members: new Collection(),
+        users: new Collection(),
+        roles: new Collection()
+    }
+
+    obj.edit ??= obj?.editReply ?? (async () => { })
+    obj.delete ??= obj?.deleteReply ?? (async () => { })
+    obj.react ??=
+        obj.fetchWebhook =
+        obj.fetchReference = async () => { }
+    obj.createReactionCollector =
+        obj.createMessageComponentCollector = () => new FakeCollector()
 }
 
 functions.escapeKeywordResult = async function (string) {
@@ -4640,9 +4680,8 @@ functions.cleanKeywords = function (string, msg) {
         var keyMatch = keydata.match
         lastString = string
 
-        string = string.replace(`${
-            Array.isArray(keyMatch) ? `${keyMatch[0]}(${keyMatch[1]})` : keyMatch
-        }`, "")
+        string = string.replace(`${Array.isArray(keyMatch) ? `${keyMatch[0]}(${keyMatch[1]})` : keyMatch
+            }`, "")
 
         declareExtraKeys()
 

@@ -129,15 +129,6 @@ class Poopy {
 
         bot.database = config.database
 
-        class FakeCollector {
-            constructor() {
-                this.on = () => { }
-                this.once = () => { }
-                this.resetTimer = () => { }
-                this.stop = () => { }
-            }
-        }
-
         fs.readdirSync('src/special/keys').forEach(name => {
             var key = name.replace(/\.js$/, '')
             var keyData = require(`./src/special/keys/${key}`)
@@ -445,8 +436,13 @@ class Poopy {
             var prefix = data.guildData[msg.guild.id]?.prefix ?? config.globalPrefix
             var hivemind = data.guildData[msg.guild.id].poopymode ? "All" : "One"
 
-            if (msg.channel.type == Discord.ChannelType.DM && msg.type !== DiscordTypes.InteractionType.ApplicationCommand && !origcontent.toLowerCase().includes(prefix.toLowerCase())) {
-                if (msg.author.bot || msg.author.id == bot.user.id) return
+            if (
+                msg.channel instanceof Discord.BaseChannel &&
+                msg.channel.type == Discord.ChannelType.DM &&
+                msg.type !== DiscordTypes.InteractionType.ApplicationCommand &&
+                !origcontent.toLowerCase().includes(prefix.toLowerCase())
+            ) {
+                if (msg.author.bot || msg.author.id == bot.user.id || tempdata[msg.guild?.id]?.[msg.channel?.id]?.shutUp) return
                 msg.channel.sendTyping().catch(() => { })
                 await sleep(Math.floor(Math.random() * 500) + 500)
                 await msg.channel.send(arrays.dmPhrases[Math.floor(Math.random() * arrays.dmPhrases.length)]
@@ -1636,12 +1632,12 @@ class Poopy {
 
                         content = `${prefix}${content.join(' ')}`
 
-                        var extraAttachments = {}
+                        var attachments = {}
 
                         for (var i = 1; i <= 2; i++) {
-                            var extraAttachment = interaction.options.getAttachment(`extraattachment${i}`)
-                            if (extraAttachment) {
-                                extraAttachments[extraAttachment.id] = extraAttachment
+                            var attachment = interaction.options.getAttachment(`extraattachment${i}`)
+                            if (attachment) {
+                                attachments[attachment.id] = attachment
                             }
                         }
 
@@ -1751,26 +1747,7 @@ class Poopy {
                             flags: DiscordTypes.MessageFlags.Ephemeral
                         } : undefined).catch(() => { })
 
-                        interaction.content = content
-                        interaction.author = interaction.user
-                        interaction.bot = false
-                        interaction.attachments = new Collection(Object.entries(extraAttachments))
-                        interaction.stickers = new Collection()
-                        interaction.embeds = []
-                        interaction.mentions = {
-                            users: new Collection(),
-                            members: new Collection(),
-                            users: new Collection(),
-                            roles: new Collection()
-                        }
-
-                        interaction.edit = interaction.editReply
-                        interaction.delete = interaction.deleteReply
-                        interaction.react =
-                            interaction.fetchWebhook =
-                            interaction.fetchReference = async () => { }
-                        interaction.createReactionCollector =
-                            interaction.createMessageComponentCollector = () => new FakeCollector()
+                        msgSupport(interaction, { content, attachments })
 
                         await Promise.all(
                             callbacks.messageCallbacks.map(

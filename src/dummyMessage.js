@@ -446,7 +446,7 @@ class User {
 }
 
 class APIMessage {
-    constructor(data, payload) {
+    constructor(data, payload = {}) {
         let { req, poopy } = data
         this._data = data
 
@@ -525,7 +525,7 @@ class APIMessage {
 }
 
 class FakeMessage {
-    constructor(data, payload) {
+    constructor(data, payload = {}) {
         let { guild, channel, user, member, poopy } = data
 
         let { generateId } = poopy.functions

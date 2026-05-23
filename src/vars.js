@@ -468,7 +468,7 @@ vars.tempdataTemplate = {
 
             userId: {
                 lastMessage: 0,
-                messageCollectors: {},
+                collectors: {},
                 chatContexts: {}
             }
         },

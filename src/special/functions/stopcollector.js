@@ -9,19 +9,19 @@ module.exports = {
         var word = matches[1]
         var [noFinishPhrase, name] = splitKeyFunc(word, { args: 2 })
 
-        function getCollectors(messageCollectors = {}) {
-            return (name && messageCollectors[name])
-                ? [[name, messageCollectors[name]]]
-                : Object.entries(messageCollectors)
+        function getCollectors(collectors = {}) {
+            return (name && collectors[name])
+                ? [[name, collectors[name]]]
+                : Object.entries(collectors)
         }
 
-        var msgCollectorData = tempdata[msg.guild.id][msg.channel.id][msg.author.id]?.messageCollectors
-        var collectors = getCollectors(msgCollectorData)
+        var collectorData = tempdata[msg.guild.id][msg.channel.id][msg.author.id]?.collectors
+        var collectors = getCollectors(collectorData)
 
         for (var [name, collector] of collectors) {
             if (!collector?.stop) continue
             collector.stop(!noFinishPhrase ? 'time' : 'user')
-            delete msgCollectorData[name]
+            delete collectorData[name]
         }
 
         return ''
