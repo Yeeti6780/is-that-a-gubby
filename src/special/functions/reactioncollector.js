@@ -40,7 +40,7 @@ module.exports = {
             msg.member.permissions.has(DiscordTypes.PermissionFlagsBits.Administrator) ||
             msg.author.id === msg.guild.ownerId || config.ownerids.find(id => id == msg.author.id) ||
             isBot || msg.author.id == bot.user.id
-        ) && message) {
+        ) && message?.id) {
             var collectorData = tempdata[guildid][channelid][authorid]?.collectors ?? {}
             if (collectorData[name]) {
                 collectorData[name].stop()
