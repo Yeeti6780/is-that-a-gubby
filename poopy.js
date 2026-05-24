@@ -669,7 +669,7 @@ class Poopy {
                     if (!collected && msg.type != DiscordTypes.InteractionType.ApplicationCommand) {
                         collected = true
                         tempdata.collectors.filter(
-                            c => c?.id.startsWith(msg.channel.id) && c?.type == "message"
+                            c => c?.id && c?.id.startsWith(msg.channel.id) && c?.type == "message"
                         ).forEach(collector => collector.collect(msg))
                     }
 
