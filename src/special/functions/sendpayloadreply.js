@@ -103,8 +103,12 @@ module.exports = {
                 return file
             })
 
-            var m = await msg.reply(payload).catch(() => { })
+            var doingitwrong = ''
+            var m = await msg.reply(payload).catch((err) => { doingitwrong = err.message })
 
+            if (doingitwrong !== '')
+                return doingitwrong
+            
             return m?.id ?? ''
         } else {
             return 'You need to have the manage messages permission to execute that!'
