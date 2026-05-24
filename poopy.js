@@ -89,7 +89,7 @@ class Poopy {
         let { Discord, DiscordTypes, Collection, fs, CryptoJS } = modules
         let { envsExist, configFlagsEnabled, refreshDiscordURLs, getUploadLimit,
             chunkArray, chunkObject, requireJSON, findCommand, fetchPingPerms,
-            dmSupport, sleep, gatherData, deleteMsgData, infoPost, sendWebhook, updateGenAiModel,
+            dmSupport, msgSupport, sleep, gatherData, deleteMsgData, infoPost, sendWebhook, updateGenAiModel,
             parseKeywords, getUrls, randomChoice, similarity, yesno, chat, autoModContent,
             regexClean, getOption, getTotalHivemindStatus, cleanKeywords } = functions
 
