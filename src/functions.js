@@ -4516,7 +4516,7 @@ functions.dmSupport = function (msg) {
     })
 
     if (!msg.channel) Object.defineProperty(msg, 'channel', {
-        value: (msg.message?.channel) ?? bot.user.channels.cache.get(msg.channelId) ?? msg.author,
+        value: (msg.message?.channel) ?? (bot.user.channels && bot.user.channels.cache.get(msg.channelId)) ?? msg.author,
         writable: true
     })
     if (msg.channel && !msg.channel.sendTyping) Object.defineProperty(msg.channel, 'sendTyping', {

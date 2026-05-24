@@ -669,7 +669,7 @@ class Poopy {
                     if (!collected && msg.type != DiscordTypes.InteractionType.ApplicationCommand) {
                         collected = true
                         tempdata.collectors.filter(
-                            c => c.id.startsWith(msg.channel.id) && c.type == "message"
+                            c => c?.id.startsWith(msg.channel.id) && c?.type == "message"
                         ).forEach(collector => collector.collect(msg))
                     }
 
@@ -1001,8 +1001,15 @@ class Poopy {
             if (!collected && msg.type != DiscordTypes.InteractionType.ApplicationCommand) {
                 collected = true
                 tempdata.collectors.filter(
-                    c => c.id.startsWith(msg.channel.id) && c.type == "message"
+                    c => c?.id?.startsWith(msg.channel.id) && c?.type == "message"
                 ).forEach(collector => collector.collect(msg))
+                
+                tempdata.collectors.filter(
+                    c => c.id === undefined || c.type === undefined
+                ).forEach(collector => {
+                    console.log('what has happened')
+                    console.log(collector)
+                })
             }
 
             if (
@@ -1356,7 +1363,7 @@ class Poopy {
             const emoji = reaction.emoji.toString()
 
             if (user) tempdata.collectors.filter(
-                c => c.id == msg.id && c.type == "reaction"
+                c => c?.id == msg.id && c?.type == "reaction"
             ).forEach(collector => collector.collect(reaction, user))
 
             reaction = msg.reactions.cache.find(r => r.emoji.toString() == emoji) ?? reaction
@@ -1496,13 +1503,18 @@ class Poopy {
                         components: [row],
                         files: attachments,
                         allowedMentions: { parse: [] }
-                    }).catch(() => { })
+                    }).catch((err) => { console.log(err) })
 
                     starboardCache[origMsg.id] = starboardMsg
                     starboardCache[msg.id] = starboardMsg
 
-                    starboard.messages[origMsg.id] = starboardMsg.id
-                    starboard.messages[msg.id] = starboardMsg.id
+                    if (starboardMsg) {
+                        starboard.messages[origMsg.id] = starboardMsg.id
+                        starboard.messages[msg.id] = starboardMsg.id
+                    } else {
+                        console.log('toilet')
+                        console.log(channel)
+                    }
                 }
 
                 if (cachedStarboardMessage && cachedStarboardMessage !== true) {
@@ -1571,7 +1583,7 @@ class Poopy {
                     type: interaction.type === DiscordTypes.InteractionType.MessageComponent,
                     execute: async () => {
                         tempdata.collectors.filter(
-                            c => c.id == interaction.message.id && c.type == "component"
+                            c => c?.id == interaction.message.id && c?.type == "component"
                         ).forEach(collector => collector.collect(interaction))
                     }
                 },
