@@ -39,6 +39,26 @@ functions.regexClean = function (str) {
     return str.replace(/[\\^$.|?*+()[{]/g, (match) => `\\${match}`)
 }
 
+functions.regexClean = function (str) {
+    return str.replace(/[\\^$.|?*+()[{]/g, (match) => `\\${match}`)
+}
+
+functions.jsonClean = function (str) {
+    return str.replace(/[\\"\u0000-\u001F]/g, (match) => {
+        switch (match) {
+            case '\\': return '\\\\'
+            case '"': return '\\"'
+            case '\b': return '\\b'
+            case '\f': return '\\f'
+            case '\n': return '\\n'
+            case '\r': return '\\r'
+            case '\t': return '\\t'
+            default:
+                return `\\u${match.charCodeAt(0).toString(16).padStart(4, '0')}`
+        }
+    })
+}
+
 functions.numberDecimals = function (number, decimalPlaces) {
     return Math.floor(number * (10 ^ decimalPlaces)) / (10 ^ decimalPlaces)
 }
@@ -4346,7 +4366,7 @@ functions.sendWebhook = async function (msg, payload) {
         if (err.message == "Unknown Webhook") {
             if (!tempdata[msg.guild.id][channel.id]) tempdata[msg.guild.id][channel.id] = {}
             tempdata[msg.guild.id][channel.id].webhooks = await channel.fetchWebhooks().then(w => [...w.values()]).catch(() => [])
-    
+
             webhook = await createWebhook(msg).catch(() => { })
             if (webhook) webhookMsg = await webhook.send(payload)
         } else throw err
