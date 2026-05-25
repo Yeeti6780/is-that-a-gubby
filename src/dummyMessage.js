@@ -532,10 +532,10 @@ class FakeMessage {
 
         if (payload && typeof payload == 'string') payload = { content: payload }
 
-        this.content = payload ? payload.content : ""
-        this.attachments = payload ? payload.files : new Collection()
-        this.embeds = payload ? payload.embeds : []
-        this.stickers = payload ? payload.stickers : new Collection()
+        this.content = payload?.content ?? ""
+        this.attachments = payload?.files ?? new Collection()
+        this.embeds = payload?.embeds ?? []
+        this.stickers = payload?.stickers ?? new Collection()
 
         this.guild = guild
         this.channel = channel
@@ -543,7 +543,7 @@ class FakeMessage {
         this.user = this.author = member.user ?? member
 
         this.component = component
-        this.id = component ? component.id : generateId()
+        this.id = component?.id ?? generateId()
         this.type = 0
         this.bot = this.user.bot
         this.mentions = {
