@@ -15,7 +15,7 @@ module.exports = {
     var breakingBad = false
 
     var breakOpts = { ...opts }
-    breakOpts.extraFuncs = { ...wopts.extraFuncs }
+    breakOpts.extraFuncs = { ...breakOpts.extraFuncs }
     breakOpts.extraFuncs.break = {
       func: async function (matches, msg) {
         var word = matches[1]
@@ -27,7 +27,7 @@ module.exports = {
     while ((await parseKeywords(condition, msg, isBot, opts).catch(() => { }) ?? '').trim()) {
       tempdata[msg.author.id][msg.id].keyAttempts++
       await parseKeywords(func, msg, isBot, breakOpts).catch(() => { })
-      
+
       if (
         (!opts.ownermode && tempdata[msg.author.id][msg.id].keyAttempts >= config.keyLimit)
         || breakingBad

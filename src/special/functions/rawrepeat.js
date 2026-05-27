@@ -16,7 +16,7 @@ module.exports = {
     var breakingBad = false
 
     var breakOpts = { ...opts }
-    breakOpts.extraFuncs = { ...wopts.extraFuncs }
+    breakOpts.extraFuncs = { ...breakOpts.extraFuncs }
     breakOpts.extraFuncs.break = {
       func: async function (matches, msg) {
         var word = matches[1]
@@ -28,7 +28,7 @@ module.exports = {
     var repeat = []
     for (var i = 0; i < times; i++) {
       tempdata[msg.author.id][msg.id].keyAttempts++
-      
+
       var repeatResult = await parseKeywords(phrase, msg, isBot, breakOpts).catch(() => { }) ?? ''
       if (!breakingBad) repeat.push(repeatResult)
 
