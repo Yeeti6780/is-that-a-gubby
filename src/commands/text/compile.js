@@ -3,8 +3,8 @@ module.exports = {
     args: [{
         name: "language", required: true, specifarg: false, orig: "<language>", autocomplete: function () {
             let poopy = this
-            return poopy.vars.codelanguages.map(lang => {
-                return { name: lang.language, value: lang.templates[0] }
+            return Object.entries(poopy.vars.codelanguages).map(([lang, compiler]) => {
+                return { name: compiler.language, value: lang }
             })
         }
     }, { name: "code", required: true, specifarg: false, orig: "<code>" }],
@@ -30,7 +30,7 @@ module.exports = {
         }
 
         if (language === undefined) {
-            await msg.reply(`What is the programming language?! Available ones are:\n${vars.codelanguages.map(lang => `\`${lang.templates[0]}\``).join(', ')}`).catch(() => { })
+            await msg.reply(`What is the programming language?! Available ones are:\n${Object.keys(vars.codelanguages).map(lang => `\`${lang}\``).join(', ')}`).catch(() => { })
             return
         }
 
@@ -38,12 +38,12 @@ module.exports = {
         if (codeBlock) saidMessage = saidMessage.substring(cl > -1 ? cl : 3, saidMessage.length - 3).trim()
         var langVersion
 
-        var findLang = vars.codelanguages.find(lang => lang.templates[0] === language.toLowerCase())
+        var findLang = vars.codelanguages[language.toLowerCase()]
 
         if (findLang) {
             langVersion = findLang.name
         } else {
-            await msg.reply(`Not a valid programming language.\nAvailable ones are: ${vars.codelanguages.map(lang => `\`${lang.templates[0]}\``).join(', ')}`).catch(() => { })
+            await msg.reply(`Not a valid programming language.\nAvailable ones are: ${Object.keys(vars.codelanguages).map(lang => `\`${lang}\``).join(', ')}`).catch(() => { })
             return
         }
 

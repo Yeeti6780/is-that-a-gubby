@@ -36,7 +36,7 @@ module.exports = {
     var langVersion
 
     if (vars.codelanguages) {
-      var findLang = vars.codelanguages.find(lang => lang.templates[0] === language.toLowerCase())
+      var findLang = vars.codelanguages[language.toLowerCase()]
 
       if (findLang) {
         langVersion = findLang.name

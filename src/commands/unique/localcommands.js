@@ -149,8 +149,9 @@ module.exports = {
         let data = poopy.data
         let config = poopy.config
         let bot = poopy.bot
+        let vars = poopy.vars
         let { chunkArray, navigateEmbed, parseKeywords, fetchPingPerms } = poopy.functions
-        let { DiscordTypes } = poopy.modules
+        let { DiscordTypes, fs } = poopy.modules
         let globaldata = poopy.globaldata
         let commands = poopy.commands
 
@@ -228,7 +229,17 @@ module.exports = {
                     if (!msg.nosend) await msg.reply({
                         content: `\`${data.guildData[msg.guild.id].localcmds[findCommand].phrase}\``,
                         allowedMentions: fetchPingPerms(msg)
-                    }).catch(() => { })
+                    }).catch(async () => {
+                        var currentcount = vars.filecount
+                        vars.filecount++
+                        var filepath = `temp/${config.database}/file${currentcount}`
+                        fs.mkdirSync(`${filepath}`)
+                        fs.writeFileSync(`${filepath}/localcmd.txt`, data.guildData[msg.guild.id].localcmds[findCommand].phrase)
+                        await msg.reply({
+                            files: [new Discord.AttachmentBuilder(`${filepath}/localcmd.txt`)]
+                        }).catch(() => { })
+                        fs.rmSync(`${filepath}`, { force: true, recursive: true })
+                    })
                     return data.guildData[msg.guild.id].localcmds[findCommand].phrase
                 } else {
                     await msg.reply(`Not a valid command.`).catch(() => { })

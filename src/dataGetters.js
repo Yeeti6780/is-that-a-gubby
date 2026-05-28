@@ -22,11 +22,29 @@ var dataGetters = {
         var clresponse = await axios.get('https://wandbox.org/api/list.json').catch((e) => console.log(e))
 
         if (clresponse) {
-            return clresponse.data.filter((lang, index, self) => self.findIndex(l => l.templates[0] === lang.templates[0]) === index).sort((a, b) => {
-                if (a.templates[0] < b.templates[0]) return -1
-                if (a.templates[0] > b.templates[0]) return 1
+            var languages = []
+            
+            clresponse.data.forEach(
+                (compiler) => {
+                    var executorName = compiler.language.toLowerCase().replace(/ script$/, "").replace(/ /g, "")
+                    
+                    function isDefaultCompiler(c) {
+                        return c.version && !c.name.toLowerCase().includes("head")
+                    }
+
+                    if (isDefaultCompiler(compiler) && !languages.find(([e]) => e == executorName)) {
+                        languages.push([executorName, compiler])
+                    }
+                }
+            )
+
+            languages.sort(([a], [b]) => {
+                if (a < b) return -1
+                if (a > b) return 1
                 return 0
             })
+
+            return Object.fromEntries(languages)
         }
     },
 
