@@ -151,7 +151,7 @@ module.exports = {
         let bot = poopy.bot
         let vars = poopy.vars
         let { chunkArray, navigateEmbed, parseKeywords, fetchPingPerms } = poopy.functions
-        let { DiscordTypes, fs } = poopy.modules
+        let { Discord, DiscordTypes, fs } = poopy.modules
         let globaldata = poopy.globaldata
         let commands = poopy.commands
 
