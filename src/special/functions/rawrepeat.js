@@ -21,6 +21,7 @@ module.exports = {
       func: async function (matches, msg) {
         var word = matches[1]
         tempdata[msg.author.id][msg.id].returnValue = word
+        breakingBad = true
         return ''
       }
     }
