@@ -4682,12 +4682,12 @@ functions.cleanKeywords = function (string, msg) {
 
     function declareExtraKeys() {
         extraExecKeys = {
-            ...(tempdata[msg.guild.id]?.[msg.channel.id]?.keyDeclared ?? {}),
-            ...(tempdata[msg.author.id]?.[msg.id]?.keyDeclared ?? {})
+            ...(tempdata[msg.guild?.id]?.[msg.channel?.id]?.keyDeclared ?? {}),
+            ...(tempdata[msg.author?.id]?.[msg.id]?.keyDeclared ?? {})
         }
         extraExecFuncs = {
-            ...(tempdata[msg.guild.id]?.[msg.channel.id]?.funcDeclared ?? {}),
-            ...(tempdata[msg.author.id]?.[msg.id]?.funcDeclared ?? {})
+            ...(tempdata[msg.guild?.id]?.[msg.channel?.id]?.funcDeclared ?? {}),
+            ...(tempdata[msg.author?.id]?.[msg.id]?.funcDeclared ?? {})
         }
     }
 
@@ -6159,9 +6159,7 @@ functions.validateFile = async function (url, exception, opts) {
                 method: 'GET',
                 url,
                 responseType: 'stream',
-                validateStatus: () => true,
-                maxBodyLength: 1024 * 1024 * 200,
-                maxContentLength: 1024 * 1024 * 200
+                validateStatus: () => true
             })
         } catch (err) {
             return reject(err.message)
@@ -6182,6 +6180,9 @@ functions.validateFile = async function (url, exception, opts) {
         }
 
         var buffer = Buffer.concat(chunks)
+        if (buffer.length >= 1024 * 1024 * 100) {
+            return reject("File extremely giga mega large that exceeds the 100 MB limit.")
+        }
 
         var type = await fileType.fromBuffer(buffer).catch(() => { })
 
