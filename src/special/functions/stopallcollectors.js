@@ -12,8 +12,8 @@ module.exports = {
         var [noFinishPhrase, name] = splitKeyFunc(word, { args: 2 })
 
         function getCollectors(collectors = {}) {
-            return (name && collectors[name])
-                ? [[name, collectors[name]]]
+            return name
+                ? (collectors[name] ? [[name, collectors[name]]] : [])
                 : Object.entries(collectors)
         }
 
