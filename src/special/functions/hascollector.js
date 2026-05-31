@@ -9,16 +9,16 @@ module.exports = {
         var word = matches[1]
         var [global, name] = splitKeyFunc(word, { args: 2 })
 
-        function getUserCollectors(collectors = {}) {
-            return (name && collectors[name])
-                ? [[name, collectors[name]]]
+        function getCollectors(collectors = {}) {
+            return name
+                ? (collectors[name] ? [[name, collectors[name]]] : [])
                 : Object.entries(collectors)
         }
 
         return (
             global
-                ? Object.values(tempdata[msg.guild.id][msg.channel.id]).some(u => getUserCollectors(u?.collectors).length > 0)
-                : getUserCollectors(tempdata[msg.guild.id][msg.channel.id][msg.author.id].collectors).length > 0
+                ? Object.values(tempdata[msg.guild.id][msg.channel.id]).some(u => getCollectors(u?.collectors).length > 0)
+                : getCollectors(tempdata[msg.guild.id][msg.channel.id][msg.author.id].collectors).length > 0
         ) || ''
     }
 }
