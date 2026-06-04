@@ -1,10 +1,11 @@
 module.exports = {
     helpf: '() (manage messages permission only)',
     desc: 'Resumes keyword execution for the current channel.',
-    func: async function (_, msg) {
+    func: async function (_, msg, isBot) {
         let poopy = this
         let tempdata = poopy.tempdata
         let config = poopy.config
+        let bot = poopy.bot
         let { DiscordTypes } = poopy.modules
 
         if (!(
