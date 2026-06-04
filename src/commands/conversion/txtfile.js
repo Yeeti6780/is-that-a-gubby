@@ -5,6 +5,7 @@ module.exports = {
     ],
     execute: async function (msg, args) {
         let poopy = this
+        let { sendFile } = poopy.functions
         let { fs, Discord } = poopy.modules
         let vars = poopy.vars
         let config = poopy.config
