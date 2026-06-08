@@ -67,7 +67,7 @@ module.exports = {
                 try {
                     if (
                         tempdata[msg.guild.id][msg.channel.id].shutUp ||
-                        globaldata.shit.includes(m.author.id)
+                        globaldata.shit.includes(comp.user.id)
                     ) return
                     var customId = comp.customId
 
