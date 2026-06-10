@@ -9,5 +9,6 @@ module.exports = {
         var isDeclared = opts.extraKeys[word] != undefined
         
         return isDeclared ? "true" : ""
-    }
+    },
+    raw: true
 }
