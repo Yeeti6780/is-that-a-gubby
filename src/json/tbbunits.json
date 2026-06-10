@@ -150,6 +150,16 @@
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/6/67/Mafia_Krip.png",
             "normal": "Krip"
         },
+                {
+            "name": "Grunt",
+            "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/5/57/Grunt.png",
+            "alt": "Mafia Grunt"
+        },
+        {
+            "name": "Mafia Grunt",
+            "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/7/7d/Mafia_Grunt.png",
+            "normal": "Grunt"
+        },
         {
             "name": "Grenade Battler",
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/0/09/Grenade_Battler.png",
@@ -451,6 +461,16 @@
             "name": "Blood",
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/b/b5/Blood.png",
             "normal": "Blud"
+        },
+        {
+            "name": "Gruntkeeper",
+            "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/5/5d/Gruntkeeper.png",
+            "alt": "Gruntlord"
+        },
+        {
+            "name": "Gruntlord",
+            "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/c/c5/Gruntlord.png",
+            "normal": "Gruntkeeper"
         },
         {
             "name": "Ninja Battler",
@@ -1332,6 +1352,7 @@
             "name": "Sailor Battler",
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/8/8f/Sailor_Battler_Enemy.png",
             "alt": "Pirate Battler"
+    
         },
         {
             "name": "Bucket Tagger",
