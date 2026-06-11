@@ -142,6 +142,7 @@ async function start() {
                 const auth = req.query.auth
                 const file = req.query.file ?? `data/poopydata.json`
                 if (!auth || auth != process.env.AUTH_TOKEN || !fs.existsSync(file)) {
+                    // gay
                     res.status(404).sendFile(`${__dirname}/html/errorpages/404.html`)
                     return
                 }

@@ -118,6 +118,12 @@ module.exports = {
         var { chunkArray, navigateEmbed, generateId, fetchPingPerms, getOption, createCronJob } = poopy.functions
         var { Discord, DiscordTypes, cron } = poopy.modules
 
+        var ownerid = config.ownerids.find(id => id == msg.author.id);
+        if (ownerid === undefined && !opts.ownermode) {
+            await msg.reply('Owner only!').catch(() => { })
+            return
+        }
+
         if (opts.sourceMsg && msg.author.id != opts.sourceMsg.author.id) {
             await msg.reply("bro").catch(() => { })
             return
@@ -502,5 +508,5 @@ module.exports = {
     },
     cooldown: 2500,
     raw: true,
-    type: 'Unique'
+    type: 'Owner'
 }
