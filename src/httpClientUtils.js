@@ -30,6 +30,7 @@ const providers = [
     "unsplash"
 ]
 
+if (!fs.existsSync("data")) fs.mkdirSync("data")
 if (!fs.existsSync("data/imagesearchdata.json")) {
     fs.writeJSONSync("data/imagesearchdata.json", Object.fromEntries(providers.map(
         (provider) => [provider, {}]
