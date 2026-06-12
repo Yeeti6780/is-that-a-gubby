@@ -22,7 +22,7 @@ module.exports = {
         var oilFolder = arrays.shitting
         if (process.env.SECRET_TRIGGER && config.tumoreTesters.includes(msg.author.id)) {
             if (msg.guildId == process.env.SECRET_TRIGGER || args.includes(`-${process.env.SECRET_ARG}`)) {
-                oilFolder = oilFolder.concat(globaldata.secretShit ?? [])
+                oilFolder = args.includes(`-${process.env.SECRET_ARG}only`) ? globaldata.secretShit ?? ["There's nothing."] : oilFolder.concat(globaldata.secretShit ?? [])
             }
         }
 

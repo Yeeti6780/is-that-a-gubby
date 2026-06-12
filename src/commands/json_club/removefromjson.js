@@ -32,9 +32,10 @@ module.exports = {
             }
 
             var type
+            var isSecret = (process.env.SECRET_ARG && config.tumoreTesters.includes(msg.author.id) && args[1].toLowerCase() == process.env.SECRET_ARG)
 
-            if (types.find(t => t === args[1].toLowerCase())) {
-                type = args[1].toLowerCase()
+            if (types.find(t => t === args[1].toLowerCase()) || isSecret) {
+                type = isSecret ? "secretOil" : args[1].toLowerCase()
             } else {
                 await msg.reply('Not a JSON type.').catch(() => { })
                 return
