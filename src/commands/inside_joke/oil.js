@@ -10,6 +10,8 @@ module.exports = {
     execute: async function (msg, args) {
         let poopy = this
         let arrays = poopy.arrays
+        let config = poopy.config
+        let globaldata = poopy.globaldata
 
         var type = 'any'
         var typeindex = args.indexOf('-type')
@@ -17,7 +19,14 @@ module.exports = {
             type = String(args[typeindex + 1]).toLowerCase()
         }
 
-        var shitting = arrays.shitting.filter(file => {
+        var oilFolder = arrays.shitting
+        if (process.env.SECRET_TRIGGER && config.tumoreTesters.includes(msg.author.id)) {
+            if (msg.guildId == process.env.SECRET_TRIGGER || args.includes(`-${process.env.SECRET_ARG}`)) {
+                oilFolder = oilFolder.concat(globaldata.secretShit ?? [])
+            }
+        }
+
+        var shitting = oilFolder.filter(file => {
             switch (type) {
                 case 'image': return file.match(/\.(png|jpe?g|bmp|webp|tiff)/)
 

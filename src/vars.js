@@ -435,6 +435,7 @@ vars.globaldataTemplate = {
     commandTemplates: [],
     initScripts: [],
     shit: [],
+    secretShit: [],
 
     ...Object.fromEntries(Object.values(vars.fileJsons).map(val => [val, []]))
 }

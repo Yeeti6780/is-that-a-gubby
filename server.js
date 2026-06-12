@@ -173,6 +173,7 @@ async function start() {
     function testCondition() {
         if (process.argv.find(a => a.trim() == '--test')) return 1
         if (process.argv.find(a => a.trim() == '--hivemind')) return 2
+        if (process.argv.find(a => a.trim() == '--secret')) return 3
     }
 
     function indiaCondition() {
@@ -250,6 +251,20 @@ async function start() {
                     }
                 )
             }
+
+            break;
+
+        case 3:
+            tokens = [
+                {
+                    TOKEN: process.env.SECRET_TOKEN,
+                    config: {
+                        globalPrefix: 't:',
+                        intents: 53608447,
+                        database: 'secretdata'
+                    }
+                }
+            ]
 
             break;
 
