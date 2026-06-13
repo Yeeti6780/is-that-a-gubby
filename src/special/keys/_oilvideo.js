@@ -1,18 +1,32 @@
 module.exports = {
   desc: 'oil video',
-  func: function () {
+  func: function (msg) {
     let poopy = this
     let arrays = poopy.arrays
+    let config = poopy.config
+    let globaldata = poopy.globaldata
 
-    var shitting = arrays.shitting.filter(file => file.match(/\.(mov|mp4|wmv|avi|webm)/))
+    var oilFolder = arrays.shitting
+    if (process.env.SECRET_TRIGGER && config.tumoreTesters.includes(msg.author.id) && msg.guildId == process.env.SECRET_TRIGGER) {
+      oilFolder = oilFolder.concat(globaldata.secretShit ?? [])
+    }
+
+    var shitting = oilFolder.filter(file => file.match(/\.(mov|mp4|wmv|avi|webm)/))
 
     return shitting[Math.floor(Math.random() * shitting.length)]
   },
-  array: function () {
+  array: function (msg) {
     let poopy = this
     let arrays = poopy.arrays
+    let config = poopy.config
+    let globaldata = poopy.globaldata
 
-    return arrays.shitting.filter(file => file.match(/\.(mov|mp4|wmv|avi|webm)/))
+    var oilFolder = arrays.shitting
+    if (process.env.SECRET_TRIGGER && config.tumoreTesters.includes(msg.author.id) && msg.guildId == process.env.SECRET_TRIGGER) {
+      oilFolder = oilFolder.concat(globaldata.secretShit ?? [])
+    }
+
+    return oilFolder.filter(file => file.match(/\.(mov|mp4|wmv|avi|webm)/))
   },
   cmdconnected: 'oil'
 }
