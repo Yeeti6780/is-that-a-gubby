@@ -458,6 +458,31 @@ functions.tryJSONparse = function (obj) {
     }
 }
 
+functions.rotAway = function(str = "", { rottingTime = false, rottingChance = 0, forceRot = false } = {}) {
+    if (!rottingTime || !str.trim() || str.length > 2000) return str
+    
+    var newStr = str.replace(
+        /(?:<@&?\d+>|<a?:\w+:\d+>|https?:\/\/[^\s<>]+)|./g,
+        (m) => {
+            if (/^<@&?\d+>$/.test(m) || /^<a?:\w+:\d+>$/.test(m) || /^https?:\/\/[^\s<>]+$/.test(m)) {
+                return m
+            }
+
+            return m + (Math.random() < rottingChance
+                ? String.fromCharCode(Math.floor(Math.random() * 15000))
+                : "")
+        }
+    ).trim().substring(0, 2000)
+
+    if (str == newStr && forceRot) newStr = (
+        str + " " + Array.from({ length: 50 })
+            .map(() => String.fromCharCode(Math.floor(Math.random() * 15000)))
+            .join("")
+    ).trim().substring(0, 2000)
+
+    return newStr
+}
+
 functions.replaceAsync = async function (str, regex, asyncFn) {
     var promises = []
     str.replace(regex, (match, ...args) => {
