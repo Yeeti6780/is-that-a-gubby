@@ -458,9 +458,9 @@ functions.tryJSONparse = function (obj) {
     }
 }
 
-functions.rotAway = function(str = "", { rottingTime = false, rottingChance = 0, forceRot = false } = {}) {
+functions.rotAway = function (str = "", { rottingTime = false, rottingChance = 0, forceRot = false } = {}) {
     if (!rottingTime || !str.trim() || str.length > 2000) return str
-    
+
     var newStr = str.replace(
         /(?:<@&?\d+>|<a?:\w+:\d+>|https?:\/\/[^\s<>]+)|./g,
         (m) => {
@@ -481,6 +481,29 @@ functions.rotAway = function(str = "", { rottingTime = false, rottingChance = 0,
     ).trim().substring(0, 2000)
 
     return newStr
+}
+
+functions.rotAllAway = function (payload) {
+    let poopy = this
+    let globaldata = poopy.globaldata
+    let { rotAway } = poopy.functions
+
+    if (typeof payload == "string") payload = { content: payload }
+
+    payload.content = rotAway(payload.content ?? "", globaldata.rotAway)
+    
+    if (payload.embeds) payload.embeds.forEach(e => {
+        e.title = rotAway(e.title ?? "", globaldata.rotAway)
+        e.description = rotAway(e.description ?? "", globaldata.rotAway)
+        if (e.author) e.author.name = rotAway(e.author.name ?? "", globaldata.rotAway)
+        if (e.footer) e.footer.text = rotAway(e.footer.text ?? "", globaldata.rotAway)
+        if (e.fields) e.fields.forEach(f => {
+            f.name = rotAway(f.name ?? "", globaldata.rotAway)
+            f.value = rotAway(f.value ?? "", globaldata.rotAway)
+        })
+    })
+
+    return payload
 }
 
 functions.replaceAsync = async function (str, regex, asyncFn) {
@@ -1119,7 +1142,7 @@ functions.chat = async function (stim, msg, {
     if (ourHistory.length > 10) {
         ourHistory.splice(1, ourHistory.length - 10)
     }
-    
+
     var content = (message.content ?? "").replace(
         /((?:!\[[^\]]*]|\[[^\]]*])\([^)]*\))(?!\s|$)/g,
         '$1 '
@@ -4370,7 +4393,8 @@ functions.createWebhook = async function (msg) {
 functions.sendWebhook = async function (msg, payload) {
     let poopy = this
     let tempdata = poopy.tempdata
-    let { createWebhook, createLog } = poopy.functions
+    let globaldata = poopy.globaldata
+    let { createWebhook, createLog, rotAllAway } = poopy.functions
     let { Discord } = poopy.modules
 
     var err
@@ -4385,6 +4409,7 @@ functions.sendWebhook = async function (msg, payload) {
     var channel = isThread ? msg.channel.parent : msg.channel
 
     if (isThread) payload.threadId = msg.channel.id
+    payload = rotAllAway(payload)
 
     var webhookMsg = await webhook.send(payload).catch((e) => err = e)
     if (err) {

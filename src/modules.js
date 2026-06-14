@@ -95,7 +95,7 @@ for (var Discord of modules.Discord) {
             waitMessageCooldown,
             setMessageCooldown,
             parseKeywords,
-            rotAway
+            rotAllAway
         } = poopy.functions
 
         await waitMessageCooldown()
@@ -169,8 +169,7 @@ for (var Discord of modules.Discord) {
             }
         }
 
-        if (typeof payload == "string") payload = rotAway(payload ?? "", globaldata.rotAway)
-        else payload.content = rotAway(payload.content ?? "", globaldata.rotAway)
+        payload = rotAllAway(payload)
 
         return channelSend.call(channel, payload).then(setMessageCooldown)
     }
@@ -190,7 +189,7 @@ for (var Discord of modules.Discord) {
             waitMessageCooldown,
             setMessageCooldown,
             parseKeywords,
-            rotAway
+            rotAllAway
         } = poopy.functions
 
         await waitMessageCooldown()
@@ -264,8 +263,7 @@ for (var Discord of modules.Discord) {
             }
         }
 
-        if (typeof payload == "string") payload = rotAway(payload ?? "", globaldata.rotAway)
-        else payload.content = rotAway(payload.content ?? "", globaldata.rotAway)
+        payload = rotAllAway(payload)
 
         if (config.allowbotusage || message.replied) return message.channel.send(payload).then(setMessageCooldown)
         else {
@@ -295,7 +293,7 @@ for (var Discord of modules.Discord) {
                 waitMessageCooldown,
                 setMessageCooldown,
                 parseKeywords,
-                rotAway
+                rotAllAway
             } = poopy.functions
 
             await waitMessageCooldown()
@@ -369,8 +367,7 @@ for (var Discord of modules.Discord) {
                 }
             }
 
-            if (typeof payload == "string") payload = rotAway(payload ?? "", globaldata.rotAway)
-            else payload.content = rotAway(payload.content ?? "", globaldata.rotAway)
+            payload = rotAllAway(payload)
 
             if (config.allowbotusage || interaction.replied) {
                 if (interaction.isUserApp) return interaction.followUp(payload).then(setMessageCooldown)
