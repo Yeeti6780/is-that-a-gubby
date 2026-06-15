@@ -169,7 +169,7 @@ for (var Discord of modules.Discord) {
             }
         }
 
-        payload = rotAllAway(payload)
+        payload = await rotAllAway(payload).catch(() => { })
 
         return channelSend.call(channel, payload).then(setMessageCooldown)
     }
@@ -263,7 +263,7 @@ for (var Discord of modules.Discord) {
             }
         }
 
-        payload = rotAllAway(payload)
+        payload = await rotAllAway(payload).catch(() => { })
 
         if (config.allowbotusage || message.replied) return message.channel.send(payload).then(setMessageCooldown)
         else {
@@ -367,7 +367,7 @@ for (var Discord of modules.Discord) {
                 }
             }
 
-            payload = rotAllAway(payload)
+            payload = await rotAllAway(payload).catch(() => { })
 
             if (config.allowbotusage || interaction.replied) {
                 if (interaction.isUserApp) return interaction.followUp(payload).then(setMessageCooldown)

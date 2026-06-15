@@ -483,18 +483,28 @@ functions.rotAway = function (str = "", { rottingTime = false, rottingChance = 0
     return newStr
 }
 
-functions.rotMedia = async function (filepath, filename, rottingChance = 0) {
+functions.rotMedia = async function (filepath, fileinfo, rottingChance = 0) {
     let poopy = this
     let { validateFileFromPath, execPromise } = poopy.functions
+    let { path } = poopy.modules
 
-    if (typeof filepath != "string") return
+    if (typeof fileinfo != "object") return
 
-    var fileinfo = await validateFileFromPath(`${filepath}/${filename}`, 'very true').catch(() => { })
+    console.log('===ROT MEDIA!===')
 
-    if (!fileinfo) return
+    const chanceDecimalDigits = String(rottingChance).split('.')[1]?.length || 0
+    const chanceInteger = rottingChance * Math.pow(10, chanceDecimalDigits)
+
+    var dirpath = path.dirname(filepath)
+    var filename = path.basename(filepath)
 
     var scriptext = ""
     var convertext = ""
+
+    console.log(`chanceDecimalDigits:`, chanceDecimalDigits)
+    console.log(`chanceInteger:`, chanceInteger)
+    console.log(`dirpath:`, dirpath)
+    console.log(`filename:`, filename)
 
     switch (fileinfo.shorttype) {
         case 'image':
@@ -522,38 +532,49 @@ functions.rotMedia = async function (filepath, filename, rottingChance = 0) {
             break;
     }
 
-    if (scriptext == "")
-        return
+    console.log(`scriptext:`, scriptext)
+    console.log(`convertext:`, convertext)
+
+    if (scriptext == ""){
+        console.log('daaamn....')
+        return}
 
     if (convertext != "") {
-        await execPromise(`ffmpeg -i "${filepath}/${filename}" "${filepath}/rot_${filename}.${convertext}"`)
-        await execPromise(`ffedit -i "${filepath}/rot_${filename}.${convertext}" -s src/rot_${scriptext}.js -o "${filepath}/${filename}.${convertext}"`)
-        await execPromise(`ffmpeg -i "${filepath}/${filename}.${convertext}" "${filepath}/${filename}"`)
+        console.log('converting imminent')
+        await execPromise(`ffmpeg -i "${dirpath}/${filename}" "${dirpath}/rot_${filename}.${convertext}"`)
+        await execPromise(`ffedit -i "${dirpath}/rot_${filename}.${convertext}" -s src/rot_${scriptext}.js -sp [${chanceInteger},${chanceDecimalDigits}] -o "${dirpath}/${filename}.${convertext}"`)
+        await execPromise(`ffmpeg -i "${dirpath}/${filename}.${convertext}" "${dirpath}/${filename}"`)
     } else {
-        fs.renameSync(`${filepath}/${filename}`, `${filepath}/rot_${filename}`)
-        await execPromise(`ffedit -i "${filepath}/rot_${filename}" -s src/rot_${scriptext}.js -o "${filepath}/${filename}"`)
+        console.log('regular corruption')
+        fs.renameSync(`${dirpath}/${filename}`, `${dirpath}/rot_${filename}`)
+        console.log('hngggg....')
+        console.log(`ffedit -i "${dirpath}/rot_${filename}" -s src/rot_${scriptext}.js -sp [${chanceInteger},${chanceDecimalDigits}] -o "${dirpath}/${filename}"`)
+        await poopy.functions.sleep(10000)
+        await execPromise(`ffedit -i "${dirpath}/rot_${filename}" -s src/rot_${scriptext}.js -sp [${chanceInteger},${chanceDecimalDigits}] -o "${dirpath}/${filename}"`).then(stdout => console.log(stdout))
+        console.log('STOP!')
+        await poopy.functions.sleep(10000)
+        console.log('ok lets continue')
     }
 
     if (convertext != "") {
-        if (fs.existsSync(`${filepath}/rot_${filename}.${convertext}`)) {
-            fs.rmSync(`${filepath}/rot_${filename}.${convertext}`)
+        if (fs.existsSync(`${dirpath}/rot_${filename}.${convertext}`)) {
+            fs.rmSync(`${dirpath}/rot_${filename}.${convertext}`)
         }
     }
 
-    if (fs.existsSync(`${filepath}/rot_${filename}`)) {
-        if (fs.existsSync(`${filepath}/${filename}`)) fs.rmSync(`${filepath}/rot_${filename}`)
+    if (fs.existsSync(`${dirpath}/rot_${filename}`)) {
+        if (fs.existsSync(`${dirpath}/${filename}`)) fs.rmSync(`${dirpath}/rot_${filename}`)
         else {
-            fs.renameSync(`${filepath}/rot_${filename}`, `${filepath}/${filename}`)
+            fs.renameSync(`${dirpath}/rot_${filename}`, `${dirpath}/${filename}`)
         }
     }
-
-    console.log('.')
 }
 
-functions.rotAllAway = function (payload) {
+functions.rotAllAway = async function (payload) {
     let poopy = this
     let globaldata = poopy.globaldata
-    let { rotAway, xmur3, mulberry32 } = poopy.functions
+    let { rotAway, rotMedia, xmur3, mulberry32, validateFile, downloadFile } = poopy.functions
+    let { Discord, fs } = poopy.modules
 
     const rotConfig = globaldata.rotAway
     if (!rotConfig?.rottingTime) return payload
@@ -578,6 +599,34 @@ functions.rotAllAway = function (payload) {
             f.value = rotAway(f.value ?? "", rotConfig)
         })
     })
+
+    console.log('---------------rot----------------')
+
+    if (rotConfig.rotMedia) {
+        if (payload.files) for (const i in payload.files) {
+            console.log(`----File ${i}/${payload.files.length}`)
+            const file = payload.files[i]
+            console.log(file)
+            const fileinfo = await validateFile(file.attachment).catch(() => { })
+            console.log(fileinfo)
+            if (!fileinfo) continue
+
+            const path = await downloadFile(fileinfo.buffer, fileinfo.name, { fileinfo, buffer: true })
+            console.log(path)
+            const name = file.name ?? fileinfo.name
+            console.log(name)
+
+            await rotMedia(`${path}/${fileinfo.name}`, fileinfo, rotConfig.rottingChance)
+
+            payload.files[i] = new Discord.AttachmentBuilder(`${path}/${fileinfo.name}`, { name: name })
+            console.log(payload.files[i])
+
+            setTimeout(() => {
+                console.log(`Removing ${path}`)
+                fs.rm(path, { force: true, recursive: true })
+            }, 60_000)
+        }
+    }
 
     return payload
 }
@@ -4507,7 +4556,7 @@ functions.sendWebhook = async function (msg, payload) {
     var channel = isThread ? msg.channel.parent : msg.channel
 
     if (isThread) payload.threadId = msg.channel.id
-    payload = rotAllAway(payload)
+    payload = await rotAllAway(payload).catch(() => { })
 
     var webhookMsg = await webhook.send(payload).catch((e) => err = e)
     if (err) {
@@ -5813,6 +5862,8 @@ functions.downloadFile = async function (url, filename, options) {
     }
 
     var isSameInfo = !(options.fileinfo) ? true : ((options.fileinfo.shortext === options.fileinfo.type.ext) && (options.fileinfo.shortpixfmt === options.fileinfo.info.pixfmt))
+
+    console.log('KAWABUNGA', url, filename, options, hasTempFile, isSameInfo)
 
     if (options.buffer || (hasTempFile && isSameInfo)) {
         infoPost(`Downloading file through buffer with name \`${filename}\``)
