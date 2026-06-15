@@ -475,7 +475,7 @@ functions.rotAway = function (str = "", {
         "<(?:@&?|#)[0-9]+>",
         "<a?:[a-zA-Z0-9_]+:[0-9]+>",
         "<t:[0-9]+(?::[a-zA-Z])?>",
-        "https?:\\/\\/[^\\s<>]"
+        "https?:\\/\\/[^\\s<>]+"
     ]
 
     var newStr = str.replace(
