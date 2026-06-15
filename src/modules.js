@@ -81,98 +81,106 @@ if (process.env.GOOGLE_KEY) {
 }
 
 for (var Discord of modules.Discord) {
-    const Channel = Discord.BaseGuildTextChannel
-    const channelSend = Channel.prototype.send
+    const channelClasses = [
+        Discord.BaseGuildTextChannel,
+        Discord.DMChannel
+    ]
 
-    Channel.prototype.send = async function send(payload) {
-        var channel = this
-        let client = channel.client
-        let poopy = activeBots[client.database]
-        let vars = poopy.vars
-        let tempdata = poopy.tempdata
-        let globaldata = poopy.globaldata
-        let {
-            waitMessageCooldown,
-            setMessageCooldown,
-            parseKeywords,
-            rotAllAway
-        } = poopy.functions
+    for (const Channel of channelClasses) {
+        const channelSend = Channel?.prototype?.send
+        if (!channelSend) continue
 
-        await waitMessageCooldown()
+        Channel.prototype.send = async function send(payload) {
+            var channel = this
+            let client = channel.client
+            let poopy = activeBots[client.database]
+            let vars = poopy.vars
+            let tempdata = poopy.tempdata
+            let globaldata = poopy.globaldata
+            let {
+                waitMessageCooldown,
+                setMessageCooldown,
+                parseKeywords,
+                rotAllAway
+            } = poopy.functions
 
-        const channelData = tempdata[channel.guild?.id]?.[channel.id]
+            await waitMessageCooldown()
 
-        if (channelData?.shutUp) return
-        if (channelData?.forceResponse && (typeof payload == 'object' ? (
-            payload.content ||
-            payload.files || payload.embeds ||
-            payload.stickers
-        ) : payload) && !channelData.forceResponse.repliesOnly) {
-            var forceres = channelData.forceResponse
-            delete channelData.forceResponse
+            const channelData = tempdata[channel.guild?.id]?.[channel.id]
 
-            var content = typeof payload == 'object' ? (payload.content ?? '') : payload
-            var msg = forceres.msg
-            var res = await parseKeywords(forceres.res, msg, true, {
-                resetAttempts: true,
-                extraKeys: {
-                    _msg: {
-                        func: async () => {
-                            return content
-                        }
-                    }
-                }
-            }).catch(() => { }) ?? forceres.res
+            if (channelData?.shutUp) return
+            if (channelData?.forceResponse && (typeof payload == 'object' ? (
+                payload.content ||
+                payload.files || payload.embeds ||
+                payload.stickers
+            ) : payload) && !channelData.forceResponse.repliesOnly) {
+                var forceres = channelData.forceResponse
+                delete channelData.forceResponse
 
-            if (forceres.persist && !channelData.forceResponse) channelData.forceResponse = forceres
-
-            switch (typeof payload) {
-                case 'string':
-                    if (payload.trim()) {
-                        payload = {
-                            content: res,
-                            allowedMentions: {
-                                parse: []
+                var content = typeof payload == 'object' ? (payload.content ?? '') : payload
+                var msg = forceres.msg
+                var res = await parseKeywords(forceres.res, msg, true, {
+                    resetAttempts: true,
+                    extraKeys: {
+                        _msg: {
+                            func: async () => {
+                                return content
                             }
                         }
                     }
-                    break;
-                case 'object':
-                    if ((payload.content ?? "").trim()) {
-                        payload.content = res
-                    }
-                    break;
+                }).catch(() => { }) ?? forceres.res
+
+                if (forceres.persist && !channelData.forceResponse) channelData.forceResponse = forceres
+
+                switch (typeof payload) {
+                    case 'string':
+                        if (payload.trim()) {
+                            payload = {
+                                content: res,
+                                allowedMentions: {
+                                    parse: []
+                                }
+                            }
+                        }
+                        break;
+                    case 'object':
+                        if ((payload.content ?? "").trim()) {
+                            payload.content = res
+                        }
+                        break;
+                }
             }
-        }
 
-        //if (
-        //    typeof payload == "string" ?
-        //    !(payload.trim()) : (
-        //    !((payload.content ?? "").trim()) &&
-        //    !payload.files?.length &&
-        //    !payload.attachments?.length &&
-        //    !payload.embeds?.length &&
-        //    !payload.stickers?.length &&
-        //    !payload.components?.length
-        //)) throw "Can't send empty message"
+            //if (
+            //    typeof payload == "string" ?
+            //    !(payload.trim()) : (
+            //    !((payload.content ?? "").trim()) &&
+            //    !payload.files?.length &&
+            //    !payload.attachments?.length &&
+            //    !payload.embeds?.length &&
+            //    !payload.stickers?.length &&
+            //    !payload.components?.length
+            //)) throw "Can't send empty message"
 
-        if (vars.currentIpAddress) {
-            switch (typeof payload) {
-                case 'string':
-                    if (payload.includes(vars.currentIpAddress))
-                        payload = "Output contains current IP address."
-                    break
+            if (vars.currentIpAddress) {
+                switch (typeof payload) {
+                    case 'string':
+                        if (payload.includes(vars.currentIpAddress))
+                            payload = "Output contains current IP address."
+                        break
 
-                case 'object':
-                    if ((payload.content ?? "").includes(vars.currentIpAddress))
-                        payload.content = "Output contains current IP address."
+                    case 'object':
+                        if ((payload.content ?? "").includes(vars.currentIpAddress))
+                            payload.content = "Output contains current IP address."
+                }
             }
-        }
 
         payload = await rotAllAway(payload).catch(() => { })
 
-        return channelSend.call(channel, payload).then(setMessageCooldown)
+            return channelSend.call(channel, payload).then(setMessageCooldown)
+        }
     }
+
 
     const Message = Discord.Message
     const messageReply = Message.prototype.reply
@@ -277,10 +285,15 @@ for (var Discord of modules.Discord) {
         }
     }
 
-    const Interaction = Discord.CommandInteraction
-    const interactionReply = Interaction?.prototype?.reply
+    const interactionClasses = [
+        Discord.CommandInteraction,
+        Discord.MessageComponentInteraction
+    ]
 
-    if (interactionReply) {
+    for (const Interaction of interactionClasses) {
+        const interactionReply = Interaction?.prototype?.reply
+        if (!interactionReply) continue
+
         Interaction.prototype.reply = async function reply(payload) {
             var interaction = this
             let client = interaction.client

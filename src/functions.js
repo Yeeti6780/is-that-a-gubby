@@ -458,13 +458,30 @@ functions.tryJSONparse = function (obj) {
     }
 }
 
-functions.rotAway = function (str = "", { rottingTime = false, rottingChance = 0, forceRot = false } = {}, rand = Math.random) {
+functions.rotAway = function (str = "", {
+    rottingTime = false,
+    rottingChance = 0,
+    forceRot = false,
+    forceBegForHelp = false
+} = {}, {
+    rand = Math.random,
+    begForHelp = false
+} = {}) {
+    if (rottingTime && (begForHelp || forceBegForHelp) && rand() < rottingChance) str = "HELP ME ".repeat(Math.floor(rand() * 10) + 1)
+
     if (!rottingTime || !str.trim() || str.length > 2000) return str
 
+    var rotIgnore = [
+        "<(?:@&?|#)[0-9]+>",
+        "<a?:[a-zA-Z0-9_]+:[0-9]+>",
+        "<t:[0-9]+(?::[a-zA-Z])?>",
+        "https?:\\/\\/[^\\s<>]+"
+    ]
+
     var newStr = str.replace(
-        /(?:<@&?\d+>|<a?:\w+:\d+>|https?:\/\/[^\s<>]+)|./g,
+        new RegExp(`(?:${rotIgnore.join("|")})|.`, "g"),
         (m) => {
-            if (/^<@&?\d+>$/.test(m) || /^<a?:\w+:\d+>$/.test(m) || /^https?:\/\/[^\s<>]+$/.test(m)) {
+            if (rotIgnore.some(reg => new RegExp(reg).test(m))) {
                 return m
             }
 
@@ -586,7 +603,7 @@ functions.rotAllAway = async function (payload) {
     if (payload.username) {
         const seedFn = xmur3(payload.username)
         const rand = mulberry32(seedFn())
-        payload.username = rotAway(payload.username, rotConfig, rand)
+        payload.username = rotAway(payload.username, rotConfig, { rand })
     }
 
     if (payload.embeds) payload.embeds.forEach(e => {
@@ -6526,7 +6543,8 @@ functions.changeStatus = function () {
     let vars = poopy.vars
     let config = poopy.config
     let json = poopy.json
-    let { infoPost } = poopy.functions
+    let globaldata = poopy.globaldata
+    let { infoPost, rotAway } = poopy.functions
 
     if (!config.allowpresence) return
 
@@ -6537,7 +6555,11 @@ functions.changeStatus = function () {
             status: 'online',
             activities: [
                 {
-                    name: choosenStatus.name + ` | ${config.globalPrefix}help`,
+                    name: rotAway(
+                        choosenStatus.name + ` | ${config.globalPrefix}help`,
+                        globaldata.rotAway,
+                        { begForHelp: true }
+                    ),
                     type: DiscordTypes.ActivityType[choosenStatus.type],
                     url: choosenStatus.url ?? 'https://www.youtube.com/watch?v=MURAALuH_TE'
                 }
