@@ -462,12 +462,13 @@ functions.rotAway = function (str = "", {
     rottingTime = false,
     rottingChance = 0,
     forceRot = false,
-    forceBegForHelp = false
+    begForHelpChance = 0
 } = {}, {
-    rand = Math.random,
-    begForHelp = false
+    rand = Math.random
 } = {}) {
-    if (!rottingTime || !str.trim() || str.length > 2000) return str
+    str = str.trim()
+    
+    if (!rottingTime || !str || str.length > 2000) return str
 
     var rotIgnore = [
         "<(?:@&?|#)[0-9]+>",
@@ -476,7 +477,7 @@ functions.rotAway = function (str = "", {
         "https?:\\/\\/[^\\s<>]+"
     ]
 
-    if ((begForHelp || forceBegForHelp) && rand() < rottingChance)
+    if (rand() < begForHelpChance)
         str = str.replace(/[^\s]+/ig, (m) => {
             if (rotIgnore.some(reg => new RegExp(reg).test(m))) {
                 return m
