@@ -1,7 +1,6 @@
 /*********************************************************************/
 
-const MV_ROW_REVERSAL_CHANCE = 0.01
-const MB_TYPE_ROW_REVERSAL_CHANCE = 0.05
+const MV_ROW_REVERSAL_CHANCE = 0.05
 
 let rottingChance = 0;
 
@@ -48,8 +47,6 @@ export function glitch_frame(frame) {
     if (!fwd_mvs)
         return;
 
-    const mb_type = frame.info?.mb_type
-
     frame.mv.overflow = "truncate";
 
     // clear horizontal element of all motion vectors
@@ -71,17 +68,6 @@ export function glitch_frame(frame) {
 
         if (Math.random() < MV_ROW_REVERSAL_CHANCE) {
             row.reverse();
-        }
-    }
-
-    if (mb_type) {
-        for (let i = 0; i < mb_type.length; i++) {
-            // loop through all rows
-            const row = mb_type[i];
-
-            if (Math.random() < MB_TYPE_ROW_REVERSAL_CHANCE) {
-                row.reverse();
-            }
         }
     }
 }

@@ -18,7 +18,7 @@ const filter_remapping = {
   [PNG_FILTER_VALUE_PAETH]: PNG_FILTER_VALUE_AVG
 }
 
-const RANDOM_REMAPPING_CHANCE = 0.2
+const RANDOM_REMAPPING_CHANCE = 0.05
 
 let rottingChance = 0;
 
@@ -56,7 +56,7 @@ export function glitch_frame(frame, stream)
 
     let newFilterType = filter_remapping[row[0]]
     if (Math.random() < RANDOM_REMAPPING_CHANCE)
-      newFilterType = Math.floor(Math.random() * 5);
+      newFilterType = Math.floor(Math.random() * 4) + 1;
 
     filterTypesOriginal.push(row[0])
     row[0] = newFilterType;
