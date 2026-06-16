@@ -18,11 +18,9 @@ const filter_remapping = {
   [PNG_FILTER_VALUE_PAETH]: PNG_FILTER_VALUE_AVG
 }
 
-const RANDOM_REMAPPING_CHANCE = 0.01
-const ROW_REVERSE_CHANCE = 0.05
-const ROW_SHUFFLE_CHANCE = 0.001
-const ROW_SQUARED_CHANCE = 0.01
-const ROW_CHANNEL_SWAP_CHANCE = 0.02
+const RANDOM_REMAPPING_CHANCE = 0.001
+const ROW_CHANGE_CHANCE = 0.1
+const PIXEL_CHANGE_CHANCE = 0.05
 
 let rottingChance = 0;
 
@@ -60,6 +58,9 @@ export function glitch_frame(frame, stream)
 {
   const rows = frame.idat?.rows;
   
+  let rowChangeCount = 0;
+  let pixelChangeCount = 0;
+
   console.log(rows?.length)
   console.log(rottingChance)
   if ( !rows )
@@ -78,25 +79,17 @@ export function glitch_frame(frame, stream)
 
     row[0] = newFilterType;
 
-    if (Math.random() < ROW_REVERSE_CHANCE)
-      rows[i] = [row[0]].concat(row.slice(1).reverse());
-
-    if (Math.random() < ROW_SHUFFLE_CHANCE)
-      rows[i] = [row[0]].concat(shuffle(row.slice(1)));
-
-    if (Math.random() < ROW_SQUARED_CHANCE)
-      rows[i] = [row[0]].concat(row.slice(1).map(value => Math.pow(value, 2) % 256));
-
-    if (Math.random() < ROW_CHANNEL_SWAP_CHANCE) {
-      const rowModified = row.slice(1)
-
-      for ( let i = 0; i < rowModified.length; i += 4 ) {
-        // R<->B G<->A
-        [rowModified[i], rowModified[i+2]] = [rowModified[i+2], rowModified[i]]
-        [rowModified[i+1], rowModified[i+3]] = [rowModified[i+3], rowModified[i+1]]
+    if (Math.random() < ROW_CHANGE_CHANCE) {
+      rowChangeCount++;
+      for ( let i = 1; i < row.length; i += 4 ) {
+        if (Math.random() > PIXEL_CHANGE_CHANCE) continue;
+        pixelChangeCount++;
+       
+        row[i] = (row[i] - 1) % 256
       }
-
-      rows[i] = [row[0]].concat(rowModified)
     }
   }
+
+  console.log('row changes:', rowChangeCount)
+  console.log('pixel changes:', pixelChangeCount)
 }
