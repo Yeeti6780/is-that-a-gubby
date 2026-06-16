@@ -24,33 +24,21 @@ function glitch_mv(mv, action)
     switch (action) {
         case 0:
             mv[0] = 0;
+            mv[1] = 0;
             break;
 
         case 1:
-            mv[1] = 0;
-            break;
-        
-        case 2:
-            mv[0] = 0;
-            mv[1] = 0;
-            break;
-
-        case 3:
             mv[0], mv[1] = mv[1], mv[0]
             break;
-        
-        case 4:
-            mv[0] = mv[0] * 2
-            break;
-        
-        case 5:
-            mv[1] = mv[1] * 2
-            break;
 
-        case 6:
-            mv[0] = mv[0] * 2
-            mv[1] = mv[1] * 2
+        case 2:
+            mv[0] = mv[0] * 3
+            mv[1] = mv[1] * 3
             break;
+        
+        case 3:
+            mv[0] = Math.pow(mv[1] - mv[0], 2)
+            mv[1] = Math.pow(mv[0] - mv[1], 2)
     }
 }
 
@@ -61,14 +49,14 @@ export function glitch_frame(frame)
   if ( !fwd_mvs )
       return;
 
-  frame.mv.overflow = "ignore";
+  frame.mv.overflow = "truncate";
 
   // clear horizontal element of all motion vectors
   for ( let i = 0; i < fwd_mvs.length; i++ )
   {
     // loop through all rows
     const row = fwd_mvs[i];
-    const action = Math.floor(Math.random() * 7)
+    const action = Math.floor(Math.random() * 4)
     for ( let j = 0; j < row.length; j++ )
     {
       // loop through all macroblocks
@@ -80,6 +68,10 @@ export function glitch_frame(frame)
       // THIS IS WHERE THE MAGIC HAPPENS
 
       glitch_mv(mv, action)
+    }
+
+    if (Math.random() < 0.01) {
+        row.reverse()
     }
   }
 }
