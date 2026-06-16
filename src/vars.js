@@ -443,6 +443,7 @@ vars.globaldataTemplate = {
 
 vars.tempdataTemplate = {
     validatedFiles: {},
+    rotStorage: {},
     discordUrls: {},
     collectors: [],
     crons: [],

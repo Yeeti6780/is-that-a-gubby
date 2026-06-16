@@ -481,7 +481,7 @@ functions.rotAway = function (str = "", {
             if (rotIgnore.some(reg => new RegExp(reg).test(m))) {
                 return m
             }
-            
+
             return "HELP ME"
         })
 
@@ -564,13 +564,13 @@ functions.rotMedia = async function (filepath, fileinfo, rottingChance = 0) {
 
     if (convertext != "") {
         await execPromise(`ffmpeg -i "${dirpath}/rot_${filename}" "${dirpath}/rotconvert_${filename}.${convertext}"`)
-        await execPromise(`ffedit -i "${dirpath}/rotconvert_${filename}.${convertext}" -s src/rot_${scriptext}.js -sp [${chanceInteger},${chanceDecimalDigits}] -o "${dirpath}/${filename}.${convertext}"`).then(stdout => { if(Math.random() < 0.05) console.log(stdout) })
+        await execPromise(`ffedit -i "${dirpath}/rotconvert_${filename}.${convertext}" -s src/rot_${scriptext}.js -sp [${chanceInteger},${chanceDecimalDigits}] -o "${dirpath}/${filename}.${convertext}"`).then(stdout => { if (Math.random() < 0.05) console.log(stdout) })
         await execPromise(`ffmpeg -i "${dirpath}/${filename}.${convertext}"`
             + `${fileinfo.shortext === 'gif' ? ` -filter_complex "[0:v]split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -gifflags -offsetting` : ''}`
             + ` "${dirpath}/${filename}"`)
     } else {
         // console.log(`ffedit -i "${dirpath}/rot_${filename}" -s src/rot_${scriptext}.js -sp [${chanceInteger},${chanceDecimalDigits}] -o "${dirpath}/${filename}"`)
-        await execPromise(`ffedit -i "${dirpath}/rot_${filename}" -s src/rot_${scriptext}.js -sp [${chanceInteger},${chanceDecimalDigits}] -o "${dirpath}/${filename}"`).then(stdout => { if(Math.random() < 0.05) console.log(stdout) })
+        await execPromise(`ffedit -i "${dirpath}/rot_${filename}" -s src/rot_${scriptext}.js -sp [${chanceInteger},${chanceDecimalDigits}] -o "${dirpath}/${filename}"`).then(stdout => { if (Math.random() < 0.05) console.log(stdout) })
     }
 
     if (convertext != "") {
@@ -590,13 +590,14 @@ functions.rotMedia = async function (filepath, fileinfo, rottingChance = 0) {
     }
 }
 
-functions.rotAllAway = async function (payload) {
+functions.rotAllAway = async function (payload, rotConfig) {
     let poopy = this
     let globaldata = poopy.globaldata
-    let { rotAway, rotMedia, xmur3, mulberry32, validateFile, downloadFile } = poopy.functions
-    let { Discord, fs } = poopy.modules
+    let tempdata = poopy.tempdata
+    let { rotAway, rotMedia, xmur3, mulberry32, validateFile, downloadFile, cleanFileInfoUrl } = poopy.functions
+    let { Discord, fs, HTTPClientUtils } = poopy.modules
 
-    const rotConfig = globaldata.rotAway
+    rotConfig ??= globaldata.rotAway
     if (!rotConfig?.rottingTime) return payload
 
     if (typeof payload != "object") return rotAway(String(payload), rotConfig)
@@ -607,6 +608,28 @@ functions.rotAllAway = async function (payload) {
         const seedFn = xmur3(payload.username)
         const rand = mulberry32(seedFn())
         payload.username = rotAway(payload.username, rotConfig, { rand })
+    }
+
+    if (rotConfig.rotMedia && payload.avatarURL) {
+        const fileInfoUrl = cleanFileInfoUrl(payload.avatarURL)
+        let rotAvatar = tempdata.rotStorage[fileInfoUrl]
+
+        const rerottingTime = 60_000 * 10
+        const refreshRotAvatar = !rotAvatar || (Date.now() - rotAvatar.fetchedTime) >= rerottingTime
+
+        const fileinfo = refreshRotAvatar && await validateFile(payload.avatarURL).catch(() => { })
+        if (refreshRotAvatar && fileinfo) {
+            const path = await downloadFile(fileinfo.buffer, fileinfo.name, { fileinfo, buffer: true })
+            await rotMedia(`${path}/${fileinfo.name}`, fileinfo, rotConfig.rottingChance)
+
+            const fileLink = await HTTPClientUtils.uploadToFileHost(`${path}/${fileinfo.name}`).catch(() => { })
+            if (fileLink) tempdata.rotStorage[fileInfoUrl] = {
+                fetchedTime: Date.now(),
+                fileLink
+            }
+        }
+
+        payload.avatarURL = tempdata.rotStorage[fileInfoUrl]?.fileLink ?? payload.avatarURL
     }
 
     if (payload.embeds) payload.embeds.forEach(e => {
@@ -5853,7 +5876,7 @@ functions.downloadFile = async function (url, filename, options) {
     }
 
     async function ffmpeg() {
-        ffmpegUsed = true       
+        ffmpegUsed = true
         infoPost(`Downloading file through FFmpeg with name \`${filename}\``)
         if (options.fileinfo) {
             await execPromise(`ffmpeg -i "${url}"${options.ffmpegstring ? ` ${options.ffmpegstring}` : options.fileinfo.shortext === 'gif' ? ` -filter_complex "[0:v]split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -gifflags -offsetting` : options.fileinfo.shortext === 'png' ? ' -pix_fmt rgba' : options.fileinfo.shortext === 'mp4' ? ' -c:v libx264 -pix_fmt yuv420p' : options.fileinfo.shortext === 'mp3' ? ' -c:a libmp3lame' : ''} ${filepath}/${filename}`)
