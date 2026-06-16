@@ -507,7 +507,7 @@ functions.rotMedia = async function (filepath, fileinfo, rottingChance = 0) {
 
     if (typeof fileinfo != "object") return
 
-    console.log('===ROT MEDIA!===')
+    // console.log('===ROT MEDIA!===')
 
     const chanceDecimalDigits = String(rottingChance).split('.')[1]?.length || 0
     const chanceInteger = rottingChance * Math.pow(10, chanceDecimalDigits)
@@ -518,10 +518,7 @@ functions.rotMedia = async function (filepath, fileinfo, rottingChance = 0) {
     var scriptext = ""
     var convertext = ""
 
-    console.log(`chanceDecimalDigits:`, chanceDecimalDigits)
-    console.log(`chanceInteger:`, chanceInteger)
-    console.log(`dirpath:`, dirpath)
-    console.log(`filename:`, filename)
+    // console.log(`rottingChance:`, rottingChance)
 
     switch (fileinfo.shorttype) {
         case 'image':
@@ -549,33 +546,29 @@ functions.rotMedia = async function (filepath, fileinfo, rottingChance = 0) {
             break;
     }
 
-    console.log(`scriptext:`, scriptext)
-    console.log(`convertext:`, convertext)
+    // console.log(`scriptext:`, scriptext)
+    // console.log(`convertext:`, convertext)
 
     if (scriptext == ""){
-        console.log('daaamn....')
         return}
 
+    fs.renameSync(`${dirpath}/${filename}`, `${dirpath}/rot_${filename}`)
+
     if (convertext != "") {
-        console.log('converting imminent')
-        await execPromise(`ffmpeg -i "${dirpath}/${filename}" "${dirpath}/rot_${filename}.${convertext}"`)
-        await execPromise(`ffedit -i "${dirpath}/rot_${filename}.${convertext}" -s src/rot_${scriptext}.js -sp [${chanceInteger},${chanceDecimalDigits}] -o "${dirpath}/${filename}.${convertext}"`)
+        await execPromise(`ffmpeg -i "${dirpath}/rot_${filename}" "${dirpath}/rotconvert_${filename}.${convertext}"`)
+        await execPromise(`ffedit -i "${dirpath}/rotconvert_${filename}.${convertext}" -s src/rot_${scriptext}.js -sp [${chanceInteger},${chanceDecimalDigits}] -o "${dirpath}/${filename}.${convertext}"`).then(stdout => console.log(stdout))
         await execPromise(`ffmpeg -i "${dirpath}/${filename}.${convertext}" "${dirpath}/${filename}"`)
     } else {
-        console.log('regular corruption')
-        fs.renameSync(`${dirpath}/${filename}`, `${dirpath}/rot_${filename}`)
-        console.log('hngggg....')
-        console.log(`ffedit -i "${dirpath}/rot_${filename}" -s src/rot_${scriptext}.js -sp [${chanceInteger},${chanceDecimalDigits}] -o "${dirpath}/${filename}"`)
-        await poopy.functions.sleep(10000)
+        // console.log(`ffedit -i "${dirpath}/rot_${filename}" -s src/rot_${scriptext}.js -sp [${chanceInteger},${chanceDecimalDigits}] -o "${dirpath}/${filename}"`)
         await execPromise(`ffedit -i "${dirpath}/rot_${filename}" -s src/rot_${scriptext}.js -sp [${chanceInteger},${chanceDecimalDigits}] -o "${dirpath}/${filename}"`).then(stdout => console.log(stdout))
-        console.log('STOP!')
-        await poopy.functions.sleep(10000)
-        console.log('ok lets continue')
     }
 
     if (convertext != "") {
-        if (fs.existsSync(`${dirpath}/rot_${filename}.${convertext}`)) {
-            fs.rmSync(`${dirpath}/rot_${filename}.${convertext}`)
+        if (fs.existsSync(`${dirpath}/rotconvert_${filename}.${convertext}`)) {
+            fs.rmSync(`${dirpath}/rotconvert_${filename}.${convertext}`)
+        }
+        if (fs.existsSync(`${dirpath}/${filename}.${convertext}`)) {
+            fs.rmSync(`${dirpath}/${filename}.${convertext}`)
         }
     }
 
@@ -617,29 +610,27 @@ functions.rotAllAway = async function (payload) {
         })
     })
 
-    console.log('---------------rot----------------')
-
     if (rotConfig.rotMedia) {
         if (payload.files) for (const i in payload.files) {
-            console.log(`----File ${i}/${payload.files.length}`)
+            // console.log(`----File ${Number(i) + 1}/${payload.files.length}`)
             const file = payload.files[i]
-            console.log(file)
+            // console.log('file:', file)
             const fileinfo = await validateFile(file.attachment).catch(() => { })
-            console.log(fileinfo)
+            // console.log('fileinfo (relevant parts):', fileinfo.path, fileinfo.name, fileinfo.buffer)
             if (!fileinfo) continue
 
             const path = await downloadFile(fileinfo.buffer, fileinfo.name, { fileinfo, buffer: true })
-            console.log(path)
+            // console.log('downloaded file path:', path)
             const name = file.name ?? fileinfo.name
-            console.log(name)
+            // console.log('final file name:', name)
 
             await rotMedia(`${path}/${fileinfo.name}`, fileinfo, rotConfig.rottingChance)
 
             payload.files[i] = new Discord.AttachmentBuilder(`${path}/${fileinfo.name}`, { name: name })
-            console.log(payload.files[i])
+            // console.log('changed file:', payload.files[i])
 
             setTimeout(() => {
-                console.log(`Removing ${path}`)
+                // console.log(`Removing ${path}`)
                 fs.rm(path, { force: true, recursive: true })
             }, 60_000)
         }
@@ -5852,7 +5843,7 @@ functions.downloadFile = async function (url, filename, options) {
     }
 
     async function ffmpeg() {
-        ffmpegUsed = true
+        ffmpegUsed = true       
         infoPost(`Downloading file through FFmpeg with name \`${filename}\``)
         if (options.fileinfo) {
             await execPromise(`ffmpeg -i "${url}"${options.ffmpegstring ? ` ${options.ffmpegstring}` : options.fileinfo.shortext === 'gif' ? ` -filter_complex "[0:v]split[pout][ppout];[ppout]palettegen=reserve_transparent=1[palette];[pout][palette]paletteuse=alpha_threshold=128[out]" -map "[out]" -gifflags -offsetting` : options.fileinfo.shortext === 'png' ? ' -pix_fmt rgba' : options.fileinfo.shortext === 'mp4' ? ' -c:v libx264 -pix_fmt yuv420p' : options.fileinfo.shortext === 'mp3' ? ' -c:a libmp3lame' : ''} ${filepath}/${filename}`)
@@ -5879,8 +5870,6 @@ functions.downloadFile = async function (url, filename, options) {
     }
 
     var isSameInfo = !(options.fileinfo) ? true : ((options.fileinfo.shortext === options.fileinfo.type.ext) && (options.fileinfo.shortpixfmt === options.fileinfo.info.pixfmt))
-
-    console.log('KAWABUNGA', url, filename, options, hasTempFile, isSameInfo)
 
     if (options.buffer || (hasTempFile && isSameInfo)) {
         infoPost(`Downloading file through buffer with name \`${filename}\``)
