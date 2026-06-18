@@ -5974,7 +5974,7 @@ functions.sendFile = async function (msg, filepath, filename, extraOptions) {
     extraOptions.catbox = extraOptions.catbox ?? args.includes('-catbox')
     extraOptions.nosend = extraOptions.nosend ?? msg.nosend ?? args.includes('-nosend')
     extraOptions.nocompress = extraOptions.nocompress ?? args.includes('-nocompress')
-    extraOptions.forcecompress = extraOptions.nocompress ?? args.includes('-forcecompress')
+    extraOptions.forcecompress = extraOptions.forcecompress ?? args.includes('-forcecompress')
 
     var compress = ((tooLarge && !extraOptions.catbox && !extraOptions.nosend) && !extraOptions.nocompress)
         || (extraOptions.forcecompress && fileBuffer.length > 1024 * 1024 * 10)
