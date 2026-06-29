@@ -1082,22 +1082,6 @@
             "normal": "Spambox Battler"
         },
         {
-            "name": "Lil' Lichen",
-            "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/c/ce/Lil%27_Lichen.png",
-            "alt": "Lil' Mortis"
-        },
-        {
-            "name": "Lil' Mortis",
-            "image": "https://cdn.discordapp.com/attachments/1376074210090287235/1521153963964104874/lil_mortis.png",
-            "normal": "Lil' Lichen"
-        },
-        {
-            "name": "FLY",
-            "image": "https://cdn.discordapp.com/attachments/1376074210090287235/1521153613215436900/latest.png",
-            "normal": "Lil' Lichen",
-            "joke": true
-        },
-        {
             "name": "Volleyball Battler",
             "image": "https://static.wikia.nocookie.net/the-battle-bricks/images/3/38/Volleyball_Battler.png",
             "alt": "Basketball Battler"
