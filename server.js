@@ -259,8 +259,7 @@ async function start() {
                 {
                     TOKEN: process.env.SECRET_TOKEN,
                     config: {
-                        globalPrefix: 't:',
-                        intents: 53608447,
+                        globalPrefix: 'p:',
                         database: 'secretdata'
                     }
                 }

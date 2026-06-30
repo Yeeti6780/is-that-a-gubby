@@ -65,6 +65,7 @@ modules.DMGuild = class DMGuild {
         this.members = {
             fetch: async (id) => members.get(id),
             resolve: (id) => members.get(id),
+            search: async () => new modules.Collection(),
             cache: members,
             me: members.get(msg.client.user.id)
         }
