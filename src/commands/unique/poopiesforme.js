@@ -1,5 +1,5 @@
 module.exports = {
-    name: ['enablemanager'],
+    name: ['poopiesforme'],
     args: [],
     execute: async function (msg, args, opts = {}) {
         const poopy = this
